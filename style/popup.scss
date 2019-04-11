@@ -1,0 +1,294 @@
+.overlay
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 200;
+}
+
+.popupWindow
+{
+    position: absolute;
+    width: 600px;
+    border-shadow: 0 0 32px rgba(0, 0, 0, 0.35);
+    background: #fff;
+    float: left;
+    left: 0;
+    top: 0;
+
+    & .title
+    {
+        width: 100%;
+        float: left;
+        background: #eee;
+    }
+
+    & .title > .icon
+    {
+        float: left;
+        padding: 8px;
+        width: 16px;
+        height: 16px;
+    }
+
+    & .title > .label
+    {
+        padding: 8px 8px 8px 0;
+        font-size: 0.9em;
+        float: left;
+    }
+
+    & .title > .close
+    {
+        padding: 8px;
+        width: 16px;
+        height: 16px;
+        float: right;
+        cursor:pointer;
+
+        &:hover { background: #ff0000; }
+        &:hover::after { background-color: #fff; }
+    }
+
+    & .content
+    {
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+        float: left;
+
+        & .popupTextareaInput
+        {
+            width: 100%;
+            height: 300px;
+            font-size: 1.2em;
+            font-family: consolas, monospace;
+        }
+    }
+
+    & .buttons
+    {
+        padding-top: 20px;
+        float: right;
+
+        & .button
+        {
+            margin-left: 20px;
+        }
+    }
+}
+
+.rightClickMenu
+{
+    position: absolute;
+    background: #eee;
+    width: 220px;
+    float: left;
+    box-shadow: 0 0 32px rgba(0,0,0,0.35);
+    border: 1px solid #fff;
+    cursor: pointer;
+
+    & .option
+    {
+        padding: 6px 8px 6px 8px;
+        width: 100%;
+        box-sizing: border-box;
+        float: left;
+        transition: background 0.2s;
+    }
+
+    & .icon
+    {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        float: left;
+        display: inline;
+    }
+    & .icon::after { background-color: #666; }
+
+    & .label
+    {
+        margin-top: 1px;
+        text-transform: uppercase;
+        color: #666;
+        font-size: 0.75em;
+        float: left;
+        display: inline;
+    }
+
+    & .option:hover
+    {
+        background: #e28fa3;
+
+        & .icon::after { background-color: #fff; }
+        & .label { color: #fff; }
+    }
+}
+
+.popupWindow_colorPicker
+{
+    width: 620px;
+}
+
+.colorfields
+{
+    & .inputs
+    {
+        width: 236px;
+        float: left;
+    }
+
+    & .label
+    {
+        float: left;
+        width: 10px;
+        padding: 6px 8px 0 8px;
+        margin-bottom: 8px;
+        display: inline;
+        color: #aaa;
+    }
+
+    & .hex
+    {
+        width: calc(100% - 84px);
+        margin-bottom: 8px;
+    }
+
+    & .r, & .g, & .b, & .a, & .h, & .s, & .v
+    {
+        width: 50px;
+        float: left;
+        display: inline;
+        margin-bottom: 8px;
+    }
+
+    & .gradient
+    {
+        position: relative;
+        border: 6px solid #ddd;
+        width: 112px;
+        height: 112px;
+        background: url('gfx/transparent.png');
+        margin-left: 8px;
+        float: left;
+
+        > .black
+        {
+            position: absolute;
+            background: linear-gradient(to bottom, rgba(0,0,0,0), black);
+            width: 100%;
+            height: 100%;
+        }
+
+        > .color
+        {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #fff;
+            box-sizing: border-box;
+        }
+
+        > .cursor
+        {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            transform: translateX(-50%) translateY(-50%);
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #000;
+        }
+    }
+
+    & .hue
+    {
+        position: relative;
+        float: left;
+        width: 20px;
+        height: 112px;
+        margin-left: 8px;
+        border: 6px solid #ddd;
+        background: linear-gradient(to bottom, #ff0000, #ff00ff, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000);
+
+        > .color
+        {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #fff;
+            box-sizing: border-box;
+        }
+
+        > .cursor
+        {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #000;
+        }
+    }
+
+    & .transparency
+    {
+        position: relative;
+        float: left;
+        width: 20px;
+        height: 112px;
+        margin-left: 8px;
+        border: 6px solid #ddd;
+        background: url(../gfx/transparent.png);
+
+        > .color
+        {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0), black);
+            border: 1px solid #fff;
+            box-sizing: border-box;
+        }
+
+        > .cursor
+        {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #000;
+        }
+    }
+
+    & .view
+    {
+        position: relative;
+        border: 6px solid #ddd;
+        width: 112px;
+        height: 112px;
+        background: url('../gfx/transparent.png');
+        margin-left: 8px;
+        float: left;
+
+        > .color, > .from
+        {
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            border: 1px solid #fff;
+            box-sizing: border-box;
+        }
+
+        > .color { border-bottom: 0; }
+        > .from { border-top: 0; top: 50%; }
+    }
+}

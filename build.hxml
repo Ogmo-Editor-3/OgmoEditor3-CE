@@ -1,0 +1,6 @@
+-lib electron
+-cp src
+-dce no
+-debug
+-js bin/ogmo.js
+-main Ogmo

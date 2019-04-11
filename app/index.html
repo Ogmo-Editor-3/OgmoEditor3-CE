@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Ogmo Editor 3</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="lib/jquery-2.2.0.min.js" type="text/javascript"></script>
+	<script type="text/javascript">var startup = [];</script>
+	<script src="ogmo.js" type="text/javascript"></script>
+</head>
+
+<body class="fullscreen">
+
+	<!-- start page -->
+	<div class="start">
+		<div class="start_inner">
+			<div class="start_logo"><img src="gfx/logo.png" draggable="false"/></div>
+			<div class="start_content">
+				<div class="start_menu">
+					<div class="button start_newProject">
+						<div class="button_icon icon icon-plus"></div>
+						<div class="button_text">New Project</div>
+					</div>
+					<div class="button start_openProject">
+						<div class="button_icon icon icon-folder-open"></div>
+						<div class="button_text">Open Project</div>
+					</div>
+				</div>
+				<div class="start_recents">
+				</div>
+			</div>
+		</div>
+		<div class="start_info">
+			Ogmo Editor V3.0 &copy; 2016
+		</div>
+	</div>
+
+	<!-- editor page -->
+	<div class="editor">
+		<div class="editor_panel editor_panel-left">
+			<div class="editor_layers"></div>
+			<div class="editor_layers_resizer v-resizer"></div>
+			<div class="editor_levels"></div>
+			<div class="editor_buttons">
+				<div class="button close-project"><div class="button_icon icon icon-no"></div></div>
+				<div class="button refresh-project"><div class="button_icon icon icon-entity-rotate"></div></div>
+				<div class="button edit-project"><div class="button_icon icon icon-ogmo"></div><div class="button_text">Edit Project</div></div>
+			</div>
+		</div>
+		<div class="editor_left_resizer h-resizer"></div>
+		<div class="editor_panel editor_panel-main">
+			<canvas class="editor_canvas" id="editor"></canvas>
+			<canvas class="editor_canvas" id="overlay" style="pointer-events: none;"></canvas>
+			<div class="sticker sticker-toolbar"></div>
+			<div class="sticker sticker-center icon icon-move"></div>
+			<div class="sticker sticker-zoom">
+				<div class="sticker-zoom_icon"></div>
+				<div class="sticker-zoom_text"></div>
+			</div>
+			<div class="sticker sticker-mouse">
+				<div class="sticker-mouse_icon"></div>
+				<div class="sticker-mouse_text"></div>
+			</div>
+			<div class="sticker sticker-size"></div>
+			<div class="sticker sticker-action"></div>
+		</div>
+		<div class="editor_right_resizer h-resizer"></div>
+		<div class="editor_panel editor_panel-right">
+			<div class="editor_palette"></div>
+			<div class="editor_palette_resizer v-resizer"></div>
+			<div class="editor_selection"></div>
+		</div>
+	</div>
+
+	<!-- project editor page -->
+	<div class="project">
+		<div class="project_left">
+			<div class="project_tabs">
+			</div>
+			<div class="project_buttons">
+				<div class="button project_save"><div class="button_icon icon icon-save"></div><div class="button_text">Save</div></div>
+				<div class="button project_cancel"><div class="button_icon icon icon-no"></div>Cancel</div>
+			</div>
+		</div>
+		<div class="project_content">
+
+		</div>
+	</div>
+
+</body>
+</html>
