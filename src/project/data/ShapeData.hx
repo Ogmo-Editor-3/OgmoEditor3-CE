@@ -9,8 +9,8 @@ import util.Color;
 class ShapeData
 {
 
-	var label:String;
-	var points:Array<Vector> = [];
+	public var label:String;
+	public var points:Array<Vector> = [];
 
 	public function new() {}
 

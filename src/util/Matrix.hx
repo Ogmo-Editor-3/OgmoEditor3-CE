@@ -3,12 +3,12 @@ package util;
 class Matrix
 {
 
-	var a:Float = 1;
-	var b:Float = 0;
-	var tx:Float = 0;
-	var c:Float = 0;
-	var d:Float = 1;
-	var ty:Float = 0;
+	public var a:Float = 1;
+	public var b:Float = 0;
+	public var tx:Float = 0;
+	public var c:Float = 0;
+	public var d:Float = 1;
+	public var ty:Float = 0;
 
 	public function new() {}
 

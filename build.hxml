@@ -1,4 +1,5 @@
 -lib electron
+-lib jQueryExtern
 -cp src
 -dce no
 -debug

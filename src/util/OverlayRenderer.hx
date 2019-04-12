@@ -2,13 +2,14 @@ package util;
 
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
+import level.data.Level;
 
 class OverlayRenderer
 {
 
 	public var canvas:CanvasElement;
 	public var context:CanvasRenderingContext2D;
-	
+
 	public var width(get, never):Float;
 	function get_width():Float return canvas.width;
 	public var height(get, never):Float;
@@ -26,7 +27,7 @@ class OverlayRenderer
 	
 	// SIZE
 	
-	updateCanvasSize()
+	public function updateCanvasSize()
 	{       
 		canvas.width = canvas.parentElement.clientWidth;
 		canvas.height = canvas.parentElement.clientHeight;
@@ -35,44 +36,44 @@ class OverlayRenderer
 	
 	// DRAWING
 	
-	clear()
+	public function clear()
 	{
 		context.setTransform(1, 0, 0, 1, 0, 0);
 		context.clearRect(0, 0, canvas.width, canvas.height);  
 		context.translate(canvas.width/2, canvas.height/2);   
 	}
 	
-	prepareForLevel(level:Level)
+	public function prepareForLevel(level:Level)
 	{
 		context.transform(level.camera.a, level.camera.b, level.camera.c, level.camera.d, level.camera.tx, level.camera.ty);
 		
 		//Update Line Style Stuff
 		{
-			let dash = 10 / level.zoom;
+			var dash = 10 / level.zoom;
 			dashedLine[0] = dash * .6;
 			dashedLine[1] = dash * .4;       
-			context.lineDashOffset = -((ogmo.totalTime * 1 * dash) % dash);
+			context.lineDashOffset = -((Ogmo.ogmo.totalTime * 1 * dash) % dash);
 			
 			context.lineWidth = 2 / level.zoom;  
 		}
 	}
 	
-	setLineWidth(width:Float, level:Level)
+	public function setLineWidth(width:Float, level:Level)
 	{
 		context.lineWidth = width / level.zoom;
 	}
 	
-	resetLineWidth(level:Level)
+	public function resetLineWidth(level:Level)
 	{
 		context.lineWidth = 2 / level.zoom;
 	}
 	
-	dashedLineMode()
+	public function dashedLineMode()
 	{
 		context.setLineDash(dashedLine);
 	}
 	
-	solidLineMode()
+	public function solidLineMode()
 	{
 		context.setLineDash(solidLine);
 	}
