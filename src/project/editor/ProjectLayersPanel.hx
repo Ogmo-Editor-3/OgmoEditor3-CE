@@ -1,5 +1,7 @@
 package project.editor;
 
+import project.data.LayerDefinition;
+import util.Fields;
 import js.html.Window;
 import js.jquery.JQuery;
 import util.ItemList;
@@ -35,7 +37,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
     root.append(inspector);
   }
 
-  public function begin():Void
+  override public function begin():Void
   {
     // TODO: This block had an extra set of brackets for some reason. if there are issues, check this section out - austin
     // new layer stuff
@@ -50,10 +52,10 @@ class ProjectLayersPanel extends ProjectEditorPanel
     
     var newLayerType = Fields.createOptions(layerTypes, buttons);
     var newLayerButton = Fields.createButton("plus", null, buttons);
-    newLayerButton.on("click", function() { self.newLayer(newLayerType.val()); });
+    newLayerButton.on("click", function() { newLayer(newLayerType.val()); });
 
     refreshList();
-    if (ogmo.project.layers.length > 0) inspect(ogmo.project.layers[0]);
+    if (ogmo.project.layers.length > 0) inspect(Ogmo.ogmo.project.layers[0]);
   }
   
   public function newLayer(definitionId:String):Void

@@ -5,10 +5,10 @@ using StringTools;
 
 class Color
 {
-	var r:Float;
-	var g:Float;
-	var b:Float;
-	var a:Float;
+	public var r:Float;
+	public var g:Float;
+	public var b:Float;
+	public var a:Float;
 
 	public function new(r:Float = 0, g:Float = 0, b:Float = 0, a:Float = 1)
 	{
@@ -46,14 +46,14 @@ class Color
 	}
 
 	// TODO - what does the output of this look like? -01010111
-	// updated - changed let -> var, was that the issue? - austin
+	// updated - may have fixed it? - austin
 	public function toHexAlpha():String
 	{
 		var r = Math.floor(this.r * 255);
 		var g = Math.floor(this.g * 255);
 		var b = Math.floor(this.b * 255);
 		var a = Math.floor(this.a * 255);
-		return "#" + (256 + r).toString(16).substr(1) + ((1 << 24) + (g << 16) | (b << 8) | a).toString(16).substr(1);
+		return "#" + (256 + r).hex(16).substr(1) + ((1 << 24) + (g << 16) | (b << 8) | a).hex(16).substr(1);
 	}
 
 	public function toHSV():Array<Float>
@@ -67,12 +67,23 @@ class Color
 		v = max;
 
 		// TODO - haxe server is saying the last 3 cases are unused? -01010111
-		switch (max)
+		// update - apparently float values arent captured in switch statements? https://community.openfl.org/t/resolved-switch-case-warning-this-case-is-unused/9746
+		// 					just gonna change it to `if` statements for now		
+		if (max == min) h = 0;
+		else if (max == r) 
 		{
-			case min: h = 0;
-			case r: h = (g - b) + d * (g < b ? 6: 0); h /= 6 * d;
-			case g: h = (b - r) + d * 2; h /= 6 * d;
-			case b: h = (r - g) + d * 4; h /= 6 * d;
+			h = (g - b) + d * (g < b ? 6: 0); 
+			h /= 6 * d;
+		}
+		else if (max == g) 
+		{
+			h = (b - r) + d * 2; 
+			h /= 6 * d;
+		}
+		else if (max == b) 
+		{
+			h = (r - g) + d * 4; 
+			h /= 6 * d;
 		}
 
 		return [h, s, v];
@@ -97,7 +108,7 @@ class Color
 		return color;
 	}
 
-	public static function fromHexAlpha(hex:String)
+	public static function fromHexAlpha(hex:String):Color
 	{
 		var color:Color = new Color(0,0,0,0);
 		var result = ~/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -112,6 +123,10 @@ class Color
 			color = Color.fromHex(hex, 1);
 		return color;
 	}*/
+	// TEMP until ^^^ is added
+	public static function fromHex(hex:String, opacity:Float):Color return new Color();
+	// TEMP until ^^^ is added
+	public static function fromHexAlpha(hex:String):Color return new Color();
 
 	public static function fromHSV(h:Float, s:Float, v:Float, ?a:Float):Color
 	{

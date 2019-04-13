@@ -1,13 +1,19 @@
 package rendering;
 
 import js.html.CanvasElement;
-import js.html.Float32Array;
+import js.lib.Float32Array;
 import js.html.webgl.RenderingContext;
+import js.html.webgl.Buffer;
 import js.Syntax;
+import project.data.Tileset;
+import util.Vector;
+import util.Color;
+import util.Rectangle;
+import util.Matrix3D;
 
 class GLRenderer
 {
-	static var renderers: Map<String, GLRenderer> = new Map();
+	public static var renderers: Map<String, GLRenderer> = new Map();
 	
 	public var name: String;
 	public var canvas: CanvasElement;
@@ -20,13 +26,13 @@ class GLRenderer
 	private var shapeShader: Shader;
 	private var textureShader: Shader;
 	private var orthoMatrix: Matrix3D;
-	private var posBuffer: WebGLBuffer;
-	private var colBuffer: WebGLBuffer;  
-	private var uvBuffer: WebGLBuffer; 
-	private var positions: Array<Int> = [];
-	private var colors: Array<Int> = [];
-	private var uvs: Array<Int> = [];
-	private var currentDrawMode: Array<Int> = -1;
+	private var posBuffer: Buffer;
+	private var colBuffer: Buffer;  
+	private var uvBuffer: Buffer; 
+	private var positions: Array<Float> = [];
+	private var colors: Array<Float> = [];
+	private var uvs: Array<Float> = [];
+	private var currentDrawMode: Int = -1;
 	private var currentTexture: Texture = null;
 	private var lastAlpha: Int;
 	
@@ -39,11 +45,11 @@ class GLRenderer
 		
 		// init gl
 		gl = canvas.getContext("experimental-webgl");
-		gl.enable(gl.BLEND);
-		gl.disable(gl.DEPTH_TEST);
-		gl.disable(gl.CULL_FACE);
+		gl.enable(RenderingContext.BLEND);
+		gl.disable(RenderingContext.DEPTH_TEST);
+		gl.disable(RenderingContext.CULL_FACE);
 		gl.clearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+		gl.blendFunc(RenderingContext.SRC_ALPHA, RenderingContext.ONE_MINUS_SRC_ALPHA);
 		
 		posBuffer = gl.createBuffer();
 		colBuffer = gl.createBuffer();
@@ -82,7 +88,7 @@ class GLRenderer
 	public function clear(): Void
 	{
 		gl.clearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
 	}
 	
 	public function finishDrawing(): Void
@@ -105,7 +111,7 @@ class GLRenderer
 		if (currentDrawMode != newMode)
 		{
 			if (currentTexture != null)
-				doDraw(gl.TRIANGLES, currentTexture);
+				doDraw(RenderingContext.TRIANGLES, currentTexture);
 			else if (currentDrawMode != -1)
 				doDraw(currentDrawMode, null);
 				
@@ -119,7 +125,7 @@ class GLRenderer
 		if (currentTexture != texture)
 		{
 			if (currentTexture != null)
-				doDraw(gl.TRIANGLES, currentTexture);
+				doDraw(RenderingContext.TRIANGLES, currentTexture);
 			else if (currentDrawMode != -1)
 				doDraw(currentDrawMode, null);
 			
@@ -138,30 +144,30 @@ class GLRenderer
 		// positions
 		{
 			gl.enableVertexAttribArray(shader.vertexPositionAttribute);
-			gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
-			gl.vertexAttribPointer(shader.vertexPositionAttribute, 2, gl.FLOAT, false, 0, 0);
-			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+			gl.bindBuffer(RenderingContext.ARRAY_BUFFER, posBuffer);
+			gl.vertexAttribPointer(shader.vertexPositionAttribute, 2, RenderingContext.FLOAT, false, 0, 0);
+			gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32Array(positions), RenderingContext.STATIC_DRAW);
 		}
 
 		// vertex colors (shape shader)
 		if (texture == null)
 		{
 			gl.enableVertexAttribArray(shader.vertexColorAttribute);
-			gl.bindBuffer(gl.ARRAY_BUFFER, colBuffer);
-			gl.vertexAttribPointer(shader.vertexColorAttribute, 4, gl.FLOAT, false, 0, 0);
-			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+			gl.bindBuffer(RenderingContext.ARRAY_BUFFER, colBuffer);
+			gl.vertexAttribPointer(shader.vertexColorAttribute, 4, RenderingContext.FLOAT, false, 0, 0);
+			gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32Array(colors), RenderingContext.STATIC_DRAW);
 		}
 		// vertex uv's (texture shader)
 		else
 		{
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, texture.textures[name]);
+			gl.activeTexture(RenderingContext.TEXTURE0);
+			gl.bindTexture(RenderingContext.TEXTURE_2D, texture.textures[name]);
 			gl.uniform1i(gl.getUniformLocation(shader.program, "texture"), 0);
 			
 			gl.enableVertexAttribArray(shader.vertexUVAttribute);
-			gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
-			gl.vertexAttribPointer(shader.vertexUVAttribute, 2, gl.FLOAT, false, 0, 0);
-			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uvs), gl.STATIC_DRAW);
+			gl.bindBuffer(RenderingContext.ARRAY_BUFFER, uvBuffer);
+			gl.vertexAttribPointer(shader.vertexUVAttribute, 2, RenderingContext.FLOAT, false, 0, 0);
+			gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32Array(uvs), RenderingContext.STATIC_DRAW);
 		}
 
 		// Set Matrix Uniforms
@@ -171,14 +177,14 @@ class GLRenderer
 			gl.uniformMatrix4fv(pUniform, false, orthoMatrix.flatten());
 
 			var mvUniform = gl.getUniformLocation(shader.program, "matrix");
-			gl.uniformMatrix3fv(mvUniform, false, editor.level.camera.flatten());
+			gl.uniformMatrix3fv(mvUniform, false, Ogmo.editor.level.camera.flatten());
 		}
 		
-		gl.drawArrays(drawMode, 0, positions.length / 2);
+		gl.drawArrays(drawMode, 0, Math.floor(positions.length / 2));
 
-		positions.length = 0;
-		colors.length = 0;
-		uvs.length = 0;
+		positions.resize(0);
+		colors.resize(0);
+		uvs.resize(0);
 	}
 	
 	// TEXTURES
@@ -188,14 +194,14 @@ class GLRenderer
 	private var botleft:Vector = new Vector();
 	private var botright:Vector = new Vector();
 	
-	public function drawTexture(x:Int, y:Int, texture:Texture, ?origin:Vector, ?scale:Vector, ?rotation:Float, ?clipX:Float, ?clipY:Float, ?clipW:Flaot, ?clipH:Float):Void
+	public function drawTexture(x:Float, y:Float, texture:Texture, ?origin:Vector, ?scale:Vector, ?rotation:Float, ?clipX:Float, ?clipY:Float, ?clipW:Float, ?clipH:Float):Void
 	{
 		setTexture(texture);
 
-		if (clipX == undefined) clipX = 0;
-		if (clipY == undefined) clipY = 0;
-		if (clipW == undefined) clipW = texture.width;
-		if (clipH == undefined) clipH = texture.height;
+		if (clipX == null) clipX = 0;
+		if (clipY == null) clipY = 0;
+		if (clipW == null) clipW = texture.width;
+		if (clipH == null) clipH = texture.height;
 		
 		// relative positions
 		topleft.set(0, 0);
@@ -204,7 +210,7 @@ class GLRenderer
 		botright.set(clipW, clipH);
 		
 		// offset by origin
-		if (origin && (origin.x != 0 || origin.y != 0))
+		if (origin != null && (origin.x != 0 || origin.y != 0))
 		{
 			topleft.sub(origin);
 			topright.sub(origin);
@@ -213,7 +219,7 @@ class GLRenderer
 		}
 		
 		// scale
-		if (scale && (scale.x != 1 || scale.y != 1))
+		if (scale != null && (scale.x != 1 || scale.y != 1))
 		{
 			topleft.mult(scale);
 			topright.mult(scale);
@@ -222,7 +228,7 @@ class GLRenderer
 		}
 		
 		// rotate
-		if (rotation && rotation != 0)
+		if (rotation != null && rotation != 0)
 		{
 			var s = Math.sin(rotation);
 			var c = Math.cos(rotation);
@@ -266,7 +272,7 @@ class GLRenderer
     uvs.push(uvy + uvh);
 	}
 
-	public function drawTile(x: Int, y: Int, tileset: Tileset, id: Int): Void
+	public function drawTile(x:Float, y:Float, tileset: Tileset, id: Int): Void
 	{
 		setTexture(tileset.texture);
 		
@@ -311,9 +317,9 @@ class GLRenderer
 	
 	// GEOMETRY
 	
-	public function drawRect(x:Int, y:Int, w:Int, h:Int, col:Color):Void
+	public function drawRect(x:Float, y:Float, w:Float, h:Float, col:Color):Void
 	{
-		setDrawMode(gl.TRIANGLES);
+		setDrawMode(RenderingContext.TRIANGLES);
 		
 		positions.push(x);
     positions.push(y);
@@ -331,9 +337,9 @@ class GLRenderer
     add_color(col, 6);
 	}
 
-	public function drawTriangle(x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int, col:Color):Void
+	public function drawTriangle(x1:Float, y1:Float, x2:Float, y2:Float, x3:Float, y3:Float, col:Color):Void
 	{
-		setDrawMode(gl.TRIANGLES);
+		setDrawMode(RenderingContext.TRIANGLES);
 		
 		positions.push(x1);
     positions.push(y1);
@@ -347,7 +353,7 @@ class GLRenderer
 
 	public function drawTri(p1: Vector, p2: Vector, p3: Vector, col: Color): Void
 	{
-		setDrawMode(gl.TRIANGLES);
+		setDrawMode(RenderingContext.TRIANGLES);
 		
 		positions.push(p1.x);
     positions.push(p1.y);
@@ -361,7 +367,7 @@ class GLRenderer
 
 	public function drawTris(points: Array<Vector>, offset: Vector, col: Color): Void
 	{
-		setDrawMode(gl.TRIANGLES);
+		setDrawMode(RenderingContext.TRIANGLES);
 		
     var i = 0;
 		while (i < points.length - 2) 
@@ -378,7 +384,7 @@ class GLRenderer
 
 	public function drawLine(a: Vector, b: Vector, col: Color): Void
 	{
-		setDrawMode(gl.LINES);
+		setDrawMode(RenderingContext.LINES);
 		
 		positions.push(a.x);
     positions.push(a.y);
@@ -390,7 +396,7 @@ class GLRenderer
 
 	public function drawLineNode(at: Vector, radius: Float, col: Color): Void
 	{
-		setDrawMode(gl.LINES);
+		setDrawMode(RenderingContext.LINES);
 		
 		var seg = (Math.PI / 2) / 8;
 		var last = new Vector(radius, 0);
@@ -425,10 +431,10 @@ class GLRenderer
 
 	public function drawCircle(x:Int, y:Int, radius:Float, segments:Int, col:Color):Void
 	{
-		setDrawMode(gl.LINES);
+		setDrawMode(RenderingContext.LINES);
 		
-		var p:Array<Int> = [x, y, x + radius, y];
-		var c:Array<Int> = [];
+		var p:Array<Float> = [x, y, x + radius, y];
+		var c:Array<Float> = [];
 
 		for (i in 1...segments)
 		{
@@ -436,7 +442,10 @@ class GLRenderer
 			var atX = x + Math.cos(rads) * radius;
 			var atY = y + Math.sin(rads) * radius;
 
-			p.push(atX, atY, x, y);
+			p.push(atX);
+			p.push(atY);
+			p.push(x);
+			p.push(y);
 		}
 
 		for (i in 0...Math.floor(p.length / 2)) {
@@ -449,7 +458,7 @@ class GLRenderer
 
 	public function drawGrid(gridSize: Vector, gridOffset: Vector, size: Vector, zoom: Float, col: Color): Void
 	{
-		setDrawMode(gl.LINES);
+		setDrawMode(RenderingContext.LINES);
 		
 		var minSpace = 10;
 		var intX = gridSize.x;
@@ -489,7 +498,7 @@ class GLRenderer
 
 	public function drawLineRect(rect: Rectangle, col: Color): Void
 	{
-		setDrawMode(gl.LINES);
+		setDrawMode(RenderingContext.LINES);
 		
 		positions.push(rect.x);
 		positions.push(rect.y);

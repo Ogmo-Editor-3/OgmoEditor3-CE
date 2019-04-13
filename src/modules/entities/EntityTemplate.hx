@@ -1,5 +1,13 @@
 package modules.entities;
 
+import util.Matrix;
+import util.Vector;
+import util.Color;
+import project.data.Project;
+import project.data.ShapeData;
+import project.data.value.ValueTemplate;
+import Enums;
+
 class EntityTemplate
 {
 	public var exportID:String;
@@ -22,7 +30,7 @@ class EntityTemplate
 	public var canSetColor:Bool = false;
 	public var hasNodes:Bool = false;
 	public var nodeLimit:Int = -1;
-	public var nodeDisplay:Float = NodeDisplayModes.Path;
+	public var nodeDisplay:NodeDisplayModes = NodeDisplayModes.PATH;
 	public var nodeGhost:Bool = true;
 	public var values:Array<ValueTemplate> = [];
 	public var tags:Array<String> = [];
@@ -35,7 +43,7 @@ class EntityTemplate
 
 	public function drawPreview(at:Vector)
 	{
-		editor.overlay.drawTris(getPreviewPoints(), at, color.x(0.5));
+		Ogmo.editor.overlay.drawTris(getPreviewPoints(), at, color.x(0.5));
 	}
 
 	public static function create(project:Project):EntityTemplate
@@ -161,7 +169,7 @@ class EntityTemplate
 	public function allowedOnLayer(template:EntityLayerTemplate):Bool
 	{
 		for (tag in template.requiredTags) if (tags.indexOf(tag) == -1) return false;
-		for (tag in template.xcludedTags) if (tags.indexOf(tag) != -1) return false;
+		for (tag in template.excludedTags) if (tags.indexOf(tag) != -1) return false;
 		return true;
 	}
 

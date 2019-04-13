@@ -2,9 +2,25 @@ package modules.entities;
 
 class EntityTemplateList
 {
-	public var templates: Array<EntityTemplate> = [];
-	public var tags:Array<String> = [];
-	public var tagLists:Map<String, Array<EntityTemplate>> = new Map();
+	public var templates: Array<EntityTemplate>;
+	public var tags:Array<String>;
+	public var tagLists:Map<String, Array<EntityTemplate>>;
+	var i:Int;
+
+	public function new() {
+		templates = [];
+		tags = [];
+		tagLists = new Map();
+		i = 0;
+	}
+
+	public function hasNext() {
+    return i < templates.length;
+  }
+
+  public function next() {
+    return templates[i++];
+  }
 
 	public function add(template:EntityTemplate)
 	{
@@ -23,7 +39,7 @@ class EntityTemplateList
 		// add to moved pos
 		{
 			var n = templates.indexOf(toBelow);
-			if (n != -1) templates.splice(n + 1, 0, template);
+			if (n != -1) templates.insert(n + 1, template);
 			else templates.insert(0, template);
 		}
 	}

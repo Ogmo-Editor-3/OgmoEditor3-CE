@@ -1,5 +1,8 @@
 package io;
 
+import level.data.Level;
+import level.data.Value;
+import util.Color;
 import js.Browser;
 import js.html.Element;
 import js.html.Document;

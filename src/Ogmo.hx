@@ -19,7 +19,7 @@ class Ogmo
 	public var popupMode:Bool = false;
 	public var root:String = App.getAppPath();
 
-	var project:Project = null;
+	public var project:Project = null;
 	var startTile:Float = js.Date.now();
 	var lastTime:Float = js.Date.now();
 	var deltaTime:Float = 0;

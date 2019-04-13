@@ -66,7 +66,7 @@ class Tileset
   
   public static function load(project:Project, data:Dynamic):Tileset
   {
-    var img = Browser.document.createElement("img");
+    var img = Browser.document.createImageElement();
     img.src = data.image;
     return new Tileset(project, data.label, data.path, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, img);
   }
@@ -75,13 +75,13 @@ class Tileset
   
   public inline function getTileY(id: Int): Float return Math.floor(id / tileColumns);
   
-  public inline function coordsToID(x: Float, y: Float): Int return x + y * tileColumns;
+  public inline function coordsToID(x: Float, y: Float): Int return Math.floor(x + y * tileColumns);
   
   inline function get_width():Int return texture.image.width;
   
   inline function get_height():Int return texture.image.height;
   
-  inline function get_tileColumns():Int return (width - tileSeparationX) / (tileWidth + tileSeparationX); 
+  inline function get_tileColumns():Int return Math.floor((width - tileSeparationX) / (tileWidth + tileSeparationX)); 
   
-  inline function get_tileRows():Int return (height - tileSeparationY) / (tileHeight + tileSeparationY); 
+  inline function get_tileRows():Int return Math.floor((height - tileSeparationY) / (tileHeight + tileSeparationY)); 
 }

@@ -144,6 +144,8 @@ class Vector
 		data[xName] = this.x;
 		data[yName] = this.y;
 	}*/
+	// TEMP for ^^^
+	public function saveInto(data:Dynamic, xName:String, yName:String) {}
 
 	public function round(?result:Vector):Vector
 	{

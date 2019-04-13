@@ -7,10 +7,10 @@ import level.editor.LayerEditor;
 
 class LayerTemplate
 {
-  var exportID: String;
-  var name: String = "";
-  var gridSize: Vector = new Vector(8, 8);
-  var definition: LayerDefinition;
+  public var exportID: String;
+  public var name: String = "";
+  public var gridSize: Vector = new Vector(8, 8);
+  public var definition: LayerDefinition;
 
   public function new(exportID: String)
   {
@@ -32,7 +32,7 @@ class LayerTemplate
     return data;
   }
 
-  public function load(data: Dynamic): LayerTemplate
+  public function load(data: Dynamic):LayerTemplate
   {
     this.name = data.name;
     this.gridSize = Vector.load(data.gridSize);
@@ -40,9 +40,9 @@ class LayerTemplate
   }
 
   /// Create a data layer from this template
-  function createEditor(id: Int): LayerEditor {}
+  public function createEditor(id: Int):LayerEditor return null;
   
-  function createLayer(level: Level, id: Int): Layer {}
+  public function createLayer(level: Level, id: Int):Layer return null;
 
-  function projectWasLoaded(project:Project):Void {}
+  public function projectWasLoaded(project:Project):Void {}
 }
