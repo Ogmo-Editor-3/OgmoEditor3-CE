@@ -12,7 +12,7 @@ class Shader
 	var vertexUVAttribute: Float;
 	var uniforms: Map<String,WebGLUniformLocation> = {};
 
-	public function new(gl: WebGLRenderingContext, shader:string)
+	public function new(gl: WebGLRenderingContext, shader:String)
 	{
 		this.gl = gl;
 
@@ -44,23 +44,23 @@ class Shader
 		gl.deleteProgram(program);
 	}
 
-	public function setUniform1f(name: string, value: number): Void
+	public function setUniform1f(name: String, value: Float): Void
 	{
 		if (uniforms[name] == undefined) uniforms[name] = gl.getUniformLocation(program, name);
 		gl.uniform1f(uniforms[name], value);
 	}
 	
-	public function setUniform2f(name: string, vec:Vector): Void
+	public function setUniform2f(name: String, vec:Vector): Void
 	{
 		if (uniforms[name] == undefined) uniforms[name] = gl.getUniformLocation(program, name);
 		gl.uniform2f(uniforms[name], vec.x, vec.y);
 	}
 
-	private function getShader(path: string): WebGLShader
+	private function getShader(path: String): WebGLShader
 	{
 		var type = (Path.extname(path) == ".vs" ? gl.VERTEX_SHADER : gl.FRAGMENT_SHADER);
 		var shader:WebGLShader = gl.createShader(type);
-		var source = Fs.readFileSync(Path.join(ogmo.root, "shaders/" + path));
+		var source = Fs.readFileSync(Path.join(Ogmo.ogmo.root, "shaders/" + path));
 
 		// Compile the shader program
 		gl.shaderSource(shader, source);

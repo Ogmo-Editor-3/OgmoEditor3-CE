@@ -1,5 +1,10 @@
 package project.data;
 
+import util.Vector;
+import level.data.Layer;
+import level.data.Level;
+import level.editor.LayerEditor;
+
 class LayerTemplate
 {
   var exportID: String;

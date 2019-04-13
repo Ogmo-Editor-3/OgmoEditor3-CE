@@ -1,12 +1,14 @@
 import electron.main.App;
 import electron.renderer.Remote;
 import project.data.Project;
+import level.editor.Editor;
 import util.Vector;
 
 class Ogmo
 {
 
 	public static var ogmo:Ogmo;
+	public static var editor:Editor;
 
 	public var version:String = 'v0.001';
 	public var settings:Settings;

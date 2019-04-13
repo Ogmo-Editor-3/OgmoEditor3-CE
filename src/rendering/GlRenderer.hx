@@ -9,13 +9,13 @@ class GLRenderer
 {
 	static var renderers: Map<String, GLRenderer> = new Map();
 	
-	var name: String;
-	var canvas: CanvasElement;
-	var gl: RenderingContext; 
-	var clearColor:Color = Color.fromHex("#171a20", 1);
-	var loadTextures:Bool = true;
-  var width(get,null)Int;
-  var height(get,null)Int;
+	public var name: String;
+	public var canvas: CanvasElement;
+	public var gl: RenderingContext; 
+	public var clearColor:Color = Color.fromHex("#171a20", 1);
+	public var loadTextures:Bool = true;
+  public var width(get,null):Int;
+  public var height(get,null):Int;
 	
 	private var shapeShader: Shader;
 	private var textureShader: Shader;
@@ -79,13 +79,13 @@ class GLRenderer
 	
 	// DRAWING
 	
-	public function function clear(): Void
+	public function clear(): Void
 	{
 		gl.clearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	}
 	
-	public function function finishDrawing(): Void
+	public function finishDrawing(): Void
 	{
 		setTexture(null);
 		setDrawMode(-1);
@@ -188,7 +188,7 @@ class GLRenderer
 	private var botleft:Vector = new Vector();
 	private var botright:Vector = new Vector();
 	
-	public function drawTexture(x:Int, y:Int, texture:Texture, origin?:Vector, scale?:Vector, rotation?:Float, clipX?:Float, clipY?:Float, clipW?:Flaot, clipH?:Float):Void
+	public function drawTexture(x:Int, y:Int, texture:Texture, ?origin:Vector, ?scale:Vector, ?rotation:Float, ?clipX:Float, ?clipY:Float, ?clipW:Flaot, ?clipH:Float):Void
 	{
 		setTexture(texture);
 
@@ -289,7 +289,7 @@ class GLRenderer
     positions.push(y + th);
 		
 		// use this to push in the UVs a bit to aVoid seems
-		var texel = new Vector(1 / tileset.width, 1 / tileset.height)
+		var texel = new Vector(1 / tileset.width, 1 / tileset.height);
 		var uvx = (tileset.tileSeparationX + tx * (tileset.tileWidth + tileset.tileSeparationX)) / tileset.width + texel.x * .01;
 		var uvy = (tileset.tileSeparationY + ty * (tileset.tileHeight + tileset.tileSeparationY)) / tileset.height + texel.y * .01;
 		var uvw = tileset.tileWidth / tileset.width - texel.x * .02;
@@ -359,7 +359,7 @@ class GLRenderer
 		add_color(col, 3);
 	}
 
-	public function drawTris(points: Vector[], offset: Vector, col: Color): Void
+	public function drawTris(points: Array<Vector>, offset: Vector, col: Color): Void
 	{
 		setDrawMode(gl.TRIANGLES);
 		
@@ -372,7 +372,7 @@ class GLRenderer
 				points[i + 2].x + offset.x, points[i + 2].y + offset.y,
 				col
 			);
-      i += 3
+      i += 3;
     }
 	}
 
@@ -470,7 +470,7 @@ class GLRenderer
 
       add_color(col, 2);
 
-      i += intX
+      i += intX;
 		}
 
     i = intY + gridOffset.y;
@@ -483,7 +483,7 @@ class GLRenderer
 
 			add_color(col, 2);
 
-      i += intY
+      i += intY;
 		}
 	}
 
@@ -524,7 +524,7 @@ class GLRenderer
     }
   }
 
-  function get_width(): Int return canvas.width;
+  function get_width():Int return canvas.width;
 
-	function get_height(): Int return canvas.height;
+	function get_height():Int return canvas.height;
 }

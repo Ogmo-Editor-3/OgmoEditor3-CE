@@ -49,7 +49,7 @@ class Texture
 	function load():Void
 	{
 		center = new Vector(image.width / 2, image.height / 2);
-		for (var name in GLRenderer.renderers)
+		for (name in GLRenderer.renderers.keys())
 		{
 			if (GLRenderer.renderers[name].loadTextures)
 			{
@@ -71,7 +71,7 @@ class Texture
 	
 	inline function dispose(): Void
 	{
-		for (var name in textures) GLRenderer.renderers[name].gl.deleteTexture(textures[name]);
+		for (name in textures.keys()) GLRenderer.renderers[name].gl.deleteTexture(textures[name]);
 		textures = new Map();
 	}
 	

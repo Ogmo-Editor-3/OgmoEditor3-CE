@@ -1,7 +1,10 @@
 package project.data;
 
-import modules.entities.EntityTemplateList;
 import js.node.Path;
+import modules.entities.EntityTemplate;
+import modules.entities.EntityTemplateList;
+import util.Color;
+import util.Vector;
 
 class Project
 {
@@ -215,5 +218,5 @@ typedef ProjectSaveFile =
 	entityTags:Array<String>,
 	layers:Array<LayerTemplate>,
 	entities:Array<EntityTemplate>,
-	tilesets:Array<Tilesets>
+	tilesets:Array<Tileset>
 }

@@ -110,7 +110,7 @@ class EntityTemplate
 		return e;
 	}
 
-	save():Dynamic
+	public function save():Dynamic
 	{
 		return {
 			exportID: exportID,
@@ -140,25 +140,25 @@ class EntityTemplate
 		}
 	}
 
-	getPreviewPoints():Array<Vector>
+	public function getPreviewPoints():Array<Vector>
 	{
 		if (_points == null) refreshPoints();
 		return _points;
 	}
 
-	getIcon():String
+	public function getIcon():String
 	{
 		if (_icon == null) refreshIcon();
 		return _icon;
 	}
 
-	onShapeChanged()
+	public function onShapeChanged()
 	{
 		refreshPoints();
 		refreshIcon();
 	}
 
-	allowedOnLayer(template:EntityLayerTemplate):Bool
+	public function allowedOnLayer(template:EntityLayerTemplate):Bool
 	{
 		for (tag in template.requiredTags) if (tags.indexOf(tag) == -1) return false;
 		for (tag in template.xcludedTags) if (tags.indexOf(tag) != -1) return false;

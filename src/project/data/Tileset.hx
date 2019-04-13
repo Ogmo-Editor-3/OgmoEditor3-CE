@@ -4,6 +4,7 @@ import io.FileSystem;
 import js.Browser;
 import js.node.Path;
 import js.html.ImageElement;
+import rendering.Texture;
 
 class Tileset
 {
@@ -15,7 +16,7 @@ class Tileset
   public var height(get, null):Int;
 
   public var tileColumns(get, null):Int;
-  public var tileHeight(get, null):Int;
+  public var tileRows(get, null):Int;
   public var tileWidth: Int;
   public var tileHeight: Int;
   public var tileSeparationX: Int;
@@ -24,7 +25,7 @@ class Tileset
   public var brokenPath:Bool = false;
 	public var brokenTexture:Bool = false;
     
-  public function new(project:Project, label:string, path:string, tileWidth:Int, tileHeight:Int, tileSepX:Int, tileSepY:Int, ?image:ImageElement)
+  public function new(project:Project, label:String, path:String, tileWidth:Int, tileHeight:Int, tileSepX:Int, tileSepY:Int, ?image:ImageElement)
   {
     this.label = label;
     this.path = path;
