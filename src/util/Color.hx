@@ -46,14 +46,15 @@ class Color
 	}
 
 	// TODO - what does the output of this look like? -01010111
-	/*public function toHexAlpha():String
+	// updated - changed let -> var, was that the issue? - austin
+	public function toHexAlpha():String
 	{
-		let r = Math.floor(this.r * 255);
-		let g = Math.floor(this.g * 255);
-		let b = Math.floor(this.b * 255);
-		let a = Math.floor(this.a * 255);
+		var r = Math.floor(this.r * 255);
+		var g = Math.floor(this.g * 255);
+		var b = Math.floor(this.b * 255);
+		var a = Math.floor(this.a * 255);
 		return "#" + (256 + r).toString(16).substr(1) + ((1 << 24) + (g << 16) | (b << 8) | a).toString(16).substr(1);
-	}*/
+	}
 
 	public function toHSV():Array<Float>
 	{
