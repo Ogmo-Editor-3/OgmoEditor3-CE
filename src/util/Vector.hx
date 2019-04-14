@@ -12,10 +12,10 @@ class Vector
 	}
 
 	public var length(get, never):Float;
-	function get_length():Float return Math.sqrt(this.x * this.x + this.y * this.y);
+	function get_length():Float return Math.sqrt(x * x + y * y);
 
 	public var angle(get, never):Float;
-	function get_angle():Float return Math.atan2(this.y, this.x);
+	function get_angle():Float return Math.atan2(y, x);
 
 	public function set(x:Float, y:Float):Vector
 	{
@@ -26,51 +26,51 @@ class Vector
 
 	public function copy(v:Vector):Vector
 	{
-		this.x = v.x;
-		this.y = v.y;
+		x = v.x;
+		y = v.y;
 		return this;
 	}
 	
 	public function add(v:Vector):Vector
 	{
-		this.x += v.x;
-		this.y += v.y;
+		x += v.x;
+		y += v.y;
 		return this;
 	}
 	
 	public function sub(v:Vector):Vector
 	{
-		this.x -= v.x;
-		this.y -= v.y;
+		x -= v.x;
+		y -= v.y;
 		return this;
 	}
 	
 	public function mult(v:Vector):Vector
 	{
-		this.x *= v.x;
-		this.y *= v.y;
+		x *= v.x;
+		y *= v.y;
 		return this;
 	}
 
 	public function div(v:Vector):Vector
 	{
-		this.x /= v.x;
-		this.y /= v.y;
+		x /= v.x;
+		y /= v.y;
 		return this;
 	}
 	
 	public function scale(s:Float):Vector
 	{
-		this.x *= s;
-		this.y *= s;
+		x *= s;
+		y *= s;
 		return this;
 	}
 	
 	public function rotate(sin:Float, cos:Float):Vector
 	{
-		var ox = this.x, oy = this.y;
-		this.x = ox * cos - oy * sin;
-		this.y = ox * sin + oy * cos;
+		var ox = x, oy = y;
+		x = ox * cos - oy * sin;
+		y = ox * sin + oy * cos;
 		return this;
 	}
 
@@ -78,35 +78,35 @@ class Vector
 	{
 		if (result != null)
 		{
-			result.x = this.x;
-			result.y = this.y;
+			result.x = x;
+			result.y = y;
 		}
 		else
-			result = new Vector(this.x, this.y);
+			result = new Vector(x, y);
 		return result;
 	}
 
 	public function normalize():Vector
 	{
-		var len:Float = this.length;
+		var len:Float = length;
 		if (len > 0)
 		{
-			this.x /= len;
-			this.y /= len;
+			x /= len;
+			y /= len;
 		}
 		return this;
 	}
 
 	public function setPolar(angle:Float, length:Float):Vector
 	{
-		this.x = Math.cos(angle) * length;
-		this.y = Math.sin(angle) * length;
+		x = Math.cos(angle) * length;
+		y = Math.sin(angle) * length;
 		return this;
 	}
 
 	public function turnLeft():Vector
 	{
-		var x:Float = this.x;
+		var x:Float = x;
 		this.x = this.y;
 		this.y = -x;
 		return this;
@@ -122,38 +122,35 @@ class Vector
 
 	public function toString():String
 	{
-		return "{ " + this.x + ", " + this.y + " }";
+		return "{ " + x + ", " + y + " }";
 	}
 
 	public function equals(other:Vector):Bool
 	{
-		return this.x == other.x && this.y == other.y;
+		return x == other.x && y == other.y;
 	}
 
 	public function save():Dynamic
 	{
 		var obj:Dynamic = {};
-		obj.x = this.x;
-		obj.y= this.y;
+		obj.x = x;
+		obj.y= y;
 		return obj;
 	}
 
-	/* TODO
 	public function saveInto(data:Dynamic, xName:String, yName:String)
 	{
-		data[xName] = this.x;
-		data[yName] = this.y;
-	}*/
-	// TEMP for ^^^
-	public function saveInto(data:Dynamic, xName:String, yName:String) {}
+		data[xName] = x;
+		data[yName] = y;
+	}
 
 	public function round(?result:Vector):Vector
 	{
 		if (result == null)
 			result = new Vector();
 
-		result.x = Math.round(this.x);
-		result.y = Math.round(this.y);
+		result.x = Math.round(x);
+		result.y = Math.round(y);
 
 		return result;
 	}
