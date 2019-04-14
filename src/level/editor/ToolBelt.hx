@@ -1,10 +1,12 @@
 package level.editor;
 
+import js.jquery.JQuery;
 import level.editor.ui.ToolButton;
+import util.Keys;
 
 class ToolBelt
 {
-  public var allTools:Map<String, Tool> = new Map();
+  public var allTools:Map<String, Array<Tool>> = new Map();
   public var keyToolFrom:Int;
   public var currentKeyTool:Int = 0;
   public var buttons:Array<ToolButton> = [];
@@ -25,7 +27,7 @@ class ToolBelt
     if (currentKeyTool != key)
     {
       var tool:Int = -1;
-      var layer:String = editor.level.currentLayer.template.definition.id;
+      var layer:String = Ogmo.editor.level.currentLayer.template.definition.id;
 
       switch (key)
       {
@@ -39,7 +41,7 @@ class ToolBelt
           throw "Not a keytool key!";
       }
 
-      if (currentKeyTool == 0) keyToolFrom = editor.currentLayerEditor.currentTool;
+      if (currentKeyTool == 0) keyToolFrom = Ogmo.editor.currentLayerEditor.currentTool;
 
       if (setTool(tool))
       {
@@ -49,6 +51,7 @@ class ToolBelt
       
       return tool != -1;
     }
+    return false;
   }
 
   public function unsetKeyTool(key:Int):Bool
@@ -75,21 +78,21 @@ class ToolBelt
 
   public function afterSetLayer():Void
   {
-    setTool(editor.currentLayerEditor.currentTool, true);
+    setTool(Ogmo.editor.currentLayerEditor.currentTool, true);
     populateToolbar();
   }
 
   public function setTool(id:Int, ?force:Bool):Bool
   {
-    if (force == undefined) force = false;
+    if (force == null) force = false;
 
-    var layer = editor.level.currentLayer.template.definition.id;
+    var layer = Ogmo.editor.level.currentLayer.template.definition.id;
 
-    if (id >= 0 && (id != editor.currentLayerEditor.currentTool || force) && id < allTools[layer].length)
+    if (id >= 0 && (id != Ogmo.editor.currentLayerEditor.currentTool || force) && id < allTools[layer].length)
     {
-      editor.currentLayerEditor.currentTool = id;
-      editor.dirty();
-      editor.locked = false;
+      Ogmo.editor.currentLayerEditor.currentTool = id;
+      Ogmo.editor.dirty();
+      Ogmo.editor.locked = false;
 
       currentKeyTool = 0;
       refreshToolbar();
@@ -106,9 +109,9 @@ class ToolBelt
 
   public function populateToolbar():Void
   {
-    var tools = allTools[editor.level.currentLayer.template.definition.id];
-    var toolbar = $(".sticker-toolbar");
-    buttons.length = 0;
+    var tools = allTools[Ogmo.editor.level.currentLayer.template.definition.id];
+    var toolbar = new JQuery(".sticker-toolbar");
+    buttons.resize(0);
 
     toolbar.empty();
     for (i in 0...tools.length)
@@ -125,7 +128,7 @@ class ToolBelt
   {
     for (i in 0...buttons.length)
     {
-      if (i == editor.currentLayerEditor.currentTool)
+      if (i == Ogmo.editor.currentLayerEditor.currentTool)
       {
         if (currentKeyTool != 0) buttons[i].keyToolSelected();
         else buttons[i].selected();

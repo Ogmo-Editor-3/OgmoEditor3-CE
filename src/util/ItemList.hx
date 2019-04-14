@@ -2,7 +2,7 @@ package util;
 
 class ItemListNode 
 {
-
+	public function new() {}
 }
 
 class ItemListFolder extends ItemListNode

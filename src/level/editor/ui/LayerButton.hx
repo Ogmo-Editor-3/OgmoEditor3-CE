@@ -28,13 +28,13 @@ class LayerButton
     jqRoot.append(jqIcon).append(jqName).append(jqVis);
 
     // select layer
-    jqRoot.click(function(e) { editor.setLayer(self.id); });
+    jqRoot.click(function(e) { Ogmo.editor.setLayer(this.id); });
 
     // toggle visibility
     jqVis.click(function (e)
     {
-      var visible = editor.toggleLayerVisibility(self.id);
-      self.updateEyeIcon(visible);
+      var visible = Ogmo.editor.toggleLayerVisibility(this.id);
+      updateEyeIcon(visible);
       e.stopPropagation();
     });
   }

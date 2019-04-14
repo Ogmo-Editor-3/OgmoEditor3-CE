@@ -9,10 +9,10 @@ class LayersPanel extends SidePanel
 
   override function populate(into:JQuery):Void
   {
-    buttons.length = 0;
+    buttons.resize(0);
     into.empty();
 
-    var height = 0;
+    var height:Float = 0;
     for (i in 0...Ogmo.ogmo.project.layers.length)
     {
       var button = new LayerButton(Ogmo.ogmo.project.layers[i], i);

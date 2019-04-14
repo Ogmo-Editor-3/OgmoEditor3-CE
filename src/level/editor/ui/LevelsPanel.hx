@@ -16,7 +16,7 @@ class LevelsPanel extends SidePanel
   public var itemlist:ItemList;
   public var unsavedFolder:ItemListFolder = null;
 
-  public function populate(into:JQuery):Void
+  override public function populate(into:JQuery):Void
   {
     into.empty();
 
@@ -25,7 +25,7 @@ class LevelsPanel extends SidePanel
 
     // new levels button
     newbutton = new JQuery('<div class="button"><div class="button_icon icon icon-new-file"></div></div>');
-    newbutton.on('click', function() { editor.levelManager.create(); });
+    newbutton.on('click', function() { Ogmo.editor.levelManager.create(); });
     options.append(newbutton);
 
     // search bar

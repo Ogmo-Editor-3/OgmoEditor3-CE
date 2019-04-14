@@ -2,9 +2,9 @@ package level.editor.ui;
 
 import js.jquery.JQuery;
 
-// TODO: Maybe turn this into an Interface? - austin
 class SidePanel
 {
+  public function new() {}
   public function populate(into:JQuery):Void {}
   public function refresh():Void {}
   public function resize():Void {}
