@@ -23,18 +23,18 @@ class GLRenderer
   public var width(get,null):Int;
   public var height(get,null):Int;
 	
-	private var shapeShader: Shader;
-	private var textureShader: Shader;
-	private var orthoMatrix: Matrix3D;
-	private var posBuffer: Buffer;
-	private var colBuffer: Buffer;  
-	private var uvBuffer: Buffer; 
-	private var positions: Array<Float> = [];
-	private var colors: Array<Float> = [];
-	private var uvs: Array<Float> = [];
-	private var currentDrawMode: Int = -1;
-	private var currentTexture: Texture = null;
-	private var lastAlpha: Int;
+	var shapeShader: Shader;
+	var textureShader: Shader;
+	var orthoMatrix: Matrix3D;
+	var posBuffer: Buffer;
+	var colBuffer: Buffer;  
+	var uvBuffer: Buffer; 
+	var positions: Array<Float> = [];
+	var colors: Array<Float> = [];
+	var uvs: Array<Float> = [];
+	var currentDrawMode: Int = -1;
+	var currentTexture: Texture = null;
+	var lastAlpha: Int;
 	
 	public function new(name: String, canvas: CanvasElement)
 	{
@@ -106,7 +106,7 @@ class GLRenderer
 		}
 	}
 	
-	private function setDrawMode(newMode: Int): Void
+	function setDrawMode(newMode: Int): Void
 	{
 		if (currentDrawMode != newMode)
 		{
@@ -120,7 +120,7 @@ class GLRenderer
 		}
 	}
 	
-	private function setTexture(texture: Texture): Void
+	function setTexture(texture: Texture): Void
 	{
 		if (currentTexture != texture)
 		{
@@ -134,7 +134,7 @@ class GLRenderer
 		}
 	}
 	
-	private function doDraw(drawMode: Int, texture: Texture): Void
+	function doDraw(drawMode: Int, texture: Texture): Void
 	{
 		// set up current shader
 		var shader:Shader = (texture == null ? shapeShader : textureShader);
@@ -189,10 +189,10 @@ class GLRenderer
 	
 	// TEXTURES
 
-	private var topleft:Vector = new Vector();
-	private var topright:Vector = new Vector();
-	private var botleft:Vector = new Vector();
-	private var botright:Vector = new Vector();
+	var topleft:Vector = new Vector();
+	var topright:Vector = new Vector();
+	var botleft:Vector = new Vector();
+	var botright:Vector = new Vector();
 	
 	public function drawTexture(x:Float, y:Float, texture:Texture, ?origin:Vector, ?scale:Vector, ?rotation:Float, ?clipX:Float, ?clipY:Float, ?clipW:Float, ?clipH:Float):Void
 	{

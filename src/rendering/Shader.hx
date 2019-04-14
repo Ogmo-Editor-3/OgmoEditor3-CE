@@ -60,7 +60,7 @@ class Shader
 		gl.uniform2f(uniforms[name], vec.x, vec.y);
 	}
 
-	private function getShader(path: String): js.html.webgl.Shader
+	function getShader(path: String): js.html.webgl.Shader
 	{
 		var type = (Path.extname(path) == ".vs" ? RenderingContext.VERTEX_SHADER : RenderingContext.FRAGMENT_SHADER);
 		var shader:js.html.webgl.Shader = gl.createShader(type);

@@ -159,7 +159,7 @@ class UndoStack
 		}
 	}
 
-	private function showActionSticker(undo:Bool, description:String):Void
+	function showActionSticker(undo:Bool, description:String):Void
 	{
 		if (undo)
 			description = "<div class='icon icon-undo'></div><div class='label undo'>" + description + "</div>";
@@ -182,17 +182,17 @@ class UndoStack
 		}, 1000);
 	}
 
-	private function fetchLayer(layerID:Int, description:String): LevelState
+	function fetchLayer(layerID:Int, description:String): LevelState
 	{
 		return { level: null, description: description, layers: [ level.layers[layerID].clone() ], freezeBottom: false, freezeRight: false };
 	}
 
-	private function fetchLevelData(description:String): LevelState
+	function fetchLevelData(description:String): LevelState
 	{
 		return { level: level.data.clone(), description: description, layers: [], freezeBottom: false, freezeRight: false };
 	}
 
-	private function fetchFull(freezeRight:Bool, freezeBottom:Bool, description:String): LevelState
+	function fetchFull(freezeRight:Bool, freezeBottom:Bool, description:String): LevelState
 	{
 		var layers: Array<Layer> = [];
 		for (i in 0...level.layers.length) layers.push(level.layers[i].clone());
@@ -200,7 +200,7 @@ class UndoStack
 		return { level: level.data.clone(), description: description, layers: layers, freezeBottom: freezeBottom, freezeRight: freezeRight };
 	}
 
-	private function match(state: LevelState): LevelState
+	function match(state: LevelState): LevelState
 	{
 		var level: LevelData = null;
 		var layers: Array<Layer> = [];
@@ -210,7 +210,7 @@ class UndoStack
 		return { level: level, description: state.description, layers: layers, freezeBottom: state.freezeBottom, freezeRight: state.freezeRight };
 	}
 
-	private function apply(state: LevelState):String
+	function apply(state: LevelState):String
 	{
 		for (i in 0...state.layers.length)
 		{

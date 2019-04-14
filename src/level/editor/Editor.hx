@@ -32,19 +32,19 @@ class Editor
 	public var locked:Bool = false;
 	public var isDirty:Bool = false;
 	public var isOverlayDirty:Bool = false;
-	private var lastArrows: Vector = new Vector();
-	private var mouseMoving:Bool = false;
-	private var mouseMovePos: Vector = new Vector();
-	private var lastMouseMovePos: Vector = new Vector();
-	private var mouseInside:Bool = false;
-	private var middleClickMove:Bool = false;
-	private var lastOverlayUpdate:Float = 0;
+	var lastArrows: Vector = new Vector();
+	var mouseMoving:Bool = false;
+	var mouseMovePos: Vector = new Vector();
+	var lastMouseMovePos: Vector = new Vector();
+	var mouseInside:Bool = false;
+	var middleClickMove:Bool = false;
+	var lastOverlayUpdate:Float = 0;
 
-	private var resizingLeft:Bool = false;
-	private var resizingRight:Bool = false;
-	private var resizingLayers:Bool = false;
-	private var resizingPalette:Bool = false;
-	private var lastPaletteHeight:Float = 0;
+	var resizingLeft:Bool = false;
+	var resizingRight:Bool = false;
+	var resizingLayers:Bool = false;
+	var resizingPalette:Bool = false;
+	var lastPaletteHeight:Float = 0;
 
 	public function new()
 	{
@@ -332,12 +332,12 @@ class Editor
 		dirty();
 	}
 
-	private function beforeSetLayer():Void
+	function beforeSetLayer():Void
 	{
 		toolBelt.beforeSetLayer();
 	}
 
-	private function setLayerUtil(id:Int):Void
+	function setLayerUtil(id:Int):Void
 	{
 		level.currentLayerID = id;
 		toolBelt.afterSetLayer();
@@ -675,7 +675,7 @@ class Editor
 		}
 	}
 	
-	private function defaultKeyPress(key:Int):Void
+	function defaultKeyPress(key:Int):Void
 	{
 		if (level != null)
 		{
@@ -684,7 +684,7 @@ class Editor
 		}
 	}
 	
-	private function defaultKeyRepeat(key:Int):Void
+	function defaultKeyRepeat(key:Int):Void
 	{
 		if (level != null)
 		{
@@ -693,7 +693,7 @@ class Editor
 		}
 	}
 	
-	private function defaultKeyRelease(key:Int):Void
+	function defaultKeyRelease(key:Int):Void
 	{
 		if (level != null)
 		{
@@ -702,7 +702,7 @@ class Editor
 		}
 	}
 
-	private function updateArrowKeys():Void
+	function updateArrowKeys():Void
 	{
 		var moveSpeed = 10;
 		var moveDiag = Math.sqrt((moveSpeed * moveSpeed) * .5);

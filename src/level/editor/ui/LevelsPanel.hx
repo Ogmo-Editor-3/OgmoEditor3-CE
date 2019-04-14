@@ -156,7 +156,7 @@ class LevelsPanel extends SidePanel
     });
   }
 
-  private function recursiveAdd(node:ItemListNode, path:String):Void
+  function recursiveAdd(node:ItemListNode, path:String):Void
   {
     if (FileSystem.readable(path))
     {
@@ -190,7 +190,7 @@ class LevelsPanel extends SidePanel
     }
   }
 
-  private function recursiveFolderExpandCheck(node: ItemListNode):Void
+  function recursiveFolderExpandCheck(node: ItemListNode):Void
   {
       for (i in 0...node.children.length)
       {
@@ -208,7 +208,7 @@ class LevelsPanel extends SidePanel
       }
   }
 
-  private function recursiveFilter(parent:ItemListNode, node:ItemListNode, search:String):Bool
+  function recursiveFilter(parent:ItemListNode, node:ItemListNode, search:String):Bool
   {
     if (node.label.search(search) != -1)
     {
@@ -232,7 +232,7 @@ class LevelsPanel extends SidePanel
     }
   }
 
-  private function getSearchQuery():String
+  function getSearchQuery():String
   {
     return searchbar.find("input").val();
   }
@@ -241,7 +241,7 @@ class LevelsPanel extends SidePanel
           CLICKS
   */
 
-  private function selectLevel(node: ItemListNode):Void
+  function selectLevel(node: ItemListNode):Void
   {
     editor.levelManager.open(node.data, null,
     function (error)
@@ -258,7 +258,7 @@ class LevelsPanel extends SidePanel
     });
   }
 
-  private function inspectFolder(node: ItemListNode):Void
+  function inspectFolder(node: ItemListNode):Void
   {
     var menu = new RightClickMenu(ogmo.mouse);
     menu.onClosed(function() { node.highlighted = false; });
@@ -365,7 +365,7 @@ class LevelsPanel extends SidePanel
     menu.open();
   }
 
-  private function inspectUnsavedFolder(node: ItemListNode):Void
+  function inspectUnsavedFolder(node: ItemListNode):Void
   {
     var menu = new RightClickMenu(ogmo.mouse);
     menu.onClosed(function() { node.highlighted = false; });
@@ -380,7 +380,7 @@ class LevelsPanel extends SidePanel
     menu.open();
   }
 
-  private function inspectBrokenFolder(node: ItemListNode):Void
+  function inspectBrokenFolder(node: ItemListNode):Void
   {
     var menu = new RightClickMenu(ogmo.mouse);
     menu.onClosed(function() { node.highlighted = false; });
@@ -404,7 +404,7 @@ class LevelsPanel extends SidePanel
     menu.open();
   }
 
-  private function inspectUnsavedLevel(node:ItemListNode):Void
+  function inspectUnsavedLevel(node:ItemListNode):Void
   {
     var level = editor.levelManager.get(node.data);
     var menu = new RightClickMenu(ogmo.mouse);
@@ -419,7 +419,7 @@ class LevelsPanel extends SidePanel
     menu.open();
   }
 
-  private function inspectLevel(node:ItemListNode):Void
+  function inspectLevel(node:ItemListNode):Void
   {
     var menu = new RightClickMenu(ogmo.mouse);
     menu.onClosed(function() { node.highlighted = false; });

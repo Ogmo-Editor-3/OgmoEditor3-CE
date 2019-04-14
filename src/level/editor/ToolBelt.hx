@@ -11,7 +11,7 @@ class ToolBelt
   public var currentKeyTool:Int = 0;
   public var buttons:Array<ToolButton> = [];
   public var current(get, null):Tool;
-  private var tool:Tool = null;
+  var tool:Tool = null;
 
   public function new()
   {

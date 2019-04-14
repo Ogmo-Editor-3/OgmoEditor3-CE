@@ -4,7 +4,7 @@ class Random
 {
     public var state:Float;
     
-    private var stack: Array<Float> = [];
+    var stack: Array<Float> = [];
     
     public function new(?seed: Float)
     {
