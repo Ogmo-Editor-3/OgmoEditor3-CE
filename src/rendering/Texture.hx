@@ -43,7 +43,7 @@ class Texture
 	{
 		this.image = image;
 		
-		if (image.width <= 0) image.onload = () -> load();
+		if (image.width <= 0) image.onload = function() { load(); };
 		else load();
 	}
 

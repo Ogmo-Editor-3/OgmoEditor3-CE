@@ -30,7 +30,7 @@ class LayerTemplateEditor
 
     name.on("input", function()
     {
-      parentPanel.layersList.perform((n) ->
+      parentPanel.layersList.perform(function(n)
       {
         if (n.data == template) n.label  = name.val();
       });

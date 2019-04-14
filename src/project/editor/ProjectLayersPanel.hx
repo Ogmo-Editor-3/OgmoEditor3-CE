@@ -30,10 +30,10 @@ class ProjectLayersPanel extends ProjectEditorPanel
     layers.append(buttons);
 
     // layers list
-    layersList = new ItemList(layers, (a, b, c) -> onReorder(a, b, c));
+    layersList = new ItemList(layers, function(a, b, c) { onReorder(a, b, c); });
     
     // inspector
-    inspector = $('<div class="project_layers_inspector">');
+    inspector = new JQuery('<div class="project_layers_inspector">');
     root.append(inspector);
   }
 
@@ -47,7 +47,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
     {
       var def = LayerDefinition.definitions[i];
       layerTypes[def.id] = def.label;
-      console.log(def.id + "->" + def.label);
+      trace(def.id + "->" + def.label);
     }
     
     var newLayerType = Fields.createOptions(layerTypes, buttons);
@@ -55,7 +55,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
     newLayerButton.on("click", function() { newLayer(newLayerType.val()); });
 
     refreshList();
-    if (ogmo.project.layers.length > 0) inspect(Ogmo.ogmo.project.layers[0]);
+    if (Ogmo.ogmo.project.layers.length > 0) inspect(Ogmo.ogmo.project.layers[0]);
   }
   
   public function newLayer(definitionId:String):Void
@@ -66,9 +66,9 @@ class ProjectLayersPanel extends ProjectEditorPanel
     {
       if (name != null && name.length > 0)
       {
-        var template = definition.createTemplate(ogmo.project);
+        var template = definition.createTemplate(Ogmo.ogmo.project);
         template.name = name;
-        ogmo.project.layers.push(template);
+        Ogmo.ogmo.project.layers.push(template);
         refreshList();
         inspect(template);
       }
@@ -80,12 +80,12 @@ class ProjectLayersPanel extends ProjectEditorPanel
 		var layer = node.data;
 		var under = (below == null ? null : below.data);
 		
-		if (layer != null && layer != undefined)
+		if (layer != null)
 		{
-			var n = ogmo.project.layers.indexOf(layer);
-			if (n >= 0) ogmo.project.layers.splice(n, 1);
-			n = ogmo.project.layers.indexOf(under);
-			ogmo.project.layers.splice(n + 1, 0, layer);
+			var n = Ogmo.ogmo.project.layers.indexOf(layer);
+			if (n >= 0) Ogmo.ogmo.project.layers.splice(n, 1);
+			n = Ogmo.ogmo.project.layers.indexOf(under);
+			Ogmo.ogmo.project.layers.splice(n + 1, 0, layer);
 		}
 		
 		refreshList();
@@ -95,28 +95,28 @@ class ProjectLayersPanel extends ProjectEditorPanel
   {
     layersList.empty();
     
-    for (i in 0...ogmo.project.layers.length)
+    for (i in 0...Ogmo.ogmo.project.layers.length)
     {
-      var layer = ogmo.project.layers[i];
+      var layer = Ogmo.ogmo.project.layers[i];
       var item = layersList.add(new ItemListItem(layer.name, layer));
 
       item.setKylesetIcon(layer.definition.icon);
-      item.onclick = (current) ->
+      item.onclick = function(current)
       {
-        self.inspect(current.data);
+        inspect(current.data);
       }
-      item.onrightclick = (current) ->
+      item.onrightclick = function (current)
       {
         var menu = new RightClickMenu(ogmo.mouse);
-        menu.onClosed(() -> current.highlighted = false);
-        menu.addOption("Delete Layer", "trash", () ->
+        menu.onClosed(function() { current.highlighted = false; });
+        menu.addOption("Delete Layer", "trash", function()
         {
-          Popup.open("Delete Layer", "trash", "Permanently delete <span class='monospace'>" + current.data.name + "</span>?", ["Delete", "Cancel"],(btn) ->
+          Popup.open("Delete Layer", "trash", "Permanently delete <span class='monospace'>" + current.data.name + "</span>?", ["Delete", "Cancel"], function(btn)
           {
             if (btn == 0)
             {
-              var index = ogmo.project.layers.indexOf(current.data);
-              if (index >= 0) ogmo.project.layers.splice(index, 1);
+              var index = Ogmo.ogmo.project.layers.indexOf(current.data);
+              if (index >= 0) Ogmo.ogmo.project.layers.splice(index, 1);
               
               refreshList();
               if (inspecting == current.data) inspect(null, false);
@@ -135,7 +135,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
     if (saveOnChange == undefined || saveOnChange) save(layerTemplateEditor);
     
     // reselect and clear inspector
-    layersList.perform((node) -> node.selected = (node.data == layer));
+    layersList.perform(function(node) { node.selected = (node.data == layer); });
     inspector.empty();
     
     // load new template editor (if the layer is not null)
@@ -161,4 +161,4 @@ class ProjectLayersPanel extends ProjectEditorPanel
 }
 
 // TODO - Figure out a better way to do this window.startupStuff - austin
-// Window.startup.push(() -> projectEditor.addPanel(new ProjectLayersPanel()));
+// Window.startup.push(function() { projectEditor.addPanel(new ProjectLayersPanel()); });
