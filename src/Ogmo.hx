@@ -1,13 +1,14 @@
-import electron.renderer.IpcRenderer;
 import js.Browser;
-import util.Keys;
 import js.jquery.JQuery;
 import electron.main.BrowserWindow;
 import electron.main.App;
 import electron.renderer.Remote;
+import electron.renderer.IpcRenderer;
+import project.editor.ProjectEditor;
 import project.data.Project;
 import level.editor.Editor;
 import util.Vector;
+import util.Keys;
 
 class Ogmo
 {

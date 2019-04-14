@@ -2,7 +2,7 @@ package level.editor;
 
 import project.data.LayerTemplate;
 import level.data.Layer;
-import level.ui.SidePanel;
+import level.editor.ui.SidePanel;
 
 class LayerEditor
 {

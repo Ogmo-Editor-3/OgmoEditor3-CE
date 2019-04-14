@@ -154,7 +154,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
     if (editor != null) editor.save();
   }
 
-  public function end():Void
+  override public function end():Void
   {
     save(layerTemplateEditor);
   }

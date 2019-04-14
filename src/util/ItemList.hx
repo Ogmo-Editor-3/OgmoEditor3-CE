@@ -5,6 +5,16 @@ class ItemListNode
 
 }
 
+class ItemListFolder extends ItemListNode
+{
+
+}
+
+class ItemListItem extends ItemListNode
+{
+
+}
+
 class ItemList extends ItemListNode
 {
 

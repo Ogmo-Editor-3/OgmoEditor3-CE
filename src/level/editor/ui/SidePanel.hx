@@ -1,4 +1,4 @@
-package level.ui;
+package level.editor.ui;
 
 import js.jquery.JQuery;
 

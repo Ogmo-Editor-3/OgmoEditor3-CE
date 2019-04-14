@@ -1,17 +1,18 @@
 package project.editor;
 
+import util.Fields;
 import io.Imports;
 import js.jquery.JQuery;
 import project.data.LayerTemplate;
 
 class LayerTemplateEditor
 {
-  var into:JQuery;
-  var template:LayerTemplate;
-  var name:JQuery;
-  var gridWidth:JQuery;
-  var gridHeight:JQuery;
-	var parentPanel:ProjectLayersPanel;
+  public var into:JQuery;
+  public var template:LayerTemplate;
+  public var name:JQuery;
+  public var gridWidth:JQuery;
+  public var gridHeight:JQuery;
+	public var parentPanel:ProjectLayersPanel;
 
   public function new(template:LayerTemplate)
   {

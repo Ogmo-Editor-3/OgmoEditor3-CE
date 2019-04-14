@@ -205,9 +205,9 @@ class UndoStack
 	private function match(state: LevelState): LevelState
 	{
 		var level: LevelData = null;
-		var layers: Layer[] = [];
-		for (i in 0...state.layers.length) layers.push(level.layers[state.layers[i].id].clone());
-		if (state.level != null) level = level.data.clone();
+		var layers: Array<Layer> = [];
+		for (i in 0...state.layers.length) layers.push(this.level.layers[state.layers[i].id].clone());
+		if (state.level != null) level = this.level.data.clone();
 
 		return { level: level, description: state.description, layers: layers, freezeBottom: state.freezeBottom, freezeRight: state.freezeRight };
 	}
