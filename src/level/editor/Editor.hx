@@ -8,7 +8,7 @@ import io.LevelManager;
 import level.data.Level;
 import level.editor.ui.LayersPanel;
 import level.editor.ui.LevelsPanel;
-import rendering.GlRenderer;
+import rendering.GLRenderer;
 import util.Vector;
 import util.Keys;
 

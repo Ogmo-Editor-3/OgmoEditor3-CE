@@ -175,12 +175,10 @@ class UndoStack
 			untyped clearTimeout(timeoutID);
 
 		//Do timeout
-		var self = this;
 		timeoutID = untyped setTimeout(function ()
 		{
-			self.timeoutID = null;
-			if (self.sticker.hasClass("active"))
-				self.sticker.removeClass("active");
+			timeoutID = null;
+			if (sticker.hasClass("active")) sticker.removeClass("active");
 		}, 1000);
 	}
 

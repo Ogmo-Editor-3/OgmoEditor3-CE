@@ -124,12 +124,11 @@ class Level
 		}
 		else
 		{
-			var self = this;
 			Popup.open("Close Level", "warning", "Save changes to <span class='monospace'>" + displayNameNoStar + "</span> before closing it?", ["Save and Close", "Discard", "Cancel"], function (i)
 			{
 				if (i == 0)
 				{
-					if (self.doSave())
+					if (doSave())
 						action();
 				}
 				else if (i == 1)
