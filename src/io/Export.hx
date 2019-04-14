@@ -1,5 +1,6 @@
 package io;
 
+import project.data.Project;
 import level.data.Level;
 import level.data.Value;
 import util.Color;
@@ -153,7 +154,6 @@ class Export
 	static function JSONtoXML(data:Dynamic):Document
 	{
 		trace(data);
-		var doc = js
 		var doc = Browser.document.implementation.createDocument(null, Export.getJSONName(data), null);
 		Export.parseObjectInto(data, doc, doc.documentElement);
 		return doc;

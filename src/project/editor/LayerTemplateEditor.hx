@@ -1,5 +1,6 @@
 package project.editor;
 
+import io.Imports;
 import js.jquery.JQuery;
 import project.data.LayerTemplate;
 
@@ -46,7 +47,7 @@ class LayerTemplateEditor
   public function save():Void
   {
     template.name = Fields.getField(name);
-    template.gridSize.x = Import.integer(Fields.getField(gridWidth), 16);
-    template.gridSize.y = Import.integer(Fields.getField(gridHeight), 16);
+    template.gridSize.x = Imports.integer(Fields.getField(gridWidth), 16);
+    template.gridSize.y = Imports.integer(Fields.getField(gridHeight), 16);
   }
 }

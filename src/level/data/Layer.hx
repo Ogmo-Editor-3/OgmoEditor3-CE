@@ -52,7 +52,7 @@ class Layer
 
 	public function load(data: Dynamic):Void
 	{
-		offset = Import.vector(data, "offsetX", "offsetY");
+		offset = Imports.vector(data, "offsetX", "offsetY");
 	}
 
 	/*

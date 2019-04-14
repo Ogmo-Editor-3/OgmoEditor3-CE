@@ -2,6 +2,7 @@ package project.data;
 
 import js.node.Path;
 import io.Export;
+import io.Imports;
 import project.data.value.ValueTemplate;
 import modules.entities.EntityTemplate;
 import modules.entities.EntityTemplateList;
@@ -139,7 +140,7 @@ class Project
 		levelMinSize = Vector.load(data.levelMinSize);
 		levelMaxSize = Vector.load(data.levelMaxSize);
 		levelValues = ValueTemplate.loadList(data.levelValues);
-		defaultExportMode = Import.string(data.defaultExportMode, ".xml");
+		defaultExportMode = Imports.string(data.defaultExportMode, ".xml");
 
 		// tilesets
 		if (data.tilesets != null) for (tileset in data.tilesets) tilesets.push(Tileset.load(this, tileset));
@@ -200,7 +201,7 @@ class Project
 
 	public static function createDebugProject():Project
 	{
-		return Import.project(Path.join('.', 'debugProject', 'debug.ogmo'));
+		return Imports.project(Path.join('.', 'debugProject', 'debug.ogmo'));
 	}
 }
 
