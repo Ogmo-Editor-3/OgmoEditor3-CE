@@ -1,5 +1,7 @@
 package util;
 
+import js.RegExp;
+
 using Math;
 using StringTools;
 
@@ -95,15 +97,16 @@ class Color
 	}
 
 	// TODO - I'm not a regex person :| -01010111
-	/*public static function fromHex(hex:String, opacity:Float):Color
+	// update - hopefully this works? we'll have to test - austin
+	public static function fromHex(hex:String, opacity:Float):Color
 	{
 		var color:Color = new Color(0,0,0, opacity);
-		var result = ~/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		var result = new RegExp('~/^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i').exec(hex);
 		if (result != null && result.length >= 4)
 		{
-			color.r = Std.parseInt(result[1], 16) / 255;
-			color.g = Std.parseInt(result[2], 16) / 255;
-			color.b = Std.parseInt(result[3], 16) / 255;
+			color.r = Std.parseInt(result[1]) / 255;
+			color.g = Std.parseInt(result[2]) / 255;
+			color.b = Std.parseInt(result[3]) / 255;
 		}
 		return color;
 	}
@@ -111,22 +114,18 @@ class Color
 	public static function fromHexAlpha(hex:String):Color
 	{
 		var color:Color = new Color(0,0,0,0);
-		var result = ~/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		var result = new RegExp('~/^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i').exec(hex);
 		if (result != null && result.length >= 5)
 		{
-			color.r = Std.parseInt(result[1], 16) / 255;
-			color.g = Std.parseInt(result[2], 16) / 255;
-			color.b = Std.parseInt(result[3], 16) / 255;
-			color.a = Std.parseInt(result[4], 16) / 255;
+			color.r = Std.parseInt(result[1]) / 255;
+			color.g = Std.parseInt(result[2]) / 255;
+			color.b = Std.parseInt(result[3]) / 255;
+			color.a = Std.parseInt(result[4]) / 255;
 		}
 		else
 			color = Color.fromHex(hex, 1);
 		return color;
-	}*/
-	// TEMP until ^^^ is added
-	public static function fromHex(hex:String, opacity:Float):Color return new Color();
-	// TEMP until ^^^ is added
-	public static function fromHexAlpha(hex:String):Color return new Color();
+	}
 
 	public static function fromHSV(h:Float, s:Float, v:Float, ?a:Float):Color
 	{
