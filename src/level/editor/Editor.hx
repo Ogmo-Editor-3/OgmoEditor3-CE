@@ -1,6 +1,7 @@
 package level.editor;
 
-import js.html.Event;
+import io.Imports;
+import util.Color;
 import js.Browser;
 import js.jquery.JQuery;
 import electron.renderer.Remote;
@@ -25,13 +26,12 @@ class Editor
 	public var layersPanel: LayersPanel = new LayersPanel();
 	public var levelsPanel:LevelsPanel = new LevelsPanel();
 	public var handles: LevelResizeHandles;
-
-  public var currentLayerEditor(get, null):LayerEditor;
-
 	public var active:Bool = false;
 	public var locked:Bool = false;
 	public var isDirty:Bool = false;
 	public var isOverlayDirty:Bool = false;
+  public var currentLayerEditor(get, null):LayerEditor;
+
 	var lastArrows: Vector = new Vector();
 	var mouseMoving:Bool = false;
 	var mouseMovePos: Vector = new Vector();
@@ -63,7 +63,7 @@ class Editor
 				if (Ogmo.editor.level != null) Ogmo.editor.level.centerCamera();
 			});
 			
-			new JQuery(Browser.window).resize(function()
+			new JQuery(Browser.window).resize(function(e)
 			{
 				Ogmo.editor.draw.updateCanvasSize();
 				Ogmo.editor.overlay.updateCanvasSize();
@@ -138,7 +138,7 @@ class Editor
 					new JQuery(".editor_palette").height(e.pageY);
 				if (Ogmo.editor.resizingLayers)
 					new JQuery(".editor_layers").height(e.pageY);
-				if (Ogmo.editor.resizingLeft && e.pageX)
+				if (Ogmo.editor.resizingLeft && e.pageX != null)
 				{
 					new JQuery(".editor_panel-left").width(Math.min(400, e.pageX));
 					Ogmo.editor.draw.updateCanvasSize();
@@ -189,7 +189,7 @@ class Editor
 			});
 
 			// Editor Project Button
-			new JQuery(".edit-project").click(function()
+			new JQuery(".edit-project").click(function(e)
 			{
 				Ogmo.editor.levelManager.closeAll(function ()
 				{
@@ -198,7 +198,7 @@ class Editor
 			});
 
 			// Close Project Button
-			new JQuery('.close-project').click(function()
+			new JQuery('.close-project').click(function(e)
 			{
 				Ogmo.editor.levelManager.closeAll(function()
 				{
@@ -208,13 +208,13 @@ class Editor
 				});
 			});
 
-			new JQuery('.refresh-project').click(function()
+			new JQuery('.refresh-project').click(function(e)
 			{
 				Ogmo.editor.levelManager.closeAll(function()
 				{
 					var path = Ogmo.ogmo.project.path;
 					Ogmo.ogmo.project.unload();
-					Ogmo.ogmo.project = Import.project(path);
+					Ogmo.ogmo.project = Imports.project(path);
 					Ogmo.ogmo.gotoEditorPage();
 				});
 			});
@@ -236,7 +236,7 @@ class Editor
 
 	public function onMouseMove(?pos: Vector):Void
 	{
-		if (pos == undefined)
+		if (pos == null)
 			pos = lastMouseMovePos;
 		else
 			lastMouseMovePos = pos;

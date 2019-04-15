@@ -6,12 +6,12 @@ import project.data.ShapeData;
 class Settings
 {
 
-	var recentProjects:Array<{ path:String, name:String }> = [];
-	var openLevelLimit:Int = 30;
-	var undoLimit:Int = 100;
-	var shapes:Array<ShapeData> = [];
-	var populateInto:JQuery;
-	var filepath:String = '';
+	public var recentProjects:Array<{ path:String, name:String }> = [];
+	public var openLevelLimit:Int = 30;
+	public var undoLimit:Int = 100;
+	public var shapes:Array<ShapeData> = [];
+	public var populateInto:JQuery;
+	public var filepath:String = '';
 
 	public function new()
 	{

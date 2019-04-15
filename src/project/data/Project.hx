@@ -1,5 +1,6 @@
 package project.data;
 
+import js.Date;
 import js.node.Path;
 import io.Export;
 import io.Imports;
@@ -66,15 +67,15 @@ class Project
 
 	public function getNextLayerTemplateExportID():String
 	{
-		return (new Date().getTime()).toString(36).substring(4, 8) + Math.random().toString(36).substring(2, 6);
+		return Std.string(new Date().getTime()).substring(4, 8) + Std.string(Math.random()).substring(2, 6);
 	}
 
 	public function getNextEntityTemplateExportID():String
 	{
-		return (new Date().getTime()).toString(36).substring(4, 8) + Math.random().toString(36).substring(2, 6);
+		return Std.string(new Date().getTime()).substring(4, 8) + Std.string(Math.random()).substring(2, 6);
 	}
 
-	public function getNextUnsavedLevelID():Float
+	public function getNextUnsavedLevelID():Int
 	{
 		return _nextUnsavedLevelID++;
 	}
@@ -149,7 +150,7 @@ class Project
 		for (layerData in data.layers)
 		{
 			var definitionId = layerData.definition;
-			var definition = LayerDefinition.getDefinitionById(definitionId);
+			var definition = LayerDefinition.getDefinitionById(definitionId.id);
 			var exportID:String = layerData.exportID;
 
 			var template = definition.loadTemplate(exportID, layerData);

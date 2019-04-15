@@ -1,5 +1,8 @@
 package util;
 
+import js.node.Path;
+import io.FileSystem;
+import io.Imports;
 import js.jquery.JQuery;
 
 enum SettingsBlock
@@ -94,9 +97,9 @@ class Fields
 	public static function createVector(vector:Vector, ?into:JQuery):JQuery
 	{
 		var holder = new JQuery('<div class="vector"></div>');
-		var x = Fields.createField("X", vector.x.toString(), holder);
+		var x = Fields.createField("X", Std.string(vector.x), holder);
 		x.addClass("vecX");
-		var y = Fields.createField("Y", vector.y.toString(), holder);
+		var y = Fields.createField("Y", Std.string(vector.y), holder);
 		y.addClass("vecY");
 		if (into != null) into.append(holder);
 		return holder;
@@ -111,8 +114,8 @@ class Fields
 	public static function getVector(element:JQuery):Vector
 	{
 		var vec = new Vector();
-		vec.x = Import.float(element.find(".vecX").val(), 0);
-		vec.y = Import.float(element.find(".vecY").val(), 0);
+		vec.x = Imports.float(element.find(".vecX").val(), 0);
+		vec.y = Imports.float(element.find(".vecY").val(), 0);
 		return vec;
 	}
 
@@ -181,7 +184,7 @@ class Fields
 
 		element.on("click", function()
 		{
-			var c = Color.fromHex(element.attr("data-hex"), Import.float(element.attr("data-alpha"), 1));
+			var c = Color.fromHex(element.attr("data-hex"), Imports.float(element.attr("data-alpha"), 1));
 			Popup.openColorPicker(label, c, function(result)
 			{
 				Fields.setColor(element, result);
@@ -273,7 +276,7 @@ class Fields
 		var button = Fields.createButton("folder-dot-open", "Select", holder);
 		button.on("click", function()
 		{
-			var folder = _path.relative(ogmo.project.path, FileSystem.chooseFolder("Select Folder"));
+			var folder = Path.relative(Ogmo.ogmo.project.path, FileSystem.chooseFolder("Select Folder"));
 			if (folder.length > 0) element.val(folder);
 		});
 

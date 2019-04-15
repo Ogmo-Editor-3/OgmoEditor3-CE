@@ -105,8 +105,8 @@ class UndoStack
 
 			if (Ogmo.editor.currentLayerEditor != null)
 			{
-				if (Ogmo.editor.currentLayerEditor.pavartePanel != null)
-					Ogmo.editor.currentLayerEditor.pavartePanel.refresh();
+				if (Ogmo.editor.currentLayerEditor.palettePanel != null)
+					Ogmo.editor.currentLayerEditor.palettePanel.refresh();
 				if (Ogmo.editor.currentLayerEditor.selectionPanel != null)
 					Ogmo.editor.currentLayerEditor.selectionPanel.refresh();
 			}
@@ -149,8 +149,8 @@ class UndoStack
 
 			if (Ogmo.editor.currentLayerEditor != null)
 			{
-				if (Ogmo.editor.currentLayerEditor.pavartePanel != null)
-					Ogmo.editor.currentLayerEditor.pavartePanel.refresh();
+				if (Ogmo.editor.currentLayerEditor.palettePanel != null)
+					Ogmo.editor.currentLayerEditor.palettePanel.refresh();
 				if (Ogmo.editor.currentLayerEditor.selectionPanel != null)
 					Ogmo.editor.currentLayerEditor.selectionPanel.refresh();
 			}

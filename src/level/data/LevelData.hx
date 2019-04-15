@@ -32,7 +32,7 @@ class LevelData
 
 	public function loadFrom(data:Dynamic):Void
 	{
-		size = Imports.vector(data, "width", "height", ogmo.project.levelDefaultSize);
-		values = Imports.values(data, ogmo.project.levelValues);
+		size = Imports.vector(data, "width", "height", Ogmo.ogmo.project.levelDefaultSize);
+		values = Imports.values(data, Ogmo.ogmo.project.levelValues);
 	}
 }

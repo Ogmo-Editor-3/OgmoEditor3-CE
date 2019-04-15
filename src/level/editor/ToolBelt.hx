@@ -2,6 +2,7 @@ package level.editor;
 
 import js.jquery.JQuery;
 import level.editor.ui.ToolButton;
+import project.data.LayerDefinition;
 import util.Keys;
 
 class ToolBelt
@@ -18,7 +19,7 @@ class ToolBelt
     for (i in 0...LayerDefinition.definitions.length)
     {
       var l = LayerDefinition.definitions[i];
-      if (allTools[l.id] == undefined) allTools[l.id] = l.tools;
+      if (allTools[l.id] == null) allTools[l.id] = l.tools;
     }
   }
 

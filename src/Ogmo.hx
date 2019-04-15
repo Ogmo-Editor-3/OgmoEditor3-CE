@@ -7,6 +7,7 @@ import electron.renderer.IpcRenderer;
 import project.editor.ProjectEditor;
 import project.data.Project;
 import level.editor.Editor;
+import level.editor.ToolBelt;
 import util.Vector;
 import util.Keys;
 

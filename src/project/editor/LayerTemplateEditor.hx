@@ -37,10 +37,10 @@ class LayerTemplateEditor
       });
     });
       
-    gridWidth = Fields.createField("00", template.gridSize.x.toString());
+    gridWidth = Fields.createField("00", Std.string(template.gridSize.x));
     Fields.createSettingsBlock(into, gridWidth, SettingsBlock.Fourth, "Grid Width", SettingsBlock.InlineTitle);
       
-    gridHeight = Fields.createField("00", template.gridSize.y.toString());
+    gridHeight = Fields.createField("00", Std.string(template.gridSize.y));
     Fields.createSettingsBlock(into, gridHeight, SettingsBlock.Fourth, "Grid Height", SettingsBlock.InlineTitle);
     Fields.createLineBreak(into);
   }

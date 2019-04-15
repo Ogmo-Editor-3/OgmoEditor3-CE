@@ -1,5 +1,8 @@
 package level.editor.ui;
 
+import util.RightClickMenu;
+import util.Popup;
+import io.FileSystem;
 import js.node.Fs;
 import electron.Shell;
 import js.node.Path;
@@ -41,7 +44,7 @@ class LevelsPanel extends SidePanel
     refresh();
   }
 
-  public function refresh():Void
+  override function refresh():Void
   {
     if (levels == null || levels == null) return;
         
@@ -56,7 +59,7 @@ class LevelsPanel extends SidePanel
     unsavedFolder.onrightclick = inspectUnsavedFolder;
     itemlist.add(unsavedFolder);
 
-    var unsaved = editor.levelManager.getUnsavedLevels();
+    var unsaved = Ogmo.editor.levelManager.getUnsavedLevels();
     if (unsaved.length > 0)
     {
       for (i in 0...unsaved.length)
@@ -68,7 +71,7 @@ class LevelsPanel extends SidePanel
         item.setKylesetIcon("radio-on");
 
         //Selected?
-        if (editor.level != null) item.selected = (editor.level.managerPath == path);
+        if (Ogmo.editor.level != null) item.selected = (Ogmo.editor.level.managerPath == path);
 
         //Events
         item.onclick = selectLevel;
@@ -79,7 +82,7 @@ class LevelsPanel extends SidePanel
     }
 
     //Add root folders if necessary, and recursively populate them
-    var paths = ogmo.project.getAbsoluteLevelDirectories();
+    var paths = Ogmo.ogmo.project.getAbsoluteLevelDirectories();
     for (i in 0...paths.length)
     {
       if (!FileSystem.exists(paths[i]))
@@ -122,13 +125,13 @@ class LevelsPanel extends SidePanel
     //Set level icons and selected state
     itemlist.perform(function (node)
     {
-      if (node.constructor == ItemListItem)
+      if (Std.is(node,ItemListItem))
       {
-        node.label = editor.levelManager.getDisplayName(node.data);
-        var lev = editor.levelManager.get(node.data);
+        node.label = Ogmo.editor.levelManager.getDisplayName(node.data);
+        var lev = Ogmo.editor.levelManager.get(node.data);
         if (lev != null)
         {
-          node.selected = (editor.level != null && editor.level.managerPath == node.data);
+          node.selected = (Ogmo.editor.level != null && Ogmo.editor.level.managerPath == node.data);
           if (lev.deleted) node.setKylesetIcon("level-broken");
           else node.setKylesetIcon("level-on");
         }
@@ -144,7 +147,7 @@ class LevelsPanel extends SidePanel
     var i = unsavedFolder.children.length - 1;
     while (i >= 0)
     {
-      if (!editor.levelManager.isOpen(unsavedFolder.children[i].data)) unsavedFolder.removeAt(i);
+      if (!Ogmo.editor.levelManager.isOpen(unsavedFolder.children[i].data)) unsavedFolder.removeAt(i);
       i--;
     }
 
@@ -158,34 +161,31 @@ class LevelsPanel extends SidePanel
 
   function recursiveAdd(node:ItemListNode, path:String):Void
   {
-    if (FileSystem.readable(path))
+    var files = FileSystem.readDirectory(path);
+    for (i in 0...files.length)
     {
-      var files = FileSystem.readDirectory(path);
-      for (i in 0...files.length)
+      var filepath = Path.join(path, files[i]);
+      var filename = Ogmo.editor.levelManager.getDisplayName(filepath);
+
+      if (FileSystem.stat(filepath).isDirectory())
       {
-        var filepath = Path.join(path, files[i]);
-        var filename = editor.levelManager.getDisplayName(filepath);
+        //Add Folder
+        var foldernode = node.add(new ItemListFolder(filename, filepath));
 
-        if (FileSystem.stat(filepath).isDirectory())
-        {
-          //Add Folder
-          var foldernode = node.add(new ItemListFolder(filename, filepath));
+        //Events
+        foldernode.onrightclick = inspectFolder;
 
-          //Events
-          foldernode.onrightclick = inspectFolder;
+        //Rescurse in
+        recursiveAdd(foldernode, filepath);
+      }
+      else if (filepath != Ogmo.ogmo.project.path)
+      {
+        //Add File
+        var filenode = node.add(new ItemListItem(filename, filepath));
 
-          //Rescurse in
-          recursiveAdd(foldernode, filepath);
-        }
-        else if (filepath != ogmo.project.path)
-        {
-          //Add File
-          var filenode = node.add(new ItemListItem(filename, filepath));
-
-          //Events
-          filenode.onclick = selectLevel;
-          filenode.onrightclick = inspectLevel;
-        }
+        //Events
+        filenode.onclick = selectLevel;
+        filenode.onrightclick = inspectLevel;
       }
     }
   }
@@ -195,10 +195,10 @@ class LevelsPanel extends SidePanel
       for (i in 0...node.children.length)
       {
         var n = node.children[i];
-        if (n.constructor == ItemListFolder)
+        if (Std.is(n, ItemListFolder))
         {
           // default to open?
-          if (opened[n.data] != undefined) n.expandNoSlide(opened[n.data]);
+          if (opened[n.data] != null) n.expandNoSlide(opened[n.data]);
 
           // Toggle opened flag
           if (n.children.length > 0)  n.onclick = function(current) { opened[n.data] = n.expanded; }
@@ -210,7 +210,7 @@ class LevelsPanel extends SidePanel
 
   function recursiveFilter(parent:ItemListNode, node:ItemListNode, search:String):Bool
   {
-    if (node.label.search(search) != -1)
+    if (node.label.indexOf(search) != -1)
     {
       if (node.isFolder) node.expandNoSlide(true);
       return true;
@@ -243,7 +243,7 @@ class LevelsPanel extends SidePanel
 
   function selectLevel(node: ItemListNode):Void
   {
-    editor.levelManager.open(node.data, null,
+    Ogmo.editor.levelManager.open(node.data, null,
     function (error)
     {
       Popup.open("Invalid Level File", "warning", "<span class='monospace'>" + Path.basename(node.data) + "</span> is not a valid level file!<br /><span class='monospace'>" + error + "</span>", ["Okay", "Delete It", "Open with Text Editor"], function(i)
@@ -251,8 +251,8 @@ class LevelsPanel extends SidePanel
         if (i == 2) Shell.openItem(node.data);
         else if (i == 1)
         {
-          editor.levelManager.delete(node.data);
-          editor.levelsPanel.refresh();
+          Ogmo.editor.levelManager.delete(node.data);
+          Ogmo.editor.levelsPanel.refresh();
         }
       });
     });
@@ -260,7 +260,7 @@ class LevelsPanel extends SidePanel
 
   function inspectFolder(node: ItemListNode):Void
   {
-    var menu = new RightClickMenu(ogmo.mouse);
+    var menu = new RightClickMenu(Ogmo.ogmo.mouse);
     menu.onClosed(function() { node.highlighted = false; });
 
     menu.addOption("Create Level Here", "new-file", function()
@@ -271,7 +271,7 @@ class LevelsPanel extends SidePanel
       var path:String;
       do
       {
-        name = "NewLevel" + n.toString() + ogmo.project.defaultExportMode;
+        name = "NewLevel" + n + Ogmo.ogmo.project.defaultExportMode;
         path = Path.join(node.data, name);
         n++;
       }
@@ -289,14 +289,14 @@ class LevelsPanel extends SidePanel
           }
           else
           {
-            editor.levelManager.create(function (level)
+            Ogmo.editor.levelManager.create(function (level)
             {
               level.path = path;
               level.doSave();
             });
           }
         }
-      }, 0, name.length - ogmo.project.defaultExportMode.length);
+      }, 0, name.length - Ogmo.ogmo.project.defaultExportMode.length);
     });
 
     menu.addOption("Create Subfolder", "folder-closed", function()
@@ -306,7 +306,7 @@ class LevelsPanel extends SidePanel
         if (str != null && str != "")
         {
           Fs.mkdirSync(Path.join(node.data, str));
-          editor.levelsPanel.refresh();
+          Ogmo.editor.levelsPanel.refresh();
         }
       });
     });
@@ -327,15 +327,15 @@ class LevelsPanel extends SidePanel
           else
           {
             Fs.renameSync(oldPath, newPath);
-            editor.levelManager.onFolderRename(oldPath, newPath);
-            ogmo.project.renameAbsoluteLevelPathAndSave(oldPath, newPath);
-            editor.levelsPanel.refresh();
+            Ogmo.editor.levelManager.onFolderRename(oldPath, newPath);
+            Ogmo.ogmo.project.renameAbsoluteLevelPathAndSave(oldPath, newPath);
+            Ogmo.editor.levelsPanel.refresh();
           }
         }
       });
     });
 
-    if (ogmo.project.levelPaths.length > 1)
+    if (Ogmo.ogmo.project.levelPaths.length > 1)
     {
       menu.addOption("Delete Folder", "trash", function()
       {
@@ -345,9 +345,9 @@ class LevelsPanel extends SidePanel
           {
             FileSystem.removeFolder(node.data);
 
-            editor.levelManager.onFolderDelete(node.data);
-            ogmo.project.removeAbsoluteLevelPathAndSave(node.data);
-            editor.levelsPanel.refresh();
+            Ogmo.editor.levelManager.onFolderDelete(node.data);
+            Ogmo.ogmo.project.removeAbsoluteLevelPathAndSave(node.data);
+            Ogmo.editor.levelsPanel.refresh();
           }
         });
       });
@@ -367,13 +367,13 @@ class LevelsPanel extends SidePanel
 
   function inspectUnsavedFolder(node: ItemListNode):Void
   {
-    var menu = new RightClickMenu(ogmo.mouse);
+    var menu = new RightClickMenu(Ogmo.ogmo.mouse);
     menu.onClosed(function() { node.highlighted = false; });
 
     menu.addOption("Create Level", "new-file", function()
     {
-      editor.levelManager.create();
-      editor.levelsPanel.refresh();
+      Ogmo.editor.levelManager.create();
+      Ogmo.editor.levelsPanel.refresh();
     });
 
     node.highlighted = true;
@@ -382,21 +382,21 @@ class LevelsPanel extends SidePanel
 
   function inspectBrokenFolder(node: ItemListNode):Void
   {
-    var menu = new RightClickMenu(ogmo.mouse);
+    var menu = new RightClickMenu(Ogmo.ogmo.mouse);
     menu.onClosed(function() { node.highlighted = false; });
 
     menu.addOption("Recreate Missing Folder", "folder-closed", function()
     {
       Fs.mkdirSync(node.data);
-      editor.levelsPanel.refresh();
+      Ogmo.editor.levelsPanel.refresh();
     });
 
-    if (ogmo.project.levelPaths.length > 1)
+    if (Ogmo.ogmo.project.levelPaths.length > 1)
     {
       menu.addOption("Remove From Project", "trash", function()
       {
-        ogmo.project.removeAbsoluteLevelPathAndSave(node.data);
-        editor.levelsPanel.refresh();
+        Ogmo.ogmo.project.removeAbsoluteLevelPathAndSave(node.data);
+        Ogmo.editor.levelsPanel.refresh();
       });
     }
 
@@ -406,13 +406,13 @@ class LevelsPanel extends SidePanel
 
   function inspectUnsavedLevel(node:ItemListNode):Void
   {
-    var level = editor.levelManager.get(node.data);
-    var menu = new RightClickMenu(ogmo.mouse);
+    var level = Ogmo.editor.levelManager.get(node.data);
+    var menu = new RightClickMenu(Ogmo.ogmo.mouse);
     menu.onClosed(function() { node.highlighted = false; });
 
     menu.addOption("Close Level", "no", function()
     {
-      editor.levelManager.close(level);
+      Ogmo.editor.levelManager.close(level);
     });
 
     node.highlighted = true;
@@ -421,25 +421,25 @@ class LevelsPanel extends SidePanel
 
   function inspectLevel(node:ItemListNode):Void
   {
-    var menu = new RightClickMenu(ogmo.mouse);
+    var menu = new RightClickMenu(Ogmo.ogmo.mouse);
     menu.onClosed(function() { node.highlighted = false; });
 
     var name = node.label;
     if (name.charAt(name.length - 1) == "*") name = name.substr(0, name.length - 1);
 
-    if (editor.levelManager.isOpen(node.data))
+    if (Ogmo.editor.levelManager.isOpen(node.data))
     {
       menu.addOption("Close", "no", function()
       {
-        var level = editor.levelManager.get(node.data);
-        if (level != null) editor.levelManager.close(level);
+        var level = Ogmo.editor.levelManager.get(node.data);
+        if (level != null) Ogmo.editor.levelManager.close(level);
       });
     }
 
     menu.addOption("Rename", "pencil", function()
     {
       var endSel = name.lastIndexOf(".");
-      if (endSel == -1) endSel = undefined;
+      if (endSel == -1) endSel = null;
 
       Popup.openText("Rename Level", "pencil", name, "Rename", "Cancel", function (str)
       {
@@ -451,7 +451,7 @@ class LevelsPanel extends SidePanel
           var rename = function(from:String, to:String)
           {
             Fs.renameSync(from, to);
-            editor.levelManager.onLevelRename(from, to);
+            Ogmo.editor.levelManager.onLevelRename(from, to);
           };
 
           var swap = function()
@@ -464,8 +464,8 @@ class LevelsPanel extends SidePanel
 
           var finalize = function()
           {
-            editor.levelsPanel.refresh();
-            ogmo.updateWindowTitle();
+            Ogmo.editor.levelsPanel.refresh();
+            Ogmo.ogmo.updateWindowTitle();
           }
 
           if (FileSystem.exists(newPath))
@@ -506,7 +506,7 @@ class LevelsPanel extends SidePanel
       //Figure out the save name
       do
       {
-        add = "-copy" + check.toString();
+        add = "-copy" + check;
         check++;
         save = Path.join(dir, base + add + ext);
       }
@@ -516,14 +516,14 @@ class LevelsPanel extends SidePanel
       Fs.createReadStream(node.data).pipe(Fs.createWriteStream(save));
 
       //Refresh
-      editor.levelsPanel.refresh();
+      Ogmo.editor.levelsPanel.refresh();
     });
 
-    if (editor.levelManager.isOpen(node.data))
+    if (Ogmo.editor.levelManager.isOpen(node.data))
     {
       menu.addOption("Properties", "gear", function()
       {
-        var level = editor.levelManager.get(node.data);
+        var level = Ogmo.editor.levelManager.get(node.data);
         if (level != null) Popup.openLevelProperties(level);
       });
     }
@@ -534,8 +534,8 @@ class LevelsPanel extends SidePanel
       {
         if (i == 0)
         {
-          editor.levelManager.delete(node.data);
-          editor.levelsPanel.refresh();
+          Ogmo.editor.levelManager.delete(node.data);
+          Ogmo.editor.levelsPanel.refresh();
         }
       });
     });

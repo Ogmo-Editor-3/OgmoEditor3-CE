@@ -134,7 +134,7 @@ class Vector
 	{
 		var obj:Dynamic = {};
 		obj.x = x;
-		obj.y= y;
+		obj.y = y;
 		return obj;
 	}
 

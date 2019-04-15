@@ -17,7 +17,7 @@ class ProjectEditorPanel
         this.id = id;
         this.label = label;
         this.icon = icon;
-        root = $('<div class="project_panel">');
+        root = new JQuery('<div class="project_panel">');
         root.addClass("project_" + id + "_panel");
     }
 

@@ -34,7 +34,7 @@ class GLRenderer
 	var uvs: Array<Float> = [];
 	var currentDrawMode: Int = -1;
 	var currentTexture: Texture = null;
-	var lastAlpha: Int;
+	var lastAlpha: Float;
 	
 	public function new(name: String, canvas: CanvasElement)
 	{
@@ -97,7 +97,7 @@ class GLRenderer
 		setDrawMode(-1);
 	}
 	
-	public function setAlpha(alpha: Int): Void
+	public function setAlpha(alpha: Float): Void
 	{
 		if (alpha != lastAlpha)
 		{

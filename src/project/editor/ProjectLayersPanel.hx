@@ -1,5 +1,7 @@
 package project.editor;
 
+import util.RightClickMenu;
+import util.Popup;
 import project.data.LayerDefinition;
 import util.Fields;
 import js.html.Window;
@@ -22,11 +24,11 @@ class ProjectLayersPanel extends ProjectEditorPanel
     super(2, "layers", "Layers", "layers-solid");
     
     // list of layers on the left side
-    layers = $('<div class="project_layers_list">');
+    layers = new JQuery('<div class="project_layers_list">');
     root.append(layers);
       
     // contains new layer button
-    buttons = $('<div class="buttons">');
+    buttons = new JQuery('<div class="buttons">');
     layers.append(buttons);
 
     // layers list
@@ -85,7 +87,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
 			var n = Ogmo.ogmo.project.layers.indexOf(layer);
 			if (n >= 0) Ogmo.ogmo.project.layers.splice(n, 1);
 			n = Ogmo.ogmo.project.layers.indexOf(under);
-			Ogmo.ogmo.project.layers.splice(n + 1, 0, layer);
+			Ogmo.ogmo.project.layers.insert(n + 1, layer);
 		}
 		
 		refreshList();
@@ -107,7 +109,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
       }
       item.onrightclick = function (current)
       {
-        var menu = new RightClickMenu(ogmo.mouse);
+        var menu = new RightClickMenu(Ogmo.ogmo.mouse);
         menu.onClosed(function() { current.highlighted = false; });
         menu.addOption("Delete Layer", "trash", function()
         {
@@ -132,7 +134,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
   public function inspect(layer:LayerTemplate, ?saveOnChange:Bool):Void
   {
     // save current template editor (if it's not null)
-    if (saveOnChange == undefined || saveOnChange) save(layerTemplateEditor);
+    if (saveOnChange == null || saveOnChange) save(layerTemplateEditor);
     
     // reselect and clear inspector
     layersList.perform(function(node) { node.selected = (node.data == layer); });
