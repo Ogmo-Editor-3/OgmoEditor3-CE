@@ -1,5 +1,6 @@
 package io;
 
+import js.jquery.JQuery;
 import haxe.Json;
 import js.Browser;
 import js.html.Document;
@@ -143,11 +144,10 @@ class FileSystem
 			XML
 	*/
 
-	// TODO - I don't know what this is -01010111
-	/*public static function stringToXML(str:String):Document
+	public static function stringToXML(str:String):Document
 	{
-		return $.parseXML(str);
-	}*/
+		return JQuery.parseXML(str);
+	}
 
 	public static function XMLtoString(xml:Document, ?pretty:Bool):String
 	{
@@ -158,10 +158,10 @@ class FileSystem
 	}
 
 	// TODO - dependant on stringToXML() -01010111
-	/*public static function loadXML(path:String):Document
+	public static function loadXML(path:String):Document
 	{
 		return FileSystem.stringToXML(FileSystem.loadString(path));
-	}*/
+	}
 
 	public static function saveXML(xml:Document, path:String, ?pretty:Bool):String
 	{

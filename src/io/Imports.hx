@@ -39,49 +39,39 @@ class Imports
 
 	public static function integer(value:String, def:Int):Int
 	{
-		if (value == null)
-			return def;
+		if (value == null) return def;
 
-		var n = Number(value);
-		if (isNaN(n))
-			return def;
-		else
-			return Math.floor(n);
+		var n = Std.parseInt(value);
+		if (n == null) return def;
+		else return n;
 	}
 
 	public static function float(value:String, def:Float):Float
 	{
-		if (value == null)
-			return def;
+		if (value == null) return def;
 
-		var n = Number(value);
-		if (isNaN(n))
-			return def;
-		else
-			return n;
+		var n = Std.parseFloat(value);
+		if (n == null) return def;
+		else return n;
 	}
 
 	public static function vector(from:Dynamic, xName:String, yName:String, ?def: Vector): Vector
 	{
 		return new Vector(
-			Import.integer(from[xName], def == null ? 0 : def.x),
-			Import.integer(from[yName], def == null ? 0 : def.y)
+			Imports.integer(from[xName], def == null ? 0 : def.x),
+			Imports.integer(from[yName], def == null ? 0 : def.y)
 		);
 	}
 
 	public static function color(hex:String, alpha:Bool, def: Color): Color
 	{
-		if (hex == null)
-			return def.clone();
+		if (hex == null) return def.clone();
 
 		var c: Color;
-		if (alpha)
-			c = Color.fromHexAlpha(hex);
-		else
-			c = Color.fromHex(hex, 1);
+		if (alpha) c = Color.fromHexAlpha(hex);
+		else c = Color.fromHex(hex, 1);
 
-		if (isNaN(c.r) || isNaN(c.g) || isNaN(c.b) || isNaN(c.a))
-			c = def.clone();
+		if (c.r == null || c.g == null || c.b == null || c.a == null) c = def.clone();
 
 		return c;
 	}
