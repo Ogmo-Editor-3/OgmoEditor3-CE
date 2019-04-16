@@ -1,5 +1,8 @@
 package level.editor.value;
 
+import level.data.Value;
+import project.data.value.ValueTemplate;
+import project.data.value.EnumValueTemplate;
 import js.jquery.JQuery;
 
 class EnumValueEditor extends ValueEditor
@@ -35,7 +38,7 @@ class EnumValueEditor extends ValueEditor
 
     // handle changes to the textfield
     var lastValue = value;
-    element.change(function()
+    element.change(function(e)
     {
       var index = element.val();
       if (index >= 0 && index < enumTemplate.choices.length)
@@ -43,9 +46,9 @@ class EnumValueEditor extends ValueEditor
         var nextValue = enumTemplate.choices[index];
         if (nextValue != lastValue || conflict)
         {
-          editor.level.store("Changed " + enumTemplate.name + " Value from '" + lastValue + "'  to '" + nextValue + "'");
+          Ogmo.editor.level.store("Changed " + enumTemplate.name + " Value from '" + lastValue + "'  to '" + nextValue + "'");
           for (i in 0...values.length) values[i].value = nextValue;
-          if (conflict) element.find("option[value='-1']").each(function() { $(this).remove(); });
+          if (conflict) element.find("option[value='-1']").each(function(i, e) { new JQuery(e).remove(); });
           conflict = false;
         }
 

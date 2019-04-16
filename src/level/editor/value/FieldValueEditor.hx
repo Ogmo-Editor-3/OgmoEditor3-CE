@@ -1,5 +1,7 @@
 package level.editor.value;
 
+import level.data.Value;
+import project.data.value.ValueTemplate;
 import js.jquery.JQuery;
 
 class FieldValueEditor extends ValueEditor
@@ -55,12 +57,12 @@ class FieldValueEditor extends ValueEditor
     // handle changes to the textfield
     {
       var lastValue = value;
-      element.change(function()
+      element.change(function(e)
       {
         var nextValue = template.validate(element.val());
         if (nextValue != lastValue || conflict)
         {
-          editor.level.store("Changed " + template.name + " Value from '" + lastValue + "'  to '" + nextValue + "'");
+          Ogmo.editor.level.store("Changed " + template.name + " Value from '" + lastValue + "'  to '" + nextValue + "'");
           for (i in 0...values.length)  values[i].value = nextValue;
           conflict = false;
         }

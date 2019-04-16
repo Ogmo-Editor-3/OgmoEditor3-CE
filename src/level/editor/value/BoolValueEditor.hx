@@ -1,5 +1,8 @@
 package level.editor.value;
 
+import util.Fields;
+import level.data.Value;
+import project.data.value.ValueTemplate;
 import js.jquery.JQuery;
 import io.Imports;
 
@@ -44,7 +47,7 @@ class BoolValueEditor extends ValueEditor
       {
         // change
         var was = value;
-        value = (!Imports.bool(value, true)).toString();
+        value = Std.string(!Imports.bool(value, true));
 
         // update visuals
         element.find(".button_icon").removeClass("icon-" + icon);
@@ -62,7 +65,7 @@ class BoolValueEditor extends ValueEditor
         }
 
         // save
-        editor.level.store("Changed " + template.name + " Value from '" + was + "'  to '" + value + "'");
+        Ogmo.editor.level.store("Changed " + template.name + " Value from '" + was + "'  to '" + value + "'");
         for (i in 0...values.length) values[i].value = value;
         conflict = false;
       });
