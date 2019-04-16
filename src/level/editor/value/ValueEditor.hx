@@ -36,6 +36,8 @@ class ValueEditor
     return "Ø Ø Ø";
   }
 
+  public function new() {}
+
   public function load(template:ValueTemplate, values:Array<Value>):Void {}
   public function display(into:JQuery):Void {}
 }

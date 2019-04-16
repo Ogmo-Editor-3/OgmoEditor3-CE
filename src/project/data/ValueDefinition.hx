@@ -5,7 +5,7 @@ import project.editor.value.ValueTemplateEditor;
 
 class ValueDefinition
 {
-  static var definitions: Array<ValueDefinition> = [];
+  public static var definitions: Array<ValueDefinition> = [];
   public var type:Class<ValueTemplate>;
   public var editorType:Class<ValueTemplateEditor>;
   public var icon:String = "";

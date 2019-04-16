@@ -1,5 +1,11 @@
 package level.editor.value;
 
+import util.Popup;
+import util.Fields;
+import project.data.value.ValueTemplate;
+import level.data.Value;
+import js.jquery.JQuery;
+
 class TextValueEditor extends ValueEditor
 {
   public var title:String;
@@ -23,7 +29,7 @@ class TextValueEditor extends ValueEditor
       i++;
     }
 
-    var btn = value.substr(0, Math.min(value.length, 5)) + "...";
+    var btn = value.substr(0, Math.floor(Math.min(value.length, 5))) + "...";
 
     element = Fields.createButton("pencil", btn);
     element.on("click", function()
@@ -36,10 +42,10 @@ class TextValueEditor extends ValueEditor
           value = str;
 
           // save
-          editor.level.store("Changed " + template.name + " Value");
+          Ogmo.editor.level.store("Changed " + template.name + " Value");
           for (i in 0...values.length) values[i].value = value;
 
-          element.find(".button_text").html(value.substr(0, Math.min(value.length, 5)) + "...");
+          element.find(".button_text").html(value.substr(0, Math.floor(Math.min(value.length, 5))) + "...");
           conflict = false;
         }
       });

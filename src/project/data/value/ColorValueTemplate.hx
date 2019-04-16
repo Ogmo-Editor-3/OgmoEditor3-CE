@@ -1,0 +1,56 @@
+package project.data.value;
+
+import level.data.Value;
+import level.editor.value.ValueEditor;
+import util.Color;
+
+class ColorValueTemplate extends ValueTemplate
+{
+  public var defaults:Color = new Color();
+  public var includeAlpha:Bool = false;
+
+  override function getHashCode():String
+  {
+    return name + ":co:" + includeAlpha;
+  }
+
+  override function getDefault():String
+  {
+    return defaults.toHexAlpha();
+  }
+
+  override function validate(val:String):String
+  {
+    //TODO!!
+    return val;
+  }
+
+  override function createEditor(values:Array<Value>):Null<ValueEditor>
+  {
+    return null;
+  }
+
+  override function load(data:Dynamic):Void
+  {
+    name = data.name;
+    defaults = Color.fromHexAlpha(data.defaults);
+    includeAlpha = data.includeAlpha;
+  }
+
+  override function save():Dynamic
+  {
+    var data:Dynamic = {};
+    data.name = name;
+    data.definition = definition.label;
+    data.defaults = defaults.toHexAlpha();
+    data.includeAlpha = includeAlpha;
+    return data;
+  }
+}
+//TODO
+// definition
+// (<any>window).startup.push(function()
+// {
+//     let n = new ValueDefinition(ColorValueTemplate, ColorValueTemplateEditor, "value-color", "Color");
+//     ValueDefinition.definitions.push(n);
+// });
