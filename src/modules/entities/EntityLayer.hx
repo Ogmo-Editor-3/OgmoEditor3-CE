@@ -36,11 +36,12 @@ class EntityLayer extends Layer
 		_nextID = entities.getHighestID();
 	}
 
-	public var template(get, never):EntityLayerTemplate;
+	// TODO - redefinition of variable! -01010111
+	/*public var template(get, never):EntityLayerTemplate;
 	function get_template():EntityLayerTemplate
 	{
 		return Ogmo.ogmo.project.layers[id];
-	}
+	}*/
 
 	public function clone():EntityLayer
 	{

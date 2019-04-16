@@ -10,15 +10,15 @@ class Layer
 	public var level:Level;
 	public var id:Int;
 	public var offset:Vector;
-  public var template(get, null):LayerTemplate;
-  public var gridCellsX(get, null):Int;
-  public var gridCellsY(get, null):Int;
+	public var template(get, null):LayerTemplate;
+	public var gridCellsX(get, null):Int;
+	public var gridCellsY(get, null):Int;
 
 	public function new(level:Level, id:Int)
 	{
 		this.level = level;
 		this.id = id;
-    offset = new Vector();
+		offset = new Vector();
 	}
 
 	/**
@@ -34,11 +34,11 @@ class Layer
 	 */
 	public function resize(newSize:Vector, shift:Vector):Void {}
 	
-  /**
-   * Override Me!
-   * @param amount 
-   */
-  public function shift(amount:Vector):Void {}
+	/**
+	 * Override Me!
+	 * @param amount 
+	 */
+	public function shift(amount:Vector):Void {}
 
 	public function save():Dynamic
 	{
@@ -143,12 +143,12 @@ class Layer
 		return into;
 	}
 
-  function get_template():LayerTemplate
+	function get_template():LayerTemplate
 	{
 		return Ogmo.ogmo.project.layers[id];
 	}
 
-  function get_gridCellsX():Int
+	function get_gridCellsX():Int
 	{
 		return getGridCellsX(level.data.size.x);
 	}
@@ -158,7 +158,7 @@ class Layer
 		return getGridCellsY(level.data.size.y);
 	}
 
-  function get_leftoverX():Float
+	function get_leftoverX():Float
 	{
 		return (level.data.size.x - offset.x) % template.gridSize.x;
 	}

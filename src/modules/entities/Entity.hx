@@ -54,7 +54,7 @@ class Entity
 		if (template == null || data.id == null) return null;
 
 		var e = new Entity();
-		e.id = +data.id;
+		e.id = data.id;
 		e.template = template;
 		e.position = Imports.vector(data, "x", "y");
 		e.size = Imports.vector(data, "width", "height", template.size);
@@ -237,7 +237,7 @@ class Entity
 
 	public function getNodeAt(pos:Vector):Vector
 	{
-		const size = 6;
+		var size = 6;
 
 		for (n in nodes)
 		{
@@ -355,9 +355,7 @@ class Entity
 
 		//Check Entity corner points against AABB
 		var corners = getCorners(position, 4);
-		for (var i = 0; i < corners.length; i++)
-			if (rect.contains(corners[i]))
-				return true;
+		for (corner in corners) if (rect.contains(corner)) return true;
 
 		//Check Entity edges against AABB
 		if (rect.intersectsLineNoContainsCheck(corners[0], corners[1]))
