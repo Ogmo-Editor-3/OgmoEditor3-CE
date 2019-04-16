@@ -1,6 +1,5 @@
-import js.Browser;
 import js.jquery.JQuery;
-import electron.main.BrowserWindow;
+import js.Browser;
 import electron.main.App;
 import electron.renderer.Remote;
 import electron.renderer.IpcRenderer;
@@ -10,6 +9,7 @@ import level.editor.Editor;
 import level.editor.ToolBelt;
 import util.Vector;
 import util.Keys;
+import electron.main.BrowserWindow;
 
 class Ogmo
 {
