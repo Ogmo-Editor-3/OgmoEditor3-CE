@@ -68,29 +68,27 @@ class EntityNodeTool extends EntityTool
 	public function onRightDown(pos:Vector)
 	{
 		var entities = layer.entities.getGroupForNodes(layerEditor.selection);
-		if (entities.length > 0)
+		if (entities.length == 0) return;
+		var nodes = [];
+
+		//Look for an existing node
+		for (e in entities)
 		{
-			var nodes = [];
+			var n = e.getNodeAt(pos);
+			if (n != null) nodes.push({ entity: e, node: n });
+		}
 
-			//Look for an existing node
-			for (e in entities)
+		// delete them
+		if (nodes.length > 0)
+		{
+			Ogmo.editor.level.store("deleted node");
+			for (n in nodes)
 			{
-				var n = e.getNodeAt(pos);
-				if (n != null) nodes.push({ entity: e, node: n });
+				var entity:Entity = n.entity;
+				for (j in 0...entity.nodes.length) if (entity.nodes[j] == n.node) entity.nodes.splice(j, 1); // TODO - dunno if comparison will work here, might do `equals()`? -01010111
 			}
 
-			// delete them
-			if (nodes.length > 0)
-			{
-				Ogmo.editor.level.store("deleted node");
-				for (n in nodes)
-				{
-					var entity:Entity = n.entity;
-					for (j in 0...entity.nodes.length) if (entity.nodes[j] == n.node) entity.nodes.splice(j, 1); // TODO - dunno if comparison will work here, might do `equals()`? -01010111
-				}
-
-				Ogmo.editor.dirty();
-			}
+			Ogmo.editor.dirty();
 		}
 	}
 
