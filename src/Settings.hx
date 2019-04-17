@@ -2,6 +2,9 @@ import js.jquery.JQuery;
 import io.FileSystem;
 import project.data.Project;
 import project.data.ShapeData;
+import util.ItemList;
+import Ogmo.startPage as STARTPAGE;
+import electron.Shell;
 
 class Settings
 {
@@ -51,8 +54,96 @@ class Settings
 			path: project.path,
 			name: project.name
 		};
-		
+		var n = findProject(project.path);
+		if (n >= 0)
+		{
+			recentProjects.splice(n, 1);
+			recentProjects.unshift(data);
+		}
+		else if (n == -1)
+		{
+			recentProjects.unshift(data);
+			while (recentProjects.length > maxRecentProjects) recentProjects.pop();
+		}
 	}
+
+	public function removeRecentProject(path: String)
+	{
+		var n = findProject(path);
+		if (n != -1) recentProjects.splice(n, 1);
+	}
+
+	function findProject(path: String):Int
+	{
+		for (i in 0...recentProjects.length) if (recentProjects[i].path == path) return i;
+		return -1;
+	}
+
+	public function populateRecentProjects(into: JQuery)
+	{
+		var self = this;
+		populateInto = into;
+
+		//Prune projects
+		for (project in recentProjects) if (!FileSystem.exists(project.path)) recentProjects.remove(project);
+
+		into.empty();
+		if (recentProjects.length > 0)
+		{
+			new JQuery(".start_openProject").addClass("button-squarebottom");
+			var itemlist = new ItemList(into);
+			for (p in recentProjects)
+			{
+				var item = itemlist.add(new ItemListItem(p.name));
+				item.setKylesetIcon('ogmo');
+				item.onclick = function(e)
+				{
+					STARTPAGE.onOpenProject(p.path);
+				};
+				item.onrightclick = function(e)
+				{
+					self.inspectRecentProject(cast item, p.path); // TODO - another weird cast -01010111
+				};
+			}
+		}
+		else
+		{
+			into.remove();
+		}
+	}
+
+	function inspectRecentProject(item: ItemListItem, path: String)
+	{
+		var self = this;
+		var menu = new RightClickMenu(ogmo.mouse);
+		menu.onClosed(function() { item.highlighted = false; });
+
+		menu.addOption("Open Project", "folder-closed", function ()
+		{
+			STARTPAGE.onOpenProject(path);
+		});
+
+		menu.addOption("Edit Project", "pencil", function ()
+		{
+			STARTPAGE.onEditProject(path);
+		});
+
+		menu.addOption("Remove From This List", "no", function ()
+		{
+			self.removeRecentProject(path);
+			self.populateRecentProjects(self.populateInto);
+		});
+
+		menu.addOption("Open in Text Editor", "book", function ()
+		{
+			Shell.openItem(path);
+		});
+
+		item.highlighted = true;
+		menu.open();
+	}
+
+	// region SHAPES
 
 	public function initShapes()
 	{
@@ -116,5 +207,7 @@ class Settings
 		if (id >= 0 && id < shapes.length) return shapes[id].clone();
 		return shapes[0].clone();
 	}
+
+	// endregion
 
 }
