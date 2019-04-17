@@ -105,11 +105,11 @@ class LevelManager
 	public function closeAll(?onSuccess: Void->Void):Void
 	{
 		//First close all levels with unsaved changes
-		for (i in 0...EDITOR.levelManager.levels.length)
+		for (level in EDITOR.levelManager.levels)
 		{
-			if (EDITOR.levelManager.levels[i].unsavedChanges)
+			if (level.unsavedChanges)
 			{
-				EDITOR.levelManager.close(EDITOR.levelManager.levels[i], function ()
+				EDITOR.levelManager.close(level, function ()
 				{
 					EDITOR.levelManager.closeAll(onSuccess);
 				});
@@ -127,9 +127,9 @@ class LevelManager
 
 	public function get(path:String): Level
 	{
-		for (i in 0...this.levels.length)
-			if (this.levels[i].managerPath == path)
-				return this.levels[i];
+		for (level in levels)
+			if (level.managerPath == path)
+				return level;
 
 		return null;
 	}
@@ -172,9 +172,9 @@ class LevelManager
 	{
 		var levels: Array<Level> = [];
 
-		for (i in 0...this.levels.length)
-			if (this.levels[i].path == null)
-				levels.push(this.levels[i]);
+		for (level in this.levels)
+			if (level.path == null)
+				levels.push(level);
 
 		return levels;
 	}
@@ -187,11 +187,11 @@ class LevelManager
 		*/
 
     var i = 0;
-		while (i < this.levels.length)
+		while (i < levels.length)
 		{
-			if (this.levels[i].safeToClose)
+			if (levels[i].safeToClose)
 			{
-				this.levels.splice(i, 1);
+				levels.splice(i, 1);
 				i--;
 			}
       i++;
@@ -204,11 +204,11 @@ class LevelManager
 			Close the first level without unsaved changes
 		*/
 
-		for (i in 0...this.levels.length)
+		for (level in levels)
 		{
-			if (!this.levels[i].unsavedChanges)
+			if (!level.unsavedChanges)
 			{
-				this.levels.splice(i, 1);
+				levels.remove(level);
 				return true;
 			}
 		}
@@ -280,25 +280,25 @@ class LevelManager
 
 	public function onFolderDelete(dir:String):Void
 	{
-		for (i in 0...this.levels.length)
-			if (this.levels[i].path != null && this.levels[i].path.indexOf(dir) == 0)
-				this.forceClose(this.levels[i]);
+		for (level in levels)
+			if (level.path != null && level.path.indexOf(dir) == 0)
+				this.forceClose(level);
 	}
 
 	public function onFolderRename(oldPath:String, newPath:String):Void
 	{
-		for (i in 0...this.levels.length)
-			if (this.levels[i].path != null && this.levels[i].path.indexOf(oldPath) == 0)
-				this.levels[i].path = newPath + this.levels[i].path.substr(oldPath.length);
+		for (level in levels)
+			if (level.path != null && level.path.indexOf(oldPath) == 0)
+				level.path = newPath + level.path.substr(oldPath.length);
 	}
 
 	public function onLevelRename(oldPath:String, newPath:String):Void
 	{
-		for (i in 0...this.levels.length)
+		for (level in levels)
 		{
-			if (this.levels[i].path == oldPath)
+			if (level.path == oldPath)
 			{
-				this.levels[i].path = newPath;
+				level.path = newPath;
 				return;
 			}
 		}
@@ -310,17 +310,14 @@ class LevelManager
 
 	public function log():Void
 	{
-		if (this.levels.length == 0)
-			trace("No levels are open!");
+		if (levels.length == 0) trace("No levels are open!");
 		else
 		{
 			trace("Open Levels:");
-			for (i in 0...this.levels.length)
+			for (level in levels)
 			{
-				if (this.levels[i].path == null)
-					trace("Unsaved Level");
-				else
-					trace(this.levels[i].path);
+				if (level.path == null) trace("Unsaved Level");
+				else trace(level.path);
 			}
 		}
 	}
