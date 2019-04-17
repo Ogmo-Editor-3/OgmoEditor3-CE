@@ -10,7 +10,7 @@ class EntityRotateTool extends EntityTool
 	public var last:Vector;
 	public var entities:Array<Entity>;
 
-	public function onMouseDown(pos:Vector)
+	override public function onMouseDown(pos:Vector)
 	{
 		entities = layer.entities.getGroup(layerEditor.selection);
 		if (entities.length == 0) return;
@@ -33,14 +33,14 @@ class EntityRotateTool extends EntityTool
 		EDITOR.overlayDirty();
 	}
 
-	public function onMouseUp(pos:Vector)
+	override public function onMouseUp(pos:Vector)
 	{
 		rotating = false;
 		EDITOR.locked = false;
 		EDITOR.overlayDirty();
 	}
 
-	public function onMouseMove(pos:Vector)
+	override public function onMouseMove(pos:Vector)
 	{
 		if (!rotating) return;
 		if (pos.equals(last)) return;
@@ -50,13 +50,13 @@ class EntityRotateTool extends EntityTool
 			EDITOR.level.store('rotate entities');
 		}
 		var angle = Calc.angleTo(origin, pos);
-		var initial = Calc.angleTo(oritin, start);
-		for (entity in entities) entity.rotate(anle - initial);
+		var initial = Calc.angleTo(origin, start);
+		for (entity in entities) entity.rotate(angle - initial);
 		EDITOR.dirty();
 		pos.clone(last);
 	}
 
-	public function drawOverlay()
+	override public function drawOverlay()
 	{
 		if (!rotating) return;
 		var at = Calc.angleTo(origin, start);
@@ -68,7 +68,7 @@ class EntityRotateTool extends EntityTool
 			vec.y += origin.y;
 
 			EDITOR.overlay.drawLine(origin, vec, Color.white);
-			EDITOR.overlay.drawLineNodes(origin, 10 / EDITOR.level.zoom, Color.green);
+			EDITOR.overlay.drawLineNode(origin, 10 / EDITOR.level.zoom, Color.green);
 		}
 
 		// Curve
@@ -76,8 +76,8 @@ class EntityRotateTool extends EntityTool
 			var length = 60 / EDITOR.level.zoom;
 			var move = 10 * Calc.DTR;
 			var angle = Calc.angleTo(origin, last);
-			var last = Vetor.fromAngle(at, length);
-			last.x += orgin.x;
+			var last = Vector.fromAngle(at, length);
+			last.x += origin.x;
 			last.y += origin.y;
 			var vec = new Vector();
 
@@ -97,7 +97,7 @@ class EntityRotateTool extends EntityTool
 		}
 	}
 
-	public function getIcon():String return 'entity-rotate';
-	public function getName():String return 'Rotate';
+	override public function getIcon():String return 'entity-rotate';
+	override public function getName():String return 'Rotate';
 
 }

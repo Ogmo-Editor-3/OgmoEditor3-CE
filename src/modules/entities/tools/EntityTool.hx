@@ -7,12 +7,12 @@ class EntityTool extends Tool // TODO - this was an abstract but I changed it -0
 	public var layerEditor(get, never):EntityLayerEditor;
 	function get_layerEditor():EntityLayerEditor
 	{
-		return EDITOR.currentLayerEditor;
+		return cast EDITOR.currentLayerEditor;
 	}
 
 	public var layer(get, never):EntityLayer;
 	function get_layer():EntityLayer
 	{
-		return EDITOR.level.currentLayer;
+		return cast EDITOR.level.currentLayer;
 	} 
 }

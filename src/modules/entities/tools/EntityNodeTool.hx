@@ -6,7 +6,7 @@ class EntityNodeTool extends EntityTool
 	public var editing:Array<Vector> = [];
 	public var lastPos:Vector = new Vector();
 
-	public function onMouseMove(pos:Vector)
+	override public function onMouseMove(pos:Vector)
 	{
 		if (editing.length > 0)
 		{
@@ -24,7 +24,7 @@ class EntityNodeTool extends EntityTool
 		}*/
 	}
 
-	public function onMouseDown(pos:Vector)
+	override public function onMouseDown(pos:Vector)
 	{
 		editing = [];
 		var entities = layer.entities.getGroupForNodes(layerEditor.selection);
@@ -59,13 +59,13 @@ class EntityNodeTool extends EntityTool
 		}
 	}
 
-	public function onMouseUp(pos:Vector)
+	override public function onMouseUp(pos:Vector)
 	{
 		EDITOR.locked = false;
 		editing = [];
 	}
 
-	public function onRightDown(pos:Vector)
+	override public function onRightDown(pos:Vector)
 	{
 		var entities = layer.entities.getGroupForNodes(layerEditor.selection);
 		if (entities.length == 0) return;
@@ -92,8 +92,8 @@ class EntityNodeTool extends EntityTool
 		}
 	}
 
-	public function onRightUp(pos:Vector) {}
-	public function getIcon():String return "entity-nodes";
-	public function getName():String return "Add Node";
+	override public function onRightUp(pos:Vector) {}
+	override public function getIcon():String return "entity-nodes";
+	override public function getName():String return "Add Node";
 
 }

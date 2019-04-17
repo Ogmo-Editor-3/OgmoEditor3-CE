@@ -12,7 +12,7 @@ class EntityResizeTool extends EntityTool
 	public var canResizeX:Bool = false;
 	public var canResizeY:Bool = false;
 
-	public function drawOverlay()
+	override public function drawOverlay()
 	{
 		if (!resizing) return;
 		EDITOR.overlay.drawLine(start, mousePos, Color.white);
@@ -21,7 +21,7 @@ class EntityResizeTool extends EntityTool
 		if (canResizeY) EDITOR.overlay.drawLine(start, new Vector(start.x, lastPos.y), Color.green);
 	}
 
-	public function onMouseDown(pos:Vector)
+	override public function onMouseDown(pos:Vector)
 	{
 		entities = layer.entities.getGroup(layerEditor.selection);
 
@@ -49,14 +49,14 @@ class EntityResizeTool extends EntityTool
 		}
 	}
 
-	public function onMouseUp(pos:Vector)
+	override public function onMouseUp(pos:Vector)
 	{
 		resizing = false;
 		EDITOR.locked = false;
 		EDITOR.overlayDirty();
 	}
 
-	public function onMouseMove(pos:Vector)
+	override public function onMouseMove(pos:Vector)
 	{
 		if (!resizing) return;
 		if (!pos.equals(mousePos))
@@ -65,7 +65,7 @@ class EntityResizeTool extends EntityTool
 			EDITOR.overlayDirty();
 		}
 
-		if (!ogmo.ctrl) layer.snapToGrid(pos, pos);
+		if (!OGMO.ctrl) layer.snapToGrid(pos, pos);
 
 		if (!pos.equals(lastPos))
 		{
@@ -82,6 +82,6 @@ class EntityResizeTool extends EntityTool
 		}
 	}
 
-	public function getIcon():String return "entity-scale";
-	public function getName():String return "Resize";
+	override public function getIcon():String return "entity-scale";
+	override public function getName():String return "Resize";
 }

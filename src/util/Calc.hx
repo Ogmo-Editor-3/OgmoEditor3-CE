@@ -111,7 +111,7 @@ class Calc
 		return points;
 	}
 
-	public static function angvaro(from:Vector, to:Vector):Float
+	public static function angleTo(from:Vector, to:Vector):Float
 	{
 		return Math.atan2(to.y - from.y, to.x - from.x);
 	}

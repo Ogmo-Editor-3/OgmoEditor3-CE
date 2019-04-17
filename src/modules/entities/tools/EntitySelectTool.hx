@@ -12,19 +12,19 @@ class EntitySelectTool extends EntityTool
 	public var end:Vector = new Vector();
 	public var firstChange:Bool = false;
 
-	public function drawOverlay()
+	override public function drawOverlay()
 	{
 		if (start.equals(end)) return;
 		if (mode == Select) EDITOR.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.green.x(0.2));
 		else if (mode == Delete) EDITOR.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.red.x(0.2));
 	}
 
-	public function deactivated()
+	override public function deactivated()
 	{
 		layerEditor.hovered.clear();
 	}
 
-	public function onMouseDown(pos:Vector)
+	override public function onMouseDown(pos:Vector)
 	{
 		pos.clone(start);
 		pos.clone(end);
@@ -41,7 +41,7 @@ class EntitySelectTool extends EntityTool
 		else
 		{
 			layerEditor.selection.set(hit);
-			editor.dirty();
+			EDITOR.dirty();
 			startMove();
 		}
 	}
@@ -54,7 +54,7 @@ class EntitySelectTool extends EntityTool
 		entities = layer.entities.getGroup(layerEditor.selection);
 	}
 
-	public function onMouseUp(pos:Vector)
+	override public function onMouseUp(pos:Vector)
 	{
 		if (mode == Select)
 		{
@@ -76,7 +76,7 @@ class EntitySelectTool extends EntityTool
 		}
 	}
 
-	public function onMouseMove(pos:Vector)
+	override public function onMouseMove(pos:Vector)
 	{
 		if (mode == Select || mode == Delete)
 		{
@@ -108,19 +108,19 @@ class EntitySelectTool extends EntityTool
 			if (layerEditor.hovered.equals(hit))
 			{
 				layerEditor.hovered.set(hit);
-				editor.dirty();
+				EDITOR.dirty();
 			}
 		}
 	}
 
-	public function onRightDown(pos:Vector)
+	override public function onRightDown(pos:Vector)
 	{
 		pos.clone(start);
 		pos.clone(end);
 		mode = Delete;
 	}
 
-	public function onRightUp(pos:Vector)
+	override public function onRightUp(pos:Vector)
 	{
 		if (mode != Delete) return;
 		pos.clone(end);
@@ -136,9 +136,9 @@ class EntitySelectTool extends EntityTool
 		EDITOR.dirty();
 	}
 
-	public function getIcon():String return 'entity-selection';
-	public function getName():String return 'Select';
-	public function keyToolAlt():Int return 2;
+	override public function getIcon():String return 'entity-selection';
+	override public function getName():String return 'Select';
+	override public function keyToolAlt():Int return 2;
 
 }
 

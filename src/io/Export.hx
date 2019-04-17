@@ -166,26 +166,25 @@ class Export
 		return e;
 	}
 
-	// TODO - will finish later -01010111
-	/*static function parseObjectInto(data:Dynamic, doc:Document, into:Element)
+	static function parseObjectInto(data:Dynamic, doc:Document, into:Element)
 	{
 		var nameStr = "_name";
 		if (data.name == null) nameStr = "name";
 
-		for (var k in data)
+		for (k in data)
 			if (k != nameStr && k != "_contents" && k != data["_contents"])
 				into.setAttribute(k, data[k].toString());
 
 		var c = Export.getJSONContents(data);
 		if (c != null)
 		{
-			if (typeof c === "string")
+			if (Type.getClassName(Type.getClass(c)) == "String")
 			{
 				into.textContent = c;
 			}
 			else
 			{
-				for (var i = 0; i < c.length; i++)
+				for (i in 0...c.length)
 					into.appendChild(Export.convertObjectToXML(c[i], doc));
 			}
 		}
@@ -193,18 +192,17 @@ class Export
 
 	static function getJSONName(data:Dynamic):String
 	{
-		var s = data["_name"];
+		var s:String = cast data._name;
 		if (s == null)
-			s = data["name"];
+			s = cast data.name;
 
-		while (s.indexOf(" ") != -1)
-			s = s.replace(" ", "");
+		s = s.split(' ').join('');
 
 		return s;
 	}
 
 	static function getJSONContents(data:Dynamic):Dynamic
 	{
-		return data[data["_contents"]];
-	}*/
+		return data.data._contents;
+	}
 }

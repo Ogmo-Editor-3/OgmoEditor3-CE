@@ -10,16 +10,16 @@ class EntityCreateTool extends EntityTool
 	public var firstDelete:Bool = false;
 	public var lastDeletePos:Vector = new Vector();
 
-	public function drawOverlay()
+	override public function drawOverlay()
 	{
 		if (layerEditor.brushTemplate != null && created == null && !deleting && canPreview) 
 			layerEditor.brushTemplate.drawPreview(previewAt);
 	}
 
-	public function activated() canPreview = false;
-	public function onMouseLeave() canPreview = false;
+	override public function activated() canPreview = false;
+	override public function onMouseLeave() canPreview = false;
 
-	public function onMouseDown(pos:Vector)
+	override public function onMouseDown(pos:Vector)
 	{
 		deleting = false;
 
@@ -37,7 +37,7 @@ class EntityCreateTool extends EntityTool
 		else layerEditor.selection.set([ created ]);
 	}
 
-	public function onMouseUp(pos:Vector)
+	override public function onMouseUp(pos:Vector)
 	{
 		if (created == null) return;
 		created = null;
@@ -45,7 +45,7 @@ class EntityCreateTool extends EntityTool
 		if (!OGMO.shift) EDITOR.toolBelt.setTool(0);
 	}
 
-	public function onRightDown(pos:Vector)
+	override public function onRightDown(pos:Vector)
 	{
 		created = null;
 		deleting = true;
@@ -55,7 +55,7 @@ class EntityCreateTool extends EntityTool
 		doDelete(pos);
 	}
 
-	public function onRightUp(pos:Vector)
+	override public function onRightUp(pos:Vector)
 	{
 		deleting = false;
 		EDITOR.locked = false;
@@ -74,7 +74,7 @@ class EntityCreateTool extends EntityTool
 		EDITOR.dirty();
 	}
 
-	public function onMouseMove(pos:Vector)
+	override public function onMouseMove(pos:Vector)
 	{
 		if (created != null)
 		{
@@ -101,7 +101,7 @@ class EntityCreateTool extends EntityTool
 		}
 	}
 
-	public function getIcon():String return "entity-create";
-	public function getName():String return "Create";
+	override public function getIcon():String return "entity-create";
+	override public function getName():String return "Create";
 
 }
