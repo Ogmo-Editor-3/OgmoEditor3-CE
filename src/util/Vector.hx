@@ -140,8 +140,8 @@ class Vector
 
 	public function saveInto(data:Dynamic, xName:String, yName:String)
 	{
-		data[xName] = x;
-		data[yName] = y;
+		Reflect.setField(data, xName, x);
+		Reflect.setField(data, yName, y);
 	}
 
 	public function round(?result:Vector):Vector

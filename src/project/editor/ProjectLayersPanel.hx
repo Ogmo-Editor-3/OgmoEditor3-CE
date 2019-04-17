@@ -48,7 +48,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
     for (i in 0...LayerDefinition.definitions.length)
     {
       var def = LayerDefinition.definitions[i];
-      layerTypes[def.id] = def.label;
+      Reflect.setField(layerTypes, def.id, def.label);
       trace(def.id + "->" + def.label);
     }
     

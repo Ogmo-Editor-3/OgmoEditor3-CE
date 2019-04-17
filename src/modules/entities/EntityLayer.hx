@@ -60,5 +60,4 @@ class EntityLayer extends Layer
 
 	var _nextID:Int = 0;
 	public function nextID():Int return _nextID++;
-
 }

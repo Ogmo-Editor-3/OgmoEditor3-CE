@@ -58,8 +58,8 @@ class Imports
 	public static function vector(from:Dynamic, xName:String, yName:String, ?def: Vector): Vector
 	{
 		return new Vector(
-			Imports.integer(from[xName], def == null ? 0 : def.x),
-			Imports.integer(from[yName], def == null ? 0 : def.y)
+			Imports.integer(Reflect.field(from, xName), def == null ? 0 : def.x.int()),
+			Imports.integer(Reflect.field(from, yName), def == null ? 0 : def.y.int())
 		);
 	}
 
@@ -81,7 +81,7 @@ class Imports
 		var result:Array<Value> = [];
 
 		for (i in 0...templates.length)
-			result.push(new Value(templates[i], from[templates[i].name]));
+			result.push(new Value(templates[i], Reflect.field(from, templates[i].name)));
 
 		return result;
 	}
@@ -98,8 +98,8 @@ class Imports
 	{
 		if (data._contents != null)
 			return data._contents;
-		else if (data[name] != null)
-			return data[name];
+		else if (Reflect.field(data, name) != null)
+			return Reflect.field(data, name);
 		else
 			return [];
 	}
@@ -108,8 +108,8 @@ class Imports
 	{
 		if (data._contents != null)
 			return data._contents;
-		else if (data[name] != null)
-			return data[name];
+		else if (Reflect.field(data, name) != null)
+			return Reflect.field(data, name);
 		else
 			return "";
 	}
@@ -222,7 +222,7 @@ class Imports
 		//Attributes
 		if (e.attributes != null)
 			for (i in 0...e.attributes.length)
-				data[e.attributes[i].name] = e.attributes[i].value;
+				Reflect.setField(data, e.attributes[i].name, e.attributes[i].value);
 
 		//Contents
 		if (e.childElementCount > 0)

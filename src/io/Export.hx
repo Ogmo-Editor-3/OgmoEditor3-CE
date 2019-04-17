@@ -66,7 +66,7 @@ class Export
 
 	public static function values(into:Dynamic, values:Array<Value>)
 	{
-		for (value in values) into[value.template.name] = value.value;
+		for (value in values) Reflect.setField(into, value.template.name, value.value);
 	}
 
 	/*
@@ -138,7 +138,7 @@ class Export
 	{
 		Syntax.delete(data, '_name');
 
-		var contents = Export.getJSONContents(data);
+		var contents:Iterable<Dynamic> = Export.getJSONContents(data);
 		if (contents != null)
 		{
 			for (content in contents) Export.stripJSON(content);
