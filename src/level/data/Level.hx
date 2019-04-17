@@ -57,7 +57,7 @@ class Level
 		{
 			project.levelDefaultSize.clone(this.data.size);
 			values = [];
-			for (i in 0...OGMO.project.levelValues.length) values.push(new Value(OGMO.project.levelValues[i]));   
+			for (lv in OGMO.project.levelValues) values.push(new Value(lv));   
 			initLayers();
 		}
 		else load(data);
@@ -111,8 +111,8 @@ class Level
 		Export.values(data, values);
 
 		data.layers = [];
-		for (i in 0...layers.length)
-			data.layers.push(layers[i].save());
+		for (layer in layers)
+			data.layers.push(layer.save());
 
 		return data;
 	}
@@ -215,7 +215,7 @@ class Level
 
 	public function getLayerByExportID(exportID:String): Layer
 	{
-		for (i in 0...layers.length) if (layers[i].template.exportID == exportID) return layers[i];
+		for (layer in layers) if (layer.template.exportID == exportID) return layer;
 		return null;
 	}
 
@@ -246,14 +246,14 @@ class Level
 	{
 		if (!data.size.equals(newSize))
 		{
-			for (i in 0...layers.length) layers[i].resize(newSize.clone(), shift.clone());
+			for (layer in layers) layer.resize(newSize.clone(), shift.clone());
 			data.size = newSize.clone();
 		}
 	}
 
 	public function shift(amount: Vector):Void
 	{
-		for (i in 0...layers.length) layers[i].shift(amount.clone());
+		for (layer in layers) layer.shift(amount.clone());
 	}
 
 	/*

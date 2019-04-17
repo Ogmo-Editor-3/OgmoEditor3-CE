@@ -80,8 +80,8 @@ class Imports
 	{
 		var result:Array<Value> = [];
 
-		for (i in 0...templates.length)
-			result.push(new Value(templates[i], Reflect.field(from, templates[i].name)));
+		for (template in templates)
+			result.push(new Value(template, Reflect.field(from, template.name)));
 
 		return result;
 	}
@@ -118,9 +118,9 @@ class Imports
 	{
 		var n: Array<Vector> = [];
 
-		var c = Imports.contentsArray(parent, "nodes");
-		for (i in 0...c.length)
-			n.push(Imports.vector(c[i], "x", "y"));
+		var contents = Imports.contentsArray(parent, "nodes");
+		for (c in contents)
+			n.push(Imports.vector(c, "x", "y"));
 
 		return n;
 	}
@@ -221,8 +221,8 @@ class Imports
 
 		//Attributes
 		if (e.attributes != null)
-			for (i in 0...e.attributes.length)
-				Reflect.setField(data, e.attributes[i].name, e.attributes[i].value);
+			for (attr in e.attributes)
+				Reflect.setField(data, attr.name, attr.value);
 
 		//Contents
 		if (e.childElementCount > 0)

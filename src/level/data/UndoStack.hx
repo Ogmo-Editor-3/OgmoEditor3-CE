@@ -195,7 +195,7 @@ class UndoStack
 	function fetchFull(freezeRight:Bool, freezeBottom:Bool, description:String): LevelState
 	{
 		var layers: Array<Layer> = [];
-		for (i in 0...level.layers.length) layers.push(level.layers[i].clone());
+		for (layer in level.layers) layers.push(layer.clone());
 
 		return { level: level.data.clone(), description: description, layers: layers, freezeBottom: freezeBottom, freezeRight: freezeRight };
 	}
@@ -204,7 +204,7 @@ class UndoStack
 	{
 		var level: LevelData = null;
 		var layers: Array<Layer> = [];
-		for (i in 0...state.layers.length) layers.push(this.level.layers[state.layers[i].id].clone());
+		for (layer in state.layers) layers.push(this.level.layers[layer.id].clone());
 		if (state.level != null) level = this.level.data.clone();
 
 		return { level: level, description: state.description, layers: layers, freezeBottom: state.freezeBottom, freezeRight: state.freezeRight };
@@ -212,9 +212,8 @@ class UndoStack
 
 	function apply(state: LevelState):String
 	{
-		for (i in 0...state.layers.length)
+		for (layer in state.layers)
 		{
-			var layer = state.layers[i];
 			level.layers[layer.id] = layer;
 			EDITOR.layerEditors[layer.id].afterUndoRedo();
 		}

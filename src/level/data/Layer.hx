@@ -110,7 +110,7 @@ class Layer
 	public function pointsInsideGrid(points: Array<Vector>):Array<Vector>
 	{
 		var ret: Array<Vector> = [];
-		for (i in 0...points.length) if (insideGrid(points[i])) ret.push(points[i]);
+		for (point in points) if (insideGrid(point)) ret.push(point);
 		return ret;
 	}
 
