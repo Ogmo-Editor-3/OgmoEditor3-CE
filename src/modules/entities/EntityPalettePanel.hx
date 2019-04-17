@@ -59,9 +59,9 @@ class EntityPalettePanel extends SidePanel
 			// searching
 			var matchingTemplates:Array<EntityTemplate> = [];
 			for (temp in allTemplates)
-				if (search.length <= 0 || temp.name.toLowerCase().indexOf(search.toLowerCase()) >= 0 || (tagName != untaggedName && tagName.search(search) >= 0))
+				if (search.length <= 0 || temp.name.toLowerCase().indexOf(search.toLowerCase()) >= 0 || (tagName != untaggedName && tagName.indexOf(search.toString()) >= 0))
 					if (template == null || temp.allowedOnLayer(cast template))
-						matchingTemplates.push(allTemplates[i]);
+						matchingTemplates.push(temp);
 
 			if (matchingTemplates.length <= 0)
 				continue;
