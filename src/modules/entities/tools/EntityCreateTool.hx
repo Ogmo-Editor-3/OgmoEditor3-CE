@@ -24,16 +24,16 @@ class EntityCreateTool extends EntityTool
 		deleting = false;
 
 		if (layerEditor.brushTemplate == null) return;
-		if (!Ogmo.ogmo.ctrl) layer.snapToGrid(pos, pos);
+		if (!OGMO.ctrl) layer.snapToGrid(pos, pos);
 
-		Ogmo.editor.level.store("create entity");
-		Ogmo.editor.locked = true;
-		Ogmo.editor.dirty();
+		EDITOR.level.store("create entity");
+		EDITOR.locked = true;
+		EDITOR.dirty();
 
 		created = Entity.create(layer.nextID(), layerEditor.brushTemplate, pos);
 		layer.entities.add(created);
 
-		if (Ogmo.ogmo.keyCheckMap[Keys.Shift]) layerEditor.selection.add([ created ]);
+		if (OGMO.keyCheckMap[Keys.Shift]) layerEditor.selection.add([ created ]);
 		else layerEditor.selection.set([ created ]);
 	}
 
@@ -41,8 +41,8 @@ class EntityCreateTool extends EntityTool
 	{
 		if (created == null) return;
 		created = null;
-		Ogmo.editor.locked = false;
-		if (!Ogmo.ogmo.shift) Ogmo.editor.toolBelt.setTool(0);
+		EDITOR.locked = false;
+		if (!OGMO.shift) EDITOR.toolBelt.setTool(0);
 	}
 
 	public function onRightDown(pos:Vector)
@@ -50,7 +50,7 @@ class EntityCreateTool extends EntityTool
 		created = null;
 		deleting = true;
 		lastDeletePos = pos;
-		Ogmo.editor.locked = true;
+		EDITOR.locked = true;
 
 		doDelete(pos);
 	}
@@ -58,7 +58,7 @@ class EntityCreateTool extends EntityTool
 	public function onRightUp(pos:Vector)
 	{
 		deleting = false;
-		Ogmo.editor.locked = false;
+		EDITOR.locked = false;
 	}
 
 	public function doDelete(pos:Vector)
@@ -68,22 +68,22 @@ class EntityCreateTool extends EntityTool
 		if (!firstDelete)
 		{
 			firstDelete = true;
-			Ogmo.editor.level.store("delete entities");
+			EDITOR.level.store("delete entities");
 		}
 		layer.entities.removeList(hit);
-		Ogmo.editor.dirty();
+		EDITOR.dirty();
 	}
 
 	public function onMouseMove(pos:Vector)
 	{
 		if (created != null)
 		{
-			if (!Ogmo.ogmo.ctrl) layer.snapToGrid(pos, pos);
+			if (!OGMO.ctrl) layer.snapToGrid(pos, pos);
 
 			if (pos.equals(created.position)) return;
 			pos.clone(created.position);
 			created.updateMatrix();
-			Ogmo.editor.dirty();
+			EDITOR.dirty();
 		}
 		else if (deleting)
 		{
@@ -93,11 +93,11 @@ class EntityCreateTool extends EntityTool
 		}
 		else if (layerEditor.brushTemplate != null && !pos.equals(previewAt))
 		{
-			if (!Ogmo.ogmo.ctrl) layer.snapToGrid(pos, pos);
+			if (!OGMO.ctrl) layer.snapToGrid(pos, pos);
 
 			canPreview = true;
 			previewAt = pos;
-			Ogmo.editor.overlayDirty();
+			EDITOR.overlayDirty();
 		}
 	}
 

@@ -17,7 +17,7 @@ class LevelManager
 		//Okay enforce the limit and create a new one
 		this.enforceLimit(function ()
 		{
-			var level = Ogmo.editor.levelManager.forceCreate();
+			var level = EDITOR.levelManager.forceCreate();
 			if (onSuccess != null)
 				onSuccess(level);
 		});
@@ -25,11 +25,11 @@ class LevelManager
 
 	public function forceCreate(): Level
 	{
-		var level = new Level(Ogmo.ogmo.project);
-		level.unsavedID = Ogmo.ogmo.project.getNextUnsavedLevelID();
-		Ogmo.editor.levelManager.levels.push(level);
-		Ogmo.editor.levelsPanel.refresh();
-		Ogmo.editor.setLevel(level);
+		var level = new Level(OGMO.project);
+		level.unsavedID = OGMO.project.getNextUnsavedLevelID();
+		EDITOR.levelManager.levels.push(level);
+		EDITOR.levelsPanel.refresh();
+		EDITOR.setLevel(level);
 		return level;
 	}
 
@@ -42,7 +42,7 @@ class LevelManager
 		if (level != null)
 		{
 			this.moveToFront(level);
-			Ogmo.editor.setLevel(level);
+			EDITOR.setLevel(level);
 			if (onSuccess != null)
 				onSuccess(level);
 
@@ -72,8 +72,8 @@ class LevelManager
 				return;
 			}
 
-			Ogmo.editor.levelManager.levels.push(level);
-			Ogmo.editor.setLevel(level);
+			EDITOR.levelManager.levels.push(level);
+			EDITOR.setLevel(level);
 
 			if (onSuccess != null)
 				onSuccess(level);
@@ -82,10 +82,10 @@ class LevelManager
 
 	public function close(level:Level, ?onSuccess: Void->Void):Void
 	{
-		Ogmo.editor.setLevel(level);
+		EDITOR.setLevel(level);
 		level.attemptClose(function ()
 		{
-			Ogmo.editor.levelManager.forceClose(level);
+			EDITOR.levelManager.forceClose(level);
 			if (onSuccess != null)
 				onSuccess();
 		});
@@ -93,33 +93,33 @@ class LevelManager
 
 	public function forceClose(level: Level):Void
 	{
-		var n = Ogmo.editor.levelManager.levels.indexOf(level);
-		Ogmo.editor.levelManager.levels.splice(n, 1);
+		var n = EDITOR.levelManager.levels.indexOf(level);
+		EDITOR.levelManager.levels.splice(n, 1);
 
-		if (Ogmo.editor.level == level && Ogmo.editor.levelManager.levels.length != 0)
-			Ogmo.editor.setLevel(Ogmo.editor.levelManager.levels[Ogmo.editor.levelManager.levels.length - 1]);
+		if (EDITOR.level == level && EDITOR.levelManager.levels.length != 0)
+			EDITOR.setLevel(EDITOR.levelManager.levels[EDITOR.levelManager.levels.length - 1]);
 		else
-			Ogmo.editor.setLevel(null);
+			EDITOR.setLevel(null);
 	}
 
 	public function closeAll(?onSuccess: Void->Void):Void
 	{
 		//First close all levels with unsaved changes
-		for (i in 0...Ogmo.editor.levelManager.levels.length)
+		for (i in 0...EDITOR.levelManager.levels.length)
 		{
-			if (Ogmo.editor.levelManager.levels[i].unsavedChanges)
+			if (EDITOR.levelManager.levels[i].unsavedChanges)
 			{
-				Ogmo.editor.levelManager.close(Ogmo.editor.levelManager.levels[i], function ()
+				EDITOR.levelManager.close(EDITOR.levelManager.levels[i], function ()
 				{
-					Ogmo.editor.levelManager.closeAll(onSuccess);
+					EDITOR.levelManager.closeAll(onSuccess);
 				});
 				return;
 			}
 		}
 
 		//Now close the rest
-		while (Ogmo.editor.levelManager.levels.length > 0)
-			Ogmo.editor.levelManager.forceClose(Ogmo.editor.levelManager.levels[0]);
+		while (EDITOR.levelManager.levels.length > 0)
+			EDITOR.levelManager.forceClose(EDITOR.levelManager.levels[0]);
 
 		if (onSuccess != null)
 			onSuccess();
@@ -219,19 +219,19 @@ class LevelManager
 	function enforceLimit(onSuccess:Void->Void):Void
 	{
 		//First do a safe-to-close trim
-		Ogmo.editor.levelManager.trim();
+		EDITOR.levelManager.trim();
 
 		//Now try removing levels that don't have unsaved changes
 		var trim = true;
-		while (trim && Ogmo.editor.levelManager.levels.length >= Ogmo.ogmo.settings.openLevelLimit)
-			trim = Ogmo.editor.levelManager.savedTrim();
+		while (trim && EDITOR.levelManager.levels.length >= OGMO.settings.openLevelLimit)
+			trim = EDITOR.levelManager.savedTrim();
 
 		//Now we're forced to ask to close levels
-		if (Ogmo.editor.levelManager.levels.length >= Ogmo.ogmo.settings.openLevelLimit)
+		if (EDITOR.levelManager.levels.length >= OGMO.settings.openLevelLimit)
 		{
-			Ogmo.editor.levelManager.close(Ogmo.editor.levelManager.levels[0], function ()
+			EDITOR.levelManager.close(EDITOR.levelManager.levels[0], function ()
 			{
-				Ogmo.editor.levelManager.enforceLimit(onSuccess);
+				EDITOR.levelManager.enforceLimit(onSuccess);
 			});
 		}
 		else
@@ -244,32 +244,32 @@ class LevelManager
 
 	function resolveModifiedLevel():Void
 	{
-		Popup.open("Level File Modified", "warning", "<span class='monospace'>" + Ogmo.editor.level.displayNameNoStar + "</span> was modified externally!", ["Reload", "Keep Mine"], function (i)
+		Popup.open("Level File Modified", "warning", "<span class='monospace'>" + EDITOR.level.displayNameNoStar + "</span> was modified externally!", ["Reload", "Keep Mine"], function (i)
 		{
 			if (i == 0)
 			{
-				Imports.levelInto(Ogmo.editor.level.path, Ogmo.editor.level);
-				Ogmo.editor.level.unsavedChanges = false;
-				Ogmo.editor.dirty();
+				Imports.levelInto(EDITOR.level.path, EDITOR.level);
+				EDITOR.level.unsavedChanges = false;
+				EDITOR.dirty();
 			}
 			else
-				Ogmo.editor.level.unsavedChanges = true;
+				EDITOR.level.unsavedChanges = true;
 
-			Ogmo.editor.levelsPanel.refreshLabelsAndIcons();
-			Ogmo.ogmo.updateWindowTitle();
+			EDITOR.levelsPanel.refreshLabelsAndIcons();
+			OGMO.updateWindowTitle();
 		});
 	}
 
 	public function onGainFocus():Void
 	{
-		if (Ogmo.editor.level != null)
+		if (EDITOR.level != null)
 		{
-			if (Ogmo.editor.level.externallyDeleted)
+			if (EDITOR.level.externallyDeleted)
 			{
-				Ogmo.editor.level.deleted = true;
-				Ogmo.editor.level.unsavedChanges = true;
+				EDITOR.level.deleted = true;
+				EDITOR.level.unsavedChanges = true;
 			}
-			else if (Ogmo.editor.level.externallyModified)
+			else if (EDITOR.level.externallyModified)
 				this.resolveModifiedLevel();
 		}
 	}

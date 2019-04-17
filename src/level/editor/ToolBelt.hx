@@ -28,7 +28,7 @@ class ToolBelt
     if (currentKeyTool != key)
     {
       var tool:Int = -1;
-      var layer:String = Ogmo.editor.level.currentLayer.template.definition.id;
+      var layer:String = EDITOR.level.currentLayer.template.definition.id;
 
       switch (key)
       {
@@ -42,7 +42,7 @@ class ToolBelt
           throw "Not a keytool key!";
       }
 
-      if (currentKeyTool == 0) keyToolFrom = Ogmo.editor.currentLayerEditor.currentTool;
+      if (currentKeyTool == 0) keyToolFrom = EDITOR.currentLayerEditor.currentTool;
 
       if (setTool(tool))
       {
@@ -79,7 +79,7 @@ class ToolBelt
 
   public function afterSetLayer():Void
   {
-    setTool(Ogmo.editor.currentLayerEditor.currentTool, true);
+    setTool(EDITOR.currentLayerEditor.currentTool, true);
     populateToolbar();
   }
 
@@ -87,13 +87,13 @@ class ToolBelt
   {
     if (force == null) force = false;
 
-    var layer = Ogmo.editor.level.currentLayer.template.definition.id;
+    var layer = EDITOR.level.currentLayer.template.definition.id;
 
-    if (id >= 0 && (id != Ogmo.editor.currentLayerEditor.currentTool || force) && id < allTools[layer].length)
+    if (id >= 0 && (id != EDITOR.currentLayerEditor.currentTool || force) && id < allTools[layer].length)
     {
-      Ogmo.editor.currentLayerEditor.currentTool = id;
-      Ogmo.editor.dirty();
-      Ogmo.editor.locked = false;
+      EDITOR.currentLayerEditor.currentTool = id;
+      EDITOR.dirty();
+      EDITOR.locked = false;
 
       currentKeyTool = 0;
       refreshToolbar();
@@ -110,7 +110,7 @@ class ToolBelt
 
   public function populateToolbar():Void
   {
-    var tools = allTools[Ogmo.editor.level.currentLayer.template.definition.id];
+    var tools = allTools[EDITOR.level.currentLayer.template.definition.id];
     var toolbar = new JQuery(".sticker-toolbar");
     buttons.resize(0);
 
@@ -129,7 +129,7 @@ class ToolBelt
   {
     for (i in 0...buttons.length)
     {
-      if (i == Ogmo.editor.currentLayerEditor.currentTool)
+      if (i == EDITOR.currentLayerEditor.currentTool)
       {
         if (currentKeyTool != 0) buttons[i].keyToolSelected();
         else buttons[i].selected();

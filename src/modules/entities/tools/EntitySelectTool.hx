@@ -15,8 +15,8 @@ class EntitySelectTool extends EntityTool
 	public function drawOverlay()
 	{
 		if (start.equals(end)) return;
-		if (mode == Select) Ogmo.editor.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.green.x(0.2));
-		else if (mode == Delete) Ogmo.editor.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.red.x(0.2));
+		if (mode == Select) EDITOR.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.green.x(0.2));
+		else if (mode == Delete) EDITOR.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.red.x(0.2));
 	}
 
 	public function deactivated()
@@ -31,7 +31,7 @@ class EntitySelectTool extends EntityTool
 
 		var hit = layer.entities.getAt(pos);
 		if (hit.length == 0) mode = Select;
-		else if (Ogmo.ogmo.shift)
+		else if (OGMO.shift)
 		{
 			layerEditor.selection.toggle(hit);
 			if (layerEditor.selection.amount > 0) startMove();
@@ -63,11 +63,11 @@ class EntitySelectTool extends EntityTool
 			if (start.equals(end)) hits = layer.entities.getAt(start);
 			else hits = layer.entities.getRect(Rectangle.fromPoints(start, end));
 
-			if (Ogmo.ogmo.shift) layerEditor.selection.toggle(hits);
+			if (OGMO.shift) layerEditor.selection.toggle(hits);
 			else layerEditor.selection.set(hits);
 
 			mode = None;
-			Ogmo.editor.overlayDirty();
+			EDITOR.overlayDirty();
 		}
 		else if (mode == Move)
 		{
@@ -81,24 +81,24 @@ class EntitySelectTool extends EntityTool
 		if (mode == Select || mode == Delete)
 		{
 			pos.clone(end);
-			Ogmo.editor.dirty();
+			EDITOR.dirty();
 
 			var hit = layer.entities.getRect(Rectangle.fromPoints(start, end));
 			layerEditor.hovered.set(hit);
 		}
 		else if (mode == Move)
 		{
-			if (!Ogmo.ogmo.ctrl) layer.snapToGrid(pos, pos);
+			if (!OGMO.ctrl) layer.snapToGrid(pos, pos);
 
 			if (!pos.equals(start))
 			{
 				if (!firstChange)
 				{
 					firstChange = true;
-					Ogmo.editor.level.store('move entities');
+					EDITOR.level.store('move entities');
 				}
 				for (entity in entities) entity.move(new Vector(pos.x - start.x, pos.y - start.y));
-				Ogmo.editor.dirty();
+				EDITOR.dirty();
 				pos.clone(start);
 			}
 		}
@@ -129,11 +129,11 @@ class EntitySelectTool extends EntityTool
 		else hit = layer.entities.getRect(Rectangle.fromPoints(start, end));
 		if (hit.length > 0)
 		{
-			Ogmo.editor.level.store('delete entities');
+			EDITOR.level.store('delete entities');
 			layer.entities.removeList(hit);
 		}
 		mode = None;
-		Ogmo.editor.dirty();
+		EDITOR.dirty();
 	}
 
 	public function getIcon():String return 'entity-selection';

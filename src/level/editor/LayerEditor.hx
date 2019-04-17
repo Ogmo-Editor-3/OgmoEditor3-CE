@@ -13,7 +13,8 @@ class LayerEditor
 	public var visible:Bool = true;
 	public var palettePanel:SidePanel;
 	public var selectionPanel:SidePanel;
-  public var template(get,null):LayerTemplate;
+  public var template(get, never):LayerTemplate;
+	public var layer(get, never):Layer;
 
 
 	public function new(id:Int)
@@ -79,11 +80,11 @@ class LayerEditor
 
   function get_template():LayerTemplate
 	{
-		return Ogmo.ogmo.project.layers[this.id];
+		return OGMO.project.layers[this.id];
 	}
 
 	function get_layer():Layer
 	{
-		return Ogmo.editor.level.layers[this.id];
+		return EDITOR.level.layers[this.id];
 	}
 }

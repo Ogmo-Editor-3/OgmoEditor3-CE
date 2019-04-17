@@ -38,8 +38,8 @@ class UndoStack
 		if (!level.unsavedChanges)
 		{
 			level.unsavedChanges = true;
-			Ogmo.ogmo.updateWindowTitle();
-			Ogmo.editor.levelsPanel.refreshLabelsAndIcons();
+			OGMO.updateWindowTitle();
+			EDITOR.levelsPanel.refreshLabelsAndIcons();
 		}
 	}
 
@@ -52,8 +52,8 @@ class UndoStack
 		if (!level.unsavedChanges)
 		{
 			level.unsavedChanges = true;
-			Ogmo.ogmo.updateWindowTitle();
-			Ogmo.editor.levelsPanel.refreshLabelsAndIcons();
+			OGMO.updateWindowTitle();
+			EDITOR.levelsPanel.refreshLabelsAndIcons();
 		}
 	}
 
@@ -66,8 +66,8 @@ class UndoStack
 		if (!level.unsavedChanges)
 		{
 			level.unsavedChanges = true;
-			Ogmo.ogmo.updateWindowTitle();
-			Ogmo.editor.levelsPanel.refreshLabelsAndIcons();
+			OGMO.updateWindowTitle();
+			EDITOR.levelsPanel.refreshLabelsAndIcons();
 		}
 	}
 
@@ -81,7 +81,7 @@ class UndoStack
 
 			redoStates.push(state);
 			var desc = apply(undoTo);
-			Ogmo.editor.dirty();
+			EDITOR.dirty();
 
 			if (state.freezeRight)
 			{
@@ -100,15 +100,15 @@ class UndoStack
 			if (!level.unsavedChanges)
 			{
 				level.unsavedChanges = true;
-				Ogmo.ogmo.updateWindowTitle();
+				OGMO.updateWindowTitle();
 			}
 
-			if (Ogmo.editor.currentLayerEditor != null)
+			if (EDITOR.currentLayerEditor != null)
 			{
-				if (Ogmo.editor.currentLayerEditor.palettePanel != null)
-					Ogmo.editor.currentLayerEditor.palettePanel.refresh();
-				if (Ogmo.editor.currentLayerEditor.selectionPanel != null)
-					Ogmo.editor.currentLayerEditor.selectionPanel.refresh();
+				if (EDITOR.currentLayerEditor.palettePanel != null)
+					EDITOR.currentLayerEditor.palettePanel.refresh();
+				if (EDITOR.currentLayerEditor.selectionPanel != null)
+					EDITOR.currentLayerEditor.selectionPanel.refresh();
 			}
 
 			showActionSticker(true, desc);
@@ -125,7 +125,7 @@ class UndoStack
 
 			undoStates.push(state);
 			var desc = apply(redoTo);
-			Ogmo.editor.dirty();
+			EDITOR.dirty();
 
 			if (state.freezeRight)
 			{
@@ -144,15 +144,15 @@ class UndoStack
 			if (!level.unsavedChanges)
 			{
 				level.unsavedChanges = true;
-				Ogmo.ogmo.updateWindowTitle();
+				OGMO.updateWindowTitle();
 			}
 
-			if (Ogmo.editor.currentLayerEditor != null)
+			if (EDITOR.currentLayerEditor != null)
 			{
-				if (Ogmo.editor.currentLayerEditor.palettePanel != null)
-					Ogmo.editor.currentLayerEditor.palettePanel.refresh();
-				if (Ogmo.editor.currentLayerEditor.selectionPanel != null)
-					Ogmo.editor.currentLayerEditor.selectionPanel.refresh();
+				if (EDITOR.currentLayerEditor.palettePanel != null)
+					EDITOR.currentLayerEditor.palettePanel.refresh();
+				if (EDITOR.currentLayerEditor.selectionPanel != null)
+					EDITOR.currentLayerEditor.selectionPanel.refresh();
 			}
 
 			showActionSticker(false, desc);
@@ -216,13 +216,13 @@ class UndoStack
 		{
 			var layer = state.layers[i];
 			level.layers[layer.id] = layer;
-			Ogmo.editor.layerEditors[layer.id].afterUndoRedo();
+			EDITOR.layerEditors[layer.id].afterUndoRedo();
 		}
 
 		if (state.level != null)
 		{
 			level.data = state.level;
-			Ogmo.editor.handles.refresh();
+			EDITOR.handles.refresh();
 		}
 
 		return state.description;

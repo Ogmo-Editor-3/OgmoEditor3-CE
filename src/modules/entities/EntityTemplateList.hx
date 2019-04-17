@@ -54,7 +54,7 @@ class EntityTemplateList
 
 	public function untagged():Array<EntityTemplate>
 	{
-		return [for (template in Ogmo.ogmo.project.entities.templates) if (template.tags.length <= 0) template];
+		return [for (template in OGMO.project.entities.templates) if (template.tags.length <= 0) template];
 	}
 
 	public function refreshTagLists()

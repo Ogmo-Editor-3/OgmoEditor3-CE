@@ -29,15 +29,15 @@ class EntityRotateTool extends EntityTool
 
 		rotating = true;
 		firstChange = false;
-		Ogmo.editor.locked = true;
-		Ogmo.editor.overlayDirty();
+		EDITOR.locked = true;
+		EDITOR.overlayDirty();
 	}
 
 	public function onMouseUp(pos:Vector)
 	{
 		rotating = false;
-		Ogmo.editor.locked = false;
-		Ogmo.editor.overlayDirty();
+		EDITOR.locked = false;
+		EDITOR.overlayDirty();
 	}
 
 	public function onMouseMove(pos:Vector)
@@ -47,12 +47,12 @@ class EntityRotateTool extends EntityTool
 		if (!firstChange)
 		{
 			firstChange = true;
-			Ogmo.editor.level.store('rotate entities');
+			EDITOR.level.store('rotate entities');
 		}
 		var angle = Calc.angleTo(origin, pos);
 		var initial = Calc.angleTo(oritin, start);
 		for (entity in entities) entity.rotate(anle - initial);
-		Ogmo.editor.dirty();
+		EDITOR.dirty();
 		pos.clone(last);
 	}
 
@@ -63,17 +63,17 @@ class EntityRotateTool extends EntityTool
 
 		// Line to start
 		{
-			var vec = Vector.fromAngle(at, 80 / Ogmo.editor.level.zoom);
+			var vec = Vector.fromAngle(at, 80 / EDITOR.level.zoom);
 			vec.x += origin.x;
 			vec.y += origin.y;
 
-			Ogmo.editor.overlay.drawLine(origin, vec, Color.white);
-			Ogmo.editor.overlay.drawLineNodes(origin, 10 / Ogmo.editor.level.zoom, Color.green);
+			EDITOR.overlay.drawLine(origin, vec, Color.white);
+			EDITOR.overlay.drawLineNodes(origin, 10 / EDITOR.level.zoom, Color.green);
 		}
 
 		// Curve
 		{
-			var length = 60 / Ogmo.editor.level.zoom;
+			var length = 60 / EDITOR.level.zoom;
 			var move = 10 * Calc.DTR;
 			var angle = Calc.angleTo(origin, last);
 			var last = Vetor.fromAngle(at, length);
@@ -88,12 +88,12 @@ class EntityRotateTool extends EntityTool
 				vec.x += origin.x;
 				vec.y += origin.y;
 
-				Ogmo.editor.overlay.drawLine(last, vec, Color.white);
+				EDITOR.overlay.drawLine(last, vec, Color.white);
 				vec.clone(last);
 			}
 
 			// Line to mouse
-			Ogmo.editor.overlay.drawLine(origin, last, Color.green);
+			EDITOR.overlay.drawLine(origin, last, Color.green);
 		}
 	}
 

@@ -17,7 +17,7 @@ class Settings
 	{
 		initShapes();
 		// TODO - not sure if this works atm -01010111
-		filepath = Ogmo.ogmo.root + 'settings.json';
+		filepath = OGMO.root + 'settings.json';
 	}
 
 	public function save()

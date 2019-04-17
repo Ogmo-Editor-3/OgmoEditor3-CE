@@ -13,9 +13,9 @@ class LayersPanel extends SidePanel
     into.empty();
 
     var height:Float = 0;
-    for (i in 0...Ogmo.ogmo.project.layers.length)
+    for (i in 0...OGMO.project.layers.length)
     {
-      var button = new LayerButton(Ogmo.ogmo.project.layers[i], i);
+      var button = new LayerButton(OGMO.project.layers[i], i);
       buttons.push(button);
       into.append(button.jqRoot);
       height += button.jqRoot.height();
@@ -26,9 +26,9 @@ class LayersPanel extends SidePanel
 
   override function refresh():Void
   {
-    for (i in 0...Ogmo.ogmo.project.layers.length)
+    for (i in 0...OGMO.project.layers.length)
     {
-      if (Ogmo.editor.level.currentLayerID == i) buttons[i].selected();
+      if (EDITOR.level.currentLayerID == i) buttons[i].selected();
       else buttons[i].notSelected();
     }
   }

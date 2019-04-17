@@ -87,35 +87,35 @@ class ProjectEditor
     for (i in 0...panels.length) panels[i].end();
 
     // save project
-    var project = Ogmo.ogmo.project;
+    var project = OGMO.project;
     var data = project.save();
     FileSystem.saveJSON(data, project.path);
 
     // reload the project
-    Ogmo.ogmo.project.unload();
-    Ogmo.ogmo.project = Imports.project(Ogmo.ogmo.project.path);
+    OGMO.project.unload();
+    OGMO.project = Imports.project(OGMO.project.path);
 
     // goto editor
-    Ogmo.editor.onSetProject();
-    Ogmo.ogmo.gotoEditorPage();
+    EDITOR.onSetProject();
+    OGMO.gotoEditorPage();
   }
 
   public function discardAndClose()
   {
-    Ogmo.ogmo.project.unload();
+    OGMO.project.unload();
     
-    if (FileSystem.exists(Ogmo.ogmo.project.path)) 
+    if (FileSystem.exists(OGMO.project.path)) 
     {
       // reload the project
-      Ogmo.ogmo.project = Imports.project(Ogmo.ogmo.project.path);
+      OGMO.project = Imports.project(OGMO.project.path);
         // goto editor
-      Ogmo.editor.onSetProject();
-      Ogmo.ogmo.gotoEditorPage();
+      EDITOR.onSetProject();
+      OGMO.gotoEditorPage();
     } else 
     {
       // if project does not exist, goto start page
-      Ogmo.ogmo.gotoStartPage();
-      Ogmo.ogmo.project = null;
+      OGMO.gotoStartPage();
+      OGMO.project = null;
     }
   }
 
@@ -129,7 +129,7 @@ class ProjectEditor
 
       setPanel(start);
       for (i in 0...panels.length) panels[i].begin();
-      Ogmo.ogmo.updateWindowTitle();
+      OGMO.updateWindowTitle();
     }
     active = set;
     root.css("display", (set ? display : "none"));

@@ -48,7 +48,7 @@ class Editor
 
 	public function new()
 	{
-		Ogmo.editor = this;
+		EDITOR = this;
 
 		draw = new GLRenderer("main", cast new JQuery(".editor_canvas#editor")[0]);
 		overlay = new GLRenderer("overlay", cast new JQuery(".editor_canvas#overlay")[0]);
@@ -60,39 +60,39 @@ class Editor
 			//Center Camera button
 			new JQuery(".sticker-center").click(function (e)
 			{
-				if (Ogmo.editor.level != null) Ogmo.editor.level.centerCamera();
+				if (EDITOR.level != null) EDITOR.level.centerCamera();
 			});
 			
 			new JQuery(Browser.window).resize(function(e)
 			{
-				Ogmo.editor.draw.updateCanvasSize();
-				Ogmo.editor.overlay.updateCanvasSize();
-				Ogmo.editor.dirty();
+				EDITOR.draw.updateCanvasSize();
+				EDITOR.overlay.updateCanvasSize();
+				EDITOR.dirty();
 			});
 
 			new JQuery(draw.canvas).mousedown(function (e)
 			{
-				if (Ogmo.editor.level != null)
+				if (EDITOR.level != null)
 				{
-					if ((Ogmo.ogmo.keyCheckMap[Keys.Space] && e.which == Keys.MouseLeft) || e.which == Keys.MouseMiddle)
+					if ((OGMO.keyCheckMap[Keys.Space] && e.which == Keys.MouseLeft) || e.which == Keys.MouseMiddle)
 					{
-						Ogmo.editor.middleClickMove = true;
-						Ogmo.editor.mouseMoving = true;
-						Ogmo.editor.mouseMovePos = Ogmo.editor.windowToCanvas(Ogmo.editor.getEventPosition(e));
+						EDITOR.middleClickMove = true;
+						EDITOR.mouseMoving = true;
+						EDITOR.mouseMovePos = EDITOR.windowToCanvas(EDITOR.getEventPosition(e));
 					}
 					else
 					{
-						var pos = Ogmo.editor.windowToLevel(Ogmo.editor.getEventPosition(e));
+						var pos = EDITOR.windowToLevel(EDITOR.getEventPosition(e));
 
 						if (e.which == Keys.MouseLeft)
 						{
-							if (!Ogmo.editor.handles.onMouseDown(pos) && Ogmo.editor.toolBelt.current != null)
-								Ogmo.editor.toolBelt.current.onMouseDown(pos);
+							if (!EDITOR.handles.onMouseDown(pos) && EDITOR.toolBelt.current != null)
+								EDITOR.toolBelt.current.onMouseDown(pos);
 						}
 						else if (e.which == Keys.MouseRight)
 						{
-							if (!Ogmo.editor.handles.onRightDown(pos) && Ogmo.editor.toolBelt.current != null)
-								Ogmo.editor.toolBelt.current.onRightDown(pos);
+							if (!EDITOR.handles.onRightDown(pos) && EDITOR.toolBelt.current != null)
+								EDITOR.toolBelt.current.onRightDown(pos);
 						}
 					}
 				}
@@ -100,137 +100,137 @@ class Editor
 
 			new JQuery(Browser.window).mouseup(function (e)
 			{
-				if (Ogmo.editor.level != null)
+				if (EDITOR.level != null)
 				{
-					if (Ogmo.editor.mouseMoving)
+					if (EDITOR.mouseMoving)
 					{
-						Ogmo.editor.middleClickMove = false;
-						Ogmo.editor.mouseMoving = false;
+						EDITOR.middleClickMove = false;
+						EDITOR.mouseMoving = false;
 					}
 					else
 					{
-						var pos = Ogmo.editor.windowToLevel(Ogmo.editor.getEventPosition(e));
+						var pos = EDITOR.windowToLevel(EDITOR.getEventPosition(e));
 
 						if (e.which == Keys.MouseLeft)
 						{
-							if (!Ogmo.editor.handles.onMouseUp(pos) && Ogmo.editor.toolBelt.current != null)
-								Ogmo.editor.toolBelt.current.onMouseUp(pos);
+							if (!EDITOR.handles.onMouseUp(pos) && EDITOR.toolBelt.current != null)
+								EDITOR.toolBelt.current.onMouseUp(pos);
 						}
-						else if (e.which == Keys.MouseRight && !Ogmo.editor.handles.resizing)
+						else if (e.which == Keys.MouseRight && !EDITOR.handles.resizing)
 						{
-							if (!Ogmo.editor.handles.onRightUp(pos) && Ogmo.editor.toolBelt.current != null)
-								Ogmo.editor.toolBelt.current.onRightUp(pos);
+							if (!EDITOR.handles.onRightUp(pos) && EDITOR.toolBelt.current != null)
+								EDITOR.toolBelt.current.onRightUp(pos);
 						}
 					}
 				}
 
-				Ogmo.editor.resizingPalette = false;
-				Ogmo.editor.resizingLayers = false;
-				Ogmo.editor.resizingLeft = false;
-				Ogmo.editor.resizingRight = false;
+				EDITOR.resizingPalette = false;
+				EDITOR.resizingLayers = false;
+				EDITOR.resizingLeft = false;
+				EDITOR.resizingRight = false;
 			});
 
 			new JQuery(Browser.window).mousemove(function (e)
 			{
-				if (Ogmo.editor.level != null)
-					Ogmo.editor.onMouseMove(Ogmo.editor.getEventPosition(e));
-				if (Ogmo.editor.resizingPalette)
+				if (EDITOR.level != null)
+					EDITOR.onMouseMove(EDITOR.getEventPosition(e));
+				if (EDITOR.resizingPalette)
 					new JQuery(".editor_palette").height(e.pageY);
-				if (Ogmo.editor.resizingLayers)
+				if (EDITOR.resizingLayers)
 					new JQuery(".editor_layers").height(e.pageY);
-				if (Ogmo.editor.resizingLeft && e.pageX != null)
+				if (EDITOR.resizingLeft && e.pageX != null)
 				{
 					new JQuery(".editor_panel-left").width(Math.min(400, e.pageX));
-					Ogmo.editor.draw.updateCanvasSize();
-					Ogmo.editor.overlay.updateCanvasSize();
+					EDITOR.draw.updateCanvasSize();
+					EDITOR.overlay.updateCanvasSize();
 				}
-				if (Ogmo.editor.resizingRight)
+				if (EDITOR.resizingRight)
 				{
 					new JQuery(".editor_panel-right").width(Math.min(400, new JQuery(Browser.window).width() - e.pageX));
-					Ogmo.editor.draw.updateCanvasSize();
-					Ogmo.editor.overlay.updateCanvasSize();
-					if (Ogmo.editor.currentLayerEditor != null && Ogmo.editor.currentLayerEditor.palettePanel != null)
-						Ogmo.editor.currentLayerEditor.palettePanel.resize();
+					EDITOR.draw.updateCanvasSize();
+					EDITOR.overlay.updateCanvasSize();
+					if (EDITOR.currentLayerEditor != null && EDITOR.currentLayerEditor.palettePanel != null)
+						EDITOR.currentLayerEditor.palettePanel.resize();
 				}
 			});
 
 			new JQuery(draw.canvas).mouseenter(function (e)
 			{
-				if (Ogmo.editor.level != null)
+				if (EDITOR.level != null)
 				{
-					Ogmo.editor.mouseInside = true;
-					var pos = Ogmo.editor.windowToLevel(Ogmo.editor.getEventPosition(e));
-					if (Ogmo.editor.toolBelt.current != null)
-						Ogmo.editor.toolBelt.current.onMouseEnter(pos);
+					EDITOR.mouseInside = true;
+					var pos = EDITOR.windowToLevel(EDITOR.getEventPosition(e));
+					if (EDITOR.toolBelt.current != null)
+						EDITOR.toolBelt.current.onMouseEnter(pos);
 				}
 			});
 
 			new JQuery(draw.canvas).mouseleave(function (e)
 			{
-				if (Ogmo.editor.level != null)
+				if (EDITOR.level != null)
 				{
-					Ogmo.editor.mouseInside = false;
-					if (Ogmo.editor.toolBelt.current != null)
-						Ogmo.editor.toolBelt.current.onMouseLeave();
+					EDITOR.mouseInside = false;
+					if (EDITOR.toolBelt.current != null)
+						EDITOR.toolBelt.current.onMouseLeave();
 				}
 			});
 
 			new JQuery(Browser.window).bind('mousewheel', function (e)
 			{
-				if (Ogmo.editor.level != null && Ogmo.editor.mouseInside && !Ogmo.editor.middleClickMove)
+				if (EDITOR.level != null && EDITOR.mouseInside && !EDITOR.middleClickMove)
 				{
-					var at = Ogmo.editor.windowToCanvas(Ogmo.editor.getEventPosition(e));
+					var at = EDITOR.windowToCanvas(EDITOR.getEventPosition(e));
 
 					if ((e.originalEvent).wheelDelta > 0)
-						Ogmo.editor.level.zoomCameraAt(1, at.x, at.y);
+						EDITOR.level.zoomCameraAt(1, at.x, at.y);
 					else
-						Ogmo.editor.level.zoomCameraAt(-1, at.x, at.y);
+						EDITOR.level.zoomCameraAt(-1, at.x, at.y);
 				}
 			});
 
 			// Editor Project Button
 			new JQuery(".edit-project").click(function(e)
 			{
-				Ogmo.editor.levelManager.closeAll(function ()
+				EDITOR.levelManager.closeAll(function ()
 				{
-					Ogmo.ogmo.gotoProjectPage();
+					OGMO.gotoProjectPage();
 				});
 			});
 
 			// Close Project Button
 			new JQuery('.close-project').click(function(e)
 			{
-				Ogmo.editor.levelManager.closeAll(function()
+				EDITOR.levelManager.closeAll(function()
 				{
-					Ogmo.ogmo.project.unload();
-					Ogmo.ogmo.gotoStartPage();
-					Ogmo.ogmo.project = null;
+					OGMO.project.unload();
+					OGMO.gotoStartPage();
+					OGMO.project = null;
 				});
 			});
 
 			new JQuery('.refresh-project').click(function(e)
 			{
-				Ogmo.editor.levelManager.closeAll(function()
+				EDITOR.levelManager.closeAll(function()
 				{
-					var path = Ogmo.ogmo.project.path;
-					Ogmo.ogmo.project.unload();
-					Ogmo.ogmo.project = Imports.project(path);
-					Ogmo.ogmo.gotoEditorPage();
+					var path = OGMO.project.path;
+					OGMO.project.unload();
+					OGMO.project = Imports.project(path);
+					OGMO.gotoEditorPage();
 				});
 			});
 
 			Remote.getCurrentWindow().on('focus', function (e)
 			{
-				Ogmo.editor.levelManager.onGainFocus();
-				Ogmo.editor.levelsPanel.refresh();
-				Ogmo.ogmo.updateWindowTitle();
+				EDITOR.levelManager.onGainFocus();
+				EDITOR.levelsPanel.refresh();
+				OGMO.updateWindowTitle();
 			});
 
 			// Resizers
-			new JQuery(".editor_layers_resizer").on("mousedown", function() { Ogmo.editor.resizingLayers = true; });
-			new JQuery(".editor_palette_resizer").on("mousedown", function() { Ogmo.editor.resizingPalette = true; });
-			new JQuery(".editor_left_resizer").on("mousedown", function() { Ogmo.editor.resizingLeft = true; });
-			new JQuery(".editor_right_resizer").on("mousedown", function() { Ogmo.editor.resizingRight = true; });
+			new JQuery(".editor_layers_resizer").on("mousedown", function() { EDITOR.resizingLayers = true; });
+			new JQuery(".editor_palette_resizer").on("mousedown", function() { EDITOR.resizingPalette = true; });
+			new JQuery(".editor_left_resizer").on("mousedown", function() { EDITOR.resizingLeft = true; });
+			new JQuery(".editor_right_resizer").on("mousedown", function() { EDITOR.resizingRight = true; });
 		}
 	}
 
@@ -241,20 +241,20 @@ class Editor
 		else
 			lastMouseMovePos = pos;
 
-		if (Ogmo.editor.level != null)
+		if (EDITOR.level != null)
 		{
-			if (Ogmo.editor.mouseMoving)
+			if (EDITOR.mouseMoving)
 			{
-				var n = Ogmo.editor.windowToCanvas(pos);
-				Ogmo.editor.level.moveCamera(Ogmo.editor.mouseMovePos.x - n.x, Ogmo.editor.mouseMovePos.y - n.y);
-				Ogmo.editor.mouseMovePos = n;
+				var n = EDITOR.windowToCanvas(pos);
+				EDITOR.level.moveCamera(EDITOR.mouseMovePos.x - n.x, EDITOR.mouseMovePos.y - n.y);
+				EDITOR.mouseMovePos = n;
 			}
 			else
 			{
-				var n = Ogmo.editor.windowToLevel(pos).round();
-				Ogmo.editor.handles.onMouseMove(n);
-				if (Ogmo.editor.toolBelt.current != null)
-					Ogmo.editor.toolBelt.current.onMouseMove(n);
+				var n = EDITOR.windowToLevel(pos).round();
+				EDITOR.handles.onMouseMove(n);
+				if (EDITOR.toolBelt.current != null)
+					EDITOR.toolBelt.current.onMouseMove(n);
 			}
 
 			updateMouseReadout();
@@ -263,19 +263,19 @@ class Editor
 
 	public function updateZoomReadout():Void
 	{
-		if (Ogmo.editor.level != null)
+		if (EDITOR.level != null)
 		{
-			var z = Math.round(Ogmo.editor.level.camera.a * 100);
+			var z = Math.round(EDITOR.level.camera.a * 100);
 			new JQuery(".sticker-zoom_text").text(z + "%");
 		}
 	}
 
 	public function updateMouseReadout():Void
 	{
-		if (Ogmo.editor.level != null)
+		if (EDITOR.level != null)
 		{
-			var lvl = Ogmo.editor.windowToLevel(lastMouseMovePos);
-			var grid = Ogmo.editor.level.currentLayer.levelToGrid(lvl);
+			var lvl = EDITOR.windowToLevel(lastMouseMovePos);
+			var grid = EDITOR.level.currentLayer.levelToGrid(lvl);
 
 			var str = "( " + Math.round(lvl.x) + ", " + Math.round(lvl.y) + " )"
 					+ " ( " + Math.round(grid.x) + ", " + Math.round(grid.y) + " )";
@@ -290,14 +290,14 @@ class Editor
 		if (set)
 		{
 			root.css("display", "flex");
-			Ogmo.editor.levelManager.forceCreate();
+			EDITOR.levelManager.forceCreate();
 			draw.updateCanvasSize();
 			overlay.updateCanvasSize();
 			updateZoomReadout();
 		}
 		else
 		{
-			Ogmo.editor.levelManager.clear();
+			EDITOR.levelManager.clear();
 			level = null;
 			root.css("display", "none");
 		}
@@ -306,8 +306,8 @@ class Editor
 	public function onSetProject():Void
 	{
 		layerEditors = [];
-		for (i in 0...Ogmo.ogmo.project.layers.length)
-			layerEditors.push(Ogmo.ogmo.project.layers[i].createEditor(i));
+		for (i in 0...OGMO.project.layers.length)
+			layerEditors.push(OGMO.project.layers[i].createEditor(i));
 
 		layersPanel.populate(new JQuery(".editor_layers"));
 		levelsPanel.populate(new JQuery(".editor_levels"));
@@ -328,7 +328,7 @@ class Editor
 		updateZoomReadout();
 		handles.refresh();
 		levelsPanel.refreshLabelsAndIcons();
-		Ogmo.ogmo.updateWindowTitle();
+		OGMO.updateWindowTitle();
 		dirty();
 	}
 
@@ -342,7 +342,7 @@ class Editor
 		level.currentLayerID = id;
 		toolBelt.afterSetLayer();
 
-		Ogmo.editor.dirty();
+		EDITOR.dirty();
 		updateMouseReadout();
 		layersPanel.refresh();
 
@@ -378,7 +378,7 @@ class Editor
 
 	public function setLayer(id:Int):Bool
 	{
-		if (id >= 0 && id < Ogmo.ogmo.project.layers.length)
+		if (id >= 0 && id < OGMO.project.layers.length)
 		{
 			beforeSetLayer();
 			setLayerUtil(id);
@@ -394,7 +394,7 @@ class Editor
 		{
 			currentLayerEditor.loop();
 			updateArrowKeys();
-			if (Ogmo.editor.toolBelt.current != null) Ogmo.editor.toolBelt.current.update();
+			if (EDITOR.toolBelt.current != null) EDITOR.toolBelt.current.update();
 		}
 
 		//Draw the level
@@ -407,7 +407,7 @@ class Editor
 		}
 		
 		//Draw the overlay
-		lastOverlayUpdate += Ogmo.ogmo.deltaTime;
+		lastOverlayUpdate += OGMO.deltaTime;
 		if (isOverlayDirty)// || lastOverlayUpdate >= 1 / 6) <-- Uncomment to re-enable overlay animation
 		{
 			isOverlayDirty = false;
@@ -433,7 +433,7 @@ class Editor
 	public function toggleLayerVisibility(id:Int):Bool
 	{
 		layerEditors[id].visible = !layerEditors[id].visible;
-		Ogmo.editor.dirty();
+		EDITOR.dirty();
 		return layerEditors[id].visible;
 	}
 	
@@ -454,10 +454,10 @@ class Editor
     var i = level.layers.length - 1;
     while(i > level.currentLayerID) 
     {
-      if (Ogmo.editor.layerEditors[i].visible) Ogmo.editor.layerEditors[i].draw();
+      if (EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
       i--;
     }
-    Ogmo.editor.layerEditors[level.currentLayerID].draw();
+    EDITOR.layerEditors[level.currentLayerID].draw();
 
 		//Draw the layers above the current one at half alpha
 		if (level.currentLayerID > 0)
@@ -466,23 +466,23 @@ class Editor
       var i = level.currentLayerID - 1;
 			while (i >= 0)
       {
-        if (Ogmo.editor.layerEditors[i].visible) Ogmo.editor.layerEditors[i].draw();
+        if (EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
         i--;
       }
 			draw.setAlpha(1);
 		}
 
 		//Resize handles
-		if (Ogmo.editor.handles.canResize) Ogmo.editor.handles.draw();
+		if (EDITOR.handles.canResize) EDITOR.handles.draw();
 			
 		//Grid
 		if (level.gridVisible) draw.drawGrid(level.currentLayer.template.gridSize, level.currentLayer.offset, level.data.size, level.camera.a, level.project.gridColor);
 		
 		//Do the current layer's drawAbove
-		Ogmo.editor.layerEditors[level.currentLayerID].drawAbove();
+		EDITOR.layerEditors[level.currentLayerID].drawAbove();
 
 		//Current Tool
-		if (Ogmo.editor.toolBelt.current != null) Ogmo.editor.toolBelt.current.draw();
+		if (EDITOR.toolBelt.current != null) EDITOR.toolBelt.current.draw();
 		
 		draw.finishDrawing();
 	}
@@ -492,11 +492,11 @@ class Editor
 		overlay.setAlpha(1);
 		
 		//Current Layer Overlay
-		Ogmo.editor.layerEditors[level.currentLayerID].drawOverlay();
+		EDITOR.layerEditors[level.currentLayerID].drawOverlay();
 		
 		//Current Tool Overlay
-		if (Ogmo.editor.toolBelt.current != null)
-			Ogmo.editor.toolBelt.current.drawOverlay();
+		if (EDITOR.toolBelt.current != null)
+			EDITOR.toolBelt.current.drawOverlay();
 		
 		//Zoom Rect
 		if (level.zoomRect != null)
@@ -513,8 +513,8 @@ class Editor
 	{
 		if (into == null) into = new Vector();
 
-		into.x = pos.x - new JQuery(Ogmo.editor.draw.canvas).offset().left - new JQuery(Ogmo.editor.draw.canvas).width() * .5;
-		into.y = pos.y - new JQuery(Ogmo.editor.draw.canvas).offset().top - new JQuery(Ogmo.editor.draw.canvas).height() * .5;
+		into.x = pos.x - new JQuery(EDITOR.draw.canvas).offset().left - new JQuery(EDITOR.draw.canvas).width() * .5;
+		into.y = pos.y - new JQuery(EDITOR.draw.canvas).offset().top - new JQuery(EDITOR.draw.canvas).height() * .5;
 
 		return into;
 	}
@@ -572,8 +572,8 @@ class Editor
 	{
     inline function dPress(key:Int) 
     {
-      if (Ogmo.ogmo.ctrl) Ogmo.editor.setLayer(key - Keys.D1);
-			else Ogmo.editor.toolBelt.setTool(key - Keys.D1);
+      if (OGMO.ctrl) EDITOR.setLayer(key - Keys.D1);
+			else EDITOR.toolBelt.setTool(key - Keys.D1);
     }
 
 		switch (key)
@@ -582,27 +582,27 @@ class Editor
 				defaultKeyPress(key);
 			case Keys.Space:
 				//Center Camera
-				if (Ogmo.ogmo.ctrl && Ogmo.editor.level != null) Ogmo.editor.level.centerCamera();
+				if (OGMO.ctrl && EDITOR.level != null) EDITOR.level.centerCamera();
 			case Keys.G:
 				//Toggle Grid
-				if (Ogmo.ogmo.ctrl && Ogmo.editor.level != null)
+				if (OGMO.ctrl && EDITOR.level != null)
 				{
-					Ogmo.editor.level.gridVisible = !Ogmo.editor.level.gridVisible;
-					Ogmo.editor.dirty();
+					EDITOR.level.gridVisible = !EDITOR.level.gridVisible;
+					EDITOR.dirty();
 				}
 			case Keys.S:
 				//Save Level
-				if (Ogmo.ogmo.ctrl && Ogmo.editor.level != null && !Ogmo.editor.locked)
+				if (OGMO.ctrl && EDITOR.level != null && !EDITOR.locked)
 				{
-					if (Ogmo.ogmo.shift)	Ogmo.editor.level.doSaveAs();
-					else Ogmo.editor.level.doSave();
+					if (OGMO.shift)	EDITOR.level.doSaveAs();
+					else EDITOR.level.doSave();
 				}
 			case Keys.N:
 				//New Level
-				if (Ogmo.ogmo.ctrl && !Ogmo.editor.locked) Ogmo.editor.levelManager.create();
+				if (OGMO.ctrl && !EDITOR.locked) EDITOR.levelManager.create();
 			case Keys.W:
 				//Close Level
-				if (Ogmo.ogmo.ctrl && Ogmo.editor.level != null && !Ogmo.editor.locked) Ogmo.editor.levelManager.close(Ogmo.editor.level);
+				if (OGMO.ctrl && EDITOR.level != null && !EDITOR.locked) EDITOR.levelManager.close(EDITOR.level);
 			case Keys.D1:
         dPress(key);
 			case Keys.D2:
@@ -624,15 +624,15 @@ class Editor
 			case Keys.D0:
 				dPress(key);
 			case Keys.Shift:
-        if (Ogmo.editor.level != null && !Ogmo.editor.toolBelt.setKeyTool(key)) defaultKeyPress(key);
+        if (EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
 			case Keys.Ctrl:
-        if (Ogmo.editor.level != null && !Ogmo.editor.toolBelt.setKeyTool(key)) defaultKeyPress(key);
+        if (EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
 			case Keys.Alt:
-				if (Ogmo.editor.level != null && !Ogmo.editor.toolBelt.setKeyTool(key)) defaultKeyPress(key);
+				if (EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
 			case Keys.Up:
-				if (Ogmo.ogmo.ctrl && Ogmo.editor.level != null) Ogmo.editor.setLayer(Ogmo.editor.level.currentLayerID - 1);
+				if (OGMO.ctrl && EDITOR.level != null) EDITOR.setLayer(EDITOR.level.currentLayerID - 1);
 			case Keys.Down:
-				if (Ogmo.ogmo.ctrl && Ogmo.editor.level != null) Ogmo.editor.setLayer(Ogmo.editor.level.currentLayerID + 1);
+				if (OGMO.ctrl && EDITOR.level != null) EDITOR.setLayer(EDITOR.level.currentLayerID + 1);
 		}
 	}
 
@@ -643,13 +643,13 @@ class Editor
 			default:
 				defaultKeyRepeat(key);
 			case Keys.Plus:
-				if (Ogmo.editor.level != null) Ogmo.editor.level.zoomCamera(1);
+				if (EDITOR.level != null) EDITOR.level.zoomCamera(1);
 			case Keys.Minus:
-				if (Ogmo.editor.level != null) Ogmo.editor.level.zoomCamera(-1);
+				if (EDITOR.level != null) EDITOR.level.zoomCamera(-1);
 			case Keys.Z:
-				if (Ogmo.ogmo.ctrl && Ogmo.editor.level != null && !Ogmo.editor.locked) Ogmo.editor.level.stack.undo();
+				if (OGMO.ctrl && EDITOR.level != null && !EDITOR.locked) EDITOR.level.stack.undo();
 			case Keys.Y:
-				if (Ogmo.ogmo.ctrl && Ogmo.editor.level != null && !Ogmo.editor.locked) Ogmo.editor.level.stack.redo();
+				if (OGMO.ctrl && EDITOR.level != null && !EDITOR.locked) EDITOR.level.stack.redo();
 		}
 	}
 
@@ -657,7 +657,7 @@ class Editor
 	{
     inline function unset(key:Int)
     {
-      if (!Ogmo.editor.toolBelt.unsetKeyTool(key)) defaultKeyRelease(key);
+      if (!EDITOR.toolBelt.unsetKeyTool(key)) defaultKeyRelease(key);
     }
 
 		switch (key)
@@ -709,10 +709,10 @@ class Editor
 
 		//Left and Right
 		{
-			var left = Ogmo.ogmo.keyCheckMap[Keys.Left];
-			var right = Ogmo.ogmo.keyCheckMap[Keys.Right];
-			var leftP = Ogmo.ogmo.keyPressMap[Keys.Left];
-			var rightP = Ogmo.ogmo.keyPressMap[Keys.Right];
+			var left = OGMO.keyCheckMap[Keys.Left];
+			var right = OGMO.keyCheckMap[Keys.Right];
+			var leftP = OGMO.keyPressMap[Keys.Left];
+			var rightP = OGMO.keyPressMap[Keys.Right];
 
 			if (lastArrows.x > 0)
 			{
@@ -738,10 +738,10 @@ class Editor
 
 		//Up and Down
 		{
-			var up = Ogmo.ogmo.keyCheckMap[Keys.Up];
-			var down = Ogmo.ogmo.keyCheckMap[Keys.Down];
-			var upP = Ogmo.ogmo.keyPressMap[Keys.Up];
-			var downP = Ogmo.ogmo.keyPressMap[Keys.Down];
+			var up = OGMO.keyCheckMap[Keys.Up];
+			var down = OGMO.keyCheckMap[Keys.Down];
+			var upP = OGMO.keyPressMap[Keys.Up];
+			var downP = OGMO.keyPressMap[Keys.Down];
 
 			if (lastArrows.y > 0)
 			{
@@ -766,7 +766,7 @@ class Editor
 		}
 
 		//Ctrl cancels movement
-		if (Ogmo.ogmo.ctrl)
+		if (OGMO.ctrl)
 		{
 			lastArrows.x = 0;
 			lastArrows.y = 0;

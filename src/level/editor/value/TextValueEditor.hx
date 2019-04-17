@@ -42,7 +42,7 @@ class TextValueEditor extends ValueEditor
           value = str;
 
           // save
-          Ogmo.editor.level.store("Changed " + template.name + " Value");
+          EDITOR.level.store("Changed " + template.name + " Value");
           for (i in 0...values.length) values[i].value = value;
 
           element.find(".button_text").html(value.substr(0, Math.floor(Math.min(value.length, 5))) + "...");

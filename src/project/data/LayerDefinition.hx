@@ -40,7 +40,7 @@ class LayerDefinition
 
     public function createTemplate(?project: Project): LayerTemplate
     {
-        if (project == null) project = Ogmo.ogmo.project;
+        if (project == null) project = OGMO.project;
 
         var id = project.getNextLayerTemplateExportID();
         var t = Type.createInstance(type,[id]);

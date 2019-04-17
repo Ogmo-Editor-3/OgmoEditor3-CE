@@ -276,7 +276,7 @@ class Fields
 		var button = Fields.createButton("folder-dot-open", "Select", holder);
 		button.on("click", function()
 		{
-			var folder = Path.relative(Ogmo.ogmo.project.path, FileSystem.chooseFolder("Select Folder"));
+			var folder = Path.relative(OGMO.project.path, FileSystem.chooseFolder("Select Folder"));
 			if (folder.length > 0) element.val(folder);
 		});
 

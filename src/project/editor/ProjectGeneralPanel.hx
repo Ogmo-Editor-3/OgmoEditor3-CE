@@ -45,26 +45,26 @@ class ProjectGeneralPanel extends ProjectEditorPanel
 
   override function begin():Void
   {
-    Fields.setField(projectName, Ogmo.ogmo.project.name);
-    Fields.setColor(backgroundColor, Ogmo.ogmo.project.backgroundColor);
-    Fields.setColor(gridColor, Ogmo.ogmo.project.gridColor);
-    angleExport.val(Ogmo.ogmo.project.anglesRadians ? "0" : "1");
-    Fields.setVector(levelMinSize, Ogmo.ogmo.project.levelMinSize);
-    Fields.setVector(levelMaxSize, Ogmo.ogmo.project.levelMaxSize);
+    Fields.setField(projectName, OGMO.project.name);
+    Fields.setColor(backgroundColor, OGMO.project.backgroundColor);
+    Fields.setColor(gridColor, OGMO.project.gridColor);
+    angleExport.val(OGMO.project.anglesRadians ? "0" : "1");
+    Fields.setVector(levelMinSize, OGMO.project.levelMinSize);
+    Fields.setVector(levelMaxSize, OGMO.project.levelMaxSize);
     levelValueManager.inspect(null, false);
-    levelValueManager.values = Ogmo.ogmo.project.levelValues;
+    levelValueManager.values = OGMO.project.levelValues;
     levelValueManager.refreshList();
   }
 
   override function end():Void
   {
-    Ogmo.ogmo.project.name = projectName.val();
-    Ogmo.ogmo.project.backgroundColor = Fields.getColor(backgroundColor);
-    Ogmo.ogmo.project.gridColor = Fields.getColor(gridColor);
-    Ogmo.ogmo.project.anglesRadians = angleExport.val() == "0";
-    Ogmo.ogmo.project.levelMinSize = Fields.getVector(levelMinSize);
-    Ogmo.ogmo.project.levelMaxSize = Fields.getVector(levelMaxSize);
-    Ogmo.ogmo.project.levelValues = levelValueManager.values;
+    OGMO.project.name = projectName.val();
+    OGMO.project.backgroundColor = Fields.getColor(backgroundColor);
+    OGMO.project.gridColor = Fields.getColor(gridColor);
+    OGMO.project.anglesRadians = angleExport.val() == "0";
+    OGMO.project.levelMinSize = Fields.getVector(levelMinSize);
+    OGMO.project.levelMaxSize = Fields.getVector(levelMaxSize);
+    OGMO.project.levelValues = levelValueManager.values;
   }
 }
 

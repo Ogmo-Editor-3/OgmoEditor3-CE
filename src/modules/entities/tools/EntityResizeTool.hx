@@ -15,10 +15,10 @@ class EntityResizeTool extends EntityTool
 	public function drawOverlay()
 	{
 		if (!resizing) return;
-		Ogmo.editor.overlay.drawLine(start, mousePos, Color.white);
-		Ogmo.editor.overlay.drawLineNode(start, 10 / Ogmo.editor.level.zoom, Color.green);
-		if (canResizeX) Ogmo.editor.overlay.drawLine(start, new Vector(lastPos.x, start.y), Color.green);
-		if (canResizeY) Ogmo.editor.overlay.drawLine(start, new Vector(start.x, lastPos.y), Color.green);
+		EDITOR.overlay.drawLine(start, mousePos, Color.white);
+		EDITOR.overlay.drawLineNode(start, 10 / EDITOR.level.zoom, Color.green);
+		if (canResizeX) EDITOR.overlay.drawLine(start, new Vector(lastPos.x, start.y), Color.green);
+		if (canResizeY) EDITOR.overlay.drawLine(start, new Vector(start.x, lastPos.y), Color.green);
 	}
 
 	public function onMouseDown(pos:Vector)
@@ -44,16 +44,16 @@ class EntityResizeTool extends EntityTool
 		{
 			resizing = true;
 			firstChange = false;
-			Ogmo.editor.locked = true;
-			Ogmo.editor.overlayDirty();
+			EDITOR.locked = true;
+			EDITOR.overlayDirty();
 		}
 	}
 
 	public function onMouseUp(pos:Vector)
 	{
 		resizing = false;
-		Ogmo.editor.locked = false;
-		Ogmo.editor.overlayDirty();
+		EDITOR.locked = false;
+		EDITOR.overlayDirty();
 	}
 
 	public function onMouseMove(pos:Vector)
@@ -62,7 +62,7 @@ class EntityResizeTool extends EntityTool
 		if (!pos.equals(mousePos))
 		{
 			pos.clone(mousePos);
-			Ogmo.editor.overlayDirty();
+			EDITOR.overlayDirty();
 		}
 
 		if (!ogmo.ctrl) layer.snapToGrid(pos, pos);
@@ -72,12 +72,12 @@ class EntityResizeTool extends EntityTool
 			if (!firstChange)
 			{
 				firstChange = true;
-				Ogmo.editor.level.store("resize entities");
+				EDITOR.level.store("resize entities");
 			}
 
 			for (e in entities) e.resize(new Vector(pos.x - start.x, pos.y - start.y));
 
-			Ogmo.editor.dirty();
+			EDITOR.dirty();
 			pos.clone(lastPos);
 		}
 	}

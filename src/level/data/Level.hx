@@ -57,7 +57,7 @@ class Level
 		{
 			project.levelDefaultSize.clone(this.data.size);
 			values = [];
-			for (i in 0...Ogmo.ogmo.project.levelValues.length) values.push(new Value(Ogmo.ogmo.project.levelValues[i]));   
+			for (i in 0...OGMO.project.levelValues.length) values.push(new Value(OGMO.project.levelValues[i]));   
 			initLayers();
 		}
 		else load(data);
@@ -74,7 +74,7 @@ class Level
 	public function load(data:Dynamic):Level
 	{
 		this.data.loadFrom(data);
-		values = Imports.values(data, Ogmo.ogmo.project.levelValues);
+		values = Imports.values(data, OGMO.project.levelValues);
 		
 		initLayers();
 		var layers = Imports.contentsArray(data, "layers");
@@ -152,13 +152,13 @@ class Level
 
 			Export.level(this, path);
 
-			if (Ogmo.editor.level == this)
-				Ogmo.ogmo.updateWindowTitle();
+			if (EDITOR.level == this)
+				OGMO.updateWindowTitle();
 
 			if (exists)
-				Ogmo.editor.levelsPanel.refreshLabelsAndIcons();
+				EDITOR.levelsPanel.refreshLabelsAndIcons();
 			else
-				Ogmo.editor.levelsPanel.refresh();
+				EDITOR.levelsPanel.refresh();
 
 			return true;
 		}
@@ -166,10 +166,10 @@ class Level
 
 	public function doSaveAs():Bool
 	{
-		Ogmo.ogmo.resetKeys();
+		OGMO.resetKeys();
 
 		var filters:Dynamic;
-		if (Ogmo.ogmo.project.defaultExportMode == ".xml")
+		if (OGMO.project.defaultExportMode == ".xml")
 			filters = [
 				{ name: "XML Level", extensions: [ "xml" ]},
 				{ name: "JSON Level", extensions: [ "json" ] }
@@ -184,23 +184,23 @@ class Level
 		{
 			title: "Save Level As...",
 			filters: filters,
-			defaultPath: Ogmo.ogmo.project.lastSavePath
+			defaultPath: OGMO.project.lastSavePath
 		});
 
 		if (file != null)
 		{
-			Ogmo.ogmo.project.lastSavePath = Path.dirname(file);
+			OGMO.project.lastSavePath = Path.dirname(file);
 			path = file;
 			Export.level(this, file);
 
-			if (Ogmo.editor.level == this) Ogmo.ogmo.updateWindowTitle();
-			Ogmo.editor.levelsPanel.refresh();
+			if (EDITOR.level == this) OGMO.updateWindowTitle();
+			EDITOR.levelsPanel.refresh();
 
 			//Update project default export
-			if (Ogmo.ogmo.project.defaultExportMode != Path.extname(file))
+			if (OGMO.project.defaultExportMode != Path.extname(file))
 			{
-				Ogmo.ogmo.project.defaultExportMode = Path.extname(file);
-				Export.project(Ogmo.ogmo.project, Ogmo.ogmo.project.path);
+				OGMO.project.defaultExportMode = Path.extname(file);
+				Export.project(OGMO.project, OGMO.project.path);
 			}
 
 			return true;
@@ -270,10 +270,10 @@ class Level
 		camera.setIdentity();
 		moveCamera(data.size.x / 2, data.size.y / 2);
 		updateCameraInverse();
-		Ogmo.editor.dirty();
+		EDITOR.dirty();
 
-		Ogmo.editor.updateZoomReadout();
-		if (Ogmo.editor.level == this) Ogmo.editor.handles.refresh();
+		EDITOR.updateZoomReadout();
+		if (EDITOR.level == this) EDITOR.handles.refresh();
 	}
 
 	public function moveCamera(x:Float, y:Float):Void
@@ -282,7 +282,7 @@ class Level
 		{
 			camera.translate(-x, -y);
 			updateCameraInverse();
-			Ogmo.editor.dirty();
+			EDITOR.dirty();
 		}
 	}
 
@@ -292,10 +292,10 @@ class Level
 
 		camera.scale(1 + .1 * zoom, 1 + .1 * zoom);
 		updateCameraInverse();
-		Ogmo.editor.dirty();
+		EDITOR.dirty();
 
-		Ogmo.editor.updateZoomReadout();
-		Ogmo.editor.handles.refresh();
+		EDITOR.updateZoomReadout();
+		EDITOR.handles.refresh();
 	}
 
 	public function zoomCameraAt(zoom:Float, x:Float, y:Float):Void
@@ -306,18 +306,18 @@ class Level
 		camera.scale(1 + .1 * zoom, 1 + .1 * zoom);
 		moveCamera(-x, -y);
 		updateCameraInverse();
-		Ogmo.editor.dirty();
+		EDITOR.dirty();
 
-		Ogmo.editor.updateZoomReadout();
-		Ogmo.editor.handles.refresh();
+		EDITOR.updateZoomReadout();
+		EDITOR.handles.refresh();
 	}
 
 	public function setZoomRect(zoom:Float):Void
 	{
 		if (zoom < 0 && zoomRect == null)
 		{
-			var topLeft = Ogmo.editor.getTopLeft();
-			var bottomRight = Ogmo.editor.getBottomRight();
+			var topLeft = EDITOR.getTopLeft();
+			var bottomRight = EDITOR.getBottomRight();
 			zoomRect = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
 		}
 
@@ -327,8 +327,8 @@ class Level
 
 	public function clearZoomRect():Void
 	{
-		Ogmo.editor.level.zoomRect = null;
-		Ogmo.editor.overlayDirty();
+		EDITOR.level.zoomRect = null;
+		EDITOR.overlayDirty();
 	}
 
 	function get_safeToClose():Bool

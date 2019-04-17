@@ -64,7 +64,7 @@ class Shader
 	{
 		var type = (Path.extname(path) == ".vs" ? RenderingContext.VERTEX_SHADER : RenderingContext.FRAGMENT_SHADER);
 		var shader:js.html.webgl.Shader = gl.createShader(type);
-		var source = Fs.readFileSync(Path.join(Ogmo.ogmo.root, "shaders/" + path), "utf8");
+		var source = Fs.readFileSync(Path.join(OGMO.root, "shaders/" + path), "utf8");
 
 		// Compile the shader program
 		gl.shaderSource(shader, source);

@@ -30,24 +30,24 @@ class StartPage
 
 	public function onNewProject(path:String):Void
 	{
-		Ogmo.ogmo.project = new Project(path);
-		Ogmo.ogmo.gotoProjectPage();
+		OGMO.project = new Project(path);
+		OGMO.gotoProjectPage();
 	}
 
 	public function onOpenProject(path:String):Void
 	{
 		var project = Imports.project(path);
 
-		Ogmo.ogmo.project = project;
-		Ogmo.ogmo.gotoEditorPage();
+		OGMO.project = project;
+		OGMO.gotoEditorPage();
 	}
 
 	public function onEditProject(path:String):Void
 	{
 		var project = Imports.project(path);
 
-		Ogmo.ogmo.project = project;
-		Ogmo.ogmo.gotoProjectPage();
+		OGMO.project = project;
+		OGMO.gotoProjectPage();
 	}
 
 	public function setActive(set:Bool):Void
@@ -56,9 +56,9 @@ class StartPage
 		root.css("display", (set ? display : "none"));
 		if (active)
 		{
-			Ogmo.ogmo.project = null;
-			Ogmo.ogmo.updateWindowTitle();
-			Ogmo.ogmo.settings.populateRecentProjects(new JQuery('.start_recents'));
+			OGMO.project = null;
+			OGMO.updateWindowTitle();
+			OGMO.settings.populateRecentProjects(new JQuery('.start_recents'));
 			root.hide().fadeIn(500);
 		}
 	}

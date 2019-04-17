@@ -46,7 +46,7 @@ class EnumValueEditor extends ValueEditor
         var nextValue = enumTemplate.choices[index];
         if (nextValue != lastValue || conflict)
         {
-          Ogmo.editor.level.store("Changed " + enumTemplate.name + " Value from '" + lastValue + "'  to '" + nextValue + "'");
+          EDITOR.level.store("Changed " + enumTemplate.name + " Value from '" + lastValue + "'  to '" + nextValue + "'");
           for (i in 0...values.length) values[i].value = nextValue;
           if (conflict) element.find("option[value='-1']").each(function(i, e) { new JQuery(e).remove(); });
           conflict = false;

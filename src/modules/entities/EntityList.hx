@@ -7,7 +7,7 @@ class EntityList
 
 	public function new(layer:EntityLayer, ?sortedList:Array<Entity>)
 	{
-		layer = layer;
+		this.layer = layer;
 		if (sortedList == null) list = [];
 		else list = sortedList;
 	}
@@ -15,6 +15,12 @@ class EntityList
 	public function deepClone():EntityList
 	{
 		return new EntityList(layer, [for (entity in list) entity.clone()]);
+	}
+
+	// Note - needed here or it will error functions that reference it - austin
+	function sorter(a: Entity, b: Entity):Int
+	{
+		return a.id - b.id;
 	}
 
 	public function add(entity:Entity)
@@ -52,8 +58,9 @@ class EntityList
 		var n = indexOf(entity.id);
 		if (n != -1)
 		{
-			this.list.splice(n, 1);
-			Ogmo.editor.layerEditors[layer.id].selection.remove(entity);
+			list.splice(n, 1);
+			var layerEditor:EntityLayerEditor = cast EDITOR.layerEditors[this.layer.id];
+			layerEditor.selection.remove(entity);
 		}
 	}
 
@@ -62,7 +69,8 @@ class EntityList
 		if (index < 0 || index >= list.length) return;
 		var e = list[index];
 		list.splice(index, 1);
-		Ogmo.editor.layerEditors[this.layer.id].selection.remove(e);
+		var layerEditor:EntityLayerEditor = cast EDITOR.layerEditors[this.layer.id];
+		layerEditor.selection.remove(e);
 	}
 
 	public function removeList(entities:Array<Entity>)
@@ -126,7 +134,7 @@ class EntityList
 	public function getHighestID():Int
 	{
 		var id:Int = 0;
-		for (ent in list) id = Math.max(id, ent.id + 1); // TODO - may need to cast Int here? -01010111
+		for (ent in list) id = Math.max(id, ent.id + 1).int(); // TODO - may need to cast Int here? -01010111
 		return id;
 	}
 
@@ -163,12 +171,9 @@ class EntityList
 		return list.length;
 	}
 
-	private function sorter(a: Entity, b: Entity):Int
-	{
-		return a.id - b.id;
-	}
+	
 
-	private function indexOf(id:Int, ?startAt:Int):Int
+	function indexOf(id:Int, ?startAt:Int):Int
 	{
 		if (this.list.length == 0) return -1;
 

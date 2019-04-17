@@ -177,7 +177,7 @@ class GLRenderer
 			gl.uniformMatrix4fv(pUniform, false, orthoMatrix.flatten());
 
 			var mvUniform = gl.getUniformLocation(shader.program, "matrix");
-			gl.uniformMatrix3fv(mvUniform, false, Ogmo.editor.level.camera.flatten());
+			gl.uniformMatrix3fv(mvUniform, false, EDITOR.level.camera.flatten());
 		}
 		
 		gl.drawArrays(drawMode, 0, Math.floor(positions.length / 2));

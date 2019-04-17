@@ -168,13 +168,13 @@ class Imports
 	private static function levelJSON(str:String): Level
 	{
 		var data = FileSystem.stringToJSON(str);
-		return new Level(Ogmo.ogmo.project, data);
+		return new Level(OGMO.project, data);
 	}
 
 	private static function levelXML(str:String): Level
 	{
 		var data = Imports.XMLtoJSON(FileSystem.stringToXML(str));
-		return new Level(Ogmo.ogmo.project, data);
+		return new Level(OGMO.project, data);
 	}
 
 	public static function stringIsXML(data:String):Bool
@@ -199,7 +199,7 @@ class Imports
 		var proj = new Project(path);
 		proj.load(FileSystem.loadJSON(path));
 
-		Ogmo.ogmo.settings.registerProject(proj);
+		OGMO.settings.registerProject(proj);
 		return proj;
 	}
 

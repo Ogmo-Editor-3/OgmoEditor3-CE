@@ -121,7 +121,7 @@ class Export
 
 	public static function project(project:Project, path:String)
 	{
-		Ogmo.ogmo.settings.registerProject(project);
+		OGMO.settings.registerProject(project);
 		project.path = path;
 
 		var data = project.save();

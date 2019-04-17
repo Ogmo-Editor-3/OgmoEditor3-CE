@@ -11,8 +11,8 @@ class ToolButton
 		  element = new JQuery('<div class="tool icon icon-' + tool.getIcon() + '" id="' + tool.getName() + '">');
       element.click(function (e)
       {
-        Ogmo.editor.toolBelt.setTool(id);
-        Ogmo.editor.toolBelt.refreshToolbar();
+        EDITOR.toolBelt.setTool(id);
+        EDITOR.toolBelt.refreshToolbar();
       });
     }
 

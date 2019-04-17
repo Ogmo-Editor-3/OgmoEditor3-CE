@@ -57,7 +57,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
     newLayerButton.on("click", function() { newLayer(newLayerType.val()); });
 
     refreshList();
-    if (Ogmo.ogmo.project.layers.length > 0) inspect(Ogmo.ogmo.project.layers[0]);
+    if (OGMO.project.layers.length > 0) inspect(OGMO.project.layers[0]);
   }
   
   public function newLayer(definitionId:String):Void
@@ -68,9 +68,9 @@ class ProjectLayersPanel extends ProjectEditorPanel
     {
       if (name != null && name.length > 0)
       {
-        var template = definition.createTemplate(Ogmo.ogmo.project);
+        var template = definition.createTemplate(OGMO.project);
         template.name = name;
-        Ogmo.ogmo.project.layers.push(template);
+        OGMO.project.layers.push(template);
         refreshList();
         inspect(template);
       }
@@ -84,10 +84,10 @@ class ProjectLayersPanel extends ProjectEditorPanel
 		
 		if (layer != null)
 		{
-			var n = Ogmo.ogmo.project.layers.indexOf(layer);
-			if (n >= 0) Ogmo.ogmo.project.layers.splice(n, 1);
-			n = Ogmo.ogmo.project.layers.indexOf(under);
-			Ogmo.ogmo.project.layers.insert(n + 1, layer);
+			var n = OGMO.project.layers.indexOf(layer);
+			if (n >= 0) OGMO.project.layers.splice(n, 1);
+			n = OGMO.project.layers.indexOf(under);
+			OGMO.project.layers.insert(n + 1, layer);
 		}
 		
 		refreshList();
@@ -97,9 +97,9 @@ class ProjectLayersPanel extends ProjectEditorPanel
   {
     layersList.empty();
     
-    for (i in 0...Ogmo.ogmo.project.layers.length)
+    for (i in 0...OGMO.project.layers.length)
     {
-      var layer = Ogmo.ogmo.project.layers[i];
+      var layer = OGMO.project.layers[i];
       var item = layersList.add(new ItemListItem(layer.name, layer));
 
       item.setKylesetIcon(layer.definition.icon);
@@ -109,7 +109,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
       }
       item.onrightclick = function (current)
       {
-        var menu = new RightClickMenu(Ogmo.ogmo.mouse);
+        var menu = new RightClickMenu(OGMO.mouse);
         menu.onClosed(function() { current.highlighted = false; });
         menu.addOption("Delete Layer", "trash", function()
         {
@@ -117,8 +117,8 @@ class ProjectLayersPanel extends ProjectEditorPanel
           {
             if (btn == 0)
             {
-              var index = Ogmo.ogmo.project.layers.indexOf(current.data);
-              if (index >= 0) Ogmo.ogmo.project.layers.splice(index, 1);
+              var index = OGMO.project.layers.indexOf(current.data);
+              if (index >= 0) OGMO.project.layers.splice(index, 1);
               
               refreshList();
               if (inspecting == current.data) inspect(null, false);

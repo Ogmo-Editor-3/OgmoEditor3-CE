@@ -10,9 +10,11 @@ class Layer
 	public var level:Level;
 	public var id:Int;
 	public var offset:Vector;
-	public var template(get, null):LayerTemplate;
-	public var gridCellsX(get, null):Int;
-	public var gridCellsY(get, null):Int;
+	public var template(get, never):LayerTemplate;
+	public var gridCellsX(get, never):Int;
+	public var gridCellsY(get, never):Int;
+	public var leftoverX(get, never):Float;
+	public var leftoverY(get, never):Float;
 
 	public function new(level:Level, id:Int)
 	{
@@ -32,7 +34,7 @@ class Layer
 	 * @param newSize 
 	 * @param shift 
 	 */
-	public function resize(newSize:Vector, shift:Vector):Void {}
+	public function resize(newSize:Vector, shiftBy:Vector):Void {}
 	
 	/**
 	 * Override Me!
@@ -145,7 +147,7 @@ class Layer
 
 	function get_template():LayerTemplate
 	{
-		return Ogmo.ogmo.project.layers[id];
+		return OGMO.project.layers[id];
 	}
 
 	function get_gridCellsX():Int

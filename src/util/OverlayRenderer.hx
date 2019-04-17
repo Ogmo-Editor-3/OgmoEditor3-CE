@@ -52,7 +52,7 @@ class OverlayRenderer
 			var dash = 10 / level.zoom;
 			dashedLine[0] = dash * .6;
 			dashedLine[1] = dash * .4;       
-			context.lineDashOffset = -((Ogmo.ogmo.totalTime * 1 * dash) % dash);
+			context.lineDashOffset = -((OGMO.totalTime * 1 * dash) % dash);
 			
 			context.lineWidth = 2 / level.zoom;  
 		}

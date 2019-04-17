@@ -1,8 +1,8 @@
 package modules.entities;
 
 import io.Imports;
-import util.Calc;
-import util.Vector;
+import level.data.Value;
+import util.Matrix;
 
 class Entity
 {
@@ -42,7 +42,7 @@ class Entity
 		e.nodes = [];
 
 		e.values = [];
-		for (value in template.values) e.values.push(value);
+		for (value in template.values) e.values.push(new Value(value));
 
 		e.updateMatrix();
 		return e;
@@ -50,7 +50,7 @@ class Entity
 
 	public static function load(data:Dynamic): Entity
 	{
-		var template = ogmo.project.getEntityTemplateByExportID(data._eid);
+		var template = OGMO.project.getEntityTemplateByExportID(data._eid);
 		if (template == null || data.id == null) return null;
 
 		var e = new Entity();
@@ -69,6 +69,8 @@ class Entity
 		e.updateMatrix();
 		return e;
 	}
+
+	public function new() {}
 
 	public function save():Dynamic
 	{
@@ -205,30 +207,30 @@ class Entity
 
 	public function draw()
 	{
-		Ogmo.editor.draw.drawTris(_points, position, color);
+		EDITOR.draw.drawTris(_points, position, color);
 
 		//Draw Node Ghosts
 		if (nodes.length > 0 && template.nodeGhost)
 		{
 			var c = color.x(0.5);
-			for (node in nodes) Ogmo.editor.draw.drawTris(_points, node, c);
+			for (node in nodes) EDITOR.draw.drawTris(_points, node, c);
 		}
 	}
 
 	public function drawHoveredBox()
 	{
-		var corners = getCorners(position, 8 / Ogmo.editor.level.zoom);
-		Ogmo.editor.draw.drawTri(corners[0], corners[1], corners[2], Entity.hoverColor);
-		Ogmo.editor.draw.drawTri(corners[1], corners[2], corners[3], Entity.hoverColor);
+		var corners = getCorners(position, 8 / EDITOR.level.zoom);
+		EDITOR.draw.drawTri(corners[0], corners[1], corners[2], Entity.hoverColor);
+		EDITOR.draw.drawTri(corners[1], corners[2], corners[3], Entity.hoverColor);
 	}
 
 	public function drawSelectionBox()
 	{
-		var corners = getCorners(position, 8 / Ogmo.editor.level.zoom);
-		Ogmo.editor.overlay.drawLine(corners[0], corners[1], Color.green);
-		Ogmo.editor.overlay.drawLine(corners[1], corners[3], Color.green);
-		Ogmo.editor.overlay.drawLine(corners[2], corners[3], Color.green);
-		Ogmo.editor.overlay.drawLine(corners[2], corners[0], Color.green);
+		var corners = getCorners(position, 8 / EDITOR.level.zoom);
+		EDITOR.overlay.drawLine(corners[0], corners[1], Color.green);
+		EDITOR.overlay.drawLine(corners[1], corners[3], Color.green);
+		EDITOR.overlay.drawLine(corners[2], corners[3], Color.green);
+		EDITOR.overlay.drawLine(corners[2], corners[0], Color.green);
 	}
 
 	/*
@@ -264,39 +266,32 @@ class Entity
 	public var canDrawNodes(get, never):Bool;
 	function get_canDrawNodes():Bool
 	{
-		return template.nodeDisplay != NodeDisplayModes.None && nodes.length > 0;
+		return template.nodeDisplay != NodeDisplayModes.NONE && nodes.length > 0;
 	}
 
 	public function drawNodeLines()
 	{
 		switch (template.nodeDisplay)
 		{
-			case NodeDisplayModes.Path:
+			case NodeDisplayModes.PATH:
+				var prev:Vector = position;
+				for (node in nodes)
 				{
-					var prev:Vector = position;
-					for (node in nodes)
-					{
-						Ogmo.editor.draw.drawLine(prev, node, Color.white);
-						prev = node;
-					}
+					EDITOR.draw.drawLine(prev, node, Color.white);
+					prev = node;
+				}
+			case NodeDisplayModes.CIRCUIT:
+				var prev:Vector = position;
+				for (node in nodes)
+				{
+					EDITOR.draw.drawLine(prev, node, Color.white);
+					prev = node;
 				}
 
-			case NodeDisplayModes.Circuit:
-				{
-					var prev:Vector = position;
-					for (node in nodes)
-					{
-						Ogmo.editor.draw.drawLine(prev, node, Color.white);
-						prev = node;
-					}
-
-					if (nodes.length > 1) Ogmo.editor.draw.drawLine(prev, position, Color.white);
-				}
-
-			case NodeDisplayModes.Fan:
-				{
-					for (node in nodes) Ogmo.editor.draw.drawLine(position, node, Color.white);
-				}
+				if (nodes.length > 1) EDITOR.draw.drawLine(prev, position, Color.white);
+			case NodeDisplayModes.FAN:
+				for (node in nodes) EDITOR.draw.drawLine(position, node, Color.white);
+			default:
 		}
 	}
 

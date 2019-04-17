@@ -43,7 +43,7 @@ class EntityTemplate
 
 	public function drawPreview(at:Vector)
 	{
-		Ogmo.editor.overlay.drawTris(getPreviewPoints(), at, color.x(0.5));
+		EDITOR.overlay.drawTris(getPreviewPoints(), at, color.x(0.5));
 	}
 
 	public static function create(project:Project):EntityTemplate
@@ -51,7 +51,7 @@ class EntityTemplate
 		var e = new EntityTemplate();
 
 		e.exportID = project.getNextEntityTemplateExportID();
-		e.shape = Ogmo.ogmo.settings.getShape(0);
+		e.shape = OGMO.settings.getShape(0);
 
 		return e;
 	}

@@ -53,7 +53,7 @@ class RightClickMenu
 		  var listheight = listElement.outerHeight();
       listElement.hide();
       listElement.slideDown(100);
-      Ogmo.ogmo.onPopupStart();
+      OGMO.onPopupStart();
 
 		  if (listElement.offset().top + listheight > holderElement.outerHeight())
 			  listElement.offset({ left: listElement.offset().left, top: holderElement.outerHeight() - listheight - 16 });
@@ -63,7 +63,7 @@ class RightClickMenu
     {
         RightClickMenu.instance = null;
         holderElement.remove();
-        Ogmo.ogmo.onPopupEnd();
+        OGMO.onPopupEnd();
         if (onClosedCallback != null) onClosedCallback();
     }
 

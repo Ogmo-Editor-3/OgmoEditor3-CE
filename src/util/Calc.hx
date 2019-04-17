@@ -3,8 +3,8 @@ package util;
 class Calc
 {
 
-	static var DTR:Float = Math.PI / 180;
-	static var RTD:Float = 180 / Math.PI;
+	public static var DTR:Float = Math.PI / 180;
+	public static var RTD:Float = 180 / Math.PI;
 
 	public static function clamp(num:Float, min:Float, max:Float):Float
 	{

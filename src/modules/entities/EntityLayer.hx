@@ -1,6 +1,8 @@
 package modules.entities;
 
+import level.data.Level;
 import level.data.Layer;
+import util.Vector;
 
 class EntityLayer extends Layer
 {
@@ -15,15 +17,15 @@ class EntityLayer extends Layer
 		if (nextID != null) _nextID = nextID;
 	}
 
-	public function save():Dynamic
+	override function save():Dynamic
 	{
 		var data = super.save();
 		data._contents = 'entities';
-		data.entities = [for (entity in entities.list) entitiy.save()];
+		data.entities = [for (entity in entities.list) entity.save()];
 		return data;
 	}
 
-	public function load(data:Dynamic)
+	override function load(data:Dynamic)
 	{
 		super.load(data);
 		entities.clear();
@@ -40,19 +42,21 @@ class EntityLayer extends Layer
 	/*public var template(get, never):EntityLayerTemplate;
 	function get_template():EntityLayerTemplate
 	{
-		return Ogmo.ogmo.project.layers[id];
+		return OGMO.project.layers[id];
 	}*/
 
-	public function clone():EntityLayer
+	override function clone():EntityLayer
 	{
 		var e = new EntityLayer(level, id, entities.deepClone(), _nextID);
 		e.offset = offset.clone();
 		return e;
 	}
 
-	public function resize(shift:Vector) shift(shift); // TODO - Unused argument `newSize:Vector` in TS - possible feature? atm this is just `shift()` -01010111
+	// TODO - Unused argument `newSize:Vector` in TS - possible feature? atm this is just `shift()` -01010111
+	// update - i think it just hasnt been implemented, but it is an override and needs `newSize` - austin
+	override function resize(newSize:Vector, shiftBy:Vector) shift(shiftBy); 
 
-	public function shift(amount:Vector) for (entity in entities.list) entity.move(amount);
+	override function shift(amount:Vector) for (entity in entities.list) entity.move(amount);
 
 	var _nextID:Int = 0;
 	public function nextID():Int return _nextID++;

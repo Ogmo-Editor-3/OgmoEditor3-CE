@@ -84,14 +84,14 @@ class Popup
       // {
       //   overlay.remove();
       //   new JQuery(Browser.window).unbind('keyup', event);
-      //   Ogmo.ogmo.onPopupEnd();
+      //   OGMO.onPopupEnd();
 
       //   if (callback != null) callback(index);
       // }
 
       // new JQuery(Browser.window).on('keyup', event);
       // Popup.makeDraggable(overlay, win, title);
-      // Ogmo.ogmo.onPopupStart();
+      // OGMO.onPopupStart();
   }
 
   /* --------------------------------- */
@@ -180,13 +180,13 @@ class Popup
 
     //     overlay.remove();
     //     new JQuery(Browser.window).unbind('keyup', event);
-    //     Ogmo.ogmo.onPopupEnd();
+    //     OGMO.onPopupEnd();
 
     //     if (callback != null) callback(str);
     // }
 
     // new JQuery(Browser.window).on('keyup', event);
-    // Ogmo.ogmo.onPopupStart();
+    // OGMO.onPopupStart();
     // input.focus();
 
     // //Selection
@@ -282,13 +282,13 @@ class Popup
 
     //   overlay.remove();
     //   new JQuery(Browser.window).unbind('keyup', event);
-    //   Ogmo.ogmo.onPopupEnd();
+    //   OGMO.onPopupEnd();
 
     //   if (callback != null) callback(str, index);
     // }
 
     // new JQuery(Browser.window).on('keyup', event);
-    // Ogmo.ogmo.onPopupStart();
+    // OGMO.onPopupStart();
     // input.focus();
 
     // Popup.makeDraggable(overlay, win, title);
@@ -368,13 +368,13 @@ class Popup
 
     //   overlay.remove();
     //   new JQuery(Browser.window).unbind('keyup', event);
-    //   Ogmo.ogmo.onPopupEnd();
+    //   OGMO.onPopupEnd();
 
     //   if (callback != null) callback(str);
     // }
 
     // new JQuery(Browser.window).on('keyup', event);
-    // Ogmo.ogmo.onPopupStart();
+    // OGMO.onPopupStart();
     // input.focus();
 
     // Popup.makeDraggable(overlay, win, title);
@@ -585,14 +585,14 @@ class Popup
     // {
     //   overlay.remove();
     //   new JQuery(Browser.window).unbind('keyup', event);
-    //   Ogmo.ogmo.onPopupEnd();
+    //   OGMO.onPopupEnd();
 
     //   if (callback != null) callback(result);
     // }
 
     // new JQuery(Browser.window).on('keyup', event);
     // Popup.makeDraggable(overlay, win, title);
-    // Ogmo.ogmo.onPopupStart();
+    // OGMO.onPopupStart();
   }
 
   /* --------------------------------------- */
@@ -674,11 +674,11 @@ class Popup
     // {
     //   overlay.remove();
     //   new JQuery(Browser.window).unbind('keyup', event);
-    //   Ogmo.ogmo.onPopupEnd();
+    //   OGMO.onPopupEnd();
     // }
 
     // new JQuery(Browser.window).on('keyup', event);
-    // Ogmo.ogmo.onPopupStart();
+    // OGMO.onPopupStart();
 
     // Popup.makeDraggable(overlay, win, title);
   }

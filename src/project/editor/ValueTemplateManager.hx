@@ -85,7 +85,7 @@ class ValueTemplateManager
 
       item.onrightclick = function(current)
       {
-        var menu = new RightClickMenu(Ogmo.ogmo.mouse);
+        var menu = new RightClickMenu(OGMO.mouse);
         menu.onClosed(function() { current.highlighted = false; });
 
         menu.addOption("Delete", "trash", function()

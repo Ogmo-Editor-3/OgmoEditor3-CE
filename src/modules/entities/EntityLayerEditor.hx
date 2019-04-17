@@ -15,7 +15,7 @@ class EntityLayerEditor extends LayerEditor
 		brush = 0;
 	}
 
-	public function draw()
+	override function draw()
 	{
 		// Draw Hover
 		if (active && hovered.amount > 0)
@@ -35,77 +35,77 @@ class EntityLayerEditor extends LayerEditor
 		if (hasNodes.length > 0) for (ent in hasNodes) ent.drawNodeLines();
 	}
 
-	public function drawAbove()
+	override function drawAbove()
 	{
 		// Draw Nodes
 		for (ent in layer.entities) if (ent.canDrawNodes) ent.drawNodeLines();
 	}
 
-	public function drawOverlay()
+	override function drawOverlay()
 	{
 		if (selection.amount <= 0) return;
 		for (entity in layer.entities.getGroup(selection)) entity.drawSelectionBox();
 	}
 
-	public function loop()
+	override function loop()
 	{
 		if (!selection.changed) return;
 		selection.changed = false;
-		selectionPanel.refesh();
-		Ogmo.editor.dirty();
+		selectionPanel.refresh();
+		EDITOR.dirty();
 	}
 
-	public function createPalettePanel():SidePanel return new EntityPalettePanel(this);
-	public function createSelectionPanel():SidePanel return new EntitySelectionPanel(this);
+	override function createPalettePanel():SidePanel return new EntityPalettePanel(this);
+	override function createSelectionPanel():SidePanel return new EntitySelectionPanel(this);
 
-	public function afterUndoRedo() selection.trim(layer.entities);
+	override function afterUndoRedo() selection.trim(layer.entities);
 
 	// TODO - this seems to already exist in super class, but TS version specifies that it should be an `EntityLayerTemplate` ignoring for now -01010111
 	/*public var template(get, never):EntityLayerTemplate 
-	function get_templaye():EntityLayerTemplate return Ogmo.ogmo.project.layers[id];*/
+	function get_templaye():EntityLayerTemplate return OGMO.project.layers[id];*/
 
 	// TODO - Same as above -01010111
 	/*public var layer(get, never):EntityLayer;
-	function get_layer():EntityLayer return Ogmo.editor.layers[id];*/
+	function get_layer():EntityLayer return EDITOR.layers[id];*/
 
 	public var brushTemplate(get, never):EntityTemplate;
-	function get_brushTemplate():EntityTemplate return Ogmo.ogmo.project.getEntityTemplate(brush);
+	function get_brushTemplate():EntityTemplate return OGMO.project.getEntityTemplate(brush);
 
 	// region KEYBOARD
 
-	public function keyPress(key:Int)
+	override function keyPress(key:Int)
 	{
-		if (Ogmo.editor.locked) return;
+		if (EDITOR.locked) return;
 		switch (key)
 		{
 			case Keys.Backspace, Keys.Delete:
 				if (selection.amount <= 0) return;
-				Ogmo.editor.level.store('delete entities');
-				Ogmo.editor.dirty();
+				EDITOR.level.store('delete entities');
+				EDITOR.dirty();
 				layer.entities.removeAndClearGroup(selection);
 			case Keys.A:
-				if (!Ogmo.ogmo.ctrl) return;
+				if (!OGMO.ctrl) return;
 				selection.set(layer.entities.list);
-				Ogmo.editor.dirty();
+				EDITOR.dirty();
 			case Keys.D:
-				if (!Ogmo.ogmo.ctrl || selection.amount <= 0) return;
-				Ogmo.editor.level.store('duplicate entities');
+				if (!OGMO.ctrl || selection.amount <= 0) return;
+				EDITOR.level.store('duplicate entities');
 				var copies:Array<Entity> = [ for (e in layer.entities.getGroup(selection)) e.duplicate(layer,nextID(), template.gridSize.x * 2, template.gridSize.y * 2) ];
 				layer.entities.addList(copies);
-				if (Ogmo.ogmo.shift) selection.add(copies);
+				if (OGMO.shift) selection.add(copies);
 				else selection.set(copies);
-				Ogmo.editor.dirty();
+				EDITOR.dirty();
 			case Keys.F:
 				// Swap selected entities' positions with their first nodes
-				if (!Ogmo.ogmo.ctrl || !Ogmo.ogmo.shift || selection.amount <= 0) return;
+				if (!OGMO.ctrl || !OGMO.shift || selection.amount <= 0) return;
 				var swapped = false;
 				for (e in layer.entities.getGroup(selection))
 				{
 					if (!swapped)
 					{
 						swapped = true;
-						Ogmo.editor.level.store('swap entity and first node positions');
-						Ogmo.editor.dirty();
+						EDITOR.level.store('swap entity and first node positions');
+						EDITOR.dirty();
 					}
 					var temp = e.position;
 					e.position = e.nodes[0];
