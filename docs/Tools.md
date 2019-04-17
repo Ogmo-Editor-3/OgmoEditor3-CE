@@ -1,13 +1,13 @@
 # Entity Tools
 
-## Entity Select Tool
+## Entity Select Tool <img src="../app/gfx/icons/entity-selection.png" width="24"/>
 
 **Left Mouse Down**
 
 If cursor is above entity, deselect selected entities, select entity.
 + Shift: Add entity to selected entities.
 
-**Left Mouse Down + Drag**
+**Left Mouse Down + Drag** 
 
 If cursor is not above an entity, create selection rectangle.
 + Left Mouse Up: Select entities in selection rectangle.
@@ -21,7 +21,7 @@ If cursor is above an entity, move selected entities, snapped to grid.
 Create selection rectangle for deletion.
 + Right Mouse Up: Delete entities in selection rectangle.
 
-## Entity Create Tool
+## Entity Create Tool <img src="../app/gfx/icons/entity-create.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -43,19 +43,19 @@ Delete entity at mouse position
 
 Preview entity at mouse position
 
-## Entity Resize Tool
+## Entity Resize Tool <img src="../app/gfx/icons/entity-scale.png" width="24"/>
 
 **Left Mouse Down + Drag**
 
 Resize selected entities (if entities are resizable).
 
-## Entity Rotation Tool
+## Entity Rotation Tool <img src="../app/gfx/icons/entity-rotate.png" width="24"/>
 
 **Left Mouse Down + Drag**
 
 Rotate selected entities (if entities are rotatable).
 
-## Entity Node Tool
+## Entity Node Tool <img src="../app/gfx/icons/entity-nodes.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -70,7 +70,7 @@ Delete node(s) under cursor
 
 # Decal Tools
 
-## Decal Select Tool
+## Decal Select Tool <img src="../app/gfx/icons/entity-selection.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -105,7 +105,7 @@ Create selection rectangle for deletion.
 - Ctrl + V: Paste selected decal(s)
 - Ctrl + D: Duplicate selected decal(s)
 
-## Decal Create Tool
+## Decal Create Tool <img src="../app/gfx/icons/entity-create.png" width="24"/>
 
 **Left Mouse Down**
 
