@@ -6,8 +6,6 @@ import js.jquery.JQuery;
 import util.Fields;
 import project.data.value.StringValueTemplate;
 
-using Std;
-
 class StringValueTemplateEditor extends ValueTemplateEditor
 {
   public var nameField:JQuery;

@@ -5,8 +5,6 @@ import js.jquery.JQuery;
 import project.data.value.FloatValueTemplate;
 import util.Fields;
 
-using Std;
-
 class FloatValueTemplateEditor extends ValueTemplateEditor
 {
   public var nameField:JQuery;

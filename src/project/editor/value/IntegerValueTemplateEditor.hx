@@ -5,8 +5,6 @@ import io.Imports;
 import project.data.value.IntegerValueTemplate;
 import util.Fields;
 
-using Std;
-
 class IntegerValueTemplateEditor extends ValueTemplateEditor
 {
   public var nameField:JQuery;

@@ -21,6 +21,10 @@ If cursor is above an entity, move selected entities, snapped to grid.
 Create selection rectangle for deletion.
 + Right Mouse Up: Delete entities in selection rectangle.
 
+**Hotkeys**
+
+- Alt: Switch to Entity Resize Tool.
+
 ## Entity Create Tool <img src="../app/gfx/icons/entity-create.png" width="24"/>
 
 **Left Mouse Down**
@@ -104,6 +108,7 @@ Create selection rectangle for deletion.
 - Ctrl + X: Cut selected decal(s)
 - Ctrl + V: Paste selected decal(s)
 - Ctrl + D: Duplicate selected decal(s)
+- Alt: Switch to Decal Create Tool.
 
 ## Decal Create Tool <img src="../app/gfx/icons/entity-create.png" width="24"/>
 
@@ -131,3 +136,81 @@ Preview decal at mouse position
 
 - H: Flip brush horizontally
 - V: Flip brush vertically
+
+# Grid Tools
+
+## Grid Selection Tool <img src="../app/gfx/icons/entity-selection.png" width="24"/>
+
+**WIP**
+
+## Grid Rectangle Tool <img src="../app/gfx/icons/square.png" width="24"/>
+
+**Left Mouse Down + Drag**
+
+Preview left brush rectangle.
++ Left Mouse Up: Apply rectangle.
+
+**Right Mouse Down + Drag**
+
+Preview right brush rectangle.
++ Right Mouse Up: Apply rectangle.
+
+## Grid Pencil Tool <img src="../app/gfx/icons/pencil.png" width="24"/>
+
+**Left Mouse Down**
+
+Start drawing with left brush.
++ Left Mouse Up: Stop drawing.
+
+**Right Mouse Down**
+
+Start drawing with right brush.
++ Right Mouse Up: Stop drawing.
+
+**Hotkeys**
+
+- Ctrl: Switch to Grid Fill Tool.
+- Alt: Switch to Grid Eyedropper Tool.
+- Shift: Switch to Grid Rectangle Tool.
+
+## Grid Line Tool <img src="../app/gfx/icons/line.png" width="24"/>
+
+**Left Mouse Down**
+
+Begin drawing a line with the left brush.
++ Left Mouse Up: Stop drawing.
+
+**Right Mouse Down**
+
+Begin drawing a line with the right brush.
++ Right Mouse Up: Stop drawing.
+
+## Grid Fill Tool <img src="../app/gfx/icons/floodfill.png" width="24"/>
+
+**Left Mouse Down**
+
+Fill using left brush.
+
+**Right Mouse Down**
+
+Fill using right brush.
+
+**Hotkeys**
+
+- Alt: Switch to Grid Eyedropper Tool.
+- Shift: Switch to Grid Rectangle Tool.
+
+## Grid Eyedropper Tool <img src="../app/gfx/icons/eyedropper.png" width="24"/>
+
+**Left Mouse Down**
+
+Copy grid data to left brush.
+
+**Right Mouse Down**
+
+Copy grid data to right brush.
+
+**Hotkeys**
+
+- Ctrl: Switch to Grid Fill Tool.
+- Shift: Switch to Grid Rectangle Tool.
