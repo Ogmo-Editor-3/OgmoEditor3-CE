@@ -301,9 +301,9 @@ class Entity
 
 	public function getCorners(offset:Vector, pad:Float):Array<Vector>
 	{
-		var padX:Float, padY:Float;
-		if (pad == null) padX = padY = 0;
-		else if (pad != 0)
+		var padX:Float = 0;
+		var padY:Float = 0;
+		if (pad != 0)
 		{
 			padX = pad / (size.x * 0.5);
 			padY = pad / (size.y * 0.5);

@@ -171,14 +171,14 @@ class Export
 		var nameStr = "_name";
 		if (data.name == null) nameStr = "name";
 
-		for (k in data)
-			if (k != nameStr && k != "_contents" && k != data["_contents"])
-				into.setAttribute(k, data[k].toString());
+		for (k in Reflect.fields(data))
+			if (k != nameStr && k != "_contents" && k != Reflect.field(data,"_contents"))
+				into.setAttribute(k, Reflect.field(data, k).toString());
 
-		var c = Export.getJSONContents(data);
+		var c:Dynamic = Export.getJSONContents(data);
 		if (c != null)
 		{
-			if (Type.getClassName(Type.getClass(c)) == "String")
+			if (c.is(String))
 			{
 				into.textContent = c;
 			}

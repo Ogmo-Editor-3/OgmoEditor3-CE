@@ -65,6 +65,7 @@ class Color
 		var d = max - min;
 		var h:Float, s:Float, v:Float;
 
+		h = 0;
 		s = (max == 0 ? 0 : d / max);
 		v = max;
 
