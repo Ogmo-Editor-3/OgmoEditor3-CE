@@ -1,5 +1,6 @@
 package io;
 
+import js.node.fs.Stats;
 import js.jquery.JQuery;
 import haxe.Json;
 import js.Browser;
@@ -87,7 +88,7 @@ class FileSystem
 		return Fs.readdirSync(path);
 	}
 
-	public static function stat(path:String):Dynamic
+	public static function stat(path:String):Stats
 	{
 		return Fs.statSync(path);
 	}

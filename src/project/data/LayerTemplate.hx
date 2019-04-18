@@ -45,4 +45,6 @@ class LayerTemplate
   public function createLayer(level: Level, id: Int):Layer return null;
 
   public function projectWasLoaded(project:Project):Void {}
+
+  public function projectWasUnloaded():Void {}
 }
