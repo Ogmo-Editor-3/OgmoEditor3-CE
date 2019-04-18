@@ -41,7 +41,7 @@ class DecalCreateTool extends DecalTool
 		EDITOR.locked = true;
 		EDITOR.dirty();
 
-		var path = _path.relative(layerEditor.template.folder, layerEditor.brush.path);
+		var path = js.node.Path.relative((cast layerEditor.template:DecalLayerTemplate).folder, layerEditor.brush.path);
 		created = new Decal(pos, path, layerEditor.brush, scale);
 		layer.decals.push(created);
 

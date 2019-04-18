@@ -1,10 +1,11 @@
-package modules.entities.tools;
+package modules.decals.tools;
 
-class EntityResizeTool extends EntityTool
+// TODO #10 -01010111
+class DecalResizeTool extends DecalTool
 {
 
 	public var resizing:Bool = false;
-	public var entities:Array<Entity>;
+	public var decals:Array<Decal>;
 	public var lastPos:Vector = new Vector();
 	public var start:Vector = new Vector();
 	public var mousePos:Vector = new Vector();
@@ -23,30 +24,18 @@ class EntityResizeTool extends EntityTool
 
 	override public function onMouseDown(pos:Vector)
 	{
-		entities = layer.entities.getGroup(layerEditor.selection);
+		decals = layerEditor.selected;
 
-		if (entities.length == 0) return;
+		if (decals.length == 0) return;
 		pos.clone(mousePos);
 		layer.snapToGrid(pos, pos);
 		pos.clone(lastPos);
 		pos.clone(start);
-
-		canResizeX = false;
-		canResizeY = false;
-		for (e in entities)
-		{
-			e.anchorSize();
-			if (e.template.resizeableX) canResizeX = true;
-			if (e.template.resizeableY) canResizeY = true;
-		}
-
-		if (canResizeX || canResizeY)
-		{
-			resizing = true;
-			firstChange = false;
-			EDITOR.locked = true;
-			EDITOR.overlayDirty();
-		}
+		
+		resizing = true;
+		firstChange = false;
+		EDITOR.locked = true;
+		EDITOR.overlayDirty();
 	}
 
 	override public function onMouseUp(pos:Vector)
@@ -59,7 +48,7 @@ class EntityResizeTool extends EntityTool
 	// TODO #2 -01010111
 	/*override public function onRightDown(pos:Vector)
 	{
-		for (entity in layer.entities.getGroup(layerEditor.selection)) entity.resize(entity.template.size.sub(entity.size));
+		for (decal in layer.decals.getGroup(layerEditor.selection)) decal.scale.set(1, 1);
 	}*/
 
 	override public function onMouseMove(pos:Vector)
@@ -78,10 +67,10 @@ class EntityResizeTool extends EntityTool
 			if (!firstChange)
 			{
 				firstChange = true;
-				EDITOR.level.store("resize entities");
+				EDITOR.level.store("resize decals");
 			}
 
-			for (e in entities) e.resize(new Vector(pos.x - start.x, pos.y - start.y));
+			//for (d in decals) d.resize(new Vector(pos.x - start.x, pos.y - start.y));
 
 			EDITOR.dirty();
 			pos.clone(lastPos);

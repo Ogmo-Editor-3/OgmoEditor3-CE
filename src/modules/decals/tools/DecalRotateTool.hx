@@ -1,6 +1,7 @@
-package modules.entities.tools;
+package modules.decals.tools;
 
-class EntityRotateTool extends EntityTool
+// TODO #10 -01010111
+class DecalRotateTool extends DecalTool
 {
 
 	public var firstChange:Bool = false;
@@ -8,21 +9,20 @@ class EntityRotateTool extends EntityTool
 	public var origin:Vector;
 	public var start:Vector;
 	public var last:Vector;
-	public var entities:Array<Entity>;
+	public var decals:Array<Decal>;
 
 	override public function onMouseDown(pos:Vector)
 	{
-		entities = layer.entities.getGroup(layerEditor.selection);
-		if (entities.length == 0) return;
+		decals = layerEditor.selected;
+		if (decals.length == 0) return;
 		origin = new Vector();
-		for (entity in entities)
+		for (decal in decals)
 		{
-			entity.anchorRotation();
-			origin.x += entity.position.x;
-			origin.y += entity.position.y;
+			origin.x += decal.position.x;
+			origin.y += decal.position.y;
 		}
-		origin.x /= entities.length;
-		origin.y /= entities.length;
+		origin.x /= decals.length;
+		origin.y /= decals.length;
 
 		pos.clone(start);
 		pos.clone(last);
@@ -47,11 +47,11 @@ class EntityRotateTool extends EntityTool
 		if (!firstChange)
 		{
 			firstChange = true;
-			EDITOR.level.store('rotate entities');
+			EDITOR.level.store('rotate decals');
 		}
 		var angle = Calc.angleTo(origin, pos);
 		var initial = Calc.angleTo(origin, start);
-		for (entity in entities) entity.rotate(angle - initial);
+		//for (decal in decals) decal.rotate(angle - initial);
 		EDITOR.dirty();
 		pos.clone(last);
 	}
@@ -59,7 +59,7 @@ class EntityRotateTool extends EntityTool
 	// TODO #2 -01010111
 	/*override public function onRightDown(pos:Vector)
 	{
-		for (entity in layer.entities.getGroup(layerEditor.selection)) entity.rotate(-entity.rotation);
+		for (decal in layer.decals.getGroup(layerEditor.selection)) decal.rotate(-decal.rotation);
 	}*/
 
 	override public function drawOverlay()
@@ -103,7 +103,7 @@ class EntityRotateTool extends EntityTool
 		}
 	}
 
-	override public function getIcon():String return 'entity-rotate';
+	override public function getIcon():String return 'decal-rotate';
 	override public function getName():String return 'Rotate';
 
 }

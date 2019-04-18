@@ -16,9 +16,9 @@ class DecalSelectTool extends DecalTool
 	override public function drawOverlay()
 	{
 		if (mode == Select && !start.equals(end))
-			editor.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.green.x(0.2));
+			EDITOR.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.green.x(0.2));
 		else if (mode == Delete && !start.equals(end))
-			editor.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.red.x(0.2));
+			EDITOR.overlay.drawRect(start.x, start.y, end.x - start.x, end.y - start.y, Color.red.x(0.2));
 	}
 
 	override public function deactivated()
@@ -33,7 +33,7 @@ class DecalSelectTool extends DecalTool
 			if (key == Keys.A)
 			{
 				layerEditor.selected = [];
-				for (decal in layerEditor.layer.decals)
+				for (decal in (cast layerEditor.layer:DecalLayer).decals)
 					layerEditor.selected.push(decal);
 				EDITOR.dirty();
 			}
@@ -62,7 +62,7 @@ class DecalSelectTool extends DecalTool
 				for (decal in DecalSelectTool.inClipboard)
 				{
 					var clone = new Decal(decal.position.clone(), decal.path, decal.texture, decal.scale.clone(), decal.rotation);
-					layerEditor.layer.decals.push(clone);
+					(cast layerEditor.layer:DecalLayer).decals.push(clone);
 					layerEditor.selected.push(clone);
 				}
 
@@ -76,7 +76,7 @@ class DecalSelectTool extends DecalTool
 				for (decal in layerEditor.selected)
 				{
 					var clone = new Decal(decal.position.clone().add(new Vector(32, 32)), decal.path, decal.texture, decal.scale.clone(), decal.rotation);
-					layerEditor.layer.decals.push(clone);
+					(cast layerEditor.layer:DecalLayer).decals.push(clone);
 					newSelection.push(clone);
 				}
 
@@ -99,7 +99,7 @@ class DecalSelectTool extends DecalTool
 				decal.scale.y = -decal.scale.y;
 			EDITOR.dirty();
 		}
-		else if (key == Keys.Delete) // TODO - This isn't working on my mac, maybe add backspace? -01010111
+		else if (key == Keys.Delete/* || key == Keys.Backspace*/) // TODO #7 -01010111
 		{
 			EDITOR.level.store("delete decals");
 			while (layerEditor.selected.length > 0)
@@ -116,7 +116,7 @@ class DecalSelectTool extends DecalTool
 				if (index >= 0)
 				{
 					layer.decals.splice(index, 1);
-					layer.decals.splice(0, 0, decal);
+					layer.decals.unshift(decal);
 				}
 			}
 			EDITOR.dirty();
@@ -174,7 +174,7 @@ class DecalSelectTool extends DecalTool
 		EDITOR.dirty();
 	}
 
-	override public function startMove()
+	public function startMove()
 	{
 		mode = Move;
 		firstChange = false;
