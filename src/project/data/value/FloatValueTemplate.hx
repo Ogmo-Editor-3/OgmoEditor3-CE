@@ -18,7 +18,7 @@ class FloatValueTemplate extends ValueTemplate
 
     override function getDefault(): String
     {
-        return defaults.toString();
+        return '$defaults';
     }
 
     override function validate(val: String): String
@@ -28,7 +28,7 @@ class FloatValueTemplate extends ValueTemplate
             number = min;
         else if (bounded && number > max)
             number = max;
-        return number.toString();
+        return '$number';
     }
 
     override function createEditor(values:Array<Value>):ValueEditor
