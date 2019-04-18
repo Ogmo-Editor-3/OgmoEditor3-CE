@@ -1,7 +1,7 @@
 -lib electron
 -lib jQueryExtern
 -cp src
--dce no
+-dce full
 -debug
 -js bin/ogmo.js
 -main Ogmo

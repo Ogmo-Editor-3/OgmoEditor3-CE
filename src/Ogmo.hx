@@ -26,7 +26,7 @@ class Ogmo
 	public var app:BrowserWindow = Remote.getCurrentWindow();
 	public var mouse:Vector = new Vector(0, 0);
 	public var popupMode:Bool = false;
-	public var root:String = App.getAppPath();
+	public var root:String = untyped Remote.app.getAppPath();
 
 	public var project(default, set):Project = null;
 	public var startTime(default, null):Float = js.Date.now();
@@ -49,7 +49,7 @@ class Ogmo
 		settings = new Settings();
 
 		// TODO: do we need to require JQuery somewhere? not sure how that works in Haxe - austin
-		// $ = jQuery = require('./lib/jquery-2.2.0.min.js');
+		js.Lib.require('./lib/jquery-2.2.0.min.js');
 		new JQuery(function () { onReady(); });
 	}
 
