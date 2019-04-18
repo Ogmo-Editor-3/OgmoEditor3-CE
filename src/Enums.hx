@@ -1,7 +1,8 @@
-enum TileExportModes
+@:enum
+abstract TileExportModes (Int) from Int to Int
 {
-  IDS;
-  COORDS;
+  var IDS;
+  var COORDS;
 }
 
 enum NodeDisplayModes

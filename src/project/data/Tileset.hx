@@ -71,11 +71,11 @@ class Tileset
     return new Tileset(project, data.label, data.path, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, img);
   }
   
-  public inline function getTileX(id: Int): Float return id % tileColumns;
+  public inline function getTileX(id: Int):Int return id % tileColumns;
   
-  public inline function getTileY(id: Int): Float return Math.floor(id / tileColumns);
+  public inline function getTileY(id: Int):Int return Math.floor(id / tileColumns);
   
-  public inline function coordsToID(x: Float, y: Float): Int return Math.floor(x + y * tileColumns);
+  public inline function coordsToID(x: Float, y: Float):Int return Math.floor(x + y * tileColumns);
   
   inline function get_width():Int return texture.image.width;
   
