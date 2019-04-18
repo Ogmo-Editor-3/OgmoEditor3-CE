@@ -5,7 +5,12 @@
 ### Open Source 2D level editor written in Haxe!
 
 ## Building
-_TODO - build instructions_
+Temp instructions:
+```
+haxe build.hxml
+npm run build
+npm start
+```
 
 ## Credits
  - Created by [Matt Thorson](https://twitter.com/mattthorson) and [Noel Berry](https://twitter.com/noelfb)
