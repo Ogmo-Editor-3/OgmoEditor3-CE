@@ -9,7 +9,6 @@ class DecalLayer extends Layer
 
 	public var decals:Array<Decal> = [];
 
-
     override function save():Dynamic
     {
       var data = super.save();

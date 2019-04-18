@@ -10,16 +10,16 @@ class Decal
 	public var rotation:Float;
 	public var texture:Texture;
 	public var path:String;
-  public var width(get, never):Int;
-  public var height(get, never):Int;
+	public var width(get, never):Int;
+	public var height(get, never):Int;
 
 	public function new(position:Vector, path:String, texture:Texture, ?scale:Vector, ?rotation:Float)
 	{
 		this.position = position.clone();
 		this.texture = texture;
 		this.path = path;
-    this.scale = scale == null ? new Vector(1, 1) : scale.clone();
-    this.rotation = rotation == null ? 0 : rotation;
+		this.scale = scale == null ? new Vector(1, 1) : scale.clone();
+		this.rotation = rotation == null ? 0 : rotation;
 		origin = new Vector(width / 2, height / 2);
 	}
 
@@ -44,7 +44,7 @@ class Decal
 		return new Decal(position, path, texture, scale, rotation);
 	}
 
-  function get_width():Int
+	function get_width():Int
 	{
 		return texture != null ? texture.width : 32;
 	}
@@ -53,4 +53,20 @@ class Decal
 	{
 		return texture != null ? texture.height : 32;
 	}
+
+	// TODO #10 -01010111
+	/*public function rotate(diff:Float)
+	{
+		rotation = rotation + diff * Calc.RTD;
+		rotation = Calc.snap(rotation, 360);
+	}
+
+	public function resize(diff:Vector)
+	{
+		scale.set(
+			width * scale.x + diff.x / width,
+			height * scaly.y + diff.y / height
+		);
+	}*/
+
 }
