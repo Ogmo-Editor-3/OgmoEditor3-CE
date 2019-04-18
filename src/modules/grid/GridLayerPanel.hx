@@ -28,10 +28,9 @@ class GridPalettePanel extends SidePanel
     var paletteHolder = new JQuery('<div class="gridPalette">');
     into.append(paletteHolder);
 
-    var layer:GridLayerEditor = EDITOR.currentLayerEditor;
-    for (key in layerEditor.template.legend)
+    var layer:GridLayerEditor = cast EDITOR.currentLayerEditor;
+    for (char in (cast layerEditor.template : GridLayerTemplate).legend.keys())
     {
-      var char = key;
       var box = new JQuery('<div class="gridPalette_color"><div>' + char + '</div></div>');
       box.children().first().css("background", (cast layerEditor.template : GridLayerTemplate).legend[char].rgbaString());
 
@@ -40,12 +39,12 @@ class GridPalettePanel extends SidePanel
           if (e.which == Keys.MouseLeft)
           {
               layer.brushLeft = char;
-              self.refresh();
+              refresh();
           }
           else if (e.which == Keys.MouseRight)
           {
               layer.brushRight = char;
-              self.refresh();
+              refresh();
           }
       });
       paletteHolder.append(box);
@@ -55,9 +54,9 @@ class GridPalettePanel extends SidePanel
 
   override function refresh():Void
   {
-    var layer:GridLayerEditor = editor.currentLayerEditor;
-    var leftColor = layerEditor.template.legend[layer.brushLeft];
-    var rightColor = layerEditor.template.legend[layer.brushRight];
+    var layer:GridLayerEditor = cast EDITOR.currentLayerEditor;
+    var leftColor = (cast layerEditor.template : GridLayerTemplate).legend[layer.brushLeft];
+    var rightColor = (cast layerEditor.template : GridLayerTemplate).legend[layer.brushRight];
 
     jqLeftBrush.children().first().css("background", leftColor.rgbaString());
     jqRightBrush.children().first().css("background", rightColor.rgbaString());
