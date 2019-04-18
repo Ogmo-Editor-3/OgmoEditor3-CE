@@ -56,6 +56,12 @@ class EntityRotateTool extends EntityTool
 		pos.clone(last);
 	}
 
+	// TODO #2 -01010111
+	/*override public function onRightDown(pos:Vector)
+	{
+		for (entity in layer.entities.getGroup(layerEditor.selection)) entity.rotate(-entity.rotation);
+	}*/
+
 	override public function drawOverlay()
 	{
 		if (!rotating) return;
