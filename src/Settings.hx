@@ -1,3 +1,4 @@
+import util.RightClickMenu;
 import js.jquery.JQuery;
 import io.FileSystem;
 import project.data.Project;
@@ -115,7 +116,7 @@ class Settings
 	function inspectRecentProject(item: ItemListItem, path: String)
 	{
 		var self = this;
-		var menu = new RightClickMenu(ogmo.mouse);
+		var menu = new RightClickMenu(OGMO.mouse);
 		menu.onClosed(function() { item.highlighted = false; });
 
 		menu.addOption("Open Project", "folder-closed", function ()
