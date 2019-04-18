@@ -51,7 +51,7 @@ class DecalRotateTool extends DecalTool
 		}
 		var angle = Calc.angleTo(origin, pos);
 		var initial = Calc.angleTo(origin, start);
-		for (decal in decals) decal.rotate(angle - initial);
+		//for (decal in decals) decal.rotate(angle - initial);
 		EDITOR.dirty();
 		pos.clone(last);
 	}

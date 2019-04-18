@@ -70,7 +70,7 @@ class DecalResizeTool extends DecalTool
 				EDITOR.level.store("resize decals");
 			}
 
-			for (d in decals) d.resize(new Vector(pos.x - start.x, pos.y - start.y));
+			//for (d in decals) d.resize(new Vector(pos.x - start.x, pos.y - start.y));
 
 			EDITOR.dirty();
 			pos.clone(lastPos);
