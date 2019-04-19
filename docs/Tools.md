@@ -214,3 +214,91 @@
 
 - Ctrl: Switch to Grid Fill Tool.
 - Shift: Switch to Grid Rectangle Tool.
+
+# Tile Tools
+
+## Tile Pencil Tool <img src="../app/gfx/icons/pencil.png" width="24"/>
+
+**Left Mouse Down**
+
+- Start drawing.
+  + Ctrl: draw 1x1 with randomized brush.
+  + Left Mouse Up: Stop drawing.
+
+**Right Mouse Down**
+
+- Start erasing.
+  + Right Mouse Up: Stop erasing.
+
+**Hotkeys**
+
+- Alt: Switch to Tile Eyedropper Tool.
+- Shift: Switch to Tile Rectangle Tool.
+
+## Tile Rectangle Tool <img src="../app/gfx/icons/square.png" width="24"/>
+
+**Left Mouse Down + Drag**
+
+- Preview brush rectangle.
+  + Left Mouse Up: Apply rectangle.
+  + Ctrl: Randomize brush
+
+**Right Mouse Down + Drag**
+
+- Preview deletion rectangle.
+  + Right Mouse Up: Delete selected tiles.
+
+**Hotkeys**
+
+- Alt: Switch to Tile Eyedropper Tool.
+- Shift: Switch to Tile Pencil Tool.
+
+## Tile Line Tool <img src="../app/gfx/icons/line.png" width="24"/>
+
+**Left Mouse Down + Drag**
+
+- Preview brush line.
+  + Left Mouse Up: Apply line.
+  + Ctrl: Randomize brush
+
+**Right Mouse Down + Drag**
+
+- Preview deletion line.
+  + Right Mouse Up: Delete selected tiles.
+
+**Hotkeys**
+
+- Alt: Switch to Tile Eyedropper Tool.
+- Shift: Switch to Tile Pencil Tool.
+
+## Tile Fill Tool <img src="../app/gfx/icons/floodfill.png" width="24"/>
+
+**Left Mouse Down**
+
+
+**Right Mouse Down**
+
+**Left Mouse Down**
+
+- Fill using brush.
+  + Ctrl: Fill using randomized brush.
+
+**Right Mouse Down**
+
+- Fill with eraser.
+
+**Hotkeys**
+
+- Alt: Switch to Tile Eyedropper Tool.
+- Shift: Switch to Tile Pencil Tool.
+
+## Tile Eyedropper Tool <img src="../app/gfx/icons/eyedropper.png" width="24"/>
+
+**Left Mouse Down + Drag**
+
+- Select tile(s) to use for a brush.
+  + Left Mouse Up: Create brush from selected tiles.
+
+**Hotkeys**
+
+- Shift: Switch to Tile Pencil Tool.
