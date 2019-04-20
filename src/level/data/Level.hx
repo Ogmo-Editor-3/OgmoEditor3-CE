@@ -3,7 +3,6 @@ package level.data;
 import js.Browser;
 import util.Popup;
 import electron.renderer.Remote;
-import electron.main.Dialog;
 import js.node.Path;
 import io.FileSystem;
 import io.Export;
@@ -181,7 +180,7 @@ class Level
 				{ name: "XML Level", extensions: [ "xml" ]}
 			];
 
-		var file = Dialog.showOpenDialog(Remote.getCurrentWindow(),
+		var file = Ogmo.dialog.showOpenDialog(Remote.getCurrentWindow(),
 		{
 			title: "Save Level As...",
 			filters: filters,

@@ -10,14 +10,13 @@ import js.node.Buffer;
 import js.node.Fs;
 import electron.FileFilter;
 import electron.renderer.Remote;
-import electron.main.Dialog;
 
 class FileSystem
 {
 
 	public static function chooseFile(title:String, filters:Array<FileFilter>)
 	{
-		var files = Dialog.showOpenDialog(
+		var files = Ogmo.dialog.showOpenDialog(
 			Remote.getCurrentWindow(),
 			{
 				title: title,
@@ -32,7 +31,7 @@ class FileSystem
 
 	public static function chooseSaveFile(title:String, filters:Array<FileFilter>):String
 	{
-		var file = Dialog.showSaveDialog(
+		var file = Ogmo.dialog.showSaveDialog(
 			Remote.getCurrentWindow(),
 			{
 				title: title,
@@ -45,7 +44,7 @@ class FileSystem
 
 	public static function chooseFolder(title:String):String
 	{
-		var files = Dialog.showOpenDialog(
+		var files = Ogmo.dialog.showOpenDialog(
 			Remote.getCurrentWindow(),
 			{
 				title: title,
@@ -58,7 +57,7 @@ class FileSystem
 
 	public static function showQuestion(title:String, question:String, confirm:String, deny:String):Bool
 	{
-		var result = Dialog.showMessageBox(
+		var result = Ogmo.dialog.showMessageBox(
 			Remote.getCurrentWindow(),
 			{
 				message: question,

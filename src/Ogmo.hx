@@ -1,6 +1,6 @@
 import js.jquery.JQuery;
 import js.Browser;
-import electron.main.App;
+import electron.main.BrowserWindow;
 import electron.renderer.Remote;
 import electron.renderer.IpcRenderer;
 import project.editor.ProjectEditor;
@@ -9,7 +9,6 @@ import level.editor.Editor;
 import level.editor.ToolBelt;
 import util.Vector;
 import util.Keys;
-import electron.main.BrowserWindow;
 
 class Ogmo
 {
@@ -18,6 +17,7 @@ class Ogmo
 	public static var editor:Editor;
 	public static var startPage:StartPage;
 	public static var projectEditor:ProjectEditor;
+	public static var dialog:Dynamic;
 
 	public var version:String = 'v0.001';
 	public var settings:Settings;
@@ -46,6 +46,7 @@ class Ogmo
 	public function new()
 	{
 		ogmo = this;
+		dialog = js.Lib.require('electron').remote.dialog;
 		settings = new Settings();
 
 		// TODO: do we need to require JQuery somewhere? not sure how that works in Haxe - austin
