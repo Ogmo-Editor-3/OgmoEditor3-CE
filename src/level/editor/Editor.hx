@@ -272,7 +272,7 @@ class Editor
 
 	public function updateMouseReadout():Void
 	{
-		if (EDITOR.level != null)
+		if (EDITOR.level != null && EDITOR.level.currentLayer != null)
 		{
 			var lvl = EDITOR.windowToLevel(lastMouseMovePos);
 			var grid = EDITOR.level.currentLayer.levelToGrid(lvl);
@@ -346,30 +346,33 @@ class Editor
 		updateMouseReadout();
 		layersPanel.refresh();
 
-		var paletteElement  = new JQuery(".editor_palette");
-		var selectionElement = new JQuery(".editor_selection");
-
-		paletteElement.empty();
-		if (currentLayerEditor.palettePanel != null)
-			currentLayerEditor.palettePanel.populate(paletteElement);
-
-		selectionElement.empty();
-		if (currentLayerEditor.selectionPanel != null)
+		if (currentLayerEditor != null)
 		{
-			currentLayerEditor.selectionPanel.populate(selectionElement);
-			if (!selectionElement.is(":visible"))
+			var paletteElement  = new JQuery(".editor_palette");
+			var selectionElement = new JQuery(".editor_selection");
+
+			paletteElement.empty();
+			if (currentLayerEditor.palettePanel != null)
+				currentLayerEditor.palettePanel.populate(paletteElement);
+
+			selectionElement.empty();
+			if (currentLayerEditor.selectionPanel != null)
 			{
-				new JQuery(".editor_palette_resizer").show();
-				paletteElement.height(lastPaletteHeight);
-				selectionElement.show();
+				currentLayerEditor.selectionPanel.populate(selectionElement);
+				if (!selectionElement.is(":visible"))
+				{
+					new JQuery(".editor_palette_resizer").show();
+					paletteElement.height(lastPaletteHeight);
+					selectionElement.show();
+				}
 			}
-		}
-		else if (selectionElement.is(":visible"))
-		{
-			lastPaletteHeight = paletteElement.height();
-			paletteElement.height("100%");
-			selectionElement.hide();
-			new JQuery(".editor_palette_resizer").hide();
+			else if (selectionElement.is(":visible"))
+			{
+				lastPaletteHeight = paletteElement.height();
+				paletteElement.height("100%");
+				selectionElement.hide();
+				new JQuery(".editor_palette_resizer").hide();
+			}
 		}
 
 		for (i in 0...level.layers.length)
@@ -392,7 +395,7 @@ class Editor
 	{	   
 		if (level != null)
 		{
-			currentLayerEditor.loop();
+			if (currentLayerEditor != null) currentLayerEditor.loop();
 			updateArrowKeys();
 			if (EDITOR.toolBelt.current != null) EDITOR.toolBelt.current.update();
 		}
@@ -454,10 +457,11 @@ class Editor
     var i = level.layers.length - 1;
     while(i > level.currentLayerID) 
     {
-      if (EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
+      if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
       i--;
     }
-    EDITOR.layerEditors[level.currentLayerID].draw();
+    
+		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].draw();
 
 		//Draw the layers above the current one at half alpha
 		if (level.currentLayerID > 0)
@@ -466,7 +470,7 @@ class Editor
       var i = level.currentLayerID - 1;
 			while (i >= 0)
       {
-        if (EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
+        if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
         i--;
       }
 			draw.setAlpha(1);
@@ -476,10 +480,10 @@ class Editor
 		if (EDITOR.handles.canResize) EDITOR.handles.draw();
 			
 		//Grid
-		if (level.gridVisible) draw.drawGrid(level.currentLayer.template.gridSize, level.currentLayer.offset, level.data.size, level.camera.a, level.project.gridColor);
+		if (level.currentLayer != null && level.gridVisible) draw.drawGrid(level.currentLayer.template.gridSize, level.currentLayer.offset, level.data.size, level.camera.a, level.project.gridColor);
 		
 		//Do the current layer's drawAbove
-		EDITOR.layerEditors[level.currentLayerID].drawAbove();
+		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].drawAbove();
 
 		//Current Tool
 		if (EDITOR.toolBelt.current != null) EDITOR.toolBelt.current.draw();
@@ -492,7 +496,7 @@ class Editor
 		overlay.setAlpha(1);
 		
 		//Current Layer Overlay
-		EDITOR.layerEditors[level.currentLayerID].drawOverlay();
+		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].drawOverlay();
 		
 		//Current Tool Overlay
 		if (EDITOR.toolBelt.current != null)

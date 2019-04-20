@@ -79,6 +79,7 @@ class ToolBelt
 
   public function afterSetLayer():Void
   {
+    if (EDITOR.currentLayerEditor == null) return;
     setTool(EDITOR.currentLayerEditor.currentTool, true);
     populateToolbar();
   }
