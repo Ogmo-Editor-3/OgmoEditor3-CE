@@ -29,7 +29,7 @@ class TilePencilTool extends TileTool
 			{
 				for (x in 0...layerEditor.brush.length)
 				{
-					for (y in 0...LayerEditor.brush[x].length)
+					for (y in 0...layerEditor.brush[x].length)
 					{
 						var id = layerEditor.brush[x][y];
 						if (id != -1)
@@ -67,7 +67,7 @@ class TilePencilTool extends TileTool
 
 		if (!prevPos.equals(pos))
 		{
-			if (drawing) for (point in Calc.bresenham(prevPos.x, prevPos.y, pos.x, pos.y)) doDraw(point);
+			if (drawing) for (point in Calc.bresenham(prevPos.x.int(), prevPos.y.int(), pos.x.int(), pos.y.int())) doDraw(point);
 			else EDITOR.overlayDirty();
 		}
 
@@ -104,6 +104,8 @@ class TilePencilTool extends TileTool
 	{
 		if (canDraw(pos))
 		{
+			var px = pos.x.int();
+			var py = pos.y.int();
 			if (!firstDraw)
 			{
 				EDITOR.level.store("draw cells");
@@ -115,7 +117,7 @@ class TilePencilTool extends TileTool
 				if (layer.insideGrid(pos))
 				{
 					var tile = random.nextChoice2D(drawBrush);
-					layer.data[pos.x][pos.y] = tile;
+					layer.data[px][py] = tile;
 					
 					lastRect = new Rectangle(pos.x, pos.y, 1, 1);
 				}
@@ -124,8 +126,8 @@ class TilePencilTool extends TileTool
 			{
 				for (x in 0...drawBrush.length)
 					for (y in 0...drawBrush[x].length)
-						if (layer.insideGrid(new Vector(pos.x + x, pos.y + y)))
-							layer.data[pos.x + x][pos.y + y] = drawBrush[x][y];
+						if (layer.insideGrid(new Vector(px + x, py + y)))
+							layer.data[px.int() + x][py.int() + y] = drawBrush[x][y];
 				
 				lastRect = new Rectangle(pos.x, pos.y, drawBrush.length, drawBrush[0].length);
 			}

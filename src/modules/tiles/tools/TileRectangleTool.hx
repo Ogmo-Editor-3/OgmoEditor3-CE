@@ -1,5 +1,7 @@
 package modules.tiles.tools;
 
+import util.Random;
+
 class TileRectangleTool extends TileTool
 {
     public var drawing:Bool = false;
@@ -31,11 +33,11 @@ class TileRectangleTool extends TileTool
             }
 
             EDITOR.overlay.setAlpha(0.5);
-            for (x in 0...rect.width)
+            for (x in 0...rect.width.int())
             {
-                for (y in 0...rect.height)
+                for (y in 0...rect.height.int())
                 {
-                    var tile = brushAt(brush, rect.x + x - start.x, rect.y + y - start.y, random);
+                    var tile = brushAt(brush, rect.x.int() + x - start.x.int(), rect.y.int() + y - start.y.int(), random);
                     if (tile != -1)
                         EDITOR.overlay.drawTile(at.x + x * layer.template.gridSize.x, at.y + y * layer.template.gridSize.y, layer.tileset, tile);
                 }
@@ -139,9 +141,9 @@ class TileRectangleTool extends TileTool
                 random = this.random;
 
             EDITOR.level.store("rectangle fill");              
-            for (i in 0...rect.width)
-                for (j in 0...rect.height)
-                    layer.data[rect.x + i][rect.y + j] = brushAt(brush, rect.x + i - start.x, rect.y + j - start.y, random);
+            for (i in 0...rect.width.int())
+                for (j in 0...rect.height.int())
+                    layer.data[rect.x.int() + i][rect.y.int() + j] = brushAt(brush, rect.x.int() + i - start.x.int(), rect.y.int() + j - start.y.int(), random);
         }
     }
 
@@ -156,11 +158,11 @@ class TileRectangleTool extends TileTool
         }
                
         var ret = false;
-        for (i in 0...rect.width)
+        for (i in 0...rect.width.int())
         {
-            for (j in 0...rect.height)
+            for (j in 0...rect.height.int())
             {
-                if (layer.data[rect.x + i][rect.y + j] != brushAt(brush, rect.x + i - start.x, rect.y + j - start.y, random))
+                if (layer.data[rect.x.int() + i][rect.y.int() + j] != brushAt(brush, rect.x.int() + i - start.x.int(), rect.y.int() + j - start.y.int(), random))
                 {
                     ret = true;
                     break;

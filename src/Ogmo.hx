@@ -1,3 +1,4 @@
+import js.jquery.Event;
 import js.jquery.JQuery;
 import js.Browser;
 import electron.main.BrowserWindow;
@@ -100,7 +101,7 @@ class Ogmo
 			}
 		});
 
-		new JQuery(Browser.window).on("mousemove", function (e:Dynamic)
+		new JQuery(Browser.window).on("mousemove", function (e:Event)
 		{
 			mouse.x = e.pageX;
 			mouse.y = e.pageY;
