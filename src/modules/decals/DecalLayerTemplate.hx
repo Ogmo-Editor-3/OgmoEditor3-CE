@@ -107,8 +107,8 @@ class DecalLayerTemplate extends LayerTemplate
 				{
 					// get next name
 					var nextName = Path.basename(texture);
-          // TODO
-					// nextName = nextName.replace(/\.[^/.]+$/, "");
+          // TODO - willl have to double check this
+					nextName = '.' + nextName.split(".").pop();
 					
 					// remove numbers
 					var lastNumber = nextName.length - 1;

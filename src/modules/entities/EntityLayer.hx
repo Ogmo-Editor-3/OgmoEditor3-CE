@@ -38,22 +38,13 @@ class EntityLayer extends Layer
 		_nextID = entities.getHighestID();
 	}
 
-	// TODO - redefinition of variable! -01010111
-	/*public var template(get, never):EntityLayerTemplate;
-	function get_template():EntityLayerTemplate
-	{
-		return OGMO.project.layers[id];
-	}*/
-
 	override function clone():EntityLayer
 	{
 		var e = new EntityLayer(level, id, entities.deepClone(), _nextID);
 		e.offset = offset.clone();
 		return e;
 	}
-
-	// TODO - Unused argument `newSize:Vector` in TS - possible feature? atm this is just `shift()` -01010111
-	// update - i think it just hasnt been implemented, but it is an override and needs `newSize` - austin
+	
 	override function resize(newSize:Vector, shiftBy:Vector) shift(shiftBy); 
 
 	override function shift(amount:Vector) for (entity in entities.list) entity.move(amount);

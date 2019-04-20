@@ -17,7 +17,7 @@ class ShapeData
 	public function clone():ShapeData
 	{
 		var s = new ShapeData();
-		s.label = this.label;
+		s.label = label;
 		for (p in points) s.points.push(p.clone());
 		return s;
 	}
@@ -143,9 +143,8 @@ class ShapeData
 			var i = from;
 			while(i < points.length)
 			{
-				// TODO - is this just setting the blank arrays blank?
-				// inside.length = 0;
-				// outside.length = 0;
+				inside.resize(0);
+				outside.resize(0);
 
 				for (j in 0...3)
 				{
@@ -190,9 +189,8 @@ class ShapeData
 			var i = from;
 			while(i < points.length)
 			{
-				// TODO - is this just setting the blank arrays blank?
-				// inside.length = 0;
-				// outside.length = 0;
+				inside.resize(0);
+				outside.resize(0);
 
 				for (j in 0...3)
 				{
@@ -239,9 +237,8 @@ class ShapeData
 			var i = from;
 			while(i < points.length)
 			{
-				// TODO - is this just setting the blank arrays blank?
-				// inside.length = 0;
-				// outside.length = 0;
+				inside.resize(0);
+				outside.resize(0);
 
 				for (j in 0...3)
 				{
@@ -288,9 +285,8 @@ class ShapeData
 			var i = from;
 			while(i < points.length)
 			{
-				// TODO - is this just setting the blank arrays blank?
-				// inside.length = 0;
-				// outside.length = 0;
+				inside.resize(0);
+				outside.resize(0);
 
 				for (j in 0...3)
 				{
@@ -356,31 +352,31 @@ class ShapeData
 
 	public function addTri(p1x:Float, p1y:Float, p2x:Float, p2y:Float, p3x:Float, p3y:Float)
     {
-    	this.points.push(new Vector(p1x, p1y));
-    	this.points.push(new Vector(p2x, p2y));
-    	this.points.push(new Vector(p3x, p3y));
+    	points.push(new Vector(p1x, p1y));
+    	points.push(new Vector(p2x, p2y));
+    	points.push(new Vector(p3x, p3y));
     }
 
     public function addRect(p1x:Float, p1y:Float, p2x:Float, p2y:Float)
     {
-    	this.points.push(new Vector(p1x, p1y));
-    	this.points.push(new Vector(p2x, p1y));
-    	this.points.push(new Vector(p1x, p2y));
+    	points.push(new Vector(p1x, p1y));
+    	points.push(new Vector(p2x, p1y));
+    	points.push(new Vector(p1x, p2y));
 
-    	this.points.push(new Vector(p2x, p1y));
-    	this.points.push(new Vector(p1x, p2y));
-    	this.points.push(new Vector(p2x, p2y));
+    	points.push(new Vector(p2x, p1y));
+    	points.push(new Vector(p1x, p2y));
+    	points.push(new Vector(p2x, p2y));
     }
 
     public function addBox(p1x:Float, p1y:Float, p2x:Float, p2y:Float, p3x:Float, p3y:Float, p4x:Float, p4y:Float)
     {
-    	this.points.push(new Vector(p1x, p1y));
-    	this.points.push(new Vector(p2x, p2y));
-    	this.points.push(new Vector(p3x, p3y));
+    	points.push(new Vector(p1x, p1y));
+    	points.push(new Vector(p2x, p2y));
+    	points.push(new Vector(p3x, p3y));
 
-    	this.points.push(new Vector(p1x, p1y));
-    	this.points.push(new Vector(p3x, p3y));
-    	this.points.push(new Vector(p4x, p4y));
+    	points.push(new Vector(p1x, p1y));
+    	points.push(new Vector(p3x, p3y));
+    	points.push(new Vector(p4x, p4y));
     }
 
 	public function toImage(color:Color, origin:Vector, size:Vector, tileSize:Vector):String

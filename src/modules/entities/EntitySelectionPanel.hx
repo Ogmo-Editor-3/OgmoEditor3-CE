@@ -124,7 +124,7 @@ class EntitySelectionPanel extends SidePanel
                             if (value.template.matches(nextValue.template))
                             {
                                 trace(value.template.getHashCode() + ", " + nextValue.template.getHashCode());
-                                values.push(cast nextValue); // TODO - I don't feel great about this cast lol -01010111
+                                values.push(nextValue);
                                 found = true;
                             }
 							k++;
@@ -139,7 +139,7 @@ class EntitySelectionPanel extends SidePanel
                     if (hasMatch)
                     {
                         var editor = value.template.createEditor(values);
-                        editor.display(cast values); // TODO - I _really_ don't feel great about this cast -01010111
+                        editor.display(this.values);
                     }
                 }
             }

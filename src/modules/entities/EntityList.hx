@@ -135,20 +135,20 @@ class EntityList
 	public function getHighestID():Int
 	{
 		var id:Int = 0;
-		for (ent in list) id = Math.max(id, ent.id + 1).int(); // TODO - may need to cast Int here? -01010111
+		for (ent in list) id = Math.max(id, ent.id + 1).int();
 		return id;
 	}
 
 	public function getAmount(template:EntityTemplate):Int
 	{
 		var num = 0;
-		for (ent in list) if (ent.template == template) num++; // TODO - will this work in haxe? -01010111
+		for (ent in list) if (ent.template == template) num++; 
 		return num;
 	}
 
 	public function getFirst(template:EntityTemplate):Entity
 	{
-		for (ent in list) if (ent.template == template) return ent; // TODO - will this work in haxe? -01010111
+		for (ent in list) if (ent.template == template) return ent;
 		return null;
 	}
 

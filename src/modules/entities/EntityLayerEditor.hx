@@ -58,17 +58,10 @@ class EntityLayerEditor extends LayerEditor
 	}
 
 	override function createPalettePanel():SidePanel return new EntityPalettePanel(this);
+	
 	override function createSelectionPanel():SidePanel return new EntitySelectionPanel(this);
 
 	override function afterUndoRedo() selection.trim(entities);
-
-	// TODO - this seems to already exist in super class, but TS version specifies that it should be an `EntityLayerTemplate` ignoring for now -01010111
-	/*public var template(get, never):EntityLayerTemplate 
-	function get_templaye():EntityLayerTemplate return OGMO.project.layers[id];*/
-
-	// TODO - Same as above -01010111
-	/*public var layer(get, never):EntityLayer;
-	function get_layer():EntityLayer return EDITOR.layers[id];*/
 
 	public var brushTemplate(get, never):EntityTemplate;
 	function get_brushTemplate():EntityTemplate return OGMO.project.getEntityTemplate(brush);

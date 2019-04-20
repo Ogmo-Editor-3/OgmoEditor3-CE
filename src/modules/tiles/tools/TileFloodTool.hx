@@ -1,5 +1,7 @@
 package modules.tiles.tools;
 
+import util.Random;
+
 class TileFloodTool extends TileTool
 {
 
@@ -20,44 +22,50 @@ class TileFloodTool extends TileTool
         if (canDrawAt(pos, brush))
         {
             var first:Bool = false;
-            var random: Random = undefined;
+            var random: Random = null;
             if (OGMO.ctrl)
                 random = new Random();
 
-            var start = layer.data[pos.x][pos.y];
+            var posX = pos.x.int();
+            var posY = pos.y.int();
+            var start = layer.data[posX][posY];
             var check = [ pos ];
             var draw:Array<Vector> = [];
             while (check.length > 0)
             {
                 var cur = check.pop();
+                var x = cur.x.int();
+                var y = cur.y.int();
                 draw.push(cur);               
-                layer.data[cur.x][cur.y] = -2;
+                layer.data[x][y] = -2;
 
-                if (cur.x > 0 && layer.data[cur.x - 1][cur.y] == start)
-                    check.push(new Vector(cur.x - 1, cur.y));
-                if (cur.x < layer.gridCellsX - 1 && layer.data[cur.x + 1][cur.y] == start)
-                    check.push(new Vector(cur.x + 1, cur.y));
-                if (cur.y > 0 && layer.data[cur.x][cur.y - 1] == start)
-                    check.push(new Vector(cur.x, cur.y - 1));
-                if (cur.y < layer.gridCellsY - 1 && layer.data[cur.x][cur.y + 1] == start)
-                    check.push(new Vector(cur.x, cur.y + 1));
+                if (x > 0 && layer.data[x - 1][y] == start)
+                    check.push(new Vector(x - 1, y));
+                if (x < layer.gridCellsX - 1 && layer.data[x + 1][y] == start)
+                    check.push(new Vector(x + 1, y));
+                if (y > 0 && layer.data[x][y - 1] == start)
+                    check.push(new Vector(x, y - 1));
+                if (y < layer.gridCellsY - 1 && layer.data[x][y + 1] == start)
+                    check.push(new Vector(x, y + 1));
             }
             
             for (p in draw)
-                layer.data[p.x][p.y] = start;
+                layer.data[p.x.int()][p.y.int()] = start;
             
             for (p in draw)
             {
-                var tile = brushAt(brush, p.x - pos.x, p.y - pos.y, random);
+                var pX = p.x.int();
+                var pY = p.y.int();
+                var tile = brushAt(brush, pX - posX, pY - posY, random);
                 
-                if (!first && layer.data[p.x][p.y] != tile)
+                if (!first && layer.data[pX][pY] != tile)
                 {
                     first = true;
                     EDITOR.level.store("flood fill");
                     EDITOR.dirty();
                 }
                 
-                layer.data[p.x][p.y] = tile;
+                layer.data[pX][pY] = tile;
             }
         }
     }
@@ -67,9 +75,9 @@ class TileFloodTool extends TileTool
         if (!layer.insideGrid(pos))
             return false;
             
-        var over = layer.data[pos.x][pos.y];       
-        for (i in brush.length)
-            for (j in brush[i].length)
+        var over = layer.data[pos.x.int()][pos.y.int()];       
+        for (i in 0...brush.length)
+            for (j in 0...brush[i].length)
                 if (brush[i][j] != over)
                     return true;
                     

@@ -7,7 +7,6 @@ import level.editor.ui.SidePanel;
 class LayerEditor
 {
 	public var id:Int;
-  // TODO - could this be changed into an enum?
 	public var currentTool:Int = 0;
 	public var active:Bool = false; // <-- is this the currently-selected layer?
 	public var visible:Bool = true;

@@ -39,7 +39,6 @@ class EntityPalettePanel extends SidePanel
 
 	override public function refresh(/*?selectedEntity:EntityTemplate TODO - this overrides with extra argument -01010111*/)
 	{
-		var self = this;
 		var search = searchbar.find("input").val();
 		var untaggedEntities = OGMO.project.entities.untagged();
 
@@ -75,10 +74,10 @@ class EntityPalettePanel extends SidePanel
 
 				// create folder
 				var folder = parent = itemlist.add(new ItemListFolder(title, tagName));
-				folder.expandNoSlide(search.length > 0 || self.opened[tagName]);
+				folder.expandNoSlide(search.length > 0 || opened[tagName]);
 				folder.onclick = function(current)
 				{
-					self.opened[current.data] = current.expanded;
+					opened[current.data] = current.expanded;
 				};
 
 				// untagged icons
@@ -96,8 +95,8 @@ class EntityPalettePanel extends SidePanel
 				// TODO - Update this when the missing argument in this function is solved -01010111
 				/*if (selectedEntity != null)
 					item.selected = (template == selectedEntity)
-				else*/ if (self.layerEditor != null)
-					item.selected = (self.layerEditor.brushTemplate == template);
+				else*/ if (layerEditor != null)
+					item.selected = (layerEditor.brushTemplate == template);
 
 				item.onclick = function(current)
 				{
@@ -105,12 +104,12 @@ class EntityPalettePanel extends SidePanel
 					itemlist.perform(function(n) { n.selected = (n.data == current.data); });
 
 					// correct brush
-					if (self.layerEditor != null)
+					if (layerEditor != null)
 					{
 						var index = OGMO.project.entities.templates.indexOf(current.data);
 						if (index >= 0)
 						{
-							self.layerEditor.brush = index;
+							layerEditor.brush = index;
 							EDITOR.toolBelt.setTool(1);
 						}
 					}

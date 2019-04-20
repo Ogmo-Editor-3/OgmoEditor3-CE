@@ -49,7 +49,6 @@ class Ogmo
 		dialog = js.Lib.require('electron').remote.dialog;
 		settings = new Settings();
 
-		// TODO: do we need to require JQuery somewhere? not sure how that works in Haxe - austin
 		js.Lib.require('./lib/jquery-2.2.0.min.js');
 		new JQuery(function () { onReady(); });
 	}
