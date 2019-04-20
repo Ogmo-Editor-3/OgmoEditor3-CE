@@ -1,5 +1,6 @@
 package modules.decals;
 
+import js.Browser;
 import level.editor.ui.SidePanel;
 
 class DecalPalettePanel extends SidePanel
@@ -60,12 +61,10 @@ class DecalPalettePanel extends SidePanel
       var button = new JQuery('<div class="decal"/>');
       button.append(img);
 
-      untyped setTimeout(function()
+      Browser.window.setTimeout(function()
       {
-        if (img.width() / img.height() > 1)
-          img.width(button.width());
-        else
-          img.height(button.height());
+        if (img.width() / img.height() > 1) img.width(button.width());
+        else img.height(button.height());
       }, 10);
       
       button.on("click", function()

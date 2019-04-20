@@ -1,5 +1,6 @@
 package level.data;
 
+import js.Browser;
 import util.Popup;
 import electron.renderer.Remote;
 import electron.main.Dialog;
@@ -322,7 +323,7 @@ class Level
 		}
 
 		if (zoomTimer != null) untyped clearTimeout(zoomTimer);
-		zoomTimer = untyped setTimeout(clearZoomRect, 500);
+		zoomTimer = Browser.window.setTimeout(clearZoomRect, 500);
 	}
 
 	public function clearZoomRect():Void

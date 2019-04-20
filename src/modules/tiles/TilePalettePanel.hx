@@ -1,302 +1,314 @@
 package modules.tiles;
 
-/// <reference path="../../Level/Editor/UI/SidePanel.ts"/>
+import js.Browser;
+import js.jquery.Event;
+import util.Matrix;
+import js.html.CanvasRenderingContext2D;
+import js.html.CanvasElement;
+import project.data.Tileset;
+import level.editor.ui.SidePanel;
 
 class TilePalettePanel extends SidePanel
 {
-    layerEditor:TileLayerEditor;
-	into:JQuery;
-	options:JQuery;
+  public var layerEditor:TileLayerEditor;
+	public var into:JQuery;
+	public var options:JQuery;
 	
-	canvas:HTMLCanvasElement;
-	context:CanvasRenderingContext2D;
-	spacing:number = 1;
-	matrix:Matrix;
+	public var canvas:CanvasElement;
+	public var context:CanvasRenderingContext2D;
+	public var spacing:Int = 1;
+	public var matrix:Matrix;
 	
-	draggingOrigin:Vector;
-	draggingActive:boolean = false;
-	selectionActive:boolean = false;
-	selectionStartTile:Vector = null;
-	selectionEndTile:Vector = null;
-	selection:Rectangle = new Rectangle(0, 0, 1, 1);
+	public var draggingOrigin:Vector;
+	public var draggingActive:Bool = false;
+	public var selectionActive:Bool = false;
+	public var selectionStartTile:Vector = null;
+	public var selectionEndTile:Vector = null;
+	public var selection:Rectangle = new Rectangle(0, 0, 1, 1);
+  public var tileset(get, never):Tileset;
+  public var columns(get, never):Int;
+  public var rows(get, never):Int;
 	
-	get tileset():Tileset { return this.layerEditor.layer.tileset; }
-	get columns():number { return this.tileset.tileColumns; }
-	get rows():number { return this.tileset.tileRows; }
+	function get_tileset():Tileset { return (cast layerEditor.layer : TileLayer).tileset; }
+	function get_columns():Int { return tileset.tileColumns; }
+	function get_rows():Int { return tileset.tileRows; }
 
-    constructor(layerEditor: TileLayerEditor)
+    public function new(layerEditor: TileLayerEditor)
     {
-        super();
-        this.layerEditor = layerEditor;
-		this.matrix = new Matrix();
-		this.matrix.setScale(2, 2);
+      super();
+      this.layerEditor = layerEditor;
+      matrix = new Matrix();
+      matrix.setScale(2, 2);
     }
 
-    populate(into: JQuery): void
+    override function populate(into: JQuery):Void
     {
-		var self = this;
 		this.into = into;
 		
 		// options
 		{
-			this.options = $('<select style="width: 100%; max-width: 100%; box-sizing: border-box; border-radius: 0; border-left: 0; border-top: 0; border-right: 0; height: 40px;">');
-			let current = 0;
-			for (let i = 0; i < ogmo.project.tilesets.length; i ++)
+			options = new JQuery('<select style="width: 100%; max-width: 100%; box-sizing: border-box; border-radius: 0; border-left: 0; border-top: 0; border-right: 0; height: 40px;">');
+			var current = 0;
+			for (i in 0...OGMO.project.tilesets.length)
 			{
-				let tileset = ogmo.project.tilesets[i];
-				if (tileset == this.tileset)
-					current = i;
-				this.options.append('<option value="' + i + '">' + tileset.label + '</option>');
+				var tileset = OGMO.project.tilesets[i];
+				if (tileset == this.tileset) current = i;
+				options.append('<option value="' + i + '">' + tileset.label + '</option>');
 			}
-			this.options.change(function()
+			options.change(function(e)
 			{
-				let next = ogmo.project.tilesets[Import.integer(self.options.val(), 0)];
-				editor.level.store("Set " + self.layerEditor.template.name + " to '" + next.label + "'");
-				self.layerEditor.layer.tileset = next;
-				self.refresh();
+				var next = OGMO.project.tilesets[Imports.integer(options.val(), 0)];
+				EDITOR.level.store("Set " + layerEditor.template.name + " to '" + next.label + "'");
+				(cast layerEditor.layer : TileLayer).tileset = next;
+				refresh();
 			});
-			this.options.val(current.toString());
-			into.append(this.options);
+			options.val(current.string());
+			into.append(options);
 		}
 		
 		// canvas
 		{
-			this.canvas = document.createElement('canvas');
-			this.context = this.canvas.getContext("2d");
-			into.append(this.canvas);
+			canvas = Browser.document.createCanvasElement();
+			context = canvas.getContext("2d");
+			into.append(canvas);
 			
 			// mouse down
-			let intervalId:any;
-			let mousedown = false;
-			$(this.canvas).on("mousedown", function(e) 
+			var intervalId:Dynamic;
+			var mousedown = false;
+			new JQuery(canvas).on("mousedown", function(e) 
 			{ 
 				mousedown = true;
-				self.mouseDown(e);
-				intervalId = setInterval(function() { self.mouseMove(null); }, 50);
+				mouseDown(e);
+				intervalId = Browser.window.setInterval(function() { mouseMove(null); }, 50);
 			});
 			
 			// mouse up
-			$(window).on("mouseup", mouseUp);
-			function mouseUp(e:any) 
+			new JQuery(Browser.window).on("mouseup", mouseUp);
+			function mouseUp(e:Event) 
 			{
-				if (editor.currentLayerEditor == null || editor.currentLayerEditor.palettePanel != self || !editor.active)
-					$(window).off("mouseup", mouseUp);
+				if (EDITOR.currentLayerEditor == null || EDITOR.currentLayerEditor.palettePanel != this || !EDITOR.active)
+					new JQuery(Browser.window).off("mouseup", mouseUp);
 				else if (mousedown)
 				{
 					mousedown = false;
-					self.mouseUp(e);
-					clearInterval(intervalId);
+					mouseUp(e);
+					Browser.window.clearInterval(intervalId);
 				}
 			}
 			
 			// mouse wheel
-			$(this.canvas).on("mousewheel", function(e) { self.mouseWheel(self.getMouse(e), (e.originalEvent as any).wheelDelta as number); })
+			new JQuery(canvas).on("mousewheel", function(e) { mouseWheel(getMouse(e), (cast e : Dynamic).originalEvent.wheelDelta); });
 		}
 
 		// refresh canas
-        this.refresh();
+        refresh();
     }
 
-	resize():void
+	override function resize():Void
 	{
-		this.refresh();
+		refresh();
 	}
 	
-	getMouse(e:JQueryEventObject):Vector
+	public function getMouse(e:Event):Vector
 	{
-		let m:Vector = ogmo.mouse;
-		if (e != undefined && e != null)
-			m = new Vector(e.clientX, e.clientY);
-		return new Vector(m.x - this.canvas.getBoundingClientRect().left, m.y - this.canvas.getBoundingClientRect().top);
+		var m:Vector = OGMO.mouse;
+		if (e != null) m = new Vector(e.clientX, e.clientY);
+		return new Vector(m.x - canvas.getBoundingClientRect().left, m.y - canvas.getBoundingClientRect().top);
 	}
 	
-	getMouseTile(e:JQueryEventObject):Vector
+	public function getMouseTile(e:Event):Vector
 	{
-		let tWidth = this.tileset.tileWidth + this.spacing;
-		let tHeight = this.tileset.tileHeight + this.spacing;
+		var tWidth = tileset.tileWidth + spacing;
+		var tHeight = tileset.tileHeight + spacing;
 		
-		let mouse = this.matrix.inverseTransformPoint(this.getMouse(e));
+		var mouse = matrix.inverseTransformPoint(getMouse(e));
 		
 		return new Vector(
 			Math.floor(mouse.x / tWidth), 
 			Math.floor(mouse.y / tHeight));
 	}
 	
-	getSelectonRect(start:Vector, end:Vector):Rectangle
+	public function getSelectonRect(start:Vector, end:Vector):Rectangle
 	{
-		let minX = Math.min(this.columns - 1, Math.max(0, Math.min(start.x, end.x)));
-		let minY = Math.min(this.rows - 1, Math.max(0, Math.min(start.y, end.y)));
-		let maxX = Math.min(this.columns - 1, Math.max(0, Math.max(start.x, end.x)));
-		let maxY = Math.min(this.rows - 1, Math.max(0, Math.max(start.y, end.y)));
+		var minX = Math.min(columns - 1, Math.max(0, Math.min(start.x, end.x)));
+		var minY = Math.min(rows - 1, Math.max(0, Math.min(start.y, end.y)));
+		var maxX = Math.min(columns - 1, Math.max(0, Math.max(start.x, end.x)));
+		var maxY = Math.min(rows - 1, Math.max(0, Math.max(start.y, end.y)));
 		
 		return new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
 	}
 	
-	mouseDown(e:JQueryEventObject):void
+	public function mouseDown(e:Event):Void
 	{
-		if (ogmo.keyCheckMap[Keys.Space] || e.which == Keys.MouseMiddle)
+		if (OGMO.keyCheckMap[Keys.Space] || e.which == Keys.MouseMiddle)
 		{
-			this.draggingActive = true;
-			this.draggingOrigin = this.getMouse(e);
+			draggingActive = true;
+			draggingOrigin = getMouse(e);
 		}
 		else
 		{
-			let tile = this.getMouseTile(e);
-			this.selectionActive = true;
-			this.selectionStartTile = this.selectionEndTile = tile;
-			this.refresh();
+			var tile = getMouseTile(e);
+			selectionActive = true;
+			selectionStartTile = selectionEndTile = tile;
+			refresh();
 		}
 	}
 	
-	mouseMove(e:JQueryEventObject):void
+	public function mouseMove(e:Event):Void
 	{
-		let mouse = this.getMouse(e);
+		var mouse = getMouse(e);
 		
-		if (this.selectionActive)
+		if (selectionActive)
 		{
-			let tile = this.getMouseTile(e);
-			this.selectionEndTile = tile;
+			var tile = getMouseTile(e);
+			selectionEndTile = tile;
 			
 			// pan camera by dragging selection
 			{
-				let step = 32;
-				let maxwidth = this.columns * (this.tileset.tileWidth + this.spacing);
-				let maxheight = this.rows * (this.tileset.tileHeight + this.spacing);
+				var step = 32;
+				var maxwidth = columns * (tileset.tileWidth + spacing);
+				var maxheight = rows * (tileset.tileHeight + spacing);
 				
-				if (mouse.x > this.canvas.width - 16)
-					this.matrix.translate(-step, 0);
+				if (mouse.x > canvas.width - 16)
+					matrix.translate(-step, 0);
 				else if (mouse.x < 16)
-					this.matrix.translate(step, 0);
+					matrix.translate(step, 0);
 					
-				if (mouse.y > this.canvas.height - 16)
-					this.matrix.translate(0, -step);
+				if (mouse.y > canvas.height - 16)
+					matrix.translate(0, -step);
 				else if (mouse.y < 16)
-					this.matrix.translate(0, step);
+					matrix.translate(0, step);
 				
 			}
 		}
-		else if (this.draggingActive)
+		else if (draggingActive)
 		{
-			this.matrix.translate(mouse.x - this.draggingOrigin.x, mouse.y - this.draggingOrigin.y);
-			this.draggingOrigin = mouse;
+			matrix.translate(mouse.x - draggingOrigin.x, mouse.y - draggingOrigin.y);
+			draggingOrigin = mouse;
 		}
 		
-		this.clampCamera();
-		this.refresh();
+		clampCamera();
+		refresh();
 	}
 	
-	mouseUp(e:JQueryEventObject):void
+	public function mouseUp(e:Event):Void
 	{
-		let tile = this.getMouseTile(e);
-		if (this.selectionActive)
+		var tile = getMouseTile(e);
+		if (selectionActive)
 		{
-			this.selectionActive = false;
-			this.selectionEndTile = tile;
-			this.selection = this.getSelectonRect(this.selectionStartTile, this.selectionEndTile);
+			selectionActive = false;
+			selectionEndTile = tile;
+			selection = getSelectonRect(selectionStartTile, selectionEndTile);
 			
 			// set editor brush
-			this.layerEditor.brush = new Array();
-			for (let x = 0; x < this.selection.width; x ++)
+			layerEditor.brush = new Array();
+			for (x in 0...selection.width.floor())
 			{
-				this.layerEditor.brush.push(new Array());
-				for (let y = 0; y  < this.selection.height; y ++)
+				layerEditor.brush.push(new Array());
+				for (y in 0...selection.height.floor())
 				{
-					let id = this.selection.x + x + (this.selection.y + y) * this.columns;
-					this.layerEditor.brush[x].push(id);
+					var id:Int = selection.x.floor() + x + (selection.y.floor() + y) * columns;
+					layerEditor.brush[x].push(id);
 				}
 			}
 			
-			this.refresh();
+			refresh();
 		}
 		
-		this.draggingActive = false;
+		draggingActive = false;
 	}
 	
-	mouseWheel(mouse:Vector, scroll:number):void
+	public function mouseWheel(mouse:Vector, scroll:Int):Void
 	{
-		let move = (scroll > 0 ? 1 : -1) * 0.25;
-		let pos = mouse;
+		var move = (scroll > 0 ? 1 : -1) * 0.25;
+		var pos = mouse;
 		
-		this.matrix.translate(-pos.x, -pos.y);
-		this.matrix.scale(1 + move, 1 + move);
-		this.matrix.translate(pos.x, pos.y);
-		this.clampCamera();
-		this.refresh();
+		matrix.translate(-pos.x, -pos.y);
+		matrix.scale(1 + move, 1 + move);
+		matrix.translate(pos.x, pos.y);
+		clampCamera();
+		refresh();
 	}
 	
-	clampCamera():void
+	public function clampCamera():Void
 	{
 		// probably a better way to do this method but whatever
-		let p = new Vector(this.matrix.tx, this.matrix.ty)
-		let m = new Matrix().scale(this.matrix.a, this.matrix.a);
+		var p = new Vector(matrix.tx, matrix.ty);
+		var m = new Matrix().scale(matrix.a, matrix.a);
 		
-		let vw = this.canvas.width;
-		let vh = this.canvas.height;
-		let tw = m.transformPoint(new Vector(this.columns * (this.tileset.tileWidth + this.spacing), 0)).x;
-		let th = m.transformPoint(new Vector(0, this.rows * (this.tileset.tileHeight + this.spacing))).y;
+		var vw = canvas.width;
+		var vh = canvas.height;
+		var tw = m.transformPoint(new Vector(columns * (tileset.tileWidth + spacing), 0)).x;
+		var th = m.transformPoint(new Vector(0, rows * (tileset.tileHeight + spacing))).y;
 		
-		this.matrix.tx = Math.min(8, Math.max(- (tw - vw) - 8, this.matrix.tx));
-		this.matrix.ty = Math.min(8, Math.max(- (th - vh) - 8, this.matrix.ty));
+		matrix.tx = Math.min(8, Math.max(- (tw - vw) - 8, matrix.tx));
+		matrix.ty = Math.min(8, Math.max(- (th - vh) - 8, matrix.ty));
 	}
 
-    refresh(): void
+    override function refresh():Void
     {
-        this.canvas.style.width = (this.canvas.width = this.into.width() - 4) + "px";
-        this.canvas.style.height = (this.canvas.height = this.into.height() - 40) + "px";
+    canvas.width = into.width().floor() - 4;
+    canvas.height = into.height().floor() - 40;
+    canvas.style.width = canvas.width + "px";
+    canvas.style.height = canvas.height + "px";
 		
 		// clear & setup context
-		this.context.setTransform(0,0,0,0,0,0);
-		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		this.context.setTransform(this.matrix.a, this.matrix.b, this.matrix.c, this.matrix.d, this.matrix.tx, this.matrix.ty);
-		(this.context as any).imageSmoothingEnabled = false;
+		context.setTransform(0,0,0,0,0,0);
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+		context.imageSmoothingEnabled = false;
 		
-		let tileset = this.tileset;
-		let image = tileset.texture.image;
-		let spacing = this.spacing;
+		var tileset = tileset;
+		var image = tileset.texture.image;
+		var spacing = spacing;
 		
 		if (tileset != null)
 		{
-			this.context.fillStyle = "rgb(220, 220, 220)";
-			this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+			context.fillStyle = "rgb(220, 220, 220)";
+			context.fillRect(0, 0, canvas.width, canvas.height);
 
 			// draw tiles (+transparent bg)
-			this.context.fillStyle = "rgb(200,200,200)";
-			for (let tx = tileset.tileSeparationX, x = 0; tx < image.width; tx += tileset.tileWidth + tileset.tileSeparationX, x ++)
+			context.fillStyle = "rgb(200,200,200)";
+      var tx = tileset.tileSeparationX, x = 0;
+			while(tx < image.width)
 			{
-				for (let ty = tileset.tileSeparationY, y = 0; ty < image.height; ty += tileset.tileHeight + tileset.tileSeparationY, y ++)
+        var ty = tileset.tileSeparationY, y = 0;
+				while(ty < image.height)
 				{
-					let drawX = x * (tileset.tileWidth + spacing);
-					let drawY = y * (tileset.tileHeight + spacing)
+					var drawX = x * (tileset.tileWidth + spacing);
+					var drawY = y * (tileset.tileHeight + spacing);
 					
-					this.context.fillRect(drawX - spacing / 2, drawY - spacing / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
-					this.context.fillRect(drawX + tileset.tileWidth / 2, drawY + tileset.tileHeight / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
-					this.context.drawImage(image, tx, ty, tileset.tileWidth, tileset.tileHeight, drawX, drawY, tileset.tileWidth, tileset.tileHeight);
+					context.fillRect(drawX - spacing / 2, drawY - spacing / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
+					context.fillRect(drawX + tileset.tileWidth / 2, drawY + tileset.tileHeight / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
+					context.drawImage(image, tx, ty, tileset.tileWidth, tileset.tileHeight, drawX, drawY, tileset.tileWidth, tileset.tileHeight);
+          ty += tileset.tileHeight + tileset.tileSeparationY;
+          y++;
 				}
+        tx += tileset.tileWidth + tileset.tileSeparationX; 
+        x++;
 			}
 			
 			// get current selection
-			let sel:Rectangle = null;
-			if (this.selectionActive)
-				sel = this.getSelectonRect(this.selectionStartTile, this.selectionEndTile);
-			else
-				sel = this.layerEditor.brushRectangle;
+			var sel:Rectangle = null;
+			if (selectionActive) sel = getSelectonRect(selectionStartTile, selectionEndTile);
+			else sel = layerEditor.brushRectangle;
 			
 			// draw selection
-			if (sel != null && sel != undefined)
+			if (sel != null)
 			{
-				this.context.fillStyle = "rgba(0,255,40,0.25)";
-				this.context.fillRect(
-					sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
-					sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
-					sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
+				context.fillStyle = "rgba(0,255,40,0.25)";
+				context.fillRect(
+        sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
+        sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
+        sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
 				
-				this.context.lineWidth = spacing;
-				this.context.strokeStyle = "rgba(0,255,40,1)";
-				this.context.strokeRect(
-					sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
-					sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
-					sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
+				context.lineWidth = spacing;
+				context.strokeStyle = "rgba(0,255,40,1)";
+				context.strokeRect(
+        sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
+        sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
+        sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
 			}
 		}
-    }
+  }
 }

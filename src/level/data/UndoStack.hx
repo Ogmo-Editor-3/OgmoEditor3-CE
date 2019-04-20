@@ -1,5 +1,6 @@
 package level.data;
 
+import js.Browser;
 import js.jquery.JQuery;
 
 typedef LevelState =
@@ -171,11 +172,10 @@ class UndoStack
 			sticker.addClass("active");
 
 		//Clear old timeout
-		if (timeoutID != null)
-			untyped clearTimeout(timeoutID);
+		if (timeoutID != null) Browser.window.clearTimeout(timeoutID);
 
 		//Do timeout
-		timeoutID = untyped setTimeout(function ()
+		timeoutID = Browser.window.setTimeout(function ()
 		{
 			timeoutID = null;
 			if (sticker.hasClass("active")) sticker.removeClass("active");
