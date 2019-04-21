@@ -39,23 +39,23 @@ class Color
 
 	public function rgbaString():String
 	{
-		return "rgba(" + Math.floor(this.r * 255) + "," + Math.floor(this.g * 255) + "," + Math.floor(this.b * 255) + "," + this.a + ")";
+		return "rgba(" + Math.floor(r * 255) + "," + Math.floor(g * 255) + "," + Math.floor(b * 255) + "," + a + ")";
 	}
 
 	public function toHex():String
 	{
-		return '#${((1 << 24) + ((r * 255).round() << 16) + ((g * 255).round() << 8) + (b * 255).round()).hex()}';
+		return untyped ("#" + ((1 << 24) + (this.r * 255 << 16) + (this.g * 255 << 8) + this.b * 255).toString(16).slice(1)).substr(0, 7);
 	}
 
 	// TODO - what does the output of this look like? -01010111
 	// updated - may have fixed it? - austin
 	public function toHexAlpha():String
 	{
-		var r = Math.floor(this.r * 255);
-		var g = Math.floor(this.g * 255);
-		var b = Math.floor(this.b * 255);
-		var a = Math.floor(this.a * 255);
-		return "#" + (256 + r).hex(16).substr(1) + ((1 << 24) + (g << 16) | (b << 8) | a).hex(16).substr(1);
+		var r = Math.floor(r * 255);
+		var g = Math.floor(g * 255);
+		var b = Math.floor(b * 255);
+		var a = Math.floor(a * 255);
+		return untyped "#" + (256 + r).toString(16).substr(1) + ((1 << 24) + (g << 16) | (b << 8) | a).toString(16).substr(1);
 	}
 
 	public function toHSV():Array<Float>
@@ -94,7 +94,7 @@ class Color
 
 	public function equals(c:Color):Bool
 	{
-		return this.r == c.r && this.g == c.g && this.b == c.b && this.a == c.a;
+		return r == c.r && g == c.g && b == c.b && a == c.a;
 	}
 
 	// TODO - I'm not a regex person :| -01010111
@@ -102,12 +102,12 @@ class Color
 	public static function fromHex(hex:String, opacity:Float):Color
 	{
 		var color:Color = new Color(0,0,0, opacity);
-		var result = new RegExp('~/^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i').exec(hex);
+		var result = new RegExp('^#?([A-F0-9]{2})([A-F0-9]{2})([A-F0-9]{2})$', 'i').exec(hex);
 		if (result != null && result.length >= 4)
 		{
-			color.r = Std.parseInt(result[1]) / 255;
-			color.g = Std.parseInt(result[2]) / 255;
-			color.b = Std.parseInt(result[3]) / 255;
+			color.r = untyped parseInt(result[1], 16) / 255;
+			color.g = untyped parseInt(result[2], 16) / 255;
+			color.b = untyped parseInt(result[3], 16) / 255;
 		}
 		return color;
 	}
@@ -115,13 +115,13 @@ class Color
 	public static function fromHexAlpha(hex:String):Color
 	{
 		var color:Color = new Color(0,0,0,0);
-		var result = new RegExp('~/^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i').exec(hex);
+		var result = new RegExp('^#?([A-F0-9]{2})([A-F0-9]{2})([A-F0-9]{2})([A-F0-9]{2})$', 'i').exec(hex);
 		if (result != null && result.length >= 5)
 		{
-			color.r = Std.parseInt(result[1]) / 255;
-			color.g = Std.parseInt(result[2]) / 255;
-			color.b = Std.parseInt(result[3]) / 255;
-			color.a = Std.parseInt(result[4]) / 255;
+			color.r = untyped parseInt(result[1], 16) / 255;
+			color.g = untyped parseInt(result[2], 16) / 255;
+			color.b = untyped parseInt(result[3], 16) / 255;
+			color.a = untyped parseInt(result[4], 16) / 255;
 		}
 		else
 			color = Color.fromHex(hex, 1);

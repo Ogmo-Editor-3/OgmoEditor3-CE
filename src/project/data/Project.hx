@@ -17,7 +17,7 @@ class Project
 	public var backgroundColor:Color = Color.fromHex("#282c34", 1);
 	public var gridColor:Color = Color.fromHex("#3c4049", 0.8);
 	public var anglesRadians:Bool = true;
-	public var defaultExportMode:String = ".xml"; // TODO het lets change this -01010111
+	public var defaultExportMode:String = ".json";
 
 	public var levelDefaultSize:Vector = new Vector(320, 240);
 	public var levelMinSize:Vector = new Vector(128, 128);
@@ -141,7 +141,7 @@ class Project
 		levelMinSize = Vector.load(data.levelMinSize);
 		levelMaxSize = Vector.load(data.levelMaxSize);
 		levelValues = ValueTemplate.loadList(data.levelValues);
-		defaultExportMode = Imports.string(data.defaultExportMode, ".xml");
+		defaultExportMode = Imports.string(data.defaultExportMode, ".json");
 
 		// tilesets
 		if (data.tilesets != null) for (tileset in data.tilesets) tilesets.push(Tileset.load(this, tileset));
@@ -150,7 +150,7 @@ class Project
 		for (layerData in data.layers)
 		{
 			var definitionId = layerData.definition;
-			var definition = LayerDefinition.getDefinitionById(definitionId.id);
+			var definition = LayerDefinition.getDefinitionById(definitionId);
 			var exportID:String = layerData.exportID;
 
 			var template = definition.loadTemplate(exportID, layerData);
@@ -220,7 +220,7 @@ typedef ProjectSaveFile =
 	levelValues:Array<Dynamic>, // TODO: do we need more specific than this? -01010111
 	defaultExportMode:String,
 	entityTags:Array<String>,
-	layers:Array<LayerTemplate>,
-	entities:Array<EntityTemplate>,
-	tilesets:Array<Tileset>
+	layers:Array<Dynamic>,
+	entities:Array<Dynamic>,
+	tilesets:Array<Dynamic>
 }

@@ -2,7 +2,7 @@ package modules.entities.tools;
 
 import level.editor.Tool;
 
-class EntityTool extends Tool // TODO - this was an abstract but I changed it -01010111
+class EntityTool extends Tool
 {
 	public var layerEditor(get, never):EntityLayerEditor;
 	function get_layerEditor():EntityLayerEditor

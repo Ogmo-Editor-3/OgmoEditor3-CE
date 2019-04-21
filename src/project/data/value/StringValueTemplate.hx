@@ -1,12 +1,18 @@
 package project.data.value;
 
 import io.Imports;
+import project.editor.value.StringValueTemplateEditor;
 import level.editor.value.FieldValueEditor;
 import level.editor.value.ValueEditor;
 import level.data.Value;
 
 class StringValueTemplate extends ValueTemplate
 {
+  public static function startup()
+  {
+    var n = new ValueDefinition(StringValueTemplate, StringValueTemplateEditor, "value-string", "String");
+    ValueDefinition.definitions.push(n);
+  }
   public var defaults:String = "";
   public var maxLength:Int = 0;
   public var trimWhitespace:Bool = true;
@@ -53,11 +59,3 @@ class StringValueTemplate extends ValueTemplate
     return data;
   }
 }
-
-// TODO
-// definition
-// (<any>window).startup.push(function()
-// {
-//     var n = new ValueDefinition(StringValueTemplate, StringValueTemplateEditor, "value-string", "String");
-//     ValueDefinition.definitions.push(n);
-// });

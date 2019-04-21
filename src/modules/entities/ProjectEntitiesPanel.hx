@@ -517,7 +517,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				Fields.createSettingsBlock(inspector, entityNodeLimit, SettingsBlock.Fourth);
 
 				// node type
-				var nodeDisplays = new Array<string>();
+				var nodeDisplays = new Array<String>();
 				Object.keys(NodeDisplayModes)
 					.filter(v => isNaN(parseInt(v, 10)))
 					.forEach(v => nodeDisplays.push(v));

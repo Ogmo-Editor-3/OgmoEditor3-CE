@@ -1,10 +1,27 @@
 package modules.grid;
 
+import modules.grid.tools.*;
+import level.editor.Tool;
 import level.data.Level;
 import project.data.LayerTemplate;
+import project.data.LayerDefinition;
 
 class GridLayerTemplate extends LayerTemplate
 {
+  public static function startup()
+  {
+    var tools:Array<Tool> = [
+        new GridPencilTool(),
+        new GridRectangleTool(),
+        new GridLineTool(),
+        new GridFloodTool(),
+        new GridEyedropperTool(),
+        new GridSelectionTool()
+    ];
+    var n = new LayerDefinition(GridLayerTemplate, GridLayerTemplateEditor, "grid", "layer-grid", "Grid Layer", tools, 0);
+    LayerDefinition.definitions.push(n);
+  }
+
   public var trimEmptyCells:Bool = true;
   public var legend:Map<String, Color>;
   public var transparent(get, never):String;
@@ -41,7 +58,7 @@ class GridLayerTemplate extends LayerTemplate
   {
       var data:Dynamic = super.save();
       data.legend = {};
-      for (key in legend.keys()) Reflect.setField(data.legend, key, legend[key].toHexAlpha());
+      for (key in legend.keys()) untyped data.legend[key] = legend[key].toHexAlpha(); // Reflect.setField(data.legend, key, legend[key].toHexAlpha());
       return data;
   }
 
@@ -50,8 +67,8 @@ class GridLayerTemplate extends LayerTemplate
       super.load(data);
 
       legend = new Map();
-      for (key in (cast data.legend : Array<String>))
-          legend[key] = Color.fromHexAlpha(key);
+      for (field in Reflect.fields(data.legend))
+          legend.set(field, Color.fromHexAlpha(Reflect.field(data.legend, field)));
 
       return this;
   }
@@ -74,19 +91,3 @@ class GridLayerTemplate extends LayerTemplate
     throw "Grid layers must have at least 2 characters in their legend.";
   }
 }
-
-// TODO
-//definition
-// (<any>window).startup.push(function()
-// {
-//     let tools:Tool[] = [
-//         new GridPencilTool(),
-//         new GridRectangleTool(),
-//         new GridLineTool(),
-//         new GridFloodTool(),
-//         new GridEyedropperTool(),
-//         new GridSelectionTool()
-//     ];
-//     let n = new LayerDefinition(GridLayerTemplate, GridLayerTemplateEditor, "grid", "layer-grid", "Grid Layer", tools, 0);
-//     LayerDefinition.definitions.push(n);
-// });

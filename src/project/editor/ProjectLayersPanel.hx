@@ -11,6 +11,10 @@ import project.data.LayerTemplate;
 
 class ProjectLayersPanel extends ProjectEditorPanel
 {
+  public static function startup()
+  {
+    Ogmo.projectEditor.addPanel(new ProjectLayersPanel());
+  }
 
   public var layers:JQuery;
   public var buttons:JQuery;
@@ -41,14 +45,13 @@ class ProjectLayersPanel extends ProjectEditorPanel
 
   override public function begin():Void
   {
-    // TODO: This block had an extra set of brackets for some reason. if there are issues, check this section out - austin
     // new layer stuff
     buttons.empty();
-    var layerTypes:Dynamic = {};
+    var layerTypes = new Map();
     for (i in 0...LayerDefinition.definitions.length)
     {
       var def = LayerDefinition.definitions[i];
-      Reflect.setField(layerTypes, def.id, def.label);
+      layerTypes.set(def.id, def.label);
       trace(def.id + "->" + def.label);
     }
     
@@ -161,6 +164,3 @@ class ProjectLayersPanel extends ProjectEditorPanel
     save(layerTemplateEditor);
   }
 }
-
-// TODO - Figure out a better way to do this window.startupStuff - austin
-// Window.startup.push(function() { projectEditor.addPanel(new ProjectLayersPanel()); });

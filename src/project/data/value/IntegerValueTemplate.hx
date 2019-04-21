@@ -1,5 +1,6 @@
 package project.data.value;
 
+import project.editor.value.IntegerValueTemplateEditor;
 import level.editor.value.FieldValueEditor;
 import level.editor.value.ValueEditor;
 import level.data.Value;
@@ -7,6 +8,12 @@ import io.Imports;
 
 class IntegerValueTemplate extends ValueTemplate
 {
+    public static function startup()
+    {
+        var n = new ValueDefinition(IntegerValueTemplate, IntegerValueTemplateEditor, "value-int", "Integer");
+        ValueDefinition.definitions.push(n);
+    }
+
     public var defaults:Int = 0;
     public var bounded:Bool = false;
     public var min:Int = 0;
@@ -62,10 +69,3 @@ class IntegerValueTemplate extends ValueTemplate
         return data;
     }
 }
-// TODO
-// definition
-// (<any>window).startup.push(function()
-// {
-//     var n = new ValueDefinition(IntegerValueTemplate, IntegerValueTemplateEditor, "value-int", "Integer");
-//     ValueDefinition.definitions.push(n);
-// });

@@ -1,11 +1,18 @@
 package project.data.value;
 
+import project.editor.value.FloatValueTemplateEditor;
 import level.editor.value.FieldValueEditor;
 import level.editor.value.ValueEditor;
 import level.data.Value;
 
 class FloatValueTemplate extends ValueTemplate
 {
+    public static function startup()
+    {
+        var n = new ValueDefinition(FloatValueTemplate, FloatValueTemplateEditor, "value-float", "Float");
+        ValueDefinition.definitions.push(n);
+    }
+    
     public var defaults:Float = 0;
     public var bounded:Bool = false;
     public var min:Float = 0;
@@ -61,10 +68,3 @@ class FloatValueTemplate extends ValueTemplate
       return data;
     }
 }
-// TODO
-// definition
-// (<any>window).startup.push(function()
-// {
-//     var n = new ValueDefinition(FloatValueTemplate, FloatValueTemplateEditor, "value-float", "Float");
-//     ValueDefinition.definitions.push(n);
-// });

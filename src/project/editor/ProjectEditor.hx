@@ -87,9 +87,8 @@ class ProjectEditor
     for (i in 0...panels.length) panels[i].end();
 
     // save project
-    var project = OGMO.project;
-    var data = project.save();
-    FileSystem.saveJSON(data, project.path);
+    var data = OGMO.project.save();
+    FileSystem.saveJSON(data, OGMO.project.path);
 
     // reload the project
     OGMO.project.unload();
@@ -134,7 +133,6 @@ class ProjectEditor
     active = set;
     root.css("display", (set ? display : "none"));
   }
-
   public function loop():Void {}
 
   public function keyPress(key:Int):Void {}

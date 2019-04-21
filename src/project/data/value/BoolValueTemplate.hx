@@ -1,5 +1,6 @@
 package project.data.value;
 
+import project.editor.value.BoolValueTemplateEditor;
 import level.editor.value.BoolValueEditor;
 import level.editor.value.ValueEditor;
 import level.data.Value;
@@ -7,6 +8,12 @@ import io.Imports;
 
 class BoolValueTemplate extends ValueTemplate
 {
+  public static function startup()
+  {
+    var n = new ValueDefinition(BoolValueTemplate, BoolValueTemplateEditor, "value-bool", "Boolean");
+    ValueDefinition.definitions.push(n);
+  }
+
   public var defaults:Bool = false;
 
   override function getHashCode():String
@@ -46,11 +53,3 @@ class BoolValueTemplate extends ValueTemplate
     return data;
   }
 }
-
-// TODO
-// definition
-// (<any>window).startup.push(function()
-// {
-//     let n = new ValueDefinition(BoolValueTemplate, BoolValueTemplateEditor, "value-bool", "Boolean");
-//     ValueDefinition.definitions.push(n);
-// });

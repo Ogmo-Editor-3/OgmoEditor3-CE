@@ -26,11 +26,12 @@ class Settings
 
 	public function save()
 	{
+		var s = [for (shape in shapes) shape.save()];
 		var data = {
 			recentProjects: recentProjects,
 			openLevelLimit: openLevelLimit,
 			undoLimit: undoLimit,
-			shapes: [for (shape in shapes) shape.save()],
+			shapes: s,
 		}
 
 		FileSystem.saveJSON(data, filepath);
@@ -45,7 +46,7 @@ class Settings
 		recentProjects = data.recentProjects;
 		openLevelLimit = data.openLevelLimit;
 		undoLimit = data.undoLimit;
-		shapes = [ for (shape in data_shapes) shape ];
+		shapes = [ for (shape in data_shapes) new ShapeData(shape.label, shape.points) ];
 	}
 
 	public function registerProject(project:Project)
@@ -82,7 +83,6 @@ class Settings
 
 	public function populateRecentProjects(into: JQuery)
 	{
-		var self = this;
 		populateInto = into;
 
 		//Prune projects
@@ -103,7 +103,7 @@ class Settings
 				};
 				item.onrightclick = function(e)
 				{
-					self.inspectRecentProject(cast item, p.path); // TODO - another weird cast -01010111
+					inspectRecentProject(cast item, p.path); // TODO - another weird cast -01010111
 				};
 			}
 		}
@@ -151,56 +151,38 @@ class Settings
 		var s: ShapeData;
 
 		//Rectangle
-		{
-			s = new ShapeData();
-			s.label = "Rectangle";
-			s.addRect(-1, -1, 1, 1);
-			shapes.push(s);
-		}
+		s = new ShapeData("Rectangle");
+		s.addRect(-1, -1, 1, 1);
+		shapes.push(s);
 
 		//Diamond
-		{
-			s = new ShapeData();
-			s.label = "Diamond";
-			s.addBox(-1, 0, 0, -1, 1, 0, 0, 1);
-			shapes.push(s);
-		}
+		s = new ShapeData("Diamond");
+		s.addBox(-1, 0, 0, -1, 1, 0, 0, 1);
+		shapes.push(s);
 
 		//Triangle
-		{
-			s = new ShapeData();
-			s.label = "Triangle";
-			s.addTri(0, -1, 1, 1, -1, 1);
-			shapes.push(s);
-		}
+		s = new ShapeData("Triangle");
+		s.addTri(0, -1, 1, 1, -1, 1);
+		shapes.push(s);
 
 		//House
-		{
-			s = new ShapeData();
-			s.label = "House";
-			s.addTri(0, -1, 1, 0, -1, 0);
-			s.addRect(-1, 0, 1, 1);
-			shapes.push(s);
-		}
+		s = new ShapeData("House");
+		s.addTri(0, -1, 1, 0, -1, 0);
+		s.addRect(-1, 0, 1, 1);
+		shapes.push(s);
 
 		//Arrow
-		{
-			s = new ShapeData();
-			s.label = "Arrow";
-			s.addTri(0, -1, 1, 0, -1, 0);
-			s.addRect(-0.35, 0, 0.35, 1);
-			shapes.push(s);
-		}
+		s = new ShapeData("Arrow");
+		s.addTri(0, -1, 1, 0, -1, 0);
+		s.addRect(-0.35, 0, 0.35, 1);
+		shapes.push(s);
 
 		//Cross
-		{
-			s = new ShapeData();
-			s.label = "Cross";
-			s.addRect(-1, -0.35, 1, 0.35);
-			s.addRect(-0.35, -1, 0.35, -0.35);
-			s.addRect(-0.35, 0.35, 0.35, 1);
-			shapes.push(s);
-		}
+		s = new ShapeData("Cross");
+		s.addRect(-1, -0.35, 1, 0.35);
+		s.addRect(-0.35, -1, 0.35, -0.35);
+		s.addRect(-0.35, 0.35, 0.35, 1);
+		shapes.push(s);
 	}
 
 	public function getShape(id:Int):ShapeData

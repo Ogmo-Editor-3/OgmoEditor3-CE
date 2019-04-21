@@ -1,11 +1,18 @@
 package project.data.value;
 
+import project.editor.value.TextValueTemplateEditor;
 import level.editor.value.TextValueEditor;
 import level.editor.value.ValueEditor;
 import level.data.Value;
 
 class TextValueTemplate extends ValueTemplate
 {
+  public static function startup()
+  {
+    var n = new ValueDefinition(TextValueTemplate, TextValueTemplateEditor, "value-text", "Text");
+    ValueDefinition.definitions.push(n);
+  }
+
   public var defaults:String = "";
 
   override function getHashCode():String
@@ -46,10 +53,3 @@ class TextValueTemplate extends ValueTemplate
     return data;
   }
 }
-// TODO
-// definition
-// (<any>window).startup.push(function()
-// {
-//     var n = new ValueDefinition(TextValueTemplate, TextValueTemplateEditor, "value-text", "Text");
-//     ValueDefinition.definitions.push(n);
-// });

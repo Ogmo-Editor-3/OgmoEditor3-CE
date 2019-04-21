@@ -4,6 +4,7 @@ import util.Vector;
 
 class Tool
 {
+	public function new() {}
 	public function onMouseDown(pos:Vector):Void {}
 	public function onMouseUp(pos:Vector):Void {}
 	public function onRightDown(pos:Vector):Void {}

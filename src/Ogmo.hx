@@ -10,6 +10,7 @@ import level.editor.Editor;
 import level.editor.ToolBelt;
 import util.Vector;
 import util.Keys;
+import util.Start;
 
 class Ogmo
 {
@@ -116,11 +117,8 @@ class Ogmo
 			});
 		});
 
-		// TODO: Evaluate this window.startup nonsense. maybe all of these can be static class methods? - austin
 		// Run startup functions
-		// var startup = untyped window.startup;
-		// for (i in 0...startup.length) startup[i]();
-
+		Start.up();
 		//Init the toolbelt
 		editor.toolBelt = new ToolBelt();
 		updateWindowTitle();		
@@ -165,6 +163,11 @@ class Ogmo
 		var w = Remote.getCurrentWindow();
 		w.setTitle(str);
 		w.setDocumentEdited(edited);
+	}
+
+	function startup() 
+	{
+
 	}
 
 	/*

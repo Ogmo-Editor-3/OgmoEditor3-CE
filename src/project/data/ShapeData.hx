@@ -12,23 +12,29 @@ class ShapeData
 	public var label:String;
 	public var points:Array<Vector> = [];
 
-	public function new() {}
+	public function new(label:String, ?points:Array<Vector>) 
+	{
+		this.label = label;
+		if (points == null) this.points = [];
+		else 
+		{
+			for (p in points) this.points.push(new Vector(p.x, p.y));
+		}
+	}
 
 	public function clone():ShapeData
 	{
-		var s = new ShapeData();
-		s.label = label;
-		for (p in points) s.points.push(p.clone());
+		var s = new ShapeData(label);
+		for (p in points) s.points.push(new Vector(p.x, p.y));
 		return s;
 	}
 
 	public static function load(data:Dynamic):ShapeData
 	{
-		var s = new ShapeData();
-		s.label = data.label == null ? 'Shape' : data.label;
+		var s = new ShapeData(data.label == null ? 'Shape' : data.label);
 		if (data.points == null || data.points.length == 0) return s;
 		var data_points:Array<Vector> = cast data.points;
-		for (p in data_points) s.points.push(p.clone());
+		for (p in data_points) s.points.push(new Vector(p.x, p.y));
 		return s;
 	}
 

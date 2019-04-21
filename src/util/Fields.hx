@@ -258,10 +258,10 @@ class Fields
 		return element;
 	}
 
-	public static function createOptions(list:Dynamic, ?into:JQuery):JQuery
+	public static function createOptions(list:Map<String, String>, ?into:JQuery):JQuery
 	{
 		var element = new JQuery('<select>');
-		for (i in 0...list.length) element.append('<option value="' + i + '">' + list[i] + '</option>');
+		for (key in list.keys()) element.append('<option value="' + key + '">' + list[key] + '</option>');
 		if (into != null) into.append(element);
 		return element;
 	}

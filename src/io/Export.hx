@@ -138,10 +138,10 @@ class Export
 	{
 		Syntax.delete(data, '_name');
 
-		var contents:Iterable<Dynamic> = Export.getJSONContents(data);
+		var contents = Export.getJSONContents(data);
 		if (contents != null)
 		{
-			for (content in contents) Export.stripJSON(content);
+			untyped for (i in 0...contents.length) Export.stripJSON(contents[i]);
 			Syntax.delete(data, '_contents');
 		}
 
@@ -201,8 +201,8 @@ class Export
 		return s;
 	}
 
-	static function getJSONContents(data:Dynamic):Dynamic
+	static function getJSONContents(data:Dynamic)
 	{
-		return data.data._contents;
+		return untyped data[data["_contents"]];
 	}
 }

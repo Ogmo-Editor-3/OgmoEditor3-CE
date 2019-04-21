@@ -1,12 +1,16 @@
 package modules.decals;
 
 import js.node.Path;
-import project.data.Project;
+import level.editor.Tool;
 import level.data.Level;
 import level.editor.LayerEditor;
 import rendering.Texture;
-import project.data.value.ValueTemplate;
+import project.data.Project;
 import project.data.LayerTemplate;
+import project.data.LayerDefinition;
+import project.data.value.ValueTemplate;
+import modules.decals.tools.DecalCreateTool;
+import modules.decals.tools.DecalSelectTool;
 
 typedef Files = 
 {
@@ -18,6 +22,15 @@ typedef Files =
 
 class DecalLayerTemplate extends LayerTemplate
 {   
+	public static function startup()
+	{
+		var tools:Array<Tool> = [
+			new DecalSelectTool(),
+			new DecalCreateTool()
+		];
+		var n = new LayerDefinition(DecalLayerTemplate, DecalLayerTemplateEditor, "decal", "image", "Decal Layer", tools, 4);
+		LayerDefinition.definitions.push(n);
+	}
 
 	public var folder:String = "";
 	public var includeImageSequence:Bool = true;
@@ -166,15 +179,3 @@ class DecalLayerTemplate extends LayerTemplate
 		files = { name: "root", parent: null, textures: [], subdirs: [] };
 	}
 }
-
-// TODO
-// definition
-// (<any>window).startup.push(function()
-// {
-//     let tools:Tool[] = [
-// 		new DecalSelectTool(),
-// 		new DecalCreateTool()
-// 	];
-//     let n = new LayerDefinition(DecalLayerTemplate, DecalLayerTemplateEditor, "decal", "image", "Decal Layer", tools, 4);
-//     LayerDefinition.definitions.push(n);
-// });

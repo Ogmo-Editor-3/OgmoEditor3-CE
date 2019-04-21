@@ -82,42 +82,44 @@ class LevelsPanel extends SidePanel
     }
 
     //Add root folders if necessary, and recursively populate them
-    var paths = OGMO.project.getAbsoluteLevelDirectories();
-    for (i in 0...paths.length)
-    {
-      if (!FileSystem.exists(paths[i]))
+    if (OGMO.project != null) {
+      var paths = OGMO.project.getAbsoluteLevelDirectories();
+      for (i in 0...paths.length)
       {
-        var broken = new ItemListFolder(Path.basename(paths[i]), paths[i]);
-        broken.onrightclick = inspectBrokenFolder;
-        broken.setFolderIcons("folder-broken", "folder-broken");
-        itemlist.add(broken);
+        if (!FileSystem.exists(paths[i]))
+        {
+          var broken = new ItemListFolder(Path.basename(paths[i]), paths[i]);
+          broken.onrightclick = inspectBrokenFolder;
+          broken.setFolderIcons("folder-broken", "folder-broken");
+          itemlist.add(broken);
+        }
+        else if (FileSystem.stat(paths[i]).isDirectory())
+        {
+          var addTo = itemlist.add(new ItemListFolder(Path.basename(paths[i]), paths[i]));
+          addTo.onrightclick = inspectFolder;
+          addTo.setFolderIcons("folder-dot-open", "folder-dot-closed");
+          recursiveAdd(addTo, paths[i]);
+        }
       }
-      else if (FileSystem.stat(paths[i]).isDirectory())
+
+      //Search or use remembered expand states
+      if (currentSearch != "")
       {
-        var addTo = itemlist.add(new ItemListFolder(Path.basename(paths[i]), paths[i]));
-        addTo.onrightclick = inspectFolder;
-        addTo.setFolderIcons("folder-dot-open", "folder-dot-closed");
-        recursiveAdd(addTo, paths[i]);
+        var i = itemlist.children.length - 1;
+        while (i >= 0) 
+        {
+          recursiveFilter(itemlist, itemlist.children[i], currentSearch);
+          i--;
+        }
       }
+      else recursiveFolderExpandCheck(itemlist);
+
+      //Sort folders to the top
+      itemlist.foldersToTop(true);
+
+      //Figure out labels and icons
+      refreshLabelsAndIcons();
     }
-
-    //Search or use remembered expand states
-    if (currentSearch != "")
-    {
-      var i = itemlist.children.length - 1;
-      while (i >= 0) 
-      {
-        recursiveFilter(itemlist, itemlist.children[i], currentSearch);
-        i--;
-      }
-    }
-    else recursiveFolderExpandCheck(itemlist);
-
-    //Sort folders to the top
-    itemlist.foldersToTop(true);
-
-    //Figure out labels and icons
-    refreshLabelsAndIcons();
   }
 
   public function refreshLabelsAndIcons():Void

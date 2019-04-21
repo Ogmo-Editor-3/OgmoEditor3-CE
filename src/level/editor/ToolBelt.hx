@@ -25,10 +25,9 @@ class ToolBelt
 
   public function setKeyTool(key:Int):Bool
   {
-    if (currentKeyTool != key)
+    if (EDITOR.currentLayerEditor != null && currentKeyTool != key)
     {
       var tool:Int = -1;
-      var layer:String = EDITOR.level.currentLayer.template.definition.id;
 
       switch (key)
       {

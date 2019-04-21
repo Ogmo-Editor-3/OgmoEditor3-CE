@@ -106,7 +106,7 @@ class Level
 		data._name = "level";
 		data._contents = "layers";
 
-		data.saveInto(data);
+		this.data.saveInto(data);
 
 		Export.values(data, values);
 
@@ -180,7 +180,7 @@ class Level
 				{ name: "XML Level", extensions: [ "xml" ]}
 			];
 
-		var file = Ogmo.dialog.showOpenDialog(Remote.getCurrentWindow(),
+		var file = Ogmo.dialog.showSaveDialog(Remote.getCurrentWindow(),
 		{
 			title: "Save Level As...",
 			filters: filters,

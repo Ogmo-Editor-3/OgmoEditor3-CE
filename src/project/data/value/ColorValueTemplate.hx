@@ -1,11 +1,18 @@
 package project.data.value;
 
+import project.editor.value.ColorValueTemplateEditor;
 import level.data.Value;
 import level.editor.value.ValueEditor;
 import util.Color;
 
 class ColorValueTemplate extends ValueTemplate
 {
+  public static function startup()
+  {
+    var n = new ValueDefinition(ColorValueTemplate, ColorValueTemplateEditor, "value-color", "Color");
+    ValueDefinition.definitions.push(n);
+  }
+
   public var defaults:Color = new Color();
   public var includeAlpha:Bool = false;
 
@@ -47,10 +54,3 @@ class ColorValueTemplate extends ValueTemplate
     return data;
   }
 }
-//TODO
-// definition
-// (<any>window).startup.push(function()
-// {
-//     let n = new ValueDefinition(ColorValueTemplate, ColorValueTemplateEditor, "value-color", "Color");
-//     ValueDefinition.definitions.push(n);
-// });

@@ -7,6 +7,10 @@ import util.Fields;
 
 class ProjectGeneralPanel extends ProjectEditorPanel
 {
+  public static function startup()
+  {
+    Ogmo.projectEditor.addPanel(new ProjectGeneralPanel());
+  }
 
   public var projectName:JQuery;
   public var backgroundColor:JQuery;
@@ -30,7 +34,10 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     gridColor = Fields.createColor("Grid Color", Color.white);
     Fields.createSettingsBlock(root, gridColor, SettingsBlock.Third, "Grid Color", SettingsBlock.InlineTitle);
 
-    angleExport = Fields.createOptions({ "0": "Radians", "1": "Degrees" });
+    var options = new Map();
+    options.set('0', 'Radians');
+    options.set('1', 'Degrees');
+    angleExport = Fields.createOptions(options);
     Fields.createSettingsBlock(root, angleExport, SettingsBlock.Third, "Angle Export Mode", SettingsBlock.InlineTitle);
 
     // level size
@@ -67,9 +74,3 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     OGMO.project.levelValues = levelValueManager.values;
   }
 }
-
-// TODO
-// (<any>window).startup.push(function()
-// {
-//     projectEditor.addPanel(new ProjectGeneralPanel());
-// });

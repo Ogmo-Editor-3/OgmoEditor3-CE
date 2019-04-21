@@ -681,7 +681,7 @@ class Editor
 	
 	function defaultKeyPress(key:Int):Void
 	{
-		if (level != null)
+		if (level != null && currentLayerEditor != null)
 		{
 			currentLayerEditor.keyPress(key);
 			if (toolBelt.current != null) toolBelt.current.onKeyPress(key);
@@ -690,7 +690,7 @@ class Editor
 	
 	function defaultKeyRepeat(key:Int):Void
 	{
-		if (level != null)
+		if (level != null && currentLayerEditor != null)
 		{
 			currentLayerEditor.keyRepeat(key);
 			if (toolBelt.current != null) toolBelt.current.onKeyRepeat(key);
@@ -699,7 +699,7 @@ class Editor
 	
 	function defaultKeyRelease(key:Int):Void
 	{
-		if (level != null)
+		if (level != null && currentLayerEditor != null)
 		{
 			currentLayerEditor.keyRelease(key);
 			if (toolBelt.current != null)	toolBelt.current.onKeyRelease(key);
