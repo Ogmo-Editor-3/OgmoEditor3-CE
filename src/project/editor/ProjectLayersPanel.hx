@@ -52,7 +52,6 @@ class ProjectLayersPanel extends ProjectEditorPanel
     {
       var def = LayerDefinition.definitions[i];
       layerTypes.set(def.id, def.label);
-      trace(def.id + "->" + def.label);
     }
     
     var newLayerType = Fields.createOptions(layerTypes, buttons);

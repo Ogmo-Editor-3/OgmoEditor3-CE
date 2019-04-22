@@ -5,10 +5,11 @@ abstract TileExportModes (Int) from Int to Int
   var COORDS;
 }
 
-enum NodeDisplayModes
+@:enum
+abstract NodeDisplayModes (Int) from Int to Int
 {
-  PATH;
-  CIRCUIT;
-  FAN;
-  NONE;
+  var PATH;
+  var CIRCUIT;
+  var FAN;
+  var NONE;
 }

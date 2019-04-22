@@ -12,7 +12,11 @@ import project.editor.ProjectEditorPanel;
 
 class ProjectTilesetsPanel extends ProjectEditorPanel
 {
-	
+	public static function startup()
+	{
+		Ogmo.projectEditor.addPanel(new ProjectTilesetsPanel());
+	}
+
 	public var tilesets:JQuery;
 	public var buttons:JQuery;
 	public var inspector:JQuery;
@@ -238,8 +242,3 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 		if (inspecting != null) save(inspecting);
 	}
 }
-
-// (<any>window).startup.push(function()
-// {
-// 	projectEditor.addPanel(new ProjectTilesetsPanel());
-// });

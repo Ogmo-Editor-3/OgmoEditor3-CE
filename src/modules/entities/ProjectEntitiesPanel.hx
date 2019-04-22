@@ -1,13 +1,17 @@
 package modules.entities;
 
+import util.RightClickMenu;
 import project.editor.ProjectEditorPanel;
 import util.ItemList;
 import util.Fields;
 import project.editor.ValueTemplateManager;
-import 
 
 class ProjectEntitiesPanel extends ProjectEditorPanel
 {
+	public static function startup()
+	{
+		Ogmo.projectEditor.addPanel(new ProjectEntitiesPanel());
+	}
 
 	public var entities:JQuery;
 	public var entitiesNewButton:JQuery;
@@ -98,12 +102,12 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 		});
 	}
 
-	public function begin()
+	override function begin()
 	{
 		inspect(OGMO.project.entities.templates[0]);
 	}
 
-	public function end()
+	override function end()
 	{
 		if (current != null)
 			updateEntity(current);
@@ -127,12 +131,12 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 				var index = OGMO.project.entities.tags.indexOf(belowTag);
 				OGMO.project.entities.tags.splice(n, 1);
-				OGMO.project.entities.tags.splice(index + 1, 0, tag);
+				OGMO.project.entities.tags.insert(index + 1, tag);
 			}
 		}
 		else
 		{
-			var template = node.data;
+			var template:EntityTemplate = cast node.data;
 			var templateBelow = (below != null ? below.data : null);
 			var tag = (into != null ? into.data : "");
 
@@ -145,7 +149,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 			{
 				if (templateBelow == null)
 				{
-					for (next in OGMO.project.entities.templates.length)
+					for (next in OGMO.project.entities.templates)
 					{
 						if (next.tags.indexOf(tag) >= 0)
 							break;
@@ -169,7 +173,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 	public function refreshList()
 	{
 		var self = this;
-		var search = searchbar.find("input").val();
+		var search:String = searchbar.find("input").val();
 		var untaggedEntities = OGMO.project.entities.untagged();
 		var untaggedName = " - untagged";
 
@@ -187,7 +191,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 			// searching
 			var matchingTemplates:Array<EntityTemplate> = [];
 			for (template in allTemplates)
-				if (search.length <= 0 || template.name.toLowerCase().indexOf(search.toLowerCase()) >= 0 || (tagName != untaggedName && tagName.search(search) >= 0))
+				if (search.length <= 0 || template.name.toLowerCase().indexOf(search.toLowerCase()) >= 0 || (tagName != untaggedName && tagName.indexOf(search) >= 0))
 					matchingTemplates.push(template);
 
 			if (matchingTemplates.length <= 0)
@@ -323,7 +327,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				item.data = template;
 
 				if (self.current != null)
-					item.selected = (template == self.current)
+					item.selected = (template == self.current);
 
 				item.onclick = function(current)
 				{
@@ -408,12 +412,12 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				Fields.createSettingsBlock(inspector, entityName, SettingsBlock.Half, "Name", SettingsBlock.InlineTitle);
 
 				// entity limit
-				entityLimit = Fields.createField("0 to ignore", (entity.limit > 0 ? entity.limit.toString() : ""));
+				entityLimit = Fields.createField("0 to ignore", (entity.limit > 0 ? entity.limit.string() : ""));
 				Fields.createSettingsBlock(inspector, entityLimit, SettingsBlock.Half, "Limit", SettingsBlock.InlineTitle);
 
 				// tags
 				var tags = "";
-				for (var i = 0; i < entity.tags.length; i ++)
+				for (i in 0...entity.tags.length)
 				{
 					tags += entity.tags[i];
 					if (i != entity.tags.length - 1)
@@ -461,7 +465,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				Fields.createSettingsBlock(inspector, entityRotateable, SettingsBlock.Fourth);
 
 				// rotation degrees
-				entityRotationDegrees = Fields.createField("360", entity.rotationDegrees.toString());
+				entityRotationDegrees = Fields.createField("360", entity.rotationDegrees.string());
 				Fields.createSettingsBlock(inspector, entityRotationDegrees, SettingsBlock.ThreeForths, "Interval", SettingsBlock.InlineTitle);
 				Fields.createLineBreak(inspector);
 			}
@@ -513,17 +517,19 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				Fields.createSettingsBlock(inspector, entityNodeGhost, SettingsBlock.Fourth);
 
 				// limit
-				entityNodeLimit = Fields.createField("Limit #", (entity.nodeLimit > 0 ? entity.nodeLimit.toString() : ""));
+				entityNodeLimit = Fields.createField("Limit #", (entity.nodeLimit > 0 ? entity.nodeLimit.string() : ""));
 				Fields.createSettingsBlock(inspector, entityNodeLimit, SettingsBlock.Fourth);
 
 				// node type
-				var nodeDisplays = new Array<String>();
-				Object.keys(NodeDisplayModes)
-					.filter(v => isNaN(parseInt(v, 10)))
-					.forEach(v => nodeDisplays.push(v));
+				// TODO - dont hardcode these enum values - austin
+				var nodeDisplays:Map<String, String> = new Map();
+				nodeDisplays.set('0', 'Path');
+				nodeDisplays.set('1', 'Circuit');
+				nodeDisplays.set('2', 'Fan');
+				nodeDisplays.set('3', 'None');
 
 				entityNodeDisplay = Fields.createOptions(nodeDisplays);
-				entityNodeDisplay.val(entity.nodeDisplay);
+				entityNodeDisplay.val(entity.nodeDisplay.string());
 				Fields.createSettingsBlock(inspector, entityNodeDisplay, SettingsBlock.Fourth);
 			}
 
@@ -537,14 +543,12 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 	{
 		// update
 		entity.name = Fields.getField(entityName);
-		entity.limit = Import.integer(Fields.getField(entityLimit), -1);
+		entity.limit = Imports.integer(Fields.getField(entityLimit), -1);
 
 		// tags
 		var tags = Fields.getField(entityTags).split(',');
 		entity.tags = [];
-		for (var i = 0; i < tags.length; i ++)
-			if (tags[i].length > 0)
-				entity.tags.push(tags[i]);
+		for (tag in tags) if (tag.length > 0) entity.tags.push(tag);
 
 		entity.size = Fields.getVector(entitySize);
 		entity.origin = Fields.getVector(entityOrigin);
@@ -554,7 +558,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 		entity.canFlipX = Fields.getCheckbox(entityFlipX);
 		entity.canFlipY = Fields.getCheckbox(entityFlipY);
 		entity.rotatable = Fields.getCheckbox(entityRotateable);
-		entity.rotationDegrees = Import.integer(Fields.getField(entityRotationDegrees), 16);
+		entity.rotationDegrees = Imports.integer(Fields.getField(entityRotationDegrees), 16);
 
 		// icon stuff
 		entity.color = Fields.getColor(entityColor);
@@ -565,8 +569,8 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 		// nodes
 		entity.hasNodes = Fields.getCheckbox(entityHasNodes);
 		entity.nodeGhost = Fields.getCheckbox(entityNodeGhost);
-		entity.nodeLimit = Import.integer(Fields.getField(entityNodeLimit), 0);
-		entity.nodeDisplay = Import.integer(entityNodeDisplay.val(), 0);
+		entity.nodeLimit = Imports.integer(Fields.getField(entityNodeLimit), 0);
+		entity.nodeDisplay = Imports.integer(entityNodeDisplay.val(), 0);
 
 		// overwrite values with value editor values
 		entityValueManager.save();
@@ -578,10 +582,3 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 	}
 
 }
-
-// TODO - oh this is what Austin meant about the window startup stuff. yeesh -01010111
-/*(<any>window).startup.push(function()
-{
-	projectEditor.addPanel(new ProjectEntitiesPanel());
-});
-*/

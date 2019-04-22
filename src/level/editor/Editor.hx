@@ -480,7 +480,7 @@ class Editor
 		if (EDITOR.handles.canResize) EDITOR.handles.draw();
 			
 		//Grid
-		if (level.currentLayer != null && level.gridVisible) draw.drawGrid(level.currentLayer.template.gridSize, level.currentLayer.offset, level.data.size, level.camera.a.int(), level.project.gridColor);
+		if (level.currentLayer != null && level.gridVisible) draw.drawGrid(level.currentLayer.template.gridSize, level.currentLayer.offset, level.data.size, level.camera.a, level.project.gridColor);
 		
 		//Do the current layer's drawAbove
 		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].drawAbove();

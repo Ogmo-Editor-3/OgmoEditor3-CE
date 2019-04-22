@@ -456,24 +456,20 @@ class GLRenderer
     }
 	}
 
-	public function drawGrid(gridSize: Vector, gridOffset: Vector, size: Vector, zoom: Int, col: Color): Void
+	public function drawGrid(gridSize: Vector, gridOffset: Vector, size: Vector, zoom: Float, col: Color): Void
 	{
 		setDrawMode(RenderingContext.LINES);
 		
-		var gSX = gridSize.x.int();
-		var gSY = gridSize.y.int();
-		var gOX = gridOffset.x.int();
-		var gOY = gridOffset.y.int();
 		var minSpace = 10;
-		var intX = gSX;
+		var intX = gridSize.x;
 		while (intX * zoom < minSpace)
-			intX += gSX;
+			intX += gridSize.x;
 
-		var intY = gSY;
+		var intY = gridSize.y;
 		while (intY * zoom < minSpace)
-			intY += gSY;
+			intY += gridSize.y;
 
-		var i = intX + gOX;
+		var i = intX + gridOffset.x;
 		while (i < size.x)
 		{
 			positions.push(i);
@@ -486,7 +482,7 @@ class GLRenderer
       i += intX;
 		}
 
-    i = intY + gOY;
+    i = intY + gridOffset.y;
 		while (i < size.y)
 		{
 			positions.push(1);

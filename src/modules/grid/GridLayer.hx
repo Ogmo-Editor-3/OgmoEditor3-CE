@@ -71,7 +71,7 @@ class GridLayer extends Layer
       }
       else
       {
-        data[x][y] = char;
+        this.data[x][y] = char;
         x++;
       }
     }
