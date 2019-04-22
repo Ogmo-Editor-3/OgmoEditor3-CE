@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="app/gfx/logo.png" alt="Ogmo Editor 3"/>
+  <img src="assets/gfx/logo.png" alt="Ogmo Editor 3"/>
 </p>
 
 ### Open Source 2D level editor written in Haxe!
