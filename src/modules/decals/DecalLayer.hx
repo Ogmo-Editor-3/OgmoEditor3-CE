@@ -44,7 +44,7 @@ class DecalLayer extends Layer
             break;
           }
 
-        decals.push(new Decal(position, path, texture, scale, rotation));
+        this.decals.push(new Decal(position, path, texture, scale, rotation));
       }
     }
 
