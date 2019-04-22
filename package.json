@@ -8,7 +8,7 @@
         "start": "electron bin/.",
         "build": "npm run scss && npm run assets",
         "scss": "node-sass style/core.scss -o bin",
-        "assets": "cp -R app/ bin/ && cp package.json bin/"
+        "assets": "cp -R assets/ bin/ && cp package.json bin/"
     },
     "devDependencies": {
         "electron": "^4.1.4",

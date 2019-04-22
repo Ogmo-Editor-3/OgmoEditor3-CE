@@ -1,3 +1,4 @@
+#if !macro
 import Ogmo.editor as EDITOR;
 import Ogmo.ogmo as OGMO;
 
@@ -12,6 +13,7 @@ import util.Keys;
 import util.Popup;
 import util.Vector;
 import util.Rectangle;
+#end
 
 using Std;
 using Math;

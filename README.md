@@ -7,9 +7,9 @@
 ## Building
 Temp instructions:
 ```
-haxe build.hxml
 npm i
-npm run build
+haxe prepare.hxml
+haxe build.hxml
 npm start
 ```
 
