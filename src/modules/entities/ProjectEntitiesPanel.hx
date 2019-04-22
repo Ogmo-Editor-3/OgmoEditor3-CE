@@ -53,8 +53,6 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 	public function new()
 	{
 		super(3, "entities", "Entities", "entity");
-		var self = this;
-
 		// list
 		{
 			entities = new JQuery('<div class="project_entities_list">');
@@ -62,14 +60,14 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 			// create new entity
 			entitiesNewButton = Fields.createButton("plus", "New Entity", entities);
-			entitiesNewButton.on("click", function() { self.newEntity(); });
+			entitiesNewButton.on("click", function() { newEntity(); });
 
 			// entitiy list
 			entitiesList = new JQuery('<div class="list">');
 			entities.append(entitiesList);
 
 			searchbar = new JQuery('<div class="searchbar"><div class="searchbar_icon icon icon-magnify-glass"></div><input class="searchbar_field"/></div>');
-			searchbar.find("input").on("change keyup", function() { self.refreshList(); });
+			searchbar.find("input").on("change keyup", function() { refreshList(); });
 			palette = new JQuery('<div class="entityList">');
 
 			entitiesList.append(searchbar);
@@ -85,8 +83,6 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 	public function newEntity(?addTag:String)
 	{
-		var self = this;
-
 		Popup.openText("Create New Entity", "plus", "new entity", "Create", "Cancel", function(name)
 		{
 			if (name.length > 0 && name != null)
@@ -97,7 +93,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 					entity.tags = [ addTag ];
 
 				OGMO.project.entities.add(entity);
-				self.inspect(entity);
+				inspect(entity);
 			}
 		});
 	}
@@ -172,16 +168,15 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 	public function refreshList()
 	{
-		var self = this;
 		var search:String = searchbar.find("input").val();
 		var untaggedEntities = OGMO.project.entities.untagged();
 		var untaggedName = " - untagged";
 
 		palette.empty();
-		itemlist = new ItemList(palette, function(a, b, c) { self.reorder(a, b, c); });
+		itemlist = new ItemList(palette, function(a, b, c) { reorder(a, b, c); });
 
 		// make the list
-		for (j in 0...OGMO.project.entities.tags.length)
+		for (j in -1...OGMO.project.entities.tags.length)
 		{
 			var isUntagged = (j < 0);
 			var tagName = (isUntagged ? untaggedName : OGMO.project.entities.tags[j]);
@@ -205,10 +200,10 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 				// create folder
 				var folder = parent = itemlist.add(new ItemListFolder(title, tagName));
-				folder.expandNoSlide(search.length > 0 || self.closed[tagName] == null || !self.closed[tagName]);
+				folder.expandNoSlide(search.length > 0 || closed[tagName] == null || !closed[tagName]);
 				folder.onclick = function(current)
 				{
-					self.closed[current.data] = !current.expanded;
+					closed[current.data] = !current.expanded;
 				};
 
 				folder.onbeginreorder = function(current)
@@ -224,7 +219,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 						var menu = new RightClickMenu(OGMO.mouse);
 						menu.onClosed(function() { current.highlighted = false; });
 
-						menu.addOption("Create Entity", "new-file", function() { self.newEntity(); });
+						menu.addOption("Create Entity", "new-file", function() { newEntity(); });
 
 						current.highlighted = true;
 						menu.open();
@@ -239,7 +234,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 						menu.addOption("Create '" + tagName + "' Entity", "new-file", function()
 						{
-							self.newEntity(tagName);
+							newEntity(tagName);
 						});
 
 						menu.addOption("Rename Tag", "pencil", function()
@@ -261,7 +256,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 										OGMO.project.entities.tags[n] = str;
 
 									OGMO.project.entities.refreshTagLists();
-									self.inspect(self.current, false);
+									inspect(this.current, false);
 								}
 							});
 						});
@@ -280,8 +275,8 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 									}
 
 									OGMO.project.entities.refreshTagLists();
-									self.refreshList();
-									self.inspect(self.current, false);
+									refreshList();
+									inspect(this.current, false);
 								}
 							});
 						});
@@ -299,9 +294,9 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 										ei--;
 									}
 									OGMO.project.entities.refreshTagLists();
-									self.refreshList();
-									if (self.current.tags.indexOf(tagName) >= 0)
-										self.inspect(null, false);
+									refreshList();
+									if (this.current.tags.indexOf(tagName) >= 0)
+										inspect(null, false);
 								}
 							});
 						});
@@ -326,13 +321,13 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				item.setImageIcon(template.getIcon());
 				item.data = template;
 
-				if (self.current != null)
-					item.selected = (template == self.current);
+				if (current != null)
+					item.selected = (template == current);
 
 				item.onclick = function(current)
 				{
-					self.itemlist.perform(function(n) { n.selected = (n.data == current.data); });
-					self.inspect(current.data);
+					itemlist.perform(function(n) { n.selected = (n.data == current.data); });
+					inspect(current.data);
 				};
 
 				item.onbeginreorder = function(current)
@@ -352,7 +347,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 							if (n >= 0)
 								current.data.tags.splice(n, 1);
 							OGMO.project.entities.refreshTagLists();
-							self.refreshList();
+							refreshList();
 						});
 
 					menu.addOption("Duplicate Entity", "new-file", function()
@@ -360,7 +355,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 						var entity = EntityTemplate.clone(current.data, OGMO.project);
 						OGMO.project.entities.add(entity);
 						OGMO.project.entities.refreshTagLists();
-						self.inspect(entity);
+						inspect(entity);
 					});
 
 					menu.addOption("Delete Entity", "trash", function()
@@ -370,9 +365,9 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 							if (btn == 0)
 							{
 								OGMO.project.entities.remove(current.data);
-								self.refreshList();
-								if (self.current == current.data)
-									self.inspect(null, false);
+								refreshList();
+								if (current == current.data)
+									inspect(null, false);
 							}
 						});
 					});
@@ -386,8 +381,6 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 	public function inspect(entity:EntityTemplate, ?saveOnChange:Bool)
 	{
-		var self = this;
-
 		if (current != null && (saveOnChange == null || saveOnChange)) // TODO - this might cause trouble? -01010111
 			updateEntity(current);
 
@@ -403,10 +396,10 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				entityName = Fields.createField("Entity Name", entity.name);
 				entityName.on("input", function()
 				{
-					self.itemlist.perform(function(n)
+					itemlist.perform(function(n)
 					{
 						if (n.data == entity)
-							n.label  = self.entityName.val();
+							n.label  = entityName.val();
 					});
 				});
 				Fields.createSettingsBlock(inspector, entityName, SettingsBlock.Half, "Name", SettingsBlock.InlineTitle);
@@ -483,7 +476,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 					entity.color = c;
 					entity.onShapeChanged();
 
-					self.itemlist.perform(function(n)
+					itemlist.perform(function(n)
 					{
 						if (n.data == entity)
 							n.setImageIcon(entity.getIcon());

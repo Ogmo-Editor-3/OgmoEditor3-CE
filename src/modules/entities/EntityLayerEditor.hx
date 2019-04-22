@@ -40,7 +40,7 @@ class EntityLayerEditor extends LayerEditor
 	override function drawAbove()
 	{
 		// Draw Nodes
-		for (ent in entities) if (ent.canDrawNodes) ent.drawNodeLines();
+		for (ent in entities.list) if (ent.canDrawNodes) ent.drawNodeLines();
 	}
 
 	override function drawOverlay()

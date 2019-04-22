@@ -5,22 +5,12 @@ class EntityTemplateList
 	public var templates: Array<EntityTemplate>;
 	public var tags:Array<String>;
 	public var tagLists:Map<String, Array<EntityTemplate>>;
-	var i:Int;
 
 	public function new() {
 		templates = [];
 		tags = [];
 		tagLists = new Map();
-		i = 0;
 	}
-
-	public function hasNext() {
-    return i < templates.length;
-  }
-
-  public function next() {
-    return templates[i++];
-  }
 
 	public function add(template:EntityTemplate)
 	{

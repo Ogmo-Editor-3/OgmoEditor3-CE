@@ -4,7 +4,6 @@ class EntityList
 {
 	public var layer:EntityLayer;
 	public var list:Array<Entity> = [];
-	var i = 0;
 
 	public function new(layer:EntityLayer, ?sortedList:Array<Entity>)
 	{
@@ -171,14 +170,6 @@ class EntityList
 	{
 		return list.length;
 	}
-
-	public function hasNext() {
-    return i < list.length;
-  }
-
-  public function next() {
-    return list[i++];
-  }
 
 	function indexOf(id:Int, ?startAt:Int):Int
 	{

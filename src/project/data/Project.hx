@@ -53,7 +53,7 @@ class Project
 
 	public function getEntityTemplateByExportID(exportID:String): EntityTemplate
 	{
-		for (entity in entities) if (entity.exportID == exportID) return entity;
+		for (entity in entities.templates) if (entity.exportID == exportID) return entity;
 		return null;
 	}
 	
@@ -183,7 +183,7 @@ class Project
 			defaultExportMode: defaultExportMode,
 			entityTags: entities.tags,
 			layers: [for (layer in layers) layer.save()],
-			entities: [for (entity in entities) entity.save()],
+			entities: [for (entity in entities.templates) entity.save()],
 			tilesets: [for (tileset in tilesets) tileset.save()],
 		};
 
