@@ -320,7 +320,7 @@ class GLRenderer
 	public function drawRect(x:Float, y:Float, w:Float, h:Float, col:Color):Void
 	{
 		setDrawMode(RenderingContext.TRIANGLES);
-		
+
 		positions.push(x);
     positions.push(y);
 		positions.push(x + w);
@@ -456,20 +456,24 @@ class GLRenderer
     }
 	}
 
-	public function drawGrid(gridSize: Vector, gridOffset: Vector, size: Vector, zoom: Float, col: Color): Void
+	public function drawGrid(gridSize: Vector, gridOffset: Vector, size: Vector, zoom: Int, col: Color): Void
 	{
 		setDrawMode(RenderingContext.LINES);
 		
+		var gSX = gridSize.x.int();
+		var gSY = gridSize.y.int();
+		var gOX = gridOffset.x.int();
+		var gOY = gridOffset.y.int();
 		var minSpace = 10;
-		var intX = gridSize.x;
+		var intX = gSX;
 		while (intX * zoom < minSpace)
-			intX += gridSize.x;
+			intX += gSX;
 
-		var intY = gridSize.y;
+		var intY = gSY;
 		while (intY * zoom < minSpace)
-			intY += gridSize.y;
+			intY += gSY;
 
-		var i = intX + gridOffset.x;
+		var i = intX + gOX;
 		while (i < size.x)
 		{
 			positions.push(i);
@@ -482,7 +486,7 @@ class GLRenderer
       i += intX;
 		}
 
-    i = intY + gridOffset.y;
+    i = intY + gOY;
 		while (i < size.y)
 		{
 			positions.push(1);
@@ -524,7 +528,7 @@ class GLRenderer
 	}
 
   inline function add_color(col:Color, amt:Int = 1) {
-    for (i in 0...(amt - 1)) 
+    for (i in 0...(amt)) 
     {
       colors.push(col.r);
       colors.push(col.g);
