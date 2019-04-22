@@ -51,7 +51,6 @@ class Ogmo
 		dialog = js.Lib.require('electron').remote.dialog;
 		settings = new Settings();
 
-		js.Lib.require('./lib/jquery-2.2.0.min.js');
 		new JQuery(function () { onReady(); });
 	}
 

@@ -59,7 +59,6 @@ class GridLayer extends Layer
 
     var x = 0;
     var y = 0;
-    var n = 0;
 
     for (i in 0...content.length)
     {
