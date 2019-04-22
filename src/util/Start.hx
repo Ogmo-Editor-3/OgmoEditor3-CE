@@ -7,7 +7,8 @@ import modules.decals.DecalLayerTemplate;
 import modules.entities.EntityLayerTemplate;
 import modules.entities.ProjectEntitiesPanel;
 import modules.grid.GridLayerTemplate;
-// import modules.tiles.TileLayerTemplate;
+import modules.tiles.TileLayerTemplate;
+import modules.tiles.ProjectTilesetsPanel;
 
 class Start {
   public static function up() {
@@ -20,15 +21,16 @@ class Start {
     StringValueTemplate.startup();
     TextValueTemplate.startup();
 
-    // Panels
+    // Editor Panels
     ProjectGeneralPanel.startup();
     ProjectLayersPanel.startup();
+    ProjectTilesetsPanel.startup();
     ProjectEntitiesPanel.startup();
 
     // Modules
     DecalLayerTemplate.startup();
     EntityLayerTemplate.startup();
     GridLayerTemplate.startup();
-    // TileLayerTemplate.startup();
+    TileLayerTemplate.startup();
   }
 }

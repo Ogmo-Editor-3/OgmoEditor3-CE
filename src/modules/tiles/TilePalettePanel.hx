@@ -79,7 +79,7 @@ class TilePalettePanel extends SidePanel
 			{ 
 				mousedown = true;
 				mouseDown(e);
-				intervalId = Browser.window.setInterval(function() { mouseMove(null); }, 50);
+				intervalId = Browser.window.setInterval(function() { if (EDITOR.level != null) mouseMove(null); }, 50);
 			});
 			
 			// mouse up

@@ -47,7 +47,7 @@ class TileLayer extends Layer
       for (y in 0...gridCellsY)
       {
         var nums: Array<Int> = [];
-        for (x in 0...gridCellsX) nums.push(data[x][y]);      
+        for (x in 0...gridCellsX) nums.push(this.data[x][y]);      
                           
         if (template.trimEmptyTiles) trimEmpty(nums);
         if (nums.length > 0) hasTiles = true;
@@ -65,7 +65,7 @@ class TileLayer extends Layer
         var nums: Array<Int> = [];               
         for (x in 0...gridCellsX)
         {
-          var num:Int = data[x][y];
+          var num:Int = this.data[x][y];
           if (num == -1) nums.push(-1);
           else
           {
@@ -121,7 +121,7 @@ class TileLayer extends Layer
     
     if (exportMode == TileExportModes.IDS)
     {
-      for (y in 0...nums.length) for (x in 0...nums[y].length) data[x][y] = Imports.integer(nums[y][x], -1);
+      for (y in 0...nums.length) for (x in 0...nums[y].length) this.data[x][y] = Imports.integer(nums[y][x], -1);
     }
     else if (exportMode == TileExportModes.COORDS)
     {
@@ -132,11 +132,11 @@ class TileLayer extends Layer
         while (i < nums[y].length)
         {
           var num = Imports.integer(nums[y][i], -1);
-          if (num == -1) data[x][y] = -1;
+          if (num == -1) this.data[x][y] = -1;
           else
           {
             i++;
-            data[x][y] = tileset.coordsToID(num, Imports.integer(nums[y][i], -1));
+            this.data[x][y] = tileset.coordsToID(num, Imports.integer(nums[y][i], -1));
           }                  
           x++;
         }

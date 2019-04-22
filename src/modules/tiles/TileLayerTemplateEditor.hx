@@ -15,9 +15,9 @@ class TileLayerTemplateEditor extends LayerTemplateEditor
     var tileTemplate:TileLayerTemplate = cast template;
 
     // export mode
-    var options:Dynamic = {};
-    options[TileExportModes.IDS] = "IDs";
-    options[TileExportModes.COORDS] = "Coords";
+    var options:Map<String, String> = new Map();
+    options.set(TileExportModes.IDS.string(), "IDs");
+    options.set(TileExportModes.COORDS.string(), "Coords");
     
     exportMode = Fields.createOptions(options);
     exportMode.val(tileTemplate.exportMode);
