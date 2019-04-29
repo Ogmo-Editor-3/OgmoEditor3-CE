@@ -215,10 +215,8 @@ class ItemListNode
 	//Removes an element without clearing its events
 	public function detach(item:ItemListNode):ItemListNode
 	{
-		var index = children.indexOf(item);
-		if (index >= 0)
+		if (children.remove(item))
 		{
-			children.splice(index, 1);
 			item.element.detach();
 			item.parent = null;
 		}

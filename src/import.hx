@@ -1,3 +1,4 @@
+// TODO - Remove the imports defined here from the project source
 #if !macro
 import Ogmo.editor as EDITOR;
 import Ogmo.ogmo as OGMO;
