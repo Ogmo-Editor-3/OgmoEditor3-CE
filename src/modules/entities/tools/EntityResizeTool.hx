@@ -58,7 +58,8 @@ class EntityResizeTool extends EntityTool
 
 	override public function onRightDown(pos:Vector)
 	{
-		for (entity in layer.entities.getGroup(layerEditor.selection)) entity.resize(entity.template.size.sub(entity.size));
+		for (entity in layer.entities.getGroup(layerEditor.selection)) entity.resize(entity.template.size.clone().sub(entity.size));
+		EDITOR.dirty();
 	}
 
 	override public function onMouseMove(pos:Vector)
