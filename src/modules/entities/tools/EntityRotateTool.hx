@@ -24,8 +24,8 @@ class EntityRotateTool extends EntityTool
 		origin.x /= entities.length;
 		origin.y /= entities.length;
 
-		pos.clone(start);
-		pos.clone(last);
+		start = pos.clone();
+		last = pos.clone();
 
 		rotating = true;
 		firstChange = false;
