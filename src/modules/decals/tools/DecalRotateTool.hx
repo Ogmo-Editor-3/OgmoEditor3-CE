@@ -51,16 +51,15 @@ class DecalRotateTool extends DecalTool
 		}
 		var angle = Calc.angleTo(origin, pos);
 		var initial = Calc.angleTo(origin, start);
-		//for (decal in decals) decal.rotate(angle - initial);
+		for (decal in decals) decal.rotate(angle - initial);
 		EDITOR.dirty();
 		pos.clone(last);
 	}
 
-	// TODO #2 -01010111
-	/*override public function onRightDown(pos:Vector)
+	override public function onRightDown(pos:Vector)
 	{
-		for (decal in layer.decals.getGroup(layerEditor.selection)) decal.rotate(-decal.rotation);
-	}*/
+		for (decal in layerEditor.selected) decal.rotate(-decal.rotation);
+	}
 
 	override public function drawOverlay()
 	{
