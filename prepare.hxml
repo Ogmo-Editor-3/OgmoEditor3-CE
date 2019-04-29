@@ -1,3 +1,9 @@
 -cp src
+--each
+
+--next
 --macro util.Assets.copy()
 -cmd node node_modules/.bin/node-sass style/core.scss -o bin
+
+--next
+-cmd node node_modules/.bin/electron-rebuild -f -w nsfw
