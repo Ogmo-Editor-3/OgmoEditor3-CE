@@ -42,7 +42,7 @@ class App
 				}
 			});
 
-			IpcMain.on('closed', (e) -> {
+			IpcMain.on('quit', (e) -> {
 				forceClose = true;
 				mainWindow.close();
 			});

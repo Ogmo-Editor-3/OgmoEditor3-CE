@@ -2,7 +2,6 @@
 -lib jQueryExtern
 -cp src
 -dce full
--debug
 --each
 
 --next
