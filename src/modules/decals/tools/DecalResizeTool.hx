@@ -47,6 +47,7 @@ class DecalResizeTool extends DecalTool
 
 	override public function onRightDown(pos:Vector)
 	{
+		// TODO - oh hey this doesn't work either lol -01010111
 		for (decal in layerEditor.selected) decal.scale.set(1, 1);
 	}
 
@@ -69,13 +70,14 @@ class DecalResizeTool extends DecalTool
 				EDITOR.level.store("resize decals");
 			}
 
-			//for (d in decals) d.resize(new Vector(pos.x - start.x, pos.y - start.y));
+			// TODO - oh hi this doesn't work lol -01010111
+			for (d in decals) d.resize(new Vector(pos.x - start.x, pos.y - start.y));
 
 			EDITOR.dirty();
 			pos.clone(lastPos);
 		}
 	}
 
-	override public function getIcon():String return "entity-scale";
+	override public function getIcon():String return "decal-scale";
 	override public function getName():String return "Resize";
 }

@@ -178,6 +178,12 @@ class Entity
 		}
 	}
 
+	public function resetRotation()
+	{
+		rotation = 0;
+		updateMatrix();
+	}
+
 	/*
 			MATRIX
 	*/

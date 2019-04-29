@@ -58,7 +58,8 @@ class EntityRotateTool extends EntityTool
 
 	override public function onRightDown(pos:Vector)
 	{
-		for (entity in layer.entities.getGroup(layerEditor.selection)) entity.rotate(-entity.rotation);
+		for (entity in layer.entities.getGroup(layerEditor.selection)) entity.resetRotation();
+		EDITOR.dirty();
 	}
 
 	override public function drawOverlay()

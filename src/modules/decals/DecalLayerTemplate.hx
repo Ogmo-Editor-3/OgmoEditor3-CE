@@ -11,6 +11,8 @@ import project.data.LayerDefinition;
 import project.data.value.ValueTemplate;
 import modules.decals.tools.DecalCreateTool;
 import modules.decals.tools.DecalSelectTool;
+import modules.decals.tools.DecalResizeTool;
+import modules.decals.tools.DecalRotateTool;
 
 typedef Files = 
 {
@@ -26,7 +28,9 @@ class DecalLayerTemplate extends LayerTemplate
 	{
 		var tools:Array<Tool> = [
 			new DecalSelectTool(),
-			new DecalCreateTool()
+			new DecalCreateTool(),
+			new DecalResizeTool(),
+			new DecalRotateTool(),
 		];
 		var n = new LayerDefinition(DecalLayerTemplate, DecalLayerTemplateEditor, "decal", "image", "Decal Layer", tools, 4);
 		LayerDefinition.definitions.push(n);

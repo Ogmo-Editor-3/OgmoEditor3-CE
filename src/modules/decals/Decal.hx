@@ -56,8 +56,7 @@ class Decal
 
 	public function rotate(diff:Float)
 	{
-		rotation = rotation + diff * Calc.RTD;
-		rotation = Calc.snap(rotation, 360);
+		rotation = rotation + diff;
 	}
 
 	public function resize(diff:Vector)
