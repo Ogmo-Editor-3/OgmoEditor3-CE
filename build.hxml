@@ -3,5 +3,12 @@
 -cp src
 -dce full
 -debug
+--each
+
+--next
 -js bin/ogmo.js
 -main Ogmo
+
+--next
+-js bin/app.js
+-main App
