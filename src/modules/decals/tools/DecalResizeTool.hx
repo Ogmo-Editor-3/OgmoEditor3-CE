@@ -47,8 +47,8 @@ class DecalResizeTool extends DecalTool
 
 	override public function onRightDown(pos:Vector)
 	{
-		// TODO - oh hey this doesn't work either lol -01010111
 		for (decal in layerEditor.selected) decal.scale.set(1, 1);
+		EDITOR.dirty();
 	}
 
 	override public function onMouseMove(pos:Vector)
@@ -70,8 +70,7 @@ class DecalResizeTool extends DecalTool
 				EDITOR.level.store("resize decals");
 			}
 
-			// TODO - oh hi this doesn't work lol -01010111
-			for (d in decals) d.resize(new Vector(pos.x - start.x, pos.y - start.y));
+			for (d in decals) d.resize(new Vector(pos.x - lastPos.x, pos.y - lastPos.y));
 
 			EDITOR.dirty();
 			pos.clone(lastPos);
