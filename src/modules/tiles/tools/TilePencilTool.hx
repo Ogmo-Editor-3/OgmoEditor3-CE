@@ -149,12 +149,12 @@ class TilePencilTool extends TileTool
 	
 	override public function onKeyPress(key:Int)
 	{
-		if (key == Keys.Ctrl) EDITOR.overlayDirty();
+		if (key == Keys.Ctrl || key == Keys.Cmd) EDITOR.overlayDirty();
 	}
 	
 	override public function onKeyRelease(key:Int)
 	{
-		if (key == Keys.Ctrl)
+		if (key == Keys.Ctrl || key == Keys.Cmd)
 		{
 			random.randomize();
 			EDITOR.overlayDirty();

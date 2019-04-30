@@ -33,7 +33,7 @@ class ToolBelt
       {
         case Keys.Shift:
           tool = current.keyToolShift();
-        case Keys.Ctrl:
+        case Keys.Ctrl, Keys.Cmd:
           tool = current.keyToolCtrl();
         case Keys.Alt:
           tool = current.keyToolAlt();
