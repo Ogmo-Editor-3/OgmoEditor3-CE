@@ -1,6 +1,5 @@
 package modules.decals.tools;
 
-// TODO #10 -01010111
 class DecalRotateTool extends DecalTool
 {
 

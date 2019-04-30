@@ -1,6 +1,5 @@
 package modules.decals.tools;
 
-// TODO #10 -01010111
 class DecalResizeTool extends DecalTool
 {
 
