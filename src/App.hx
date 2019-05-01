@@ -1,6 +1,8 @@
 import electron.main.IpcMain;
 import js.Node.process;
 import js.Node.__dirname;
+import js.node.Path;
+import js.node.Url;
 import electron.main.App as ElectronApp;
 import electron.main.BrowserWindow;
 
@@ -55,13 +57,23 @@ class App
 			});
 		}
 
-		// Load index.html
-		mainWindow.loadURL('file://${__dirname}/index.html');
 		mainWindow.setMenu(null);
 
-		// Compile in debug mode to open dev tools on startup
+		// Compile in debug mode to load from webpack-dev-server and open dev tools on startup
 		#if debug
 		mainWindow.webContents.openDevTools();
+		mainWindow.loadURL(Url.format({
+      protocol: 'http:',
+      host: 'localhost:8080',
+      pathname: 'index.html',
+      slashes: true
+		}));
+		#else
+		mainWindow.loadURL(Url.format({
+      protocol: 'file:',
+      pathname: Path.join(__dirname, 'index.html'),
+      slashes: true
+    }));
 		#end
 	}
 

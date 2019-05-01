@@ -6,7 +6,7 @@
     "private": true,
     "main": "app.js",
     "scripts": {
-        "start": "electron bin/.",
+        "start": "webpack-dev-server --host 0.0.0.0",
         "watch": "webpack --watch",
         "build": "webpack",
         "prod": "webpack --mode=production",

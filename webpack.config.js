@@ -1,3 +1,5 @@
+const path = require('path');
+const { spawn } = require('child_process');
 const CopyPlugin = require('copy-webpack-plugin');
 const buildMode = process.env.NODE_ENV || 'development';
 const debugMode = buildMode !== 'production';
@@ -5,7 +7,6 @@ const dist = `${__dirname}/bin/`;
 
 ogmoConfig = {
   mode: 'development',
-  devtool: 'source-map',
   entry: './ogmo.hxml',
   target: 'electron-renderer',
   output: {
@@ -41,7 +42,27 @@ ogmoConfig = {
       { from: 'assets' },
       'package.json'
     ])
-  ]
+  ],
+  devtool: 'source-map',
+  devServer: {
+    contentBase: dist,
+    overlay: true,
+    hot: true,
+    stats: {
+      colors: true,
+      chunks: false,
+      children: false
+    },
+    before() {
+      spawn(
+        'electron',
+        [dist],
+        { shell: true, env: process.env, stdio: 'inherit' }
+      )
+      .on('close', code => process.exit(0))
+      .on('error', spawnError => console.error(spawnError))
+    }
+  }
 }
 
 electronConfig = {

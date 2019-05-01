@@ -1,3 +1,4 @@
 bin/
 node_modules/
 binsettings.json
+events.json
