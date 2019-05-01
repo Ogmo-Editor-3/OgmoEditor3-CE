@@ -1,0 +1,44 @@
+
+/*
+    using a sort of BEM style:
+        .blockName
+        .blockName_element
+        .blockName_element-modifier
+*/
+
+@font-face {
+	font-family: "Lato";
+	src: url("../fonts/Lato-Medium.ttf");
+}
+
+html, body
+{
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+
+	font-family: "Lato";
+	font-size: 1.0em;
+
+	-webkit-user-select: none;
+	user-select: none;
+}
+*:focus { outline: none; }
+
+.monospace
+{
+	color: 666;
+	border-bottom: 2px solid #bbb;
+	font-family: consolas;
+	padding: 0;
+	margin: 0 4px 0 4px;
+	font-weight: bold;
+}
+
+@import "icons";
+@import "input";
+@import "itemlist";
+@import "start";
+@import "editor";
+@import "popup";
+@import "project";

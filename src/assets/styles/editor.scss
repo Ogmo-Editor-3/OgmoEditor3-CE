@@ -1,0 +1,551 @@
+.editor
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+
+    /* main panels */
+    &_panel
+    {
+        position: relative;
+        height: 100%;
+    }
+    &_panel-left
+    {
+        width: 240px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: hidden;
+        overflow-x: auto;
+    }
+    &_panel-main
+    {
+        flex: 1;
+        cursor:default;
+    }
+    &_panel-right
+    {
+        width: 240px;
+        display: flex;
+        flex-direction: column;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    &_canvas
+    {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    & .v-resizer
+    {
+        width: 100%;
+        height: 6px;
+        margin: 4px 0 4px 0;
+        background: #eee;
+        cursor: ns-resize;
+        z-index: 100;
+    }
+
+    & .h-resizer
+    {
+        height: 100%;
+        width: 6px;
+        background: #eee;
+        cursor: ew-resize;
+        z-index: 100;
+    }
+}
+
+// LEFT COLUMN (layers & levels & buttons)
+
+.editor_layers
+{
+    float: left;
+    width: 100%;
+    min-width: 200px;
+    height: 200px;
+    overflow-y: auto;
+
+    & .editor_layer
+    {
+        width: 100%;
+        height: 40px;
+        float: left;
+        display: flex;
+        flex-direction: row;
+        color: #666;
+
+        &:hover
+        {
+            background: #eee;
+            cursor: pointer;
+        }
+
+        &_icon
+        {
+            width: 40px;
+            height: 40px;
+            padding: 4px;
+            box-sizing: border-box;
+            float: left;
+
+            &::after { background-color: #666; }
+        }
+
+        &_name
+        {
+            flex: 1;
+            height: 40px;
+            padding: 10px 0 10px 0;
+            box-sizing: border-box;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            float: left;
+        }
+
+        &_visibility
+        {
+            width: 40px;
+            height: 40px;
+            padding: 12px;
+            box-sizing: border-box;
+
+            &::after { background: #666; }
+            &:hover::after { background-color: #000; }
+        }
+
+        &.selected
+        {
+            background: #e28fa3;
+            color: #000;
+            font-weight: bold;
+        }
+        &.selected &_icon::after { background-color: #000; }
+        &.selected &_visibility::after { background-color: #000; }
+    }
+
+}
+
+.editor_levels
+{
+    float: left;
+    width: 100%;
+    min-width: 200px;
+    min-height: 200px;
+    flex-direction: column;
+    display: flex;
+    flex: 1;
+
+	.options
+	{
+		width: 100%;
+		padding: 0 4px 4px 4px;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: row;
+	}
+
+	.options > .button
+    {
+		width: 34px;
+		height: 34px;
+		border-radius: 4px 0 0 4px;
+		border-right: 0;
+		margin: 0;
+    }
+
+	.searchbar
+	{
+		margin: 0;
+		padding: 0;
+		border-radius: 0 !important;
+		flex: 1;
+
+		&_icon { border-radius: 0; border-bottom: 1px solid #aaa; }
+		&_field { border-bottom-right-radius: 4px; border-bottom: 1px solid #aaa; }
+	}
+
+    .levelsPanel
+    {
+        margin: 0;
+        border-bottom: 1px solid #aaa;
+        box-sizing: border-box;
+        width: 100%;
+        overflow-y: auto;
+        flex: 1;
+    }
+}
+
+.editor_buttons
+{
+    float: left;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 200px;
+	display: flex;
+	flex-direction: row;
+
+    & .button { width: 100%; }
+    & .close-project { border: 0; width: 34px; }
+    & .refresh-project { border-right: 0; border-top: 0; border-bottom: 0; width: 34px; }
+    & .edit-project { border-right: 0; border-top: 0; border-bottom: 0; }
+}
+
+// RIGHT PANEL (palette & selection)
+
+.editor_palette
+{
+    width: 100%;
+    min-width: 180px;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+	& .searchbar
+	{
+		padding: 4px; 
+	}
+
+    & .entityPalette
+    {
+        width: 100%;
+        flex: 1;
+        overflow-y: auto;
+        float: left;
+        box-sizing: border-box;
+    }
+
+    & .gridBrushes
+    {
+        position: relative;
+        width: 100%;
+        height: 128px;
+        float: left;
+        background: #eee;
+
+        &_left, &_right
+        {
+            position: absolute;
+            width: 40px;
+            height:  40px;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-70%) translateY(-70%);
+            background: url(../img/transparent.png);
+            border: 3px solid #fff;
+        }
+        &_left div, &_right div
+        {
+            width: 100%;
+            height: 100%;
+            float: left;
+        }
+
+        &_right
+        {
+            transform: translateX(-30%) translateY(-30%);
+        }
+    }
+
+    & .gridPalette
+    {
+        width: 100%;
+    	float: left;
+
+        &_color
+        {
+            width: 25%;
+        	height: 40px;
+        	border-right: 1px solid #fff;
+        	border-bottom: 1px solid #fff;
+        	box-sizing: border-box;
+        	float: left;
+        	cursor: pointer;
+        	background: url(../img/transparent.png);
+        }
+        &_color:nth-child(4n+0) { border-right: 0; }
+        &_color div
+        {
+            width: 100%;
+            height: 100%;
+			padding: 8px;
+			text-align: center;
+			text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
+			color: #000;
+			font-weight: bold;
+			box-sizing: border-box;
+            float: left;
+        }
+    }
+
+	& .decalPalette
+	{
+		width: 100%;
+		flex: 1;
+        overflow-y: auto;
+
+		& .decal-folder
+		{
+			position: relative;
+			width: 100%;
+			padding: 8px;
+			box-sizing: border-box;
+			float: left;
+			margin-bottom: 2px;
+			font-weight: bold;
+			color: #666;
+			background: #eee;
+			cursor: pointer;
+
+			&:hover { color: #000; background: #eee; }
+		}
+
+		& .decal
+		{
+			position: relative;
+			width: 70px;
+			height: 70px;
+			display: block;
+			float: left;
+			margin: 2px;
+			background: url("../img/transparent.png");
+			opacity: 0.60;
+			transition: opacity 0.25s;
+			border: 2px solid #fff;
+			box-sizing: border-box;
+			cursor: pointer;
+
+			& img 
+			{
+				position: absolute;
+				max-width: 100%;
+				max-height: 100%;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				image-rendering: pixelated;
+				-webkit-image-rendering: pixelated;
+			}
+
+			&:hover { opacity: 1; }
+			&.selected { opacity: 1; border: 2px solid #00ff00; }
+		}
+	}
+
+}
+
+.editor_selection
+{
+    width: 100%;
+    min-width: 180px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    & .entityList
+    {
+        flex: 0 1;
+        min-height: 30px;
+    }
+}
+
+.valueEditors
+{
+	flex: 1 1;
+	width: 100%;
+	min-height: 40px;
+	box-sizing: border-box;
+	overflow-y: auto;
+}
+
+.valueEditor
+{
+	width: 100%;
+	padding: 2px 10px 2px 10px;
+	box-sizing: border-box;
+	float: left;
+
+	&_title
+	{
+		width: 100%;
+		margin: 6px 0 4px 0;
+		padding: 0;
+		float: left;
+		display: block;
+
+		text-transform: uppercase;
+		font-size: 0.8em;
+		font-weight: bold;
+		word-wrap: break-word;
+		line-height: 0.9em;
+		color: #555;
+	}
+
+	&_content
+	{
+		float: left;
+		display: block;
+		width: 100%;
+	}
+
+	&_content > .button { width: 100%; }
+}
+
+// STICKERS
+
+.sticker
+{
+    position: absolute;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 8px;
+    background: rgba(255,255,255,0.8);
+    font-size: 12px;
+    font-weight: bold;
+    color: #111;
+    height: 32px;
+
+    &-toolbar
+    {
+        left: 0;
+        top: 0;
+        height: 40px;
+        border-radius: 0 0 4px 0;
+        border-left: 1px solid #aaa;
+        padding: 0;
+        font-size: 18px;
+
+        .tool
+        {
+            width: 40px;
+            height: 40px;
+            padding: 10px;
+            box-sizing: border-box;
+            float: left;
+            cursor: pointer;
+            border-right: 1px solid #aaa;
+            text-align: center;
+            transition: background 0.25s, color 0.25s;
+        }
+		.tool:after { transition: background-color 0.25s; }
+        .tool:last-child { border-right: 0; border-radius: 0 0 4px 0; }
+
+        .tool:hover  { background: #fff; }
+        .tool.selected { background: #fff; }
+		.tool.selected:after { background-color: #ff0044; }
+        .tool.key-selected { background: #fff; }
+        .tool.swap-selected { background: #aaa; color: #666; }
+    }
+
+    &-center
+    {
+        left: 0;
+        bottom: 0;
+        border-radius: 0;
+        width: 34px;
+        border-left: 1px solid #aaa;
+        border-right: 1px solid #aaa;
+
+        &:hover
+        {
+            background: #fff;
+            color: #000;
+            cursor: pointer;
+        }
+    }
+
+    &-zoom
+    {
+        left: 34px;
+        bottom: 0;
+        border-radius: 0 4px 0 0;
+    }
+
+    &-mouse
+    {
+        right: 0;
+        bottom: 0;
+        border-radius: 4px 0 0 0;
+    }
+
+    &-size
+    {
+        left: 50%;
+        transform: translateX(-50%);
+        padding-left: 24px;
+        padding-right: 24px;
+        bottom: 20px;
+        opacity: 0;
+        pointer-events: none;
+        transition: bottom 0.25s, opacity 0.25s;
+
+        &.active
+        {
+            bottom: 40px;
+            opacity: 1;
+        }
+    }
+
+    &-action
+    {
+        left: 50%;
+        transform: translateX(-50%);
+        padding-left: 8px;
+        padding-right: 16px;
+        height: 48px;
+        top: -30px;
+        opacity: 0;
+        pointer-events: none;
+        transition: top 0.25s, opacity 0.25s;
+
+        &.active
+        {
+            top: -4px;
+            opacity: 1;
+        }
+
+        & .undo .layer
+        {
+            color: red;
+        }
+
+        & .redo .layer
+        {
+            color: #4B898E;
+        }
+
+        & .label
+        {
+            float: left;
+            margin-top: 8px;
+        }
+
+        & .icon
+        {
+            float: left;
+            padding-right: 8px;
+        }
+
+        & .icon-undo::after
+        {
+            background-color: red;
+        }
+
+        & .icon-redo::after
+        {
+            background-color: #4B898E;
+        }
+    }
+}

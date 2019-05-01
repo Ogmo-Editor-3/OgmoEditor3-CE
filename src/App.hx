@@ -19,7 +19,10 @@ class App
 
 		ElectronApp.on('ready', (e) -> createWindow());
 
-    }
+		// On macOS it's common to re-create a window in the app when the
+		// dock icon is clicked and there are no other windows open.
+		ElectronApp.on('activate', (e) -> if (mainWindow == null) createWindow());
+  }
 
 	static function createWindow()
 	{
@@ -58,7 +61,7 @@ class App
 
 		// Compile in debug mode to open dev tools on startup
 		#if debug
-			mainWindow.webContents.openDevTools();
+		mainWindow.webContents.openDevTools();
 		#end
 	}
 
