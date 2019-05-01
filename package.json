@@ -7,9 +7,8 @@
     "main": "app.js",
     "scripts": {
         "start": "electron ./bin",
-        "build": "webpack",
-        "dev": "webpack-dev-server --host 0.0.0.0",
-        "prod": "webpack --mode=production"
+        "build": "webpack --config=webpack.app.config.js --mode=production && webpack --config=webpack.ogmo.config.js --mode=production",
+        "dev": "webpack --config=webpack.app.config.js --mode=development && webpack-dev-server --config=webpack.ogmo.config.js --mode=development --host 0.0.0.0"
     },
     "devDependencies": {
         "copy-webpack-plugin": "^5.0.3",

@@ -16,7 +16,13 @@ npm run build
 This builds the App and puts it in the `bin` directory. You can then start the app by running `npm start`, or by starting electron in the directory.
 
 ## Development
-After building the app, you can speed up development by using Webpack's dev server. Running `npm run dev` starts electron and a server that will watch for changes in the project. If changes are found, Webpack will rebuild the source and refresh the app. If there are errors, they will show up in the DevTools.
+Speed up development by using Webpack's dev server! Running `npm run dev` builds the app, starts a server that will watch for changes in the project, then starts electron. If changes are found, Webpack will rebuild the source and refresh the app. If there are errors, they will show up in the app's DevTools.
+
+While running the dev server, all code that is within `#if debug` conditionals are added in.
+
+NOTES: 
+  * Changes to `App.hx` are not watched, and the app will need to manually be rebuilt if changes are made there.
+  * The app will need to be rebuilt normally (`npm run build`) in order to run it again after using the dev server.
 
 ## Packaging
 TODO
