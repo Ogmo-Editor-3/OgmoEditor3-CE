@@ -6,8 +6,9 @@
     "private": true,
     "main": "app.js",
     "scripts": {
-        "start": "webpack-dev-server --host 0.0.0.0",
+        "start": "electron ./bin",
         "build": "webpack",
+        "dev": "webpack-dev-server --host 0.0.0.0",
         "prod": "webpack --mode=production"
     },
     "devDependencies": {
