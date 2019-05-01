@@ -102,7 +102,7 @@ class FileSystem
 		if (FileSystem.exists(path))
 		{
 			var image = Browser.document.createImageElement();
-			var b = new Buffer(Fs.readFileSync(path));
+			var b = Buffer.from(Fs.readFileSync(path));
 			image.src = "data:image/png;base64," + b.toString("base64");
 			return image;
 		}
