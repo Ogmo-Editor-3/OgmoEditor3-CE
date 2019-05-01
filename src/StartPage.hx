@@ -23,7 +23,7 @@ class StartPage
 
 		new JQuery(".start_openProject").click(function(e)
 		{
-			var path = FileSystem.chooseFile("Selecto Project", [{ name: "Ogmo Editor Project", extensions: ["ogmo"]}]);
+			var path = FileSystem.chooseFile("Select Project", [{ name: "Ogmo Editor Project", extensions: ["ogmo"]}]);
 			if (FileSystem.exists(path)) onOpenProject(path);
 		});
 	}

@@ -1,4 +1,3 @@
-const path = require('path');
 const { spawn } = require('child_process');
 const CopyPlugin = require('copy-webpack-plugin');
 const buildMode = process.env.NODE_ENV || 'development';

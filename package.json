@@ -7,10 +7,8 @@
     "main": "app.js",
     "scripts": {
         "start": "webpack-dev-server --host 0.0.0.0",
-        "watch": "webpack --watch",
         "build": "webpack",
-        "prod": "webpack --mode=production",
-        "scss": "node-sass styles/core.scss -o bin"
+        "prod": "webpack --mode=production"
     },
     "devDependencies": {
         "copy-webpack-plugin": "^5.0.3",
