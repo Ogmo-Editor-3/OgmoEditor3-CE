@@ -12,7 +12,7 @@ class App
 	static var mainWindow:BrowserWindow = null;
 	static var forceClose:Bool = false;
 
-    static function main()
+  static function main()
 	{
 		ElectronApp.on('window_all_closed', (e) -> {
 			if (process.platform != 'darwin') ElectronApp.quit();
@@ -35,6 +35,9 @@ class App
 			height: 768,
 			minWidth: 1024,
 			minHeight: 600,
+			webPreferences: {
+				nodeIntegration: true
+			} 
 		});
 
 		// Closing Stuff
