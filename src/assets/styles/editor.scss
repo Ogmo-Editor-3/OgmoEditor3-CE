@@ -242,7 +242,7 @@
             left: 50%;
             top: 50%;
             transform: translateX(-70%) translateY(-70%);
-            background: url(gfx/transparent.png);
+            background: url(../img/transparent.png);
             border: 3px solid #fff;
         }
         &_left div, &_right div
@@ -272,7 +272,7 @@
         	box-sizing: border-box;
         	float: left;
         	cursor: pointer;
-        	background: url(gfx/transparent.png);
+        	background: url(../img/transparent.png);
         }
         &_color:nth-child(4n+0) { border-right: 0; }
         &_color div
@@ -319,7 +319,7 @@
 			display: block;
 			float: left;
 			margin: 2px;
-			background: url("gfx/transparent.png");
+			background: url("../img/transparent.png");
 			opacity: 0.60;
 			transition: opacity 0.25s;
 			border: 2px solid #fff;

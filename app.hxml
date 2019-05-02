@@ -1,0 +1,7 @@
+-lib electron
+-lib jQueryExtern
+-lib haxe-loader
+-cp src
+-dce full
+-js bin/app.js
+-main App

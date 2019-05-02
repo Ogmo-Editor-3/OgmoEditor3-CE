@@ -58,8 +58,16 @@ class EntityResizeTool extends EntityTool
 
 	override public function onRightDown(pos:Vector)
 	{
-		// TODO - somehow the last entity size is being cached somewhere, resize twice then right click twice -01010111
-		for (entity in layer.entities.getGroup(layerEditor.selection)) entity.resize(entity.template.size.clone().sub(entity.size));
+		var changed = false;
+		for (entity in layer.entities.getGroup(layerEditor.selection)) if (!entity.size.equals(entity.template.size))
+		{
+			if (!changed)
+			{
+				EDITOR.level.store("resize entities");
+				changed = true;
+			}
+			entity.resetSize();
+		}
 		EDITOR.dirty();
 	}
 

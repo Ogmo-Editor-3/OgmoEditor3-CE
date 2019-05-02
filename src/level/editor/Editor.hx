@@ -651,7 +651,7 @@ class Editor
 			case Keys.Minus:
 				if (EDITOR.level != null) EDITOR.level.zoomCamera(-1);
 			case Keys.Z:
-				if (OGMO.ctrl && EDITOR.level != null && !EDITOR.locked) EDITOR.level.stack.undo();
+				if (OGMO.ctrl && EDITOR.level != null && !EDITOR.locked) OGMO.shift ? EDITOR.level.stack.redo() : EDITOR.level.stack.undo();
 			case Keys.Y:
 				if (OGMO.ctrl && EDITOR.level != null && !EDITOR.locked) EDITOR.level.stack.redo();
 		}
