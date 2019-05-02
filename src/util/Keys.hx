@@ -17,7 +17,7 @@ abstract Keys(Int) from Int to Int
     var Escape:Int = 27;
     var Space:Int = 32;
     var Delete:Int = 46;
-    /*var Cmd:Int = 91;*/ // TODO #8 -01010111
+    var Cmd:Int = 91;
 
     var Left:Int = 37;
     var Up:Int = 38;
