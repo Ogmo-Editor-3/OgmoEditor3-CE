@@ -265,7 +265,7 @@ class Ogmo
 
 	function get_ctrl():Bool
 	{
-		return keyCheckMap[Keys.Ctrl]/*  || keyCheckMap[Keys.Cmd]*/; // TODO #8 -01010111
+		return keyCheckMap[Keys.Ctrl] || keyCheckMap[Keys.Cmd]; 
 	}
 
 	function get_shift():Bool

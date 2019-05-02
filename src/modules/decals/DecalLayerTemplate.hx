@@ -11,6 +11,8 @@ import project.data.LayerDefinition;
 import project.data.value.ValueTemplate;
 import modules.decals.tools.DecalCreateTool;
 import modules.decals.tools.DecalSelectTool;
+import modules.decals.tools.DecalResizeTool;
+import modules.decals.tools.DecalRotateTool;
 import util.Klaw;
 import util.NSFW;
 
@@ -28,7 +30,9 @@ class DecalLayerTemplate extends LayerTemplate
 	{
 		var tools:Array<Tool> = [
 			new DecalSelectTool(),
-			new DecalCreateTool()
+			new DecalCreateTool(),
+			new DecalResizeTool(),
+			new DecalRotateTool(),
 		];
 		var n = new LayerDefinition(DecalLayerTemplate, DecalLayerTemplateEditor, "decal", "image", "Decal Layer", tools, 4);
 		LayerDefinition.definitions.push(n);
@@ -47,7 +51,7 @@ class DecalLayerTemplate extends LayerTemplate
 
   override function createEditor(id:Int): LayerEditor
   {
-    return new DecalLayerEditor(id);
+	return new DecalLayerEditor(id);
   }
 
   override function createLayer(level:Level, id:Int):DecalLayer
@@ -57,24 +61,24 @@ class DecalLayerTemplate extends LayerTemplate
 
   override function save():Dynamic
   {
-    var data:Dynamic = super.save();
-    data.folder = folder;
-    data.includeImageSequence = includeImageSequence;
-    data.scaleable = scaleable;
-    data.rotatable = rotatable;
-    data.values = ValueTemplate.saveList(values);
-    return data;
+	var data:Dynamic = super.save();
+	data.folder = folder;
+	data.includeImageSequence = includeImageSequence;
+	data.scaleable = scaleable;
+	data.rotatable = rotatable;
+	data.values = ValueTemplate.saveList(values);
+	return data;
   }
   
   override function load(data:Dynamic):DecalLayerTemplate
   {
-    super.load(data);
-    folder = data.folder;
-    includeImageSequence = data.includeImageSequence;
-    scaleable = data.scaleable;
-    rotatable = data.rotatable;
-    values = ValueTemplate.loadList(data.values);
-    return this;
+	super.load(data);
+	folder = data.folder;
+	includeImageSequence = data.includeImageSequence;
+	scaleable = data.scaleable;
+	rotatable = data.rotatable;
+	values = ValueTemplate.loadList(data.values);
+	return this;
   }
 
 	override function projectWasLoaded(project:Project):Void
@@ -125,7 +129,7 @@ class DecalLayerTemplate extends LayerTemplate
 				{
 					// get next name
 					var nextName = Path.basename(texture);
-          // TODO - willl have to double check this
+					// TODO - willl have to double check this
 					nextName = '.' + nextName.split(".").pop();
 					
 					// remove numbers

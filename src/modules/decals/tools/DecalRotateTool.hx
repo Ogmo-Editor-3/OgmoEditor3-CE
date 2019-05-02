@@ -1,6 +1,5 @@
 package modules.decals.tools;
 
-// TODO #10 -01010111
 class DecalRotateTool extends DecalTool
 {
 
@@ -24,8 +23,8 @@ class DecalRotateTool extends DecalTool
 		origin.x /= decals.length;
 		origin.y /= decals.length;
 
-		pos.clone(start);
-		pos.clone(last);
+		start = pos.clone();
+		last = pos.clone();
 
 		rotating = true;
 		firstChange = false;
@@ -50,17 +49,26 @@ class DecalRotateTool extends DecalTool
 			EDITOR.level.store('rotate decals');
 		}
 		var angle = Calc.angleTo(origin, pos);
-		var initial = Calc.angleTo(origin, start);
-		//for (decal in decals) decal.rotate(angle - initial);
+		var initial = Calc.angleTo(origin, last);
+		for (decal in decals) decal.rotate(angle - initial);
 		EDITOR.dirty();
 		pos.clone(last);
 	}
 
-	// TODO #2 -01010111
-	/*override public function onRightDown(pos:Vector)
+	override public function onRightDown(pos:Vector)
 	{
-		for (decal in layer.decals.getGroup(layerEditor.selection)) decal.rotate(-decal.rotation);
-	}*/
+		var changed = false;
+		for (decal in layerEditor.selected) if (decal.rotation != 0)
+		{
+			if (!changed)
+			{
+				EDITOR.level.store("rotate entities");
+				changed = true;
+			}
+			decal.rotation = 0;
+		}
+		EDITOR.dirty();
+	}
 
 	override public function drawOverlay()
 	{

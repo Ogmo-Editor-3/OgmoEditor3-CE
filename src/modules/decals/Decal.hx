@@ -54,19 +54,22 @@ class Decal
 		return texture != null ? texture.height : 32;
 	}
 
-	// TODO #10 -01010111
-	/*public function rotate(diff:Float)
+	public function rotate(diff:Float)
 	{
-		rotation = rotation + diff * Calc.RTD;
-		rotation = Calc.snap(rotation, 360);
+		rotation = rotation + diff;
 	}
 
 	public function resize(diff:Vector)
 	{
+		diff.scale(0.1);
 		scale.set(
-			width * scale.x + diff.x / width,
-			height * scaly.y + diff.y / height
+			scale.x + diff.x,
+			scale.y + diff.y
 		);
-	}*/
+		// TODO - there's probably a more elegant way of doing this! -01010111
+		if (OGMO.ctrl) return;
+		scale.x = Calc.snap(scale.x, 1);
+		scale.y = Calc.snap(scale.y, 1);
+	}
 
 }
