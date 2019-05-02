@@ -28,7 +28,7 @@
     },
     "dependencies": {
         "chokidar": "^2.1.5",
-        "jquery": "^3.4.0",
+        "jquery": "2.2.0",
         "klaw": "^3.0.0",
         "nsfw": "^1.2.2"
     }

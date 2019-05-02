@@ -193,6 +193,7 @@ class TilePalettePanel extends SidePanel
 	
 	public function mouseUp(e:Event):Void
 	{
+		if (EDITOR.level == null || layerEditor.layer == null) return; 
 		var tile = getMouseTile(e);
 		if (selectionActive)
 		{

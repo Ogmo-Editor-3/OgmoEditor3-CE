@@ -7,7 +7,6 @@ import js.node.Fs;
 import js.node.Path;
 import electron.Shell;
 import util.ItemList;
-import util.Chokidar;
 import util.Klaw;
 import util.NSFW;
 import util.RightClickMenu;
@@ -15,8 +14,10 @@ import util.Popup;
 
 typedef PanelItem =
 {
-  >Item,
-  children:Array<PanelItem>
+  path:String,
+  dirname:String,
+  ?children:Array<PanelItem>,
+  ?node:ItemListNode
 }
 
 class LevelsPanel extends SidePanel
@@ -26,18 +27,16 @@ class LevelsPanel extends SidePanel
   public var newbutton:JQuery;
   public var opened: Map<String, Bool> = new Map();
   public var currentSearch:String = "";
-  public var searchTimer:Int;
+  public var refreshTimer:Int;
   public var itemlist:ItemList;
   public var unsavedFolder:ItemListFolder = null;
 
-  var ready:Bool = false;
   var items:Array<PanelItem> = [];
   var walkers:Array<Walker> = [];
   var watchers:Array<NSFW> = [];
 
   override public function populate(into:JQuery):Void
   {
-    ready = false;
     into.empty();
 
     var options = new JQuery('<div class="options">');
@@ -50,11 +49,7 @@ class LevelsPanel extends SidePanel
 
     // search bar
     searchbar = new JQuery('<div class="searchbar"><div class="searchbar_icon icon icon-magnify-glass"></div><input class="searchbar_field"/></div>');
-    searchbar.find("input").on("change keyup", function() 
-    { 
-      if (searchTimer != null) Browser.window.clearTimeout(searchTimer);
-      searchTimer = Browser.window.setTimeout(refresh, 300); 
-    });
+    searchbar.find("input").on("change keyup", refresh);
     options.append(searchbar);
 
     // levels list
@@ -62,12 +57,92 @@ class LevelsPanel extends SidePanel
     into.append(levels);
 
     itemlist = new ItemList(levels);
-    items = [];
+    items.resize(0);
 
     if (OGMO.project != null) {
+      function recursiveAdd(item:Item, parent:PanelItem):Bool
+      {
+        if (OGMO.project == null) return false;
+        // if item's directory is the root folder, add to that
+        var dirname = Path.dirname(item.path);
+        if (dirname == parent.path)
+        {
+          // Remove any duplicates
+          for (child in parent.children) if (item.path == child.path) parent.children.remove(child);
+
+          if (item.stats.isDirectory())
+          {
+            // Add Folder
+            parent.children.push({
+              path: item.path,
+              dirname: dirname,
+              children: []
+            });
+          }
+          else if (item.stats.isFile() && item.path != OGMO.project.path)
+          {
+            
+            // Add File
+            parent.children.push({
+              path: item.path,
+              dirname: dirname,
+            });
+          }
+                     
+          refresh();
+          return true;
+        }
+        // otherwise search for directory to add
+        else {
+          var found = false;
+          if (parent.children != null)
+          {
+            var i = 0;
+            while (i < parent.children.length && !found)
+            {
+              found = recursiveAdd(item, parent.children[i]);
+              i++;
+            }
+          }
+          return found;
+        }
+      }
+
+      function recursiveRemove(path:String, parent:PanelItem)
+      {
+        if (parent.children == null) return;
+        for (child in parent.children)
+        {
+          if (path == child.path)
+          {
+            parent.children.remove(child);
+          }
+          else if (child.children != null) for (c in child.children) 
+          {
+            if (path == c.path) child.children.remove(c);
+            recursiveRemove(path, c);
+          }
+        }
+      }
+
       var paths = OGMO.project.getAbsoluteLevelDirectories();
       for(i in 0...paths.length)
       {
+        if (walkers[i] != null) walkers[i].destroy();
+
+        items[i] = {
+          path: paths[i],
+          dirname: Path.dirname(paths[i]),
+          children: FileSystem.stat(paths[i]).isDirectory() ? [] : null
+        }
+
+        walkers[i] = new Walker(paths[i], {depthLimit: OGMO.project.directoryDepth})
+        .on("data", (item:Item) -> { if(item.path != paths[i] && items[i].children != null) recursiveAdd(item, items[i]); })
+        .on("end", () -> 
+        {
+          trace(items);
+          refresh();
+        });
         NSFW.create(paths[i], (events) -> 
         {
           for (event in events)
@@ -76,13 +151,23 @@ class LevelsPanel extends SidePanel
             {
               case CREATED:
                 trace('Item ${event.file} has been added');
+                var path = Path.join(event.directory, event.file);
+                if(path != paths[i] && items[i].children != null) recursiveAdd({path: path, stats: FileSystem.stat(path)}, items[i]);
               case DELETED:
                 trace('Item ${event.file} has been deleted');
+                var path = Path.join(event.directory, event.file);
+                if(path != paths[i] && items[i].children != null) recursiveRemove(path, items[i]);
               case MODIFIED:
                 trace('Item ${event.file} has been modified');
               case RENAMED:
+                trace('Item ${event.oldFile} has been renamed to ${event.newFile}');
+                var path = Path.join(event.directory, event.oldFile);
+                if(path != paths[i] && items[i].children != null) recursiveRemove(path, items[i]);
+                path = Path.join(event.directory, event.newFile);
+                if(path != paths[i] && items[i].children != null) recursiveAdd({path: path, stats: FileSystem.stat(path)}, items[i]);
             }
           }
+          refresh();
         }).then(nsfw -> {
           if (watchers[i] != null) watchers[i].stop();
           watchers[i] = nsfw;
@@ -95,126 +180,111 @@ class LevelsPanel extends SidePanel
 
   override function refresh():Void
   {
-    if (levels == null) return;
-        
-    var scroll = levels.scrollTop();
-    currentSearch = getSearchQuery();
+    if (refreshTimer == null) refreshTimer = Browser.window.setTimeout(() -> 
+    { 
+      refreshTimer = null;
+      if (levels == null) return;
+          
+      var scroll = levels.scrollTop();
+      currentSearch = getSearchQuery();
 
-    itemlist.empty();
+      itemlist.empty();
 
-    //Add unsaved levels
-    unsavedFolder = new ItemListFolder("Unsaved Levels", ":Unsaved");
-    unsavedFolder.setFolderIcons("folder-star-open", "folder-star-closed");
-    unsavedFolder.onrightclick = inspectUnsavedFolder;
-    itemlist.add(unsavedFolder);
+      //Add unsaved levels
+      unsavedFolder = new ItemListFolder("Unsaved Levels", ":Unsaved");
+      unsavedFolder.setFolderIcons("folder-star-open", "folder-star-closed");
+      unsavedFolder.onrightclick = inspectUnsavedFolder;
+      itemlist.add(unsavedFolder);
 
-    var unsaved = EDITOR.levelManager.getUnsavedLevels();
-    if (unsaved.length > 0)
-    {
-      for (i in 0...unsaved.length)
+      var unsaved = EDITOR.levelManager.getUnsavedLevels();
+      if (unsaved.length > 0)
       {
-        var path = unsaved[i].managerPath;
-        var item = new ItemListItem(unsaved[i].displayName, path);
-
-        //Icon
-        item.setKylesetIcon("radio-on");
-
-        //Selected?
-        if (EDITOR.level != null) item.selected = (EDITOR.level.managerPath == path);
-
-        //Events
-        item.onclick = selectLevel;
-        item.onrightclick = inspectUnsavedLevel;
-
-        unsavedFolder.add(item);
-      }
-    }
-
-    //Add root folders if necessary, and recursively populate them
-    if (OGMO.project != null) {
-      var paths = OGMO.project.getAbsoluteLevelDirectories();
-      for (i in 0...paths.length)
-      {
-        if (!FileSystem.exists(paths[i]))
+        for (i in 0...unsaved.length)
         {
-          var broken = new ItemListFolder(Path.basename(paths[i]), paths[i]);
-          broken.onrightclick = inspectBrokenFolder;
-          broken.setFolderIcons("folder-broken", "folder-broken");
-          itemlist.add(broken);
+          var path = unsaved[i].managerPath;
+          var item = new ItemListItem(unsaved[i].displayName, path);
+
+          //Icon
+          item.setKylesetIcon("radio-on");
+
+          //Selected?
+          if (EDITOR.level != null) item.selected = (EDITOR.level.managerPath == path);
+
+          //Events
+          item.onclick = selectLevel;
+          item.onrightclick = inspectUnsavedLevel;
+
+          unsavedFolder.add(item);
         }
-        else if (FileSystem.stat(paths[i]).isDirectory())
-        {
-          var addTo = itemlist.add(new ItemListFolder(Path.basename(paths[i]), paths[i]));
-          addTo.onrightclick = inspectFolder;
-          addTo.setFolderIcons("folder-dot-open", "folder-dot-closed");
+      }
 
-          function recursiveAdd(item:Item, node:ItemListNode):Bool
+      //Add root folders if necessary, and recursively populate them
+      if (OGMO.project != null) {
+        for (panelItem in items)
+        {
+          panelItem.node = null;
+          var path = panelItem.path;
+          if (!FileSystem.exists(path))
           {
-            if (OGMO.project == null) return false;
-            // if item's directory is the root folder, add to that
-            var dirname = Path.dirname(item.path);
-            if (dirname == node.data)
-            {
-              var filename = EDITOR.levelManager.getDisplayName(item.path);
-              if (item.stats.isDirectory())
-              {
-                // Add Folder
-                var foldernode = node.add(new ItemListFolder(filename, item.path));
-                // Events
-                foldernode.onrightclick = inspectFolder;
-              }
-              else if (item.stats.isFile() && item.path != OGMO.project.path)
-              {
-                // Add File
-                var filenode = node.add(new ItemListItem(filename, item.path));
-                // Events
-                filenode.onclick = selectLevel;
-                filenode.onrightclick = inspectLevel;
-              }
-              return true;
-            }
-            // otherwise search for directory to add
-            else {
-              var found = false;
-              var i = 0;
-              while (i < node.children.length && !found)
-              {
-                found = recursiveAdd(item, node.children[i]);
-                i++;
-              }
-              return found;
-            }
+            var broken = panelItem.node = new ItemListFolder(Path.basename(path), path);
+            broken.onrightclick = inspectBrokenFolder;
+            broken.setFolderIcons("folder-broken", "folder-broken");
+            itemlist.add(broken);
           }
-
-          if (walkers[i] != null) walkers[i].destroy();
-          walkers[i] = new Walker(paths[i])
-          .on("data", (item:Item) -> { if(item.path != addTo.data) recursiveAdd(item, addTo); })
-          .on("end", () -> 
+          else if (panelItem.children != null)
           {
-            if (OGMO.project == null) return;
-            ready = true;
-            // Search or use remembered expand states
-            if (currentSearch != "")
+            function recursiveAdd(item:PanelItem, parent:PanelItem)
             {
-              var i = itemlist.children.length - 1;
-              while (i >= 0) 
+              item.node = null;
+              // if item's directory is the root folder, add to that
+              if (item.dirname == parent.path)
               {
-                recursiveFilter(itemlist, itemlist.children[i], currentSearch);
-                i--;
+                var filename = EDITOR.levelManager.getDisplayName(item.path);
+                if (item.children != null)
+                {
+                  // Add Folder
+                  var foldernode = item.node = parent.node.add(new ItemListFolder(filename, item.path));
+                  // Events
+                  foldernode.onrightclick = inspectFolder;
+                }
+                else if (item.path != OGMO.project.path)
+                {
+                  // Add File
+                  var filenode = item.node = parent.node.add(new ItemListItem(filename, item.path));
+                  // Events
+                  filenode.onclick = selectLevel;
+                  filenode.onrightclick = inspectLevel;
+                }      
               }
+              // search for directory to add
+              if (item.children != null) for (child in item.children) recursiveAdd(child, item);
             }
-            else recursiveFolderExpandCheck(itemlist);
 
-            // TODO - folders are getting removed but not added back in? - austin
-            //Sort folders to the top
-            // itemlist.foldersToTop(true);
-
-            //Figure out labels and icons
-            refreshLabelsAndIcons();
-          });
+            var addTo = panelItem.node = itemlist.add(new ItemListFolder(Path.basename(path), path));
+            addTo.onrightclick = inspectFolder;
+            addTo.setFolderIcons("folder-dot-open", "folder-dot-closed");
+            for (item in panelItem.children) recursiveAdd(item, panelItem);
+          }
         }
+        // Search or use remembered expand states
+        if (currentSearch != "")
+        {
+          var i = itemlist.children.length - 1;
+          while (i >= 0) 
+          {
+            recursiveFilter(itemlist, itemlist.children[i], currentSearch);
+            i--;
+          }
+        }
+        else recursiveFolderExpandCheck(itemlist);
+
+        //Sort folders to the top
+        itemlist.foldersToTop(true);
+
+        //Figure out labels and icons
+        refreshLabelsAndIcons();
       }
-    }
+     }, 150);
   }
 
   public function refreshLabelsAndIcons():Void
@@ -241,11 +311,14 @@ class LevelsPanel extends SidePanel
     });
 
     //Remove unsaved levels that aren't open (they're lost forever)
-    var i = unsavedFolder.children.length - 1;
-    while (i >= 0)
+    if (unsavedFolder != null)
     {
-      if (!EDITOR.levelManager.isOpen(unsavedFolder.children[i].data)) unsavedFolder.removeAt(i);
-      i--;
+      var i = unsavedFolder.children.length - 1;
+      while (i >= 0)
+      {
+        if (!EDITOR.levelManager.isOpen(unsavedFolder.children[i].data)) unsavedFolder.removeAt(i);
+        i--;
+      }
     }
 
     //Expand folders that contain the selected level
@@ -255,37 +328,6 @@ class LevelsPanel extends SidePanel
       opened[item.data] = true;
     });
   }
-
-  // function recursiveAdd(node:ItemListNode, path:String):Void
-  // {
-  //   var files = FileSystem.readDirectory(path);
-  //   for (i in 0...files.length)
-  //   {
-  //     var filepath = Path.join(path, files[i]);
-  //     var filename = EDITOR.levelManager.getDisplayName(filepath);
-
-  //     if (FileSystem.stat(filepath).isDirectory())
-  //     {
-  //       //Add Folder
-  //       var foldernode = node.add(new ItemListFolder(filename, filepath));
-
-  //       //Events
-  //       foldernode.onrightclick = inspectFolder;
-
-  //       //Rescurse in
-  //       recursiveAdd(foldernode, filepath);
-  //     }
-  //     else if (filepath != OGMO.project.path)
-  //     {
-  //       //Add File
-  //       var filenode = node.add(new ItemListItem(filename, filepath));
-
-  //       //Events
-  //       filenode.onclick = selectLevel;
-  //       filenode.onrightclick = inspectLevel;
-  //     }
-  //   }
-  // }
 
   function recursiveFolderExpandCheck(node: ItemListNode):Void
   {

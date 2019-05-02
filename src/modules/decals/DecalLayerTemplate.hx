@@ -11,6 +11,8 @@ import project.data.LayerDefinition;
 import project.data.value.ValueTemplate;
 import modules.decals.tools.DecalCreateTool;
 import modules.decals.tools.DecalSelectTool;
+import util.Klaw;
+import util.NSFW;
 
 typedef Files = 
 {
@@ -39,6 +41,9 @@ class DecalLayerTemplate extends LayerTemplate
 	public var textures:Array<Texture> = [];
 	public var scaleable:Bool;
 	public var rotatable:Bool;
+
+  var walkers:Array<Walker> = [];
+  var watchers:Array<NSFW> = [];
 
   override function createEditor(id:Int): LayerEditor
   {

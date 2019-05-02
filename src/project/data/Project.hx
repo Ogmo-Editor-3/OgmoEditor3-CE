@@ -18,6 +18,7 @@ class Project
 	public var gridColor:Color = Color.fromHex("#3c4049", 0.8);
 	public var anglesRadians:Bool = true;
 	public var defaultExportMode:String = ".json";
+	public var directoryDepth:Int = 5;
 
 	public var levelDefaultSize:Vector = new Vector(320, 240);
 	public var levelMinSize:Vector = new Vector(128, 128);
@@ -137,6 +138,7 @@ class Project
 		backgroundColor = Color.fromHexAlpha(data.backgroundColor);
 		gridColor = Color.fromHexAlpha(data.gridColor);
 		anglesRadians = data.anglesRadians;
+		directoryDepth = data.directoryDepth;
 		levelDefaultSize = Vector.load(data.levelDefaultSize);
 		levelMinSize = Vector.load(data.levelMinSize);
 		levelMaxSize = Vector.load(data.levelMaxSize);
@@ -176,6 +178,7 @@ class Project
 			backgroundColor: backgroundColor.toHexAlpha(),
 			gridColor: gridColor.toHexAlpha(),
 			anglesRadians: anglesRadians,
+			directoryDepth: directoryDepth,
 			levelDefaultSize: levelDefaultSize.save(),
 			levelMinSize: levelMinSize.save(),
 			levelMaxSize: levelMaxSize.save(),
@@ -214,6 +217,7 @@ typedef ProjectSaveFile =
 	backgroundColor:String,
 	gridColor:String,
 	anglesRadians:Bool,
+	directoryDepth:Int,
 	levelDefaultSize:{ x:Float, y:Float },
 	levelMinSize:{ x:Float, y:Float },
 	levelMaxSize:{ x:Float, y:Float },

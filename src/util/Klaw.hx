@@ -28,7 +28,6 @@ typedef WalkerOptions =
   ?preserveSymlinks: Bool
 }
 
-// TODO - ran tests and decided not to use. Separate out into its own haxelib lib? - austin
 @:jsRequire("klaw")
 extern class Walker extends Readable<Walker>
 {

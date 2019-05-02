@@ -327,7 +327,7 @@ class Level
 
 	public function clearZoomRect():Void
 	{
-		EDITOR.level.zoomRect = null;
+		if (EDITOR.level != null) EDITOR.level.zoomRect = null;
 		EDITOR.overlayDirty();
 	}
 

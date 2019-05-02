@@ -175,7 +175,7 @@ class ItemListNode
 	{
 			children.insert(index, item);
 			if (index == 0) childrenElement.prepend(item.element);
-			else if (index < children.length)	children[index].element.after(item.element);
+			else if (index < children.length)	children[index - 1].element.after(item.element);
 			item.parent = this;
 			return item;
 	}
@@ -215,8 +215,10 @@ class ItemListNode
 	//Removes an element without clearing its events
 	public function detach(item:ItemListNode):ItemListNode
 	{
-		if (children.remove(item))
+		var index = children.indexOf(item);
+		if (index >= 0)
 		{
+			children.splice(index, 1);
 			item.element.detach();
 			item.parent = null;
 		}
@@ -257,7 +259,7 @@ class ItemListNode
 				var folder = children[i];
 
 				if (index != i) move(folder, index);
-				index++;
+				index += 1;
 
 				if (recursive) folder.foldersToTop(true);
 			}
