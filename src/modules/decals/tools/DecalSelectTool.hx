@@ -99,7 +99,7 @@ class DecalSelectTool extends DecalTool
 				decal.scale.y = -decal.scale.y;
 			EDITOR.dirty();
 		}
-		else if (key == Keys.Delete/* || key == Keys.Backspace*/) // TODO #7 -01010111
+		else if (key == Keys.Delete || key == Keys.Backspace)
 		{
 			EDITOR.level.store("delete decals");
 			while (layerEditor.selected.length > 0)
