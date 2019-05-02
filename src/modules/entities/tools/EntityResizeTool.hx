@@ -66,7 +66,7 @@ class EntityResizeTool extends EntityTool
 				EDITOR.level.store("resize entities");
 				changed = true;
 			}
-			entity.resize(entity.template.size.clone().sub(entity.size));
+			entity.resetSize();
 		}
 		EDITOR.dirty();
 	}
