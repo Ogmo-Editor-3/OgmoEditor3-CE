@@ -4,6 +4,7 @@ import io.Imports;
 import util.Color;
 import js.Browser;
 import js.jquery.JQuery;
+import js.Node.process;
 import electron.renderer.Remote;
 import io.LevelManager;
 import level.data.Level;
@@ -629,8 +630,10 @@ class Editor
 				dPress(key);
 			case Keys.Shift:
         if (EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
-			case Keys.Ctrl, Keys.Cmd:
-        if (EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
+			case Keys.Ctrl:
+        if (process.platform != 'darwin' && EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
+			case Keys.Cmd:
+        if (process.platform == 'darwin' && EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
 			case Keys.Alt:
 				if (EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
 			case Keys.Up:
@@ -672,8 +675,10 @@ class Editor
 				mouseMoving = false;
 			case Keys.Shift:
         unset(key);
-			case Keys.Ctrl, Keys.Cmd:
-        unset(key);
+			case Keys.Ctrl:
+        if (process.platform != 'darwin') unset(key);
+			case Keys.Cmd:
+        if (process.platform == 'darwin') unset(key);
 			case Keys.Alt:
 				unset(key);
 		}

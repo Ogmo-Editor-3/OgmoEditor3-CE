@@ -1,6 +1,7 @@
 import js.jquery.Event;
 import js.jquery.JQuery;
 import js.Browser;
+import js.Node.process;
 import electron.main.BrowserWindow;
 import electron.renderer.Remote;
 import electron.renderer.IpcRenderer;
@@ -259,13 +260,18 @@ class Ogmo
 		}
 	}
 
+	public function keyIsCtrl(key:Int):Bool
+	{
+		return process.platform == 'darwin' ? key == Keys.Cmd : key == Keys.Ctrl;
+	}
+
 	/*
 			KEYBOARD HELPERS
 	*/
 
 	function get_ctrl():Bool
 	{
-		return keyCheckMap[Keys.Ctrl] || keyCheckMap[Keys.Cmd];
+		return process.platform == 'darwin' ? keyCheckMap[Keys.Cmd] : keyCheckMap[Keys.Ctrl];
 	}
 
 	function get_shift():Bool
