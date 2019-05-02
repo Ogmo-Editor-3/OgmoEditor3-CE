@@ -1,6 +1,5 @@
 package modules.decals.tools;
 
-// TODO #10 -01010111
 class DecalResizeTool extends DecalTool
 {
 
@@ -45,11 +44,20 @@ class DecalResizeTool extends DecalTool
 		EDITOR.overlayDirty();
 	}
 
-	// TODO #2 -01010111
-	/*override public function onRightDown(pos:Vector)
+	override public function onRightDown(pos:Vector)
 	{
-		for (decal in layer.decals.getGroup(layerEditor.selection)) decal.scale.set(1, 1);
-	}*/
+		var changed = false;
+		for (decal in layerEditor.selected) if (decal.scale.x != 1 || decal.scale.y != 1)
+		{
+			if (!changed)
+			{
+				EDITOR.level.store("resize decals");
+				changed = true;
+			}
+			decal.scale.set(1, 1);
+		}
+		EDITOR.dirty();
+	}
 
 	override public function onMouseMove(pos:Vector)
 	{
@@ -70,13 +78,13 @@ class DecalResizeTool extends DecalTool
 				EDITOR.level.store("resize decals");
 			}
 
-			//for (d in decals) d.resize(new Vector(pos.x - start.x, pos.y - start.y));
+			for (d in decals) d.resize(new Vector(pos.x - lastPos.x, pos.y - lastPos.y));
 
 			EDITOR.dirty();
 			pos.clone(lastPos);
 		}
 	}
 
-	override public function getIcon():String return "entity-scale";
+	override public function getIcon():String return "decal-scale";
 	override public function getName():String return "Resize";
 }

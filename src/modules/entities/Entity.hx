@@ -163,6 +163,16 @@ class Entity
 		updateMatrix();
 	}
 
+	public function resetSize()
+	{
+		size.copy(template.size);
+		if (template.originAnchored) origin.set(
+			(template.origin.x / template.size.x) * size.x,
+			(template.origin.y / template.size.y) * size.y
+		);
+		updateMatrix();
+	}
+
 	public function anchorRotation()
 	{
 		_rotationAnchor = rotation;
@@ -176,6 +186,12 @@ class Entity
 			rotation = Calc.snap(rotation, 360 / template.rotationDegrees);
 			updateMatrix();
 		}
+	}
+
+	public function resetRotation()
+	{
+		rotation = 0;
+		updateMatrix();
 	}
 
 	/*
