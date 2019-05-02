@@ -46,7 +46,16 @@ class DecalResizeTool extends DecalTool
 
 	override public function onRightDown(pos:Vector)
 	{
-		for (decal in layerEditor.selected) decal.scale.set(1, 1);
+		var changed = false;
+		for (decal in layerEditor.selected) if (decal.scale.x != 1 || decal.scale.y != 1)
+		{
+			if (!changed)
+			{
+				EDITOR.level.store("resize decals");
+				changed = true;
+			}
+			decal.scale.set(1, 1);
+		}
 		EDITOR.dirty();
 	}
 
