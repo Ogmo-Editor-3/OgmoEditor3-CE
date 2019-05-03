@@ -138,11 +138,7 @@ class LevelsPanel extends SidePanel
 
         walkers[i] = new Walker(paths[i], {depthLimit: OGMO.project.directoryDepth})
         .on("data", (item:Item) -> { if(item.path != paths[i] && items[i].children != null) recursiveAdd(item, items[i]); })
-        .on("end", () -> 
-        {
-          trace(items);
-          refresh();
-        });
+        .on("end", refresh);
         NSFW.create(paths[i], (events) -> 
         {
           for (event in events)

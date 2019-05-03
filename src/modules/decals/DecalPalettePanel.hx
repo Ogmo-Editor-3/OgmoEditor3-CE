@@ -17,9 +17,10 @@ class DecalPalettePanel extends SidePanel
 
   override function populate(into: JQuery): Void
   {
-  holder = new JQuery('<div class="decalPalette">');
-  into.append(holder);
-  refresh();
+    holder = new JQuery('<div class="decalPalette">');
+    into.append(holder);
+    (cast layerEditor.template : DecalLayerTemplate).doRefresh = refresh;
+    refresh();
   }
 
 	override function refresh():Void

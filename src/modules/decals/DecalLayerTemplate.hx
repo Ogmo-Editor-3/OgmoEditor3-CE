@@ -18,7 +18,8 @@ import util.NSFW;
 
 typedef Files = 
 {
-  ?name: String, 
+  ?name: String,
+	?dirname:String,
   ?parent: Files, 
   ?textures: Array<Dynamic>, 
   ?subdirs: Array<Files>
@@ -45,140 +46,156 @@ class DecalLayerTemplate extends LayerTemplate
 	public var textures:Array<Texture> = [];
 	public var scaleable:Bool;
 	public var rotatable:Bool;
+	public var doRefresh:Void->Void;
 
-  var walkers:Array<Walker> = [];
-  var watchers:Array<NSFW> = [];
+  var walker:Walker;
+  var watcher:NSFW;
 
   override function createEditor(id:Int): LayerEditor
   {
-	return new DecalLayerEditor(id);
+		return new DecalLayerEditor(id);
   }
 
   override function createLayer(level:Level, id:Int):DecalLayer
   {
-  return new DecalLayer(level, id);
+  	return new DecalLayer(level, id);
   }
 
   override function save():Dynamic
   {
-	var data:Dynamic = super.save();
-	data.folder = folder;
-	data.includeImageSequence = includeImageSequence;
-	data.scaleable = scaleable;
-	data.rotatable = rotatable;
-	data.values = ValueTemplate.saveList(values);
-	return data;
+		var data:Dynamic = super.save();
+		data.folder = folder;
+		data.includeImageSequence = includeImageSequence;
+		data.scaleable = scaleable;
+		data.rotatable = rotatable;
+		data.values = ValueTemplate.saveList(values);
+		return data;
   }
   
   override function load(data:Dynamic):DecalLayerTemplate
   {
-	super.load(data);
-	folder = data.folder;
-	includeImageSequence = data.includeImageSequence;
-	scaleable = data.scaleable;
-	rotatable = data.rotatable;
-	values = ValueTemplate.loadList(data.values);
-	return this;
+		super.load(data);
+		folder = data.folder;
+		includeImageSequence = data.includeImageSequence;
+		scaleable = data.scaleable;
+		rotatable = data.rotatable;
+		values = ValueTemplate.loadList(data.values);
+		return this;
   }
 
 	override function projectWasLoaded(project:Project):Void
 	{
 		files = { name: "root", parent: null, textures: [], subdirs: [] };
 
-		// parses a directory
-		function readDirectory(parent:Files, path:String)
+		function recursiveAdd(item:Item, parent:Files):Bool
 		{
-			for (file in FileSystem.readDirectory(path))
+			if (OGMO.project == null) return false;
+			var dirname = Path.dirname(item.path);
+			if (dirname == Path.join(parent.dirname, parent.name) || parent.name == 'root' && dirname == parent.dirname)
 			{
-				var sub = Path.join(path, file);
-				var stat = FileSystem.stat(sub);
-
-				if (stat.isDirectory())
+				// add to parent
+				if (item.stats.isDirectory())
 				{
-					var obj = { name: file, parent: parent, textures: [], subdirs: [] };
+					var obj = { name: Path.basename(item.path), dirname: dirname, parent: parent, textures: [], subdirs: [] };
 					parent.subdirs.push(obj);
-					readDirectory(obj, sub);
 				}
-				else if (stat.isFile())
+				else if (item.stats.isFile())
 				{
-					parent.textures.push(sub);
+					parent.textures.push(item.path);
 				}
+				return true;
 			}
+			else
+			{
+				var found = false;
+				var i = 0;
+				while (i < parent.subdirs.length && !found)
+				{
+					found = recursiveAdd(item, parent.subdirs[i]);
+					i++;
+				}
+				return found;
+			}
+			return false;
 		}
 
 		// starts reading all directories
 		var path = Path.join(project.path, folder);
-		if (FileSystem.exists(path)) readDirectory(files, path);
-
-		// remove sequences
-		if (!includeImageSequence)
-		{
-			function removeSequence (obj:Files)
-			{
-				// remove sequence
-				obj.textures.sort(function(a, b)
+		files.dirname = path;
+		if (FileSystem.exists(path)) walker = new Walker(path)
+			.on("data", (item:Item) -> { if(item.path != path) recursiveAdd(item, files); })
+    	.on("end", () -> {
+				// remove sequences
+				if (!includeImageSequence)
 				{
-					if(a < b) return -1;
-					if(a > b) return 1;
-					return 0;
-				});
-
-				var newList:Array<String> = [];
-				var lastName = "";
-				for (texture in obj.textures)
-				{
-					// get next name
-					var nextName = Path.basename(texture);
-					// TODO - willl have to double check this
-					nextName = '.' + nextName.split(".").pop();
-					
-					// remove numbers
-					var lastNumber = nextName.length - 1;
-					while (lastNumber >= 0 && !nextName.charAt(lastNumber).parseInt().isNaN()) lastNumber --;
-					nextName = nextName.substr(0, lastNumber + 1);
-
-					// check if the last name was the same
-					if (lastName == "" || lastName != nextName)
+					function removeSequence (obj:Files)
 					{
-						lastName = nextName;
-						newList.push(texture);
+						// remove sequence
+						obj.textures.sort(function(a, b)
+						{
+							if(a < b) return -1;
+							if(a > b) return 1;
+							return 0;
+						});
+
+						var newList:Array<String> = [];
+						var lastName = "";
+						for (texture in obj.textures)
+						{
+							// get next name
+							var nextName = Path.basename(texture);
+							// TODO - willl have to double check this
+							nextName = '.' + nextName.split(".").pop();
+							
+							// remove numbers
+							var lastNumber = nextName.length - 1;
+							while (lastNumber >= 0 && !nextName.charAt(lastNumber).parseInt().isNaN()) lastNumber --;
+							nextName = nextName.substr(0, lastNumber + 1);
+
+							// check if the last name was the same
+							if (lastName == "" || lastName != nextName)
+							{
+								lastName = nextName;
+								newList.push(texture);
+							}
+						}
+
+						obj.textures = newList;
+
+						// do the same on subdirectories
+						for  (subdir in obj.subdirs) removeSequence(subdir);
 					}
+
+					removeSequence(files);
 				}
 
-				obj.textures = newList;
-
-				// do the same on subdirectories
-				for  (subdir in obj.subdirs) removeSequence(subdir);
-			}
-
-			removeSequence(files);
-		}
-
-		// load textures
-		function loadTextures (obj:Files)
-		{
-			var textures = [];
-			for (texture in obj.textures)
-			{
-				var ext = Path.extname(texture);
-				if (ext != ".png" && ext != ".jpeg" && ext  != ".jpg" && ext != ".bmp")
-					continue;
-					
-				var tex = Texture.fromFile(texture);
-				if (tex != null)
+				// load textures
+				function loadTextures (obj:Files)
 				{
-					tex.path = Path.relative(project.path, texture);
-					this.textures.push(tex);
-					textures.push(tex);
+					var textures = [];
+					for (texture in obj.textures)
+					{
+						var ext = Path.extname(texture);
+						if (ext != ".png" && ext != ".jpeg" && ext  != ".jpg" && ext != ".bmp")
+							continue;
+							
+						var tex = Texture.fromFile(texture);
+						if (tex != null)
+						{
+							tex.path = Path.relative(project.path, texture);
+							this.textures.push(tex);
+							textures.push(tex);
+						}
+					}
+
+					obj.textures = textures;
+
+					for (subdir in obj.subdirs) loadTextures(subdir);
 				}
-			}
 
-			obj.textures = textures;
-
-			for (subdir in obj.subdirs) loadTextures(subdir);
-		}
-
-		loadTextures(this.files);
+				loadTextures(files);
+				if (doRefresh != null) doRefresh();
+			});
 	}
 
 	override function projectWasUnloaded()
@@ -186,5 +203,7 @@ class DecalLayerTemplate extends LayerTemplate
 		for (texture in textures) texture.dispose();
 		textures = [];
 		files = { name: "root", parent: null, textures: [], subdirs: [] };
+		if (walker != null) walker.destroy();
+		if (watcher != null) watcher.stop();
 	}
 }

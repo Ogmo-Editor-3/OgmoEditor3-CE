@@ -42,7 +42,7 @@ class Project
 	
 	public function unload()
 	{
-		for (layer in layers) layer.projectWasLoaded(this);
+		for (layer in layers) layer.projectWasUnloaded();
 		for (tileset in tilesets) tileset.texture.dispose();
 	}
 
