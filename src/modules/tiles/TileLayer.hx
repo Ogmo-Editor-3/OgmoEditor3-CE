@@ -33,116 +33,115 @@ class TileLayer extends Layer
   override function save():Dynamic
   {
     var data = super.save();
-    var hasTiles = false;
     var template:TileLayerTemplate = cast this.template;
+    var flippedData = flip2dArray(this.data);
       
     if (tileset != null) data.tileset = tileset.label;
     else data.tileset = "";
     
     data._contents = "data";
 
-    if (template.exportMode == TileExportModes.IDS)
+    if (template.exportMode == IDS)
     {
-      var lines:Array<String> = [];        
-      for (y in 0...gridCellsY)
+      if(template.arrayMode == ONE)
       {
-        var nums: Array<Int> = [];
-        for (x in 0...gridCellsX) nums.push(this.data[x][y]);      
-                          
-        if (template.trimEmptyTiles) trimEmpty(nums);
-        if (nums.length > 0) hasTiles = true;
-
-        lines.push(nums.join(","));
+        Reflect.setField(data, 'data', [for(column in flippedData) for (i in column) i]);
       }
-
-      if (hasTiles) data.data = lines.join("\n");
-    }
-    else if (template.exportMode == TileExportModes.COORDS)
-    {
-      var lines:Array<String> = [];        
-      for (y in 0...gridCellsY)
+      else if (template.arrayMode == TWO)
       {
-        var nums: Array<Int> = [];               
-        for (x in 0...gridCellsX)
+        Reflect.setField(data, 'data', flippedData);
+      }
+      else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
+    }
+    else if (template.exportMode == COORDS)
+    {
+      if(template.arrayMode == ONE)
+      {
+        Reflect.setField(data, 'data', [for(column in flippedData) for (i in column) i == -1 ? [-1] : [tileset.getTileX(i), tileset.getTileY(i)]]);
+      }
+      else if (template.arrayMode == TWO)
+      {
+        var arr = [];
+        for (y in 0...flippedData.length) 
         {
-          var num:Int = this.data[x][y];
-          if (num == -1) nums.push(-1);
-          else
+          arr[y] = [];
+          for (x in 0...flippedData[y].length)
           {
-            nums.push(tileset.getTileX(num));
-            nums.push(tileset.getTileY(num));
+            var  i = flippedData[y][x];
+            arr[y][x] = i == -1 ? [-1] : [tileset.getTileX(i), tileset.getTileY(i)];
           }
         }
-            
-        if (template.trimEmptyTiles) trimEmpty(nums);	
-        if (nums.length > 0) hasTiles = true;
-
-        lines.push(nums.join(","));
+        Reflect.setField(data, 'data', arr);
       }
-
-      if (hasTiles)	data.data = lines.join("\n");
+      else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
     }
     else throw "Invalid Tile Layer Export Mode: " + template.exportMode;
 
     data.exportMode = template.exportMode;
+    data.arrayMode = template.arrayMode;
     
     return data;
-  }
-  
-  private function trimEmpty(nums: Array<Int>):Void
-  {
-    if (nums.length > 0)
-    {
-      var at = nums.length;
-      while (at >= 1 && nums[at - 1] == -1) at--;
-  
-      if (at < nums.length) nums.splice(at, -1);
-    }
   }
 
   override function load(data:Dynamic):Void
   {
     super.load(data);
       
-    trace("LOAD:");
     tileset = OGMO.project.getTileset(data.tileset);
     if (tileset == null && template != null) tileset = OGMO.project.getTileset((cast template : TileLayerTemplate).defaultTileset);
       
     initData();
+    this.data = flip2dArray(this.data);
     var exportMode:Int = Imports.integer(data.exportMode, TileExportModes.IDS);
-    var content = Imports.contentsString(data, "data");
-    var rows = content.split("\n");
-    var nums:Array<Array<String>> = [];
-    for (row in rows)
-    {
-      if (row == "") nums.push([]);
-      else nums.push(row.split(","));
-    }
+    var arrayMode:Int = Imports.integer(data.arrayMode, TileArrayModes.ONE);
     
-    if (exportMode == TileExportModes.IDS)
+    if (exportMode == IDS)
     {
-      for (y in 0...nums.length) for (x in 0...nums[y].length) this.data[x][y] = Imports.integer(nums[y][x], -1);
-    }
-    else if (exportMode == TileExportModes.COORDS)
-    {
-      for (y in 0...nums.length)
+      if (arrayMode == ONE)
       {
-        var x = 0;
-        var i = 0;
-        while (i < nums[y].length)
+        var content:Array<Int> = data.data;
+        for (i in 0...content.length)
         {
-          var num = Imports.integer(nums[y][i], -1);
-          if (num == -1) this.data[x][y] = -1;
-          else
-          {
-            i++;
-            this.data[x][y] = tileset.coordsToID(num, Imports.integer(nums[y][i], -1));
-          }                  
-          x++;
+          var x = i % gridCellsX;
+          var y = (i / gridCellsX).int();
+          this.data[y][x] = content[i];
         }
       }
+      else if (arrayMode == TWO)
+      {
+        this.data = data.data;
+      }
+      else throw "Invalid Tile Layer Array Mode: " + arrayMode;
+    }
+    else if (exportMode == COORDS)
+    {
+      if (arrayMode == ONE)
+      {
+        var content:Array<Array<Int>> = data.data;
+        for (i in 0...content.length)
+        {
+          var x = i % gridCellsX;
+          var y = (i / gridCellsX).int();
+          if (content[i][0] == -1) this.data[y][x] = -1;
+          else this.data[y][x] = tileset.coordsToID(content[i][0], content[i][1]);
+        }
+      }
+      else if (arrayMode == TWO)
+      {
+        var content:Array<Array<Array<Int>>> = data.data;
+        for (y in 0...content.length)
+        {
+          for (x in 0...content[y].length)
+          {
+            if (content[y][x][0] == -1) this.data[y][x] = -1;
+            else this.data[y][x] = tileset.coordsToID(content[y][x][0], content[y][x][1]);
+          }
+        }
+      }
+      else throw "Invalid Tile Layer Array Mode: " + arrayMode;
     }
     else throw "Invalid Tile Layer Export Mode: " + exportMode;
+    this.data = flip2dArray(this.data);
   }
 
   override function clone(): TileLayer
@@ -300,5 +299,22 @@ class TileLayer extends Layer
       }
       data = nData;
     }
+  }
+
+  /** 
+   * Ogmo's internal data array is flipped from what you'd normally expect in a tilemap data export, so this utility is necessary to flip between Ogmo's structure and the exported structure.
+   **/
+  function flip2dArray(arr:Array<Array<Int>>):Array<Array<Int>>
+  {
+    var flipped:Array<Array<Int>> = [];
+    for (x in 0...arr.length)
+    {
+      for (y in 0...arr[x].length)
+      {
+        if (flipped[y] == null) flipped[y] = [];
+        flipped[y][x] = arr[x][y];
+      }
+    }
+    return flipped;
   }
 }
