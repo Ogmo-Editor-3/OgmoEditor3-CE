@@ -119,13 +119,13 @@ class TileRectangleTool extends TileTool
     
     override public function onKeyPress(key:Int)
     {
-        if (key == Keys.Ctrl)
+        if (OGMO.keyIsCtrl(key))
             EDITOR.overlayDirty();
     }
     
     override public function onKeyRelease(key:Int)
     {
-        if (key == Keys.Ctrl)
+        if (OGMO.keyIsCtrl(key))
         {
             random.randomize();
             EDITOR.overlayDirty();
