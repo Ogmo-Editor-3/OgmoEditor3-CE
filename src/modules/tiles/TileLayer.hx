@@ -93,7 +93,7 @@ class TileLayer extends Layer
     initData();
     this.data = flip2dArray(this.data);
     var exportMode:Int = Imports.integer(data.exportMode, TileExportModes.IDS);
-    var arrayMode:Int = Imports.integer(data.arrayMode, TileArrayModes.ONE);
+    var arrayMode:Int = Imports.integer(data.arrayMode, ArrayExportModes.ONE);
     
     if (exportMode == IDS)
     {

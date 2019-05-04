@@ -25,8 +25,8 @@ class TileLayerTemplateEditor extends LayerTemplateEditor
 
     // array mode
     options = new Map();
-    options.set(TileArrayModes.ONE.string(), "1D");
-    options.set(TileArrayModes.TWO.string(), "2D");
+    options.set(ArrayExportModes.ONE.string(), "1D");
+    options.set(ArrayExportModes.TWO.string(), "2D");
 
     arrayMode = Fields.createOptions(options);
     arrayMode.val(tileTemplate.arrayMode);

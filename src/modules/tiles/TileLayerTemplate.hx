@@ -24,7 +24,7 @@ class TileLayerTemplate extends LayerTemplate
 	}
 
   public var exportMode:Int = TileExportModes.IDS;
-  public var arrayMode:Int = TileArrayModes.ONE;
+  public var arrayMode:Int = ArrayExportModes.ONE;
 	public var defaultTileset:String = null;
     
   override function createEditor(id:Int): LayerEditor
@@ -54,7 +54,7 @@ class TileLayerTemplate extends LayerTemplate
     super.load(data);
       
     exportMode = Imports.integer(data.exportMode, TileExportModes.IDS);
-    arrayMode = Imports.integer(data.arrayMode, TileArrayModes.ONE);
+    arrayMode = Imports.integer(data.arrayMode, ArrayExportModes.ONE);
     defaultTileset = data.defaultTileset;
       
     return this;

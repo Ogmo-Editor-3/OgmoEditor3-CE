@@ -28,52 +28,49 @@ class GridLayer extends Layer
   override function save():Dynamic
   {
     var data = super.save();
+    var template:GridLayerTemplate = cast this.template;
     data._contents = "data";
+    var flippedData = flip2dArray(this.data);
 
-    var rows: Array<String> = [];
-    for (y in 0...this.data[0].length) rows.push(saveRow(y));           
-    data.data = rows.join("\n");
+    if(template.arrayMode == ONE)
+    {
+      Reflect.setField(data, 'data', [for(column in flippedData) for (i in column) i]);
+    }
+    else if (template.arrayMode == TWO)
+    {
+      Reflect.setField(data, 'data', flippedData);
+    }
+    else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
+
+    data.arrayMode = template.arrayMode;
         
     return data;
-  }
-  
-  private function saveRow(y:Int):String
-  {
-    var row = "";
-    
-    var to = data.length;
-    var empty = (cast template : GridLayerTemplate).transparent;
-    if ((cast template : GridLayerTemplate).trimEmptyCells) while (to > 0 && data[to - 1][y] == empty) to--;
-
-    for (x in 0...to) row += data[x][y];
-    
-    return row;
   }
 
   override function load(data:Dynamic):Void
   {
     super.load(data);
     initData();
+    this.data = flip2dArray(this.data);
 
-    var content = Imports.contentsString(data, "data");
+    var arrayMode:Int = Imports.integer(data.arrayMode, ArrayExportModes.ONE);
 
-    var x = 0;
-    var y = 0;
-
-    for (i in 0...content.length)
+    if (arrayMode == ONE)
     {
-      var char:String = content.charAt(i);
-      if (char == "\n")
+      var content:Array<String> = data.data;
+      for (i in 0...content.length)
       {
-        x = 0;
-        y++;
-      }
-      else
-      {
-        this.data[x][y] = char;
-        x++;
+        var x = i % gridCellsX;
+        var y = (i / gridCellsX).int();
+        this.data[y][x] = content[i];
       }
     }
+    else if (arrayMode == TWO)
+    {
+      this.data = data.data;
+    }
+    else throw "Invalid Tile Layer Array Mode: " + arrayMode;
+    this.data = flip2dArray(this.data);
   }
 
   public function subtractRow(end:Bool):Void
@@ -251,5 +248,22 @@ class GridLayer extends Layer
               if (data[x + i][y + j] != value)
                   return false;
       return true;
+  }
+
+  /** 
+   * Ogmo's internal data array is flipped from what you'd normally expect in a tilemap data export, so this utility is necessary to flip between Ogmo's structure and the exported structure.
+   **/
+  function flip2dArray(arr:Array<Array<String>>):Array<Array<String>>
+  {
+    var flipped:Array<Array<String>> = [];
+    for (x in 0...arr.length)
+    {
+      for (y in 0...arr[x].length)
+      {
+        if (flipped[y] == null) flipped[y] = [];
+        flipped[y][x] = arr[x][y];
+      }
+    }
+    return flipped;
   }
 }

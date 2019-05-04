@@ -6,7 +6,7 @@ abstract TileExportModes (Int) from Int to Int
 }
 
 @:enum
-abstract TileArrayModes (Int) from Int to Int
+abstract ArrayExportModes (Int) from Int to Int
 {
   var ONE;
   var TWO;

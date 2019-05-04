@@ -5,18 +5,30 @@ import project.editor.LayerTemplateEditor;
 
 class GridLayerTemplateEditor extends LayerTemplateEditor
 {
+  public var arrayMode:JQuery;
   public var list:JQuery;
 
   override function importInto(into:JQuery)
   {
     super.importInto(into);
+
+    var grid:GridLayerTemplate = cast template;
+
+    // array mode
+    var options = new Map();
+    options.set(ArrayExportModes.ONE.string(), "1D");
+    options.set(ArrayExportModes.TWO.string(), "2D");
+
+    arrayMode = Fields.createOptions(options);
+    arrayMode.val(grid.arrayMode);
+    Fields.createSettingsBlock(into, arrayMode, SettingsBlock.Full, "Grid Array Mode", SettingsBlock.InlineTitle);
+    Fields.createLineBreak(into);
     
     // list
     list = new JQuery('<div class="gridlayer-legend-list">');
     into.append(list);
     
     // legend
-    var grid:GridLayerTemplate = cast template;
     var index = 0;
     for (key in grid.legend.keys())
     {
@@ -74,6 +86,7 @@ class GridLayerTemplateEditor extends LayerTemplateEditor
     
     var grid:GridLayerTemplate = cast template;
     grid.legend = new Map();
+    grid.arrayMode = Imports.integer(arrayMode.val(), 0);
     
     into.find('.gridlayer-legend-item').each(function(i, e)
     {
