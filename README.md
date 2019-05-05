@@ -27,11 +27,10 @@ NOTES:
 ## Packaging
 ```
 npm i
-npm run icons
 npm run build
 npm run dist
 ```
-TODO: Flesh this out
+This builds then packages the App into an executable.
 
 ## Credits
  - Created by [Matt Thorson](https://twitter.com/mattthorson) and [Noel Berry](https://twitter.com/noelfb)
