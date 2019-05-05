@@ -1,5 +1,4 @@
 const { spawn } = require('child_process');
-const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = (env, argv) => {
   const buildMode = argv.mode || 'development';
@@ -41,9 +40,6 @@ module.exports = (env, argv) => {
         }
       ]
     },
-    plugins: [
-      new CopyPlugin([ { from: 'assets' } ])
-    ],
     devtool: 'source-map',
     devServer: {
       contentBase: dist,

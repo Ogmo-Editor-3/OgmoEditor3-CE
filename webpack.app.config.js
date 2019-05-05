@@ -1,4 +1,5 @@
 const CopyPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = (env, argv) => {
   const buildMode = argv.mode || 'development';
@@ -29,7 +30,11 @@ module.exports = (env, argv) => {
       ]
     },
     plugins: [
-      new CopyPlugin([ `${__dirname}/package.json` ])
+      new CopyPlugin([ 
+        'assets',
+        `${__dirname}/package.json` 
+      ]),
+      new CleanWebpackPlugin()
     ],
     node: {
       __dirname: false,

@@ -15,6 +15,7 @@
         "dist": "electron-builder --config electron-builder.json"
     },
     "devDependencies": {
+        "clean-webpack-plugin": "^2.0.1",
         "copy-webpack-plugin": "^5.0.3",
         "css-loader": "^2.1.1",
         "electron": "^4.1.4",
