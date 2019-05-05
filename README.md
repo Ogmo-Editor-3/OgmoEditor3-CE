@@ -25,7 +25,12 @@ NOTES:
   * The app will need to be rebuilt normally (`npm run build`) in order to run it again after using the dev server.
 
 ## Packaging
-TODO
+```
+npm i
+npm run build
+npm run dist
+```
+This builds then packages the App into an executable.
 
 ## Credits
  - Created by [Matt Thorson](https://twitter.com/mattthorson) and [Noel Berry](https://twitter.com/noelfb)

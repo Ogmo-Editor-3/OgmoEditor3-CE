@@ -1,0 +1,6 @@
+{
+  "productName": "Ogmo Editor",
+  "directories": {
+    "app": "bin"  
+  }
+}
