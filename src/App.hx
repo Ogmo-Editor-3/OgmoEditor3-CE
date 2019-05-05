@@ -30,7 +30,7 @@ class App
 	{
 		mainWindow = new BrowserWindow({
 			title: '',
-			icon: 'gfx/icon32.png',
+			icon: Webpack.require('./assets/img/icon32.png'),
 			width: 1024,
 			height: 768,
 			minWidth: 1024,

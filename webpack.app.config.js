@@ -21,6 +21,10 @@ module.exports = (env, argv) => {
             extra: `-D build_mode=${buildMode}`,
             debug: debugMode
           }
+        },
+        {
+          test: /\.(png|jpg|gif)$/,
+          use: 'file-loader'
         }
       ]
     },
