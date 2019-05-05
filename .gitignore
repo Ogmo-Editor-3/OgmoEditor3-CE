@@ -1,5 +1,7 @@
 bin/
+dist/
 node_modules/
+assets/build/
 .DS_Store
 binsettings.json
 events.json
