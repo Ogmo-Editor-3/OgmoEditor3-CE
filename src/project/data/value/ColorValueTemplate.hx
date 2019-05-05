@@ -2,7 +2,7 @@ package project.data.value;
 
 import project.editor.value.ColorValueTemplateEditor;
 import level.data.Value;
-import level.editor.value.ValueEditor;
+import level.editor.value.ColorValueEditor;
 import util.Color;
 
 class ColorValueTemplate extends ValueTemplate
@@ -32,9 +32,11 @@ class ColorValueTemplate extends ValueTemplate
     return val;
   }
 
-  override function createEditor(values:Array<Value>):Null<ValueEditor>
+  override function createEditor(values:Array<Value>):Null<ColorValueEditor>
   {
-    return null;
+    var editor = new ColorValueEditor();
+    editor.load(this, values);
+    return editor;
   }
 
   override function load(data:Dynamic):Void
