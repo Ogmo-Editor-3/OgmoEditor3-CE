@@ -6,6 +6,7 @@
 
 ## Getting Started
 TODO: Flesh this out
+
 This project requires Haxe and Node v10+.
 
 ## Build
@@ -30,7 +31,7 @@ npm i
 npm run build
 npm run dist
 ```
-This builds then packages the App into an executable.
+This builds, then packages the App into an executable.
 
 ## Credits
  - Created by [Matt Thorson](https://twitter.com/mattthorson) and [Noel Berry](https://twitter.com/noelfb)
