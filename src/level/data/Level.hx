@@ -168,22 +168,23 @@ class Level
 	{
 		OGMO.resetKeys();
 
-		var filters:Dynamic;
-		if (OGMO.project.defaultExportMode == ".xml")
-			filters = [
-				{ name: "XML Level", extensions: [ "xml" ]},
-				{ name: "JSON Level", extensions: [ "json" ] }
-			];
-		else
-			filters = [
-				{ name: "JSON Level", extensions: [ "json" ] },
-				{ name: "XML Level", extensions: [ "xml" ]}
-			];
+		// uncomment this and add back to dialog to re-enable xml export
+		// var filters:Dynamic;
+		// if (OGMO.project.defaultExportMode == ".xml")
+		// 	filters = [
+		// 		{ name: "XML Level", extensions: [ "xml" ]},
+		// 		{ name: "JSON Level", extensions: [ "json" ] }
+		// 	];
+		// else
+		// 	filters = [
+		// 		{ name: "JSON Level", extensions: [ "json" ] },
+		// 		{ name: "XML Level", extensions: [ "xml" ]}
+		// 	];
 
 		var file = Ogmo.dialog.showSaveDialog(Remote.getCurrentWindow(),
 		{
 			title: "Save Level As...",
-			filters: filters,
+			filters: [{ name: "JSON Level", extensions: [ "json" ] }],
 			defaultPath: OGMO.project.lastSavePath
 		});
 
