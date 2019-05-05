@@ -31,7 +31,7 @@ class Level
 	public var cameraInv:Matrix = new Matrix();
 	public var project:Project;
 	public var zoomRect:Rectangle = null;
-	public var zoomTimer:Dynamic;
+	public var zoomTimer:Int;
 
 	public var safeToClose(get, null):Bool;
 	public var displayName(get, null):String;
@@ -321,13 +321,13 @@ class Level
 			zoomRect = new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
 		}
 
-		if (zoomTimer != null) untyped clearTimeout(zoomTimer);
+		if (zoomTimer != null) Browser.window.clearTimeout(zoomTimer);
 		zoomTimer = Browser.window.setTimeout(clearZoomRect, 500);
 	}
 
 	public function clearZoomRect():Void
 	{
-		EDITOR.level.zoomRect = null;
+		if (EDITOR.level != null) EDITOR.level.zoomRect = null;
 		EDITOR.overlayDirty();
 	}
 

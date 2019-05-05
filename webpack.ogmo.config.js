@@ -25,15 +25,19 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(png|jpg|gif)$/,
-          use: ['file-loader']
+          use: 'file-loader'
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/,
-          use: ['file-loader']
+          use: 'file-loader'
         },
         {
           test:/\.(s*)css$/,
           use:['style-loader','css-loader', 'sass-loader']
+        },
+        {
+          test: /\.node$/,
+          use: 'node-loader'
         }
       ]
     },
