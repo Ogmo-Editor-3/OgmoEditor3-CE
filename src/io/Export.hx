@@ -66,7 +66,8 @@ class Export
 
 	public static function values(into:Dynamic, values:Array<Value>)
 	{
-		for (value in values) Reflect.setField(into, value.template.name, value.value);
+		if (into.values == null && values.length > 0) into.values = {};
+		for (value in values) Reflect.setField(into.values, value.template.name, value.value);
 	}
 
 	/*

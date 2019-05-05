@@ -81,7 +81,7 @@ class Imports
 		var result:Array<Value> = [];
 
 		for (template in templates)
-			result.push(new Value(template, Reflect.field(from, template.name)));
+			result.push(new Value(template, Reflect.field(from.values, template.name)));
 
 		return result;
 	}
