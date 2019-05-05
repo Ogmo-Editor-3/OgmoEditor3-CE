@@ -6,8 +6,8 @@ import project.editor.LayerTemplateEditor;
 class TileLayerTemplateEditor extends LayerTemplateEditor
 {
 	public var exportMode:JQuery;
+  public var arrayMode:JQuery;
 	public var defaultTiles:JQuery = null;
-	public var trimEmpty:JQuery;
 
   override function importInto(into:JQuery)
   {
@@ -23,9 +23,14 @@ class TileLayerTemplateEditor extends LayerTemplateEditor
     exportMode.val(tileTemplate.exportMode);
     Fields.createSettingsBlock(into, exportMode, SettingsBlock.Half, "Tile Export Mode", SettingsBlock.InlineTitle);
 
-    // strip ends
-    trimEmpty = Fields.createCheckbox(tileTemplate.trimEmptyTiles, "Trim Empty Tiles");
-    Fields.createSettingsBlock(into, trimEmpty, SettingsBlock.Half);
+    // array mode
+    options = new Map();
+    options.set(ArrayExportModes.ONE.string(), "1D");
+    options.set(ArrayExportModes.TWO.string(), "2D");
+
+    arrayMode = Fields.createOptions(options);
+    arrayMode.val(tileTemplate.arrayMode);
+    Fields.createSettingsBlock(into, arrayMode, SettingsBlock.Half, "Tile Array Mode", SettingsBlock.InlineTitle);
 
 		// default tileset
 		if (OGMO.project.tilesets.length > 0)
@@ -49,7 +54,7 @@ class TileLayerTemplateEditor extends LayerTemplateEditor
     super.save();
     var tileTemplate:TileLayerTemplate = cast template;
     tileTemplate.exportMode = Imports.integer(exportMode.val(), 0);
-    tileTemplate.trimEmptyTiles = Fields.getCheckbox(trimEmpty);
+    tileTemplate.arrayMode = Imports.integer(arrayMode.val(), 0);
     if (defaultTiles != null) tileTemplate.defaultTileset = OGMO.project.tilesets[Imports.integer(defaultTiles.val(), 0)].label;
   }
 }

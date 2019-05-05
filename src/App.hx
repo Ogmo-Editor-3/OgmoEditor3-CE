@@ -12,7 +12,7 @@ class App
 	static var mainWindow:BrowserWindow = null;
 	static var forceClose:Bool = false;
 
-    static function main()
+  static function main()
 	{
 		ElectronApp.on('window_all_closed', (e) -> {
 			if (process.platform != 'darwin') ElectronApp.quit();
@@ -30,11 +30,14 @@ class App
 	{
 		mainWindow = new BrowserWindow({
 			title: '',
-			icon: 'gfx/icon32.png',
+			icon: Webpack.require('./assets/img/icon32.png'),
 			width: 1024,
 			height: 768,
 			minWidth: 1024,
 			minHeight: 600,
+			webPreferences: {
+				nodeIntegration: true
+			} 
 		});
 
 		// Closing Stuff

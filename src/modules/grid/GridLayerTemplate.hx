@@ -22,7 +22,8 @@ class GridLayerTemplate extends LayerTemplate
     LayerDefinition.definitions.push(n);
   }
 
-  public var trimEmptyCells:Bool = true;
+  // TODO - add in 2D vs 1D selection - austin
+  public var arrayMode:Int = ArrayExportModes.ONE;
   public var legend:Map<String, Color>;
   public var transparent(get, never):String;
   public var firstSolid(get, never):String;
@@ -57,6 +58,7 @@ class GridLayerTemplate extends LayerTemplate
   override function save():Dynamic
   {
       var data:Dynamic = super.save();
+      data.arrayMode = arrayMode;
       data.legend = {};
       for (key in legend.keys()) untyped data.legend[key] = legend[key].toHexAlpha(); // Reflect.setField(data.legend, key, legend[key].toHexAlpha());
       return data;
@@ -66,6 +68,7 @@ class GridLayerTemplate extends LayerTemplate
   {
       super.load(data);
 
+      arrayMode = data.arrayMode;
       legend = new Map();
       for (field in Reflect.fields(data.legend))
           legend.set(field, Color.fromHexAlpha(Reflect.field(data.legend, field)));
