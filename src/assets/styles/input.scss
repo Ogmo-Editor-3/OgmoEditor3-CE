@@ -35,6 +35,8 @@ input.default-value { color: #888; }
 
 textarea { height: 120px; resize: none; }
 
+textarea, input, button, select { font-family: inherit; }
+
 .searchbar
 {
     padding: 10px;
