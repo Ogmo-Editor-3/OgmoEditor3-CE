@@ -1,6 +1,6 @@
 # Entity Tools
 
-## Entity Select Tool <img src="../app/gfx/icons/entity-selection.png" width="24"/>
+## Entity Select Tool <img src="../src/assets/img/icons/entity-selection.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -25,7 +25,7 @@
 
 - Alt: Switch to Entity Resize Tool.
 
-## Entity Create Tool <img src="../app/gfx/icons/entity-create.png" width="24"/>
+## Entity Create Tool <img src="../src/assets/img/icons/entity-create.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -47,19 +47,19 @@
 
 - Preview entity at mouse position
 
-## Entity Resize Tool <img src="../app/gfx/icons/entity-scale.png" width="24"/>
+## Entity Resize Tool <img src="../src/assets/img/icons/entity-scale.png" width="24"/>
 
 **Left Mouse Down + Drag**
 
 - Resize selected entities (if entities are resizable).
 
-## Entity Rotation Tool <img src="../app/gfx/icons/entity-rotate.png" width="24"/>
+## Entity Rotation Tool <img src="../src/assets/img/icons/entity-rotate.png" width="24"/>
 
 **Left Mouse Down + Drag**
 
 - Rotate selected entities (if entities are rotatable).
 
-## Entity Node Tool <img src="../app/gfx/icons/entity-nodes.png" width="24"/>
+## Entity Node Tool <img src="../src/assets/img/icons/entity-nodes.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -74,7 +74,7 @@
 
 # Decal Tools
 
-## Decal Select Tool <img src="../app/gfx/icons/entity-selection.png" width="24"/>
+## Decal Select Tool <img src="../src/assets/img/icons/entity-selection.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -110,7 +110,7 @@
 - Ctrl + D: Duplicate selected decal(s)
 - Alt: Switch to Decal Create Tool.
 
-## Decal Create Tool <img src="../app/gfx/icons/entity-create.png" width="24"/>
+## Decal Create Tool <img src="../src/assets/img/icons/entity-create.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -139,11 +139,11 @@
 
 # Grid Tools
 
-## Grid Selection Tool <img src="../app/gfx/icons/entity-selection.png" width="24"/>
+## Grid Selection Tool <img src="../src/assets/img/icons/entity-selection.png" width="24"/>
 
 **WIP**
 
-## Grid Rectangle Tool <img src="../app/gfx/icons/square.png" width="24"/>
+## Grid Rectangle Tool <img src="../src/assets/img/icons/square.png" width="24"/>
 
 **Left Mouse Down + Drag**
 
@@ -155,7 +155,7 @@
 - Preview right brush rectangle.
   + Right Mouse Up: Apply rectangle.
 
-## Grid Pencil Tool <img src="../app/gfx/icons/pencil.png" width="24"/>
+## Grid Pencil Tool <img src="../src/assets/img/icons/pencil.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -173,7 +173,7 @@
 - Alt: Switch to Grid Eyedropper Tool.
 - Shift: Switch to Grid Rectangle Tool.
 
-## Grid Line Tool <img src="../app/gfx/icons/line.png" width="24"/>
+## Grid Line Tool <img src="../src/assets/img/icons/line.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -185,7 +185,7 @@
 - Begin drawing a line with the right brush.
   + Right Mouse Up: Stop drawing.
 
-## Grid Fill Tool <img src="../app/gfx/icons/floodfill.png" width="24"/>
+## Grid Fill Tool <img src="../src/assets/img/icons/floodfill.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -200,7 +200,7 @@
 - Alt: Switch to Grid Eyedropper Tool.
 - Shift: Switch to Grid Rectangle Tool.
 
-## Grid Eyedropper Tool <img src="../app/gfx/icons/eyedropper.png" width="24"/>
+## Grid Eyedropper Tool <img src="../src/assets/img/icons/eyedropper.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -217,7 +217,7 @@
 
 # Tile Tools
 
-## Tile Pencil Tool <img src="../app/gfx/icons/pencil.png" width="24"/>
+## Tile Pencil Tool <img src="../src/assets/img/icons/pencil.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -235,7 +235,7 @@
 - Alt: Switch to Tile Eyedropper Tool.
 - Shift: Switch to Tile Rectangle Tool.
 
-## Tile Rectangle Tool <img src="../app/gfx/icons/square.png" width="24"/>
+## Tile Rectangle Tool <img src="../src/assets/img/icons/square.png" width="24"/>
 
 **Left Mouse Down + Drag**
 
@@ -253,7 +253,7 @@
 - Alt: Switch to Tile Eyedropper Tool.
 - Shift: Switch to Tile Pencil Tool.
 
-## Tile Line Tool <img src="../app/gfx/icons/line.png" width="24"/>
+## Tile Line Tool <img src="../src/assets/img/icons/line.png" width="24"/>
 
 **Left Mouse Down + Drag**
 
@@ -271,7 +271,7 @@
 - Alt: Switch to Tile Eyedropper Tool.
 - Shift: Switch to Tile Pencil Tool.
 
-## Tile Fill Tool <img src="../app/gfx/icons/floodfill.png" width="24"/>
+## Tile Fill Tool <img src="../src/assets/img/icons/floodfill.png" width="24"/>
 
 **Left Mouse Down**
 
@@ -292,7 +292,7 @@
 - Alt: Switch to Tile Eyedropper Tool.
 - Shift: Switch to Tile Pencil Tool.
 
-## Tile Eyedropper Tool <img src="../app/gfx/icons/eyedropper.png" width="24"/>
+## Tile Eyedropper Tool <img src="../src/assets/img/icons/eyedropper.png" width="24"/>
 
 **Left Mouse Down + Drag**
 
