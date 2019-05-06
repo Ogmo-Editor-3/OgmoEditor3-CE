@@ -1,0 +1,13 @@
+{
+  "name": "ogmo",
+  "license": "MIT",
+  "tags": ["editor"],
+  "description": "A general-case level editor for indie game developers!",
+  "contributors": ["austineast"],
+  "url": "https://austineast.dev/echo",
+  "releasenote": "first release",
+  "version": "0.1.0",
+  "dependencies": {
+    "json2object": ""
+  }
+}

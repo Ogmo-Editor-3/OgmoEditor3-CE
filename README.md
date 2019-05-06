@@ -4,7 +4,7 @@
 
 ### Open Source 2D level editor written in Haxe!
 
-## Getting Started
+# Getting Started
 TODO: Flesh this out
 
 This project requires Haxe and Node v10+.
@@ -33,7 +33,12 @@ npm run dist
 ```
 This builds, then packages the App into an executable.
 
-## Credits
+# Haxe Integration
+TODO: Flesh this out/make a haxelib release
+
+This project contains a Haxe library to help with parsing Project files (.ogmo) and Level files (.json) created by the editor.
+
+# Credits
  - Created by [Matt Thorson](https://twitter.com/mattthorson) and [Noel Berry](https://twitter.com/noelfb)
  - Icons & Logo by [Kyle Pulver](https://twitter.com/kylepulver)
  - _TODO - add haxe contributors_

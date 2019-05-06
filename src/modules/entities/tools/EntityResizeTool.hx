@@ -90,7 +90,8 @@ class EntityResizeTool extends EntityTool
 				EDITOR.level.store("resize entities");
 			}
 
-			for (e in entities) e.resize(new Vector(pos.x - start.x, pos.y - start.y));
+			var diff = new Vector(pos.x - start.x, pos.y - start.y);
+			for (e in entities) e.resize(diff);
 
 			EDITOR.dirty();
 			pos.clone(lastPos);
