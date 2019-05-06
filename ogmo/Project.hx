@@ -10,9 +10,9 @@ class ValueTemplate
    */
   public var name:String;
   /**
-   * Type of the Value Template.
+   * Definition of the Value Template.
    */
-  public var definition:ValueType;
+  public var definition:ValueDefiniton;
   /**
    * Default value(s) for the Value Template.
    */
@@ -54,9 +54,9 @@ class LayerTemplate
    */
   public var name:String;
   /**
-   * Type of the Layer Template.
+   * Definition of the Layer Template.
    */
-  public var Template:LayerType;
+  public var definition:LayerDefinition;
   /**
    * Size of each cell in the Layer's Grid.
    */
@@ -135,6 +135,7 @@ class EntityTemplate
   public var hasNodes:Bool;
   public var nodeLimit:Int;
   public var nodeDisplay:Int;
+  public var nodeGhost:Bool;
   public var tags:Array<String>;
   public var values:Array<ValueTemplate>;
 }
@@ -194,6 +195,10 @@ class Project
    * If set to `true`; its in Radians. Otherwise it is in Degrees.
    */
   public var anglesRadians:Bool;
+  /**
+   * Sets the default exported file type of a Level.
+   */
+  public var defaultExportMode:String;
   /**
    * Maximum Depth that the Editor will search for files for its File Tree.
    */

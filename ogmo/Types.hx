@@ -14,22 +14,25 @@ abstract ArrayMode (Int) from Int to Int
   var TWO;
 }
 
-enum ValueType
+@:enum
+abstract ValueDefiniton (String) from String to String
 {
-  BOOL;
-  COLOR;
-  INT;
-  FLOAT;
-  STRING;
-  TEXT;
+  var BOOL = "Boolean";
+  var COLOR = "Color";
+  var ENUM = "Enum";
+  var INT = "Integer";
+  var FLOAT = "Float";
+  var STRING = "String";
+  var TEXT = "Text";
 }
 
-enum LayerType
+@:enum
+abstract LayerDefinition (String) from String to String
 {
-  DECAL;
-  GRID;
-  TILE;
-  ENTITY;
+  var DECAL = "decal";
+  var GRID = "grid";
+  var TILE = "tile";
+  var ENTITY = "entity";
 }
 
 enum DefaultValue
