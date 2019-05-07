@@ -76,8 +76,10 @@ class Layer
   @:alias("_eid") public var exportID:String;
   public var offsetX:Float;
   public var offsetY:Float;
-  public var gridSizeX:Int;
-  public var gridSizeY:Int;
+  public var gridCellWidth:Int;
+  public var gridCellHeight:Int;
+  public var gridCellsX:Int;
+  public var gridCellsY:Int;
   @:optional public var data:Null<Array<Int>>;
   @:optional public var data2D:Null<Array<Array<Int>>>;
   @:optional public var dataCoords:Null<Array<Array<Int>>>;
