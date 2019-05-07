@@ -25,6 +25,11 @@ class Export
 
 		//Layer Conflicts
 		"data",
+		"data2D",
+		"dataCoords",
+		"dataCoords2D",
+		"grid",
+		"grid2D",
 		"entities",
 
 		//Entity Conflicts

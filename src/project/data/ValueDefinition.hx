@@ -44,7 +44,4 @@ class ValueDefinition
       t.load(valueData);
       return t;
   }
-
-  
-  
 }

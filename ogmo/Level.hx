@@ -76,7 +76,12 @@ class Layer
   @:alias("_eid") public var exportID:String;
   public var offsetX:Float;
   public var offsetY:Float;
-  @:optional public var data:AnyArrayDataValue;
+  @:optional public var data:Array<Int>;
+  @:optional public var data2D:Array<Array<Int>>;
+  @:optional public var dataCoords:Array<Array<Int>>;
+  @:optional public var dataCoords2D:Array<Array<Array<Int>>>;
+  @:optional public var grid:Array<String>;
+  @:optional public var grid2D:Array<Array<String>>;
   @:optional public var exportMode:ExportMode;
   @:optional public var arrayMode:ArrayMode;
   @:optional public var tileset:String;
@@ -122,7 +127,7 @@ class Level
    * The first argument is a 1D Array holding the Layer's Grid Data.
    * The second argument is the Layer itself.
    */
-  @:jignored public var onGrid1DLayerLoaded:Array<String>->Layer->Void;
+  @:jignored public var onGridLayerLoaded:Array<String>->Layer->Void;
   /**
    * Callback triggered when a Grid layer exported with a 2D Data Array is found after calling `load()` on a Level.
    * 
@@ -136,21 +141,21 @@ class Level
    * The first argument is a 1D Array holding the Layer's Tile ID Data.
    * The second argument is the Layer itself.
    */
-  @:jignored public var onTileID1DLayerLoaded:Array<Int>->Layer->Void;
+  @:jignored public var onTileLayerLoaded:Array<Int>->Layer->Void;
   /**
    * Callback triggered when a Tile layer exported with a 2D Data Array containing Tile IDs is found after calling `load()` on a Level.
    * 
    * The first argument is a 2D Array holding the Layer's Tile ID Data.
    * The second argument is the Layer itself.
    */
-  @:jignored public var onTileID2DLayerLoaded:Array<Array<Int>>->Layer->Void;
+  @:jignored public var onTile2DLayerLoaded:Array<Array<Int>>->Layer->Void;
   /**
    * Callback triggered when a Tile layer exported with a 2D Data Array containing Tile Coords is found after calling `load()` on a Level.
    * 
    * The first argument is a 2D Array holding the Layer's Tile Cordinate Data.
    * The second argument is the Layer itself.
    */
-  @:jignored public var onTileCoords1DLayerLoaded:Array<Array<Int>>->Layer->Void;
+  @:jignored public var onTileCoordsLayerLoaded:Array<Array<Int>>->Layer->Void;
   /**
    * Callback triggered when a Tile layer exported with a 3D Data Array containing Tile Coords is found after calling `load()` on a Level.
    * 
@@ -171,47 +176,58 @@ class Level
   {
     if (jsonParser == null) jsonParser = new JsonParser<Level>();
     jsonParser.fromJson(json);
-    trace(jsonParser.errors);
     return jsonParser.value;
   }
-
+  /**
+   * Loops through all layers, triggering each layer's callback if defined on this Level.
+   * 
+   * Available Callbacks:
+   * ```
+   * onTileLayerLoaded()
+   * onTile2DLayerLoaded()
+   * onTileCoordsLayerLoaded()
+   * onTileCoords2DLayerLoaded()
+   * onDecalLayerLoaded()
+   * onEntityLayerLoaded()
+   * onGridLayerLoaded()
+   * onGrid2DLayerLoaded()
+   * ```
+   */
   public function load()
   {
     for (layer in layers)
     {
-      
-      if (layer.decals != null) 
+      if (layer.data != null)
+      {
+        if (onTileLayerLoaded != null) onTileLayerLoaded(layer.data, layer);
+      }
+      else if (layer.data2D != null) 
+      {
+        if (onTile2DLayerLoaded != null) onTile2DLayerLoaded(layer.data2D, layer);
+      }
+      else if (layer.dataCoords != null) 
+      {
+        if (onTileCoordsLayerLoaded != null) onTileCoordsLayerLoaded(layer.dataCoords, layer);
+      }
+      else if (layer.dataCoords2D != null) 
+      {
+        if (onTileCoords2DLayerLoaded != null) onTileCoords2DLayerLoaded(layer.dataCoords2D, layer);
+      }
+      else if (layer.grid != null) 
+      {
+        if (onGridLayerLoaded != null) onGridLayerLoaded(layer.grid, layer);
+      }
+      else if (layer.grid2D != null) 
+      {
+        if (onGrid2DLayerLoaded != null) onGrid2DLayerLoaded(layer.grid2D, layer);
+      }
+      else if (layer.decals != null) 
       {
         if (onDecalLayerLoaded != null) onDecalLayerLoaded(layer.decals, layer);
       }
       else if (layer.entities != null)
       {
         if (onEntityLayerLoaded != null) onEntityLayerLoaded(layer.entities, layer);
-      }
-      else if (layer.data != null)
-      {
-        trace(layer.name + ': ');
-        trace(layer.data);
-        switch (layer.data)
-        {
-          case Int1D(v):
-            if (onTileID1DLayerLoaded != null) onTileID1DLayerLoaded(v, layer);
-          case Int2D(v):
-            if (layer.exportMode == IDS)
-            {
-              if (onTileID1DLayerLoaded != null) onTileID2DLayerLoaded(v, layer);
-            }
-            else
-            {
-              if (onTileCoords1DLayerLoaded != null) onTileCoords1DLayerLoaded(v, layer);
-            }
-          case Int3D(v):
-            if (onTileCoords2DLayerLoaded != null) onTileCoords2DLayerLoaded(v, layer);
-          case String1D(v):
-            if (onGrid1DLayerLoaded != null) onGrid1DLayerLoaded(v, layer);
-          case String2D(v):
-            if (onGrid2DLayerLoaded != null) onGrid2DLayerLoaded(v, layer);
-        }
       }
     }
   }

@@ -39,17 +39,17 @@ class TileLayer extends Layer
     if (tileset != null) data.tileset = tileset.label;
     else data.tileset = "";
     
-    data._contents = "data";
-
     if (template.exportMode == IDS)
     {
       if(template.arrayMode == ONE)
       {
-        Reflect.setField(data, 'data', [for(column in flippedData) for (i in column) i]);
+        data._contents = "data";
+        data.data = [for(column in flippedData) for (i in column) i];
       }
       else if (template.arrayMode == TWO)
       {
-        Reflect.setField(data, 'data', flippedData);
+        data._contents = "data2D";
+        data.data2D = flippedData;
       }
       else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
     }
@@ -57,7 +57,8 @@ class TileLayer extends Layer
     {
       if(template.arrayMode == ONE)
       {
-        Reflect.setField(data, 'data', [for(column in flippedData) for (i in column) i == -1 ? [-1] : [tileset.getTileX(i), tileset.getTileY(i)]]);
+        data._contents = "dataCoords";
+        data.dataCoords = [for(column in flippedData) for (i in column) i == -1 ? [-1] : [tileset.getTileX(i), tileset.getTileY(i)]];
       }
       else if (template.arrayMode == TWO)
       {
@@ -71,7 +72,8 @@ class TileLayer extends Layer
             arr[y][x] = i == -1 ? [-1] : [tileset.getTileX(i), tileset.getTileY(i)];
           }
         }
-        Reflect.setField(data, 'data', arr);
+        data._contents = "dataCoords2D";
+        data.dataCoords2D = arr;
       }
       else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
     }
@@ -109,7 +111,7 @@ class TileLayer extends Layer
       }
       else if (arrayMode == TWO)
       {
-        this.data = data.data;
+        this.data = data.data2D;
       }
       else throw "Invalid Tile Layer Array Mode: " + arrayMode;
     }
@@ -117,7 +119,7 @@ class TileLayer extends Layer
     {
       if (arrayMode == ONE)
       {
-        var content:Array<Array<Int>> = data.data;
+        var content:Array<Array<Int>> = data.dataCoords;
         for (i in 0...content.length)
         {
           var x = i % gridCellsX;
@@ -128,7 +130,7 @@ class TileLayer extends Layer
       }
       else if (arrayMode == TWO)
       {
-        var content:Array<Array<Array<Int>>> = data.data;
+        var content:Array<Array<Array<Int>>> = data.dataCoords2D;
         for (y in 0...content.length)
         {
           for (x in 0...content[y].length)

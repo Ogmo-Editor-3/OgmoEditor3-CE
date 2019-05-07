@@ -16,7 +16,7 @@ class ValueTemplate
   /**
    * Default value(s) for the Value Template.
    */
-  public var defaults:AnyDefaultValue;
+  public var defaults:String;
   /**
    * Flag to set if the value is bounded with a min/max. Only available for Int and Float Value Templates.
    */

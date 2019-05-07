@@ -29,16 +29,17 @@ class GridLayer extends Layer
   {
     var data = super.save();
     var template:GridLayerTemplate = cast this.template;
-    data._contents = "data";
     var flippedData = flip2dArray(this.data);
 
     if(template.arrayMode == ONE)
     {
-      Reflect.setField(data, 'data', [for(column in flippedData) for (i in column) i]);
+      data._contents = "grid";
+      data.grid = [for(column in flippedData) for (i in column) i];
     }
     else if (template.arrayMode == TWO)
     {
-      Reflect.setField(data, 'data', flippedData);
+      data._contents = "grid2D";
+      data.grid2D = flippedData;
     }
     else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
 
@@ -57,7 +58,7 @@ class GridLayer extends Layer
 
     if (arrayMode == ONE)
     {
-      var content:Array<String> = data.data;
+      var content:Array<String> = data.grid;
       for (i in 0...content.length)
       {
         var x = i % gridCellsX;
@@ -67,7 +68,7 @@ class GridLayer extends Layer
     }
     else if (arrayMode == TWO)
     {
-      this.data = data.data;
+      this.data = data.grid2D;
     }
     else throw "Invalid Tile Layer Array Mode: " + arrayMode;
     this.data = flip2dArray(this.data);
