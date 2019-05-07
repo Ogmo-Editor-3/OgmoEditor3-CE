@@ -58,7 +58,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 		var path = FileSystem.chooseFile("Select Tileset", [{ name: "Tilemaps", extensions: ["png", "jpg"] }]);
 		if (FileSystem.exists(path))
 		{
-			var relative  = Path.relative(OGMO.project.path, path);
+			var relative  = Path.relative(Path.dirname(OGMO.project.path), path);
 			var tilemap = new Tileset(OGMO.project, "New Tileset", relative, 8, 8, 0, 0);
 			OGMO.project.tilesets.push(tilemap);
 			refreshList();

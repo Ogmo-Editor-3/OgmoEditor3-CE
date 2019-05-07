@@ -34,9 +34,9 @@ class Tileset
     this.tileSeparationX = tileSepX;
     this.tileSeparationY = tileSepY;
       
-    if (FileSystem.exists(Path.join(project.path, path)))
+    if (FileSystem.exists(Path.join(Path.dirname(project.path), path)))
     {
-      texture = Texture.fromFile(Path.join(project.path, path));
+      texture = Texture.fromFile(Path.join(Path.dirname(project.path), path));
     }
     else if (image != null)
     {
