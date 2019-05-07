@@ -49,6 +49,7 @@ class Layer
 		data.name = template.name;
 		data._eid = template.exportID;
 		offset.saveInto(data, "offsetX", "offsetY");
+		template.gridSize.saveInto(data, "gridSizeX", "gridSizeY");
 
 		return data;
 	}

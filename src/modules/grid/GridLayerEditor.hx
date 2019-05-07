@@ -34,7 +34,7 @@ class GridLayerEditor extends LayerEditor
           {
             var startX = x - range;
             var c = (cast template : GridLayerTemplate).legend[last];
-            if (!c.equals(Color.transparent))
+            if (c != null && !c.equals(Color.transparent))
                 EDITOR.draw.drawRect(
                     layer.offset.x + startX * template.gridSize.x,
                     layer.offset.y + y * template.gridSize.y,
