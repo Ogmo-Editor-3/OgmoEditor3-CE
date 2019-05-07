@@ -120,7 +120,7 @@ class DecalLayerTemplate extends LayerTemplate
 		}
 
 		// starts reading all directories
-		var path = Path.join(project.path, folder);
+		var path = Path.join(Path.dirname(project.path), folder);
 		files.dirname = path;
 		if (FileSystem.exists(path)) walker = new Walker(path)
 			.on("data", (item:Item) -> { if(item.path != path) recursiveAdd(item, files); })
@@ -182,7 +182,7 @@ class DecalLayerTemplate extends LayerTemplate
 						var tex = Texture.fromFile(texture);
 						if (tex != null)
 						{
-							tex.path = Path.relative(project.path, texture);
+							tex.path = Path.relative(Path.dirname(project.path), texture);
 							this.textures.push(tex);
 							textures.push(tex);
 						}

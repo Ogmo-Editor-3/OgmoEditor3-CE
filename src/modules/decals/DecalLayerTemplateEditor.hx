@@ -33,7 +33,7 @@ class DecalLayerTemplateEditor extends LayerTemplateEditor
     // folders
     folderHolder = new JQuery("<div>");
     into.append(folderHolder);
-    folder = Fields.createFolderpath(decalTemplate.folder, true, folderHolder);
+    folder = Fields.createFolderpath(decalTemplate.folder, false, folderHolder);
 
     // create custom values
     valueManager = new ValueTemplateManager(into, decalTemplate.values);
