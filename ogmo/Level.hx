@@ -10,15 +10,15 @@ class Entity
   @:alias("_eid") public var exportID:String;
   public var x:Float;
   public var y:Float;
-  @:optional public var width:Float;
-  @:optional public var height:Float;
-  @:optional public var originX:Float;
-  @:optional public var originY:Float;
-  @:optional public var rotation:Float;
-  @:optional public var flippedX:Bool;
-  @:optional public var flippedY:Bool;
-  @:optional public var nodes:Array<{x:Float, y:Float}>;
-  @:optional public var values:Map<String, String>;
+  @:optional public var width:Null<Float>;
+  @:optional public var height:Null<Float>;
+  @:optional public var originX:Null<Float>;
+  @:optional public var originY:Null<Float>;
+  @:optional public var rotation:Null<Float>;
+  @:optional public var flippedX:Null<Bool>;
+  @:optional public var flippedY:Null<Bool>;
+  @:optional public var nodes:Null<Array<{x:Float, y:Float}>>;
+  @:optional public var values:Null<Map<String, String>>;
 
   /**
    * Creates a new Object containing this Entity's custom values that have been parsed to their expected type, based on the Project that is passed in.
@@ -65,9 +65,9 @@ class Decal
   public var x:Float;
   public var y:Float;
   public var texture:String;
-  @:optional public var rotation:Float;
-  @:optional public var scaleX:Float;
-  @:optional public var scaleY:Float;
+  @:optional public var rotation:Null<Float>;
+  @:optional public var scaleX:Null<Float>;
+  @:optional public var scaleY:Null<Float>;
 } 
 
 class Layer
@@ -76,17 +76,17 @@ class Layer
   @:alias("_eid") public var exportID:String;
   public var offsetX:Float;
   public var offsetY:Float;
-  @:optional public var data:Array<Int>;
-  @:optional public var data2D:Array<Array<Int>>;
-  @:optional public var dataCoords:Array<Array<Int>>;
-  @:optional public var dataCoords2D:Array<Array<Array<Int>>>;
-  @:optional public var grid:Array<String>;
-  @:optional public var grid2D:Array<Array<String>>;
-  @:optional public var exportMode:ExportMode;
-  @:optional public var arrayMode:ArrayMode;
-  @:optional public var tileset:String;
-  @:optional public var entities:Array<Entity>;
-  @:optional public var decals:Array<Decal>;
+  @:optional public var data:Null<Array<Int>>;
+  @:optional public var data2D:Null<Array<Array<Int>>>;
+  @:optional public var dataCoords:Null<Array<Array<Int>>>;
+  @:optional public var dataCoords2D:Null<Array<Array<Array<Int>>>>;
+  @:optional public var grid:Null<Array<String>>;
+  @:optional public var grid2D:Null<Array<Array<String>>>;
+  @:optional public var exportMode:Null<ExportMode>;
+  @:optional public var arrayMode:Null<ArrayMode>;
+  @:optional public var tileset:Null<String>;
+  @:optional public var entities:Null<Array<Entity>>;
+  @:optional public var decals:Null<Array<Decal>>;
 }
 
 class Level
@@ -106,7 +106,7 @@ class Level
   /**
    * Array containing all of the Level's custom values.
    */
-  @:optional public var values:Map<String, String>;
+  @:optional public var values:Null<Map<String, String>>;
   /**
    * Callback triggered when a Decal layer is found after calling `load()` on a Level.
    * 
@@ -242,7 +242,7 @@ class Level
   public function parseValues(project:Project):Dynamic
   {
     var obj = {};
-    for (key => value in values) {
+    if (values != null) for (key => value in values) {
       var found = false;
       for (template in project.levelValues)
       {

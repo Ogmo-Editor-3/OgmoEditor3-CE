@@ -20,31 +20,31 @@ class ValueTemplate
   /**
    * Flag to set if the value is bounded with a min/max. Only available for Int and Float Value Templates.
    */
-  @:optional public var bounded:Bool;
+  @:optional public var bounded:Null<Bool>;
   /**
    * Minimum value of a Float or Int. Only available for Int and Float Value Templates.
    */
-  @:optional public var min:Float;
+  @:optional public var min:Null<Float>;
   /**
    * Maximum value of a Float or Int. Only available for Int and Float Value Templates.
    */
-  @:optional public var max:Float;
+  @:optional public var max:Null<Float>;
   /**
    * Maximum length of a String. Only available for String Value Template.
    */
-  @:optional public var maxLength:Int;
+  @:optional public var maxLength:Null<Int>;
   /**
    * Flag to set whether to remove whitespace from a String. Only available for String Value Template.
    */
-  @:optional public var trimWhitespace:Bool;
+  @:optional public var trimWhitespace:Null<Bool>;
   /**
    * Available options of an Enum. Only available for Enum Value Template.
    */
-  @:optional public var choices:Array<String>;
+  @:optional public var choices:Null<Array<String>>;
   /**
    * Flag to get whether to include the Alpha component on a Color. Only available for Color Value Template.
    */
-  @:optional public var includeAlpha:Bool;
+  @:optional public var includeAlpha:Null<Bool>;
 }
 
 class LayerTemplate
@@ -68,47 +68,47 @@ class LayerTemplate
   /**
    * Enum to determine whether a Tile Layer exports it's Tile Data with IDs or Coords. Only available for Tile Layers.
    */
-  @:optional public var exportMode:ExportMode;
+  @:optional public var exportMode:Null<ExportMode>;
   /**
    * Enum to determine whether a Tile or Grid Layer exports it's Data as a 1D Array or a 2D Array. Only available for Tile and Grid Layers.
    */
-  @:optional public var arrayMode:ArrayMode;
+  @:optional public var arrayMode:Null<ArrayMode>;
   /**
    * Name of this Layer's default Tilemap. Only available for Tile Layers.
    */
-  @:optional public var defaultTileset:String;
+  @:optional public var defaultTileset:Null<String>;
   /**
    * String Map describing a Grid Layers available Grid Cells. Only available for Grid Layers.
    */
-  @:optional public var legend:Map<String, String>;
+  @:optional public var legend:Null<Map<String, String>>;
   /**
    * Array of Entity Tags that filters out any Entities that DO NOT have any of the Tags described. Only available for Entity Layers.
    */
-  @:optional public var requiredTags:Array<String>;
+  @:optional public var requiredTags:Null<Array<String>>;
   /**
    * Array of Entity Tags that filters out any Entities that DO have any of the Tags described. Only available for Entity Layers.
    */
-  @:optional public var excludedTags:Array<String>;
+  @:optional public var excludedTags:Null<Array<String>>;
   /**
    * Directory to search for Decal images. Only available for Decal Layers.
    */
-  @:optional public var folder:String;
+  @:optional public var folder:Null<String>;
   /**
    * Flag to set whether image sequences are included as available Decals. Only available for Decal Layers.
    */
-  @:optional public var includeImageSequence:Bool;
+  @:optional public var includeImageSequence:Null<Bool>;
   /**
    * Flag to set whether Decals on this layer are scaleable. Only available for Decal Layers.
    */
-  @:optional public var scaleable:Bool;
+  @:optional public var scaleable:Null<Bool>;
   /**
    * Flag to set whether Decals on this layer are rotatable. Only available for Decal Layers.
    */
-  @:optional public var rotatable:Bool;
+  @:optional public var rotatable:Null<Bool>;
   /**
    * Array of Value Templates for a Decal Layer. Only available for Decal Layers.
    */
-  @:optional public var values:Array<ValueTemplate>;
+  @:optional public var values:Null<Array<ValueTemplate>>;
 }
 
 // TODO: docs 
