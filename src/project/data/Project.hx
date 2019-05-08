@@ -62,8 +62,7 @@ class Project
 	{
 		for (tileset in tilesets) if (tileset.label == name) return tileset;
 		if (tilesets.length > 0) return tilesets[0];
-
-		throw "No tilesets in the project!";
+		return null;
 	}
 
 	public function getNextLayerTemplateExportID():String
