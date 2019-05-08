@@ -29,17 +29,17 @@ class GridLayer extends Layer
   {
     var data = super.save();
     var template:GridLayerTemplate = cast this.template;
-    var flippedData = flip2dArray(this.data);
 
     if(template.arrayMode == ONE)
     {
       data._contents = "grid";
-      data.grid = [for(column in flippedData) for (i in column) i];
+      var flippedData = flip2dArray(this.data);
+      data.grid = [for(row in flippedData) for (i in row) i];
     }
     else if (template.arrayMode == TWO)
     {
       data._contents = "grid2D";
-      data.grid2D = flippedData;
+      data.grid2D = this.data;
     }
     else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
 
@@ -52,7 +52,7 @@ class GridLayer extends Layer
   {
     super.load(data);
     initData();
-    this.data = flip2dArray(this.data);
+    // this.data = flip2dArray(this.data);
 
     var arrayMode:Int = Imports.integer(data.arrayMode, ArrayExportModes.ONE);
 
@@ -63,7 +63,7 @@ class GridLayer extends Layer
       {
         var x = i % gridCellsX;
         var y = (i / gridCellsX).int();
-        this.data[y][x] = content[i];
+        this.data[x][y] = content[i];
       }
     }
     else if (arrayMode == TWO)
@@ -71,7 +71,7 @@ class GridLayer extends Layer
       this.data = data.grid2D;
     }
     else throw "Invalid Tile Layer Array Mode: " + arrayMode;
-    this.data = flip2dArray(this.data);
+    // this.data = flip2dArray(this.data);
   }
 
   public function subtractRow(end:Bool):Void
