@@ -72,4 +72,46 @@ class Decal
 		scale.y = Calc.snap(scale.y, 1);
 	}
 
+	public function drawSelectionBox(origin:Bool)
+	{
+		var corners = getCorners(2);
+		EDITOR.overlay.drawLine(corners[0], corners[1], Color.green);
+		EDITOR.overlay.drawLine(corners[1], corners[3], Color.green);
+		EDITOR.overlay.drawLine(corners[2], corners[3], Color.green);
+		EDITOR.overlay.drawLine(corners[2], corners[0], Color.green);
+		if (!origin) return;
+		EDITOR.overlay.drawLine(
+			Vector.midPoint(corners[0], corners[1]),
+			Vector.midPoint(corners[2], corners[3]),
+			Color.white
+		);
+		EDITOR.overlay.drawLine(
+			Vector.midPoint(corners[0], corners[2]),
+			Vector.midPoint(corners[1], corners[3]),
+			Color.white
+		);
+		EDITOR.overlay.drawRect(position.x - 2, position.y - 2, 4, 4, Color.white);
+	}
+
+	public function getCorners(pad:Float):Array<Vector>
+	{
+		var corners:Array<Vector> = [
+			new Vector(-pad - width/2 * scale.x, -pad - height/2 * scale.y),
+			new Vector(pad + width/2 * scale.x, -pad - height/2 * scale.y),
+			new Vector(-pad - width/2 * scale.x, pad + height/2 * scale.y),
+			new Vector(pad + width/2 * scale.x, pad + height/2 * scale.y)
+		];
+
+		for (corner in corners)
+		{
+			var x = corner.x;
+			var y = corner.y;
+			corner.x = x * rotation.cos() - y * rotation.sin();
+			corner.y = x * rotation.sin() + y * rotation.cos();
+		}
+		for (corner in corners) corner.add(position);
+
+		return corners;
+	}
+
 }
