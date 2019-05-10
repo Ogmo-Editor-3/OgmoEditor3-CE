@@ -190,4 +190,9 @@ class Vector
 
 		return into;
 	}
+
+	public static function midPoint(a:Vector, b:Vector, v:Float = 0.5):Vector
+	{
+		return new Vector(a.x + (b.x - a.x) * v, a.y + (b.y - a.y) * v);
+	}
 }
