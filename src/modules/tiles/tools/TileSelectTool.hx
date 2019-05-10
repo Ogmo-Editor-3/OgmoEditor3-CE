@@ -152,6 +152,9 @@ class TileSelectTool extends TileTool
 		return p.x >= upper.x && p.x <= lower.x && p.y >= upper.y && p.y <= lower.y;
 	}
 
+	override public function getIcon():String return 'tile-selection';
+	override public function getName():String return 'Select';
+
 }
 
 enum SelectModes
