@@ -117,7 +117,7 @@ class Layer
 		return ret;
 	}
 
-	public function getGridRect(start:Vector, end:Vector, ?into:Rectangle):Rectangle
+	public function getGridRect(start:Vector, end:Vector, ?into:Rectangle, trim:Bool = true):Rectangle
 	{
 		if (into == null) into = new Rectangle();
 
@@ -143,7 +143,7 @@ class Layer
 			into.height = start.y - end.y + 1;
 		}
 
-		into.trim(0, 0, gridCellsX, gridCellsY);
+		if (trim) into.trim(0, 0, gridCellsX, gridCellsY);
 
 		return into;
 	}
