@@ -337,6 +337,14 @@ class GLRenderer
     add_color(col, 6);
 	}
 
+	public function drawRectLines(x:Float, y:Float, w:Float, h:Float, col:Color)
+	{
+		drawLine(new Vector(x, y), new Vector(x + w, y), col);
+		drawLine(new Vector(x + w, y), new Vector(x + w, y + h), col);
+		drawLine(new Vector(x + w, y + h), new Vector(x, y + h), col);
+		drawLine(new Vector(x, y + h), new Vector(x, y), col);
+	}
+
 	public function drawTriangle(x1:Float, y1:Float, x2:Float, y2:Float, x3:Float, y3:Float, col:Color):Void
 	{
 		setDrawMode(RenderingContext.TRIANGLES);
