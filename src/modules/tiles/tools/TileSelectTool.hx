@@ -42,17 +42,22 @@ class TileSelectTool extends TileTool
 		var w = rect.width * layer.template.gridSize.x;
 		var h = rect.height * layer.template.gridSize.y;
 
-		EDITOR.overlay.setAlpha(0.75);
+		//EDITOR.overlay.setAlpha(0.75);
 		for (x in 0...selection.length) for (y in 0...selection[x].length)
 		{
 			var id = selection[x][y];
-			if (id == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
-			if (!layer.insideGrid(new Vector(freeRect.x + x, freeRect.y + y))) continue;
 			var cur = new Vector(trueAt.x + x * layer.template.gridSize.x, trueAt.y + y * layer.template.gridSize.y);
+			if (!layer.insideGrid(new Vector(freeRect.x + x, freeRect.y + y))) continue;
+			if (id == -1) // TODO - It might be nice to be able to set this to 0 -01010111
+			{
+				if (!OGMO.ctrl) EDITOR.overlay.drawRect(cur.x, cur.y, layer.template.gridSize.x, layer.template.gridSize.y, Color.red.x(0.2));
+				continue;
+			}
+			EDITOR.overlay.drawRect(cur.x, cur.y, layer.template.gridSize.x, layer.template.gridSize.y, Color.red.x(0.25));
 			EDITOR.overlay.drawTile(cur.x, cur.y, layer.tileset, id);
 			trace('\n at: ${at.x} / ${at.y} \n cur: ${cur.x} / ${cur.y}');
 		}
-		EDITOR.overlay.setAlpha(1);
+		//EDITOR.overlay.setAlpha(1);
 		EDITOR.overlay.drawRectLines(at.x - 2, at.y - 2, w + 4, h + 4, Color.yellow);
 	}
 
@@ -81,7 +86,9 @@ class TileSelectTool extends TileTool
 		offset = new Vector(pos.x - upper.x, pos.y - upper.y);
 		updateRect();
 		if (OGMO.ctrl) return; 
-		for (x in 0...rect.width.int()) for (y in 0...rect.height.int()) layer.data[rect.x.int() + x][rect.y.int() + y] = -1;
+		for (x in 0...rect.width.int()) for (y in 0...rect.height.int()) 
+			if (selection[x][y] != -1) // TODO - It might be nice to be able to set this to 0 -01010111
+				layer.data[rect.x.int() + x][rect.y.int() + y] = -1; // TODO - It might be nice to be able to set this to 0 -01010111
 		EDITOR.dirty();
 	}
 
@@ -117,11 +124,11 @@ class TileSelectTool extends TileTool
 
 	override public function onMouseUp(pos:Vector)
 	{
-		if (mode == Select) makeSelection(pos);
+		if (mode == Select) makeSelection();
 		if (mode == Move) placeSelection(pos);
 	}
 
-	function makeSelection(pos:Vector)
+	function makeSelection()
 	{
 		mode = None;
 		EDITOR.overlayDirty();
@@ -133,11 +140,55 @@ class TileSelectTool extends TileTool
 	function placeSelection(pos:Vector)
 	{
 		mode = None;
-		for (x in 0...freeRect.width.int())
-			for (y in 0...freeRect.height.int())
-				if (layer.insideGrid(new Vector(freeRect.x + x, freeRect.y + y)))
-					layer.data[freeRect.x.int() + x][freeRect.y.int() + y] = selection[x][y];
+		for (x in 0...freeRect.width.int()) for (y in 0...freeRect.height.int())
+		{
+			if (OGMO.ctrl && selection[x][y] == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
+			if (layer.insideGrid(new Vector(freeRect.x + x, freeRect.y + y)))
+				layer.data[freeRect.x.int() + x][freeRect.y.int() + y] = selection[x][y];
+		}
 		EDITOR.dirty();
+	}
+
+	override public function onRightDown(pos:Vector)
+	{
+		deselectTiles();
+	}
+
+	override public function onKeyPress(key:Int)
+	{
+		if (key == Keys.A && OGMO.ctrl) selectAllTiles();
+		if (key == Keys.D && OGMO.ctrl) deselectTiles();
+		if (key == Keys.Delete || key == Keys.Backspace) eraseSelection();
+	}
+
+	function selectAllTiles()
+	{
+		start = new Vector(0, 0);
+		end = new Vector(layer.gridCellsX - 1, layer.gridCellsY - 1);
+		updateRect();
+		makeSelection();
+		EDITOR.overlayDirty();
+	}
+
+	function deselectTiles()
+	{
+		start = new Vector(-1);
+		end = new Vector(-1);
+		updateRect();
+		EDITOR.overlayDirty();
+	}
+
+	function eraseSelection()
+	{
+		if (mode == Move) return;
+		mode = None;
+		for (x in 0...freeRect.width.int()) for (y in 0...freeRect.height.int())
+		{
+			if (layer.insideGrid(new Vector(freeRect.x + x, freeRect.y + y)))
+				layer.data[freeRect.x.int() + x][freeRect.y.int() + y] = -1; // TODO - It might be nice to be able to set this to 0 -01010111
+		}
+		EDITOR.dirty();
+		deselectTiles();
 	}
 
 	function updateRect()
