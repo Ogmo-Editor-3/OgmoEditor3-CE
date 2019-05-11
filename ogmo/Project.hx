@@ -56,7 +56,7 @@ class LayerTemplate
   /**
    * Definition of the Layer Template.
    */
-  public var definition:LayerDefinition;
+  public var definition:LayerValueDefinition;
   /**
    * Size of each cell in the Layer's Grid.
    */
@@ -268,6 +268,12 @@ class Project
   public function getLayerTemplate(exportID:String):Null<LayerTemplate>
   {
     for (layer in layers) if (layer.exportID == exportID) return layer;
+    return null;
+  }
+
+	public function getTilesetTemplate(name:String):Null<TilesetTemplate>
+  {
+    for (tileset in tilesets) if (tileset.label == name) return tileset;
     return null;
   }
 }

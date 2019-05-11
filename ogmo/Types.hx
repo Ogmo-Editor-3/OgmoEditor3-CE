@@ -27,7 +27,7 @@ abstract ValueDefiniton (String) from String to String
 }
 
 @:enum
-abstract LayerDefinition (String) from String to String
+abstract LayerValueDefinition (String) from String to String
 {
   var DECAL = "decal";
   var GRID = "grid";

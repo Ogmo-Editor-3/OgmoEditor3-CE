@@ -3,7 +3,7 @@ package ogmo;
 import ogmo.Types;
 import json2object.JsonParser;
 
-class Entity
+class EntityDefinition
 {
   public var name:String;
   public var id:Int;
@@ -60,7 +60,7 @@ class Entity
   }
 } 
 
-class Decal
+class DecalDefinition
 {
   public var x:Float;
   public var y:Float;
@@ -70,7 +70,7 @@ class Decal
   @:optional public var scaleY:Null<Float>;
 } 
 
-class Layer
+class LayerDefinition
 {
   public var name:String;
   @:alias("_eid") public var exportID:String;
@@ -89,8 +89,8 @@ class Layer
   @:optional public var exportMode:Null<ExportMode>;
   @:optional public var arrayMode:Null<ArrayMode>;
   @:optional public var tileset:Null<String>;
-  @:optional public var entities:Null<Array<Entity>>;
-  @:optional public var decals:Null<Array<Decal>>;
+  @:optional public var entities:Null<Array<EntityDefinition>>;
+  @:optional public var decals:Null<Array<DecalDefinition>>;
 }
 
 class Level
@@ -104,9 +104,9 @@ class Level
    */
   public var height:Float;
   /**
-   * Array containing all of the Level's Layers.
+   * Array containing all of the Level's Layer Definitions.
    */
-  public var layers:Array<Layer>;
+  public var layers:Array<LayerDefinition>;
   /**
    * Array containing all of the Level's custom values.
    */
@@ -114,59 +114,59 @@ class Level
   /**
    * Callback triggered when a Decal layer is found after calling `load()` on a Level.
    * 
-   * The first argument is an Array holding the Layer's Decal Data.
-   * The second argument is the Layer's itself.
+   * The first argument is an Array holding the Layer's Decal Definitions.
+   * The second argument is the Layer Definition itself.
    */
-  @:jignored public var onDecalLayerLoaded:Array<Decal>->Layer->Void;
+  @:jignored public var onDecalLayerLoaded:Array<DecalDefinition>->LayerDefinition->Void;
   /**
    * Callback triggered when an Entity layer is found after calling `load()` on a Level.
    * 
-   * The first argument is an Array holding the Layer's Entity Data.
-   * The second argument is the Layer itself.
+   * The first argument is an Array holding the Layer's Entity Definitions.
+   * The second argument is the Layer Definition itself.
    */
-  @:jignored public var onEntityLayerLoaded:Array<Entity>->Layer->Void;
+  @:jignored public var onEntityLayerLoaded:Array<EntityDefinition>->LayerDefinition->Void;
   /**
    * Callback triggered when a Grid layer exported with a 1D Data Array is found after calling `load()` on a Level.
    * 
    * The first argument is a 1D Array holding the Layer's Grid Data.
-   * The second argument is the Layer itself.
+   * The second argument is the Layer Definition itself.
    */
-  @:jignored public var onGridLayerLoaded:Array<String>->Layer->Void;
+  @:jignored public var onGridLayerLoaded:Array<String>->LayerDefinition->Void;
   /**
    * Callback triggered when a Grid layer exported with a 2D Data Array is found after calling `load()` on a Level.
    * 
    * The first argument is a 2D Array holding the Layer's Grid Data.
-   * The second argument is the Layer itself.
+   * The second argument is the Layer Definition itself.
    */
-  @:jignored public var onGrid2DLayerLoaded:Array<Array<String>>->Layer->Void;
+  @:jignored public var onGrid2DLayerLoaded:Array<Array<String>>->LayerDefinition->Void;
   /**
    * Callback triggered when a Tile layer exported with a 1D Data Array containing Tile IDs is found after calling `load()` on a Level.
    * 
    * The first argument is a 1D Array holding the Layer's Tile ID Data.
-   * The second argument is the Layer itself.
+   * The second argument is the Layer Definition itself.
    */
-  @:jignored public var onTileLayerLoaded:Array<Int>->Layer->Void;
+  @:jignored public var onTileLayerLoaded:Array<Int>->LayerDefinition->Void;
   /**
    * Callback triggered when a Tile layer exported with a 2D Data Array containing Tile IDs is found after calling `load()` on a Level.
    * 
    * The first argument is a 2D Array holding the Layer's Tile ID Data.
-   * The second argument is the Layer itself.
+   * The second argument is the Layer Definition itself.
    */
-  @:jignored public var onTile2DLayerLoaded:Array<Array<Int>>->Layer->Void;
+  @:jignored public var onTile2DLayerLoaded:Array<Array<Int>>->LayerDefinition->Void;
   /**
    * Callback triggered when a Tile layer exported with a 2D Data Array containing Tile Coords is found after calling `load()` on a Level.
    * 
    * The first argument is a 2D Array holding the Layer's Tile Cordinate Data.
-   * The second argument is the Layer itself.
+   * The second argument is the Layer Definition itself.
    */
-  @:jignored public var onTileCoordsLayerLoaded:Array<Array<Int>>->Layer->Void;
+  @:jignored public var onTileCoordsLayerLoaded:Array<Array<Int>>->LayerDefinition->Void;
   /**
    * Callback triggered when a Tile layer exported with a 3D Data Array containing Tile Coords is found after calling `load()` on a Level.
    * 
    * The first argument is a 3D Array holding the Layer's Tile Coords Data.
-   * The second argument is the Layer itself.
+   * The second argument is the Layer Definition itself.
    */
-  @:jignored public var onTileCoords2DLayerLoaded:Array<Array<Array<Int>>>->Layer->Void;
+  @:jignored public var onTileCoords2DLayerLoaded:Array<Array<Array<Int>>>->LayerDefinition->Void;
   /**
    * `json2object` Parser.
    */
