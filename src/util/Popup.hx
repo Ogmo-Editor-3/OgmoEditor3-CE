@@ -25,21 +25,23 @@ class Popup
       var win = new JQuery('<div class="popupWindow">');
       var title = new JQuery('<div class="title">');
       var content = new JQuery('<div class="content">');
-      var event = function(e:Event, close)
+      var event:Event->Void;
+
+      function close(index:Int)
+      {
+        overlay.remove();
+        new JQuery(Browser.window).unbind('keyup', event);
+        OGMO.onPopupEnd();
+
+        if (callback != null) callback(index);
+      }
+
+      event = function(e:Event)
       {
         if (e.which == Keys.Enter || e.which == Keys.Escape)
         {
           close(e.which == Keys.Enter ? 0 : -1);
         }
-      }
-
-      function close(index:Int)
-      {
-        overlay.remove();
-        new JQuery(Browser.window).unbind('keyup', event.bind(_, close));
-        OGMO.onPopupEnd();
-
-        if (callback != null) callback(index);
       }
 
       // title part
@@ -110,13 +112,7 @@ class Popup
     var win = new JQuery('<div class="popupWindow">');
     var title = new JQuery('<div class="title">');
     var content = new JQuery('<div class="content">');
-    var event = function(e:Event, close)
-    {
-      if (e.which == Keys.Enter || e.which == Keys.Escape)
-      {
-        close(e.which == Keys.Escape);
-      }
-    }
+    var event:Event->Void;
 
     function close(escape:Bool)
     {
@@ -124,10 +120,18 @@ class Popup
       if (!escape) str = new JQuery('.popupTextInput').val();
 
       overlay.remove();
-      new JQuery(Browser.window).unbind('keyup', event.bind(_, close));
+      new JQuery(Browser.window).unbind('keyup', event);
       OGMO.onPopupEnd();
 
       if (callback != null) callback(str);
+    }
+
+    event = function(e:Event)
+    {
+      if (e.which == Keys.Enter || e.which == Keys.Escape)
+      {
+        close(e.which == Keys.Escape);
+      }
     }
 
     // title part
@@ -209,13 +213,7 @@ class Popup
     var content = new JQuery('<div class="content">');
     var input:JQuery;
     var dropdown:JQuery;
-    var event = function(e:Event, close)
-    {
-      if (e.which == Keys.Enter || e.which == Keys.Escape)
-      {
-        close(e.which == Keys.Escape);
-      }
-    }
+    var event:Event->Void;
 
     function close(escape:Bool)
     {
@@ -228,10 +226,18 @@ class Popup
       }
 
       overlay.remove();
-      new JQuery(Browser.window).unbind('keyup', event.bind(_, close));
+      new JQuery(Browser.window).unbind('keyup', event);
       OGMO.onPopupEnd();
 
       if (callback != null) callback(str, index);
+    }
+
+    event = function(e:Event)
+    {
+      if (e.which == Keys.Enter || e.which == Keys.Escape)
+      {
+        close(e.which == Keys.Escape);
+      }
     }
 
     // title part
@@ -305,10 +311,7 @@ class Popup
     var title = new JQuery('<div class="title">');
     var content = new JQuery('<div class="content">');
     var input: JQuery;
-    var event = function(e:Event, close)
-    {
-      if (e.which == Keys.Escape) close(true);
-    }
+    var event:Event->Void;
 
     function close(escape:Bool)
     {
@@ -316,10 +319,18 @@ class Popup
       if (!escape) str = input.val();
 
       overlay.remove();
-      new JQuery(Browser.window).unbind('keyup', event.bind(_, close));
+      new JQuery(Browser.window).unbind('keyup', event);
       OGMO.onPopupEnd();
 
       if (callback != null) callback(str);
+    }
+
+    event = function(e:Event)
+    {
+      if (e.which == Keys.Enter || e.which == Keys.Escape)
+      {
+        close(e.which == Keys.Escape);
+      }
     }
 
     // title part
@@ -392,18 +403,23 @@ class Popup
 
     // current color
     var initialColor = color.clone();
-    var event = function(e:Event, close)
-    {
-      if (e.which == Keys.Enter || e.which == Keys.Escape) close(e.which == Keys.Enter ? color : initialColor);
-    }
+    var event:Event->Void;
 
     function close(result:Color)
     {
       overlay.remove();
-      new JQuery(Browser.window).unbind('keyup', event.bind(_, close));
+      new JQuery(Browser.window).unbind('keyup', event);
       OGMO.onPopupEnd();
 
       if (callback != null) callback(result);
+    }
+
+    event = function(e:Event)
+    {
+      if (e.which == Keys.Enter || e.which == Keys.Escape)
+      {
+        close(e.which == Keys.Enter ? color : initialColor);
+      }
     }
 
     // title part
@@ -629,16 +645,21 @@ class Popup
     var win = new JQuery('<div class="popupWindow" style="width: ' + (columns * columnWidth + 100) + 'px;">');
     var title = new JQuery('<div class="title">');
     var content = new JQuery('<div class="content">');
-    var event = function(e:Event, close)
-    {
-      if (e.which == Keys.Escape) close(true);
-    }
+    var event:Event->Void;
 
     function close(escape:Bool)
     {
       overlay.remove();
-      new JQuery(Browser.window).unbind('keyup', event.bind(_, close));
+      new JQuery(Browser.window).unbind('keyup', event);
       OGMO.onPopupEnd();
+    }
+
+    event = function(e:Event)
+    {
+      if (e.which == Keys.Enter || e.which == Keys.Escape)
+      {
+        close(true);
+      }
     }
 
     // title part
@@ -714,7 +735,6 @@ class Popup
       dragging = true;
       dragX = mouseX - win.offset().left.int();
       dragY = mouseY - win.offset().top.int();
-      trace(dragX +", " + dragY);
     });
 
     holder.on("mouseup", function()
