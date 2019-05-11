@@ -18,6 +18,7 @@ class TileLayerTemplate extends LayerTemplate
         new TileLineTool(),
         new TileFloodTool(),
         new TileEyedropperTool(),
+        new TileSelectTool(),
     ];
     var n = new LayerDefinition(TileLayerTemplate, TileLayerTemplateEditor, "tile", "layer-tiles", "Tile Layer", tools, 2);
     LayerDefinition.definitions.push(n);
