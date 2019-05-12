@@ -8,13 +8,16 @@ class TileSelectTool extends TileTool
 	var mode:SelectModes = None;
 	var start:Vector = new Vector();
 	var end:Vector = new Vector();
-	var rect:Rectangle = new Rectangle();
-	var selecting:Bool = false;
-	var firstChange:Bool = false;
 	var selection:Array<Array<Int>> = [];
-	var lastPos:Vector = new Vector();
-	var offset:Vector = new Vector();
+	var rect:Rectangle = new Rectangle();
 	var freeRect:Rectangle = new Rectangle();
+	var offset:Vector = new Vector();
+	var lastPos:Vector = new Vector();
+
+	override public function activated()
+	{
+		deselectTiles();
+	}
 
 	override public function drawOverlay()
 	{
@@ -203,7 +206,6 @@ class TileSelectTool extends TileTool
 		var p = layer.levelToGrid(pos);
 		var upper = new Vector(Math.min(start.x, end.x), Math.min(start.y, end.y));
 		var lower = new Vector(Math.max(start.x, end.x), Math.max(start.y, end.y));
-		trace('\npos: ${p.x} / ${p.y}\nupper: ${upper.x} / ${upper.y}\nlower: ${lower.x} / ${lower.y}');
 		return p.x >= upper.x && p.x <= lower.x && p.y >= upper.y && p.y <= lower.y;
 	}
 
