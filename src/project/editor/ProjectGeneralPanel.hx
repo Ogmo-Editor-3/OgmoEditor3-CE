@@ -51,7 +51,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     Fields.createSettingsBlock(root, levelMaxSize, SettingsBlock.Half, "Max. Level Size", SettingsBlock.InlineTitle);
 
     // level custom fields
-    levelValueManager = new ValueTemplateManager(root, []);
+    levelValueManager = new ValueTemplateManager(root, [], 'Level Values');
   }
 
   override function begin():Void

@@ -215,6 +215,15 @@
     flex-direction: row;
     float: left;
 
+    &_title
+    {
+        text-align: center;
+        font-size: 0.85em;
+        font-weight: bold;
+        text-transform: uppercase;
+        padding: 5px 0;
+    }
+
     &_manager
     {
         width: 25%;

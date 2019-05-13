@@ -14,6 +14,7 @@ class ValueTemplateManager
   public var root:JQuery;
   public var element:JQuery;
   public var manager:JQuery;
+  public var title:JQuery;
   public var buttons:JQuery;
   public var list:JQuery;
   public var inspector:JQuery;
@@ -22,7 +23,7 @@ class ValueTemplateManager
   public var inspectingEditor:ValueTemplateEditor = null;
   public var values:Array<ValueTemplate> = [];
 
-  public function new(into:JQuery, from:Array<ValueTemplate>)
+  public function new(into:JQuery, from:Array<ValueTemplate>, ?title:String)
   {
     root = into;
     values = from;
@@ -37,6 +38,11 @@ class ValueTemplateManager
     element.append(inspector);
 
     // manager parts (buttons & list)
+    if (title != null) 
+    {
+      this.title = new JQuery('<div class="valuetemplates_title">$title</div>');
+      manager.append(this.title);
+    }
     buttons = new JQuery('<div class="valuetemplates_buttons">');
     manager.append(buttons);
     list = new JQuery('<div class="valuetemplates_list">');
@@ -65,7 +71,6 @@ class ValueTemplateManager
 
   public function refreshList():Void
   {
-    var self = this;
     list.empty();
 
     var itemlist = new ItemList(list, function(a, b, c) { reorder(a, b, c); });
