@@ -18,14 +18,14 @@
     left: 0;
     top: 0;
 
-    & .title
+    & > .title
     {
         width: 100%;
         float: left;
         background: #eee;
     }
 
-    & .title > .icon
+    & > .title > .icon
     {
         float: left;
         padding: 8px;
@@ -33,14 +33,14 @@
         height: 16px;
     }
 
-    & .title > .label
+    & > .title > .label
     {
         padding: 8px 8px 8px 0;
         font-size: 0.9em;
         float: left;
     }
 
-    & .title > .close
+    & > .title > .close
     {
         padding: 8px;
         width: 16px;
@@ -52,7 +52,16 @@
         &:hover::after { background-color: #fff; }
     }
 
-    & .content
+    & > .settings
+    {
+        padding: 20px;
+        padding-bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+        float: left;
+    }
+
+    & > .content
     {
         padding: 20px;
         width: 100%;
@@ -74,6 +83,11 @@
         float: right;
 
         & .button
+        {
+            margin-left: 5px;
+        }
+
+        & .button:not(:first-child)
         {
             margin-left: 20px;
         }

@@ -6,6 +6,7 @@ import js.html.InputElement;
 import js.jquery.Event;
 import js.jquery.JQuery;
 import level.data.Level;
+import util.Fields;
 
 /**
  * TODO: this class has a lot of local functions that arent compiling nicely. May have to rethink them - austin
@@ -639,16 +640,25 @@ class Popup
     if (level.values.length > perColumn && level.values.length < perColumn * 2)
       perColumn = Math.ceil(level.values.length / 2);
 
-    var columns = Math.ceil(level.values.length / perColumn);
+    var columns = Math.max(1, Math.ceil(level.values.length / perColumn));
 
     var overlay = new JQuery('<div class="overlay">');
     var win = new JQuery('<div class="popupWindow" style="width: ' + (columns * columnWidth + 100) + 'px;">');
     var title = new JQuery('<div class="title">');
+    var settings = new JQuery('<div class="settings">');
     var content = new JQuery('<div class="content">');
     var event:Event->Void;
+    var levelOffset:JQuery;
 
     function close(escape:Bool)
     {
+      var offset = Fields.getVector(levelOffset);
+      if (!level.data.offset.equals(offset))
+      {
+        level.store("Changed Level Offset from '" + level.data.offset.toString() + "'  to '" + offset.toString() + "'");
+        level.data.offset = offset;
+        level.unsavedChanges = true;
+      }
       overlay.remove();
       new JQuery(Browser.window).unbind('keyup', event);
       OGMO.onPopupEnd();
@@ -667,8 +677,18 @@ class Popup
     title.append('<div class="icon icon-gear"></div>');
     title.append('<div class="label">Level Properties: ' + level.displayName + '</div>');
 
+    // add level offsets
+    levelOffset = Fields.createVector(new Vector(level.data.offset.x, level.data.offset.y));
+    Fields.createSettingsBlock(settings, levelOffset, SettingsBlock.Full, "Level Offset", SettingsBlock.OverTitle);
+
+    if (level.values.length > 0) Fields.createLineBreak(settings);
+
+    win.append(settings);
+
     // content part
     win.append(content);
+
+    // add custom values
     while (index < level.values.length)
     {
       var values = new JQuery('<div class="valueEditors" style="width: ' + columnWidth + 'px; float: left; display inline;">');

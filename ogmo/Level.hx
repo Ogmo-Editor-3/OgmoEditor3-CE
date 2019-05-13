@@ -104,6 +104,14 @@ class Level
    */
   public var height:Float;
   /**
+   * Offset of the Level on the X axis. Useful for loading multiple chunked Levels.
+   */
+  public var offsetX:Float;
+  /**
+   * Offset of the Level on the Y axis. Useful for loading multiple chunked Levels.
+   */
+  public var offsetY:Float;
+  /**
    * Array containing all of the Level's Layer Definitions.
    */
   public var layers:Array<LayerDefinition>;
