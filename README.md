@@ -5,9 +5,21 @@
 ### Open Source 2D level editor written in Haxe!
 
 # Getting Started
-TODO: Flesh this out
 
-This project requires Haxe and Node v10+.
+This project requires Haxe, Node v10+, and various dependencies for each of them.
+
+### Node
+* Install [Node](https://nodejs.org/)
+* Install [Node-Gyp](https://github.com/nodejs/node-gyp#installation)
+
+### Haxe
+* Install [Haxe](https://haxe.org/download/)
+* Install the following Haxelibs:
+```
+haxelib install electron 4.1.4
+haxelib install jQueryExtern
+haxelib install haxe-loader
+```
 
 ## Build
 ```
