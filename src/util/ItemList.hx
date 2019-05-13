@@ -305,19 +305,20 @@ class ItemListFolder extends ItemListNode
 		expanded = false;
 		childrenElement = new JQuery('<div class="itemlist_folderContent">');
 		isFolder = true;
-		element.append(this.childrenElement);
+		element.append(childrenElement);
 
-		this.titleElement.on("click contextmenu", function(e)
+		titleElement.click(function(e:Event)
 		{
-			if (e.button == 0)
+			switch (e.which)
 			{
-				expanded = !expanded;
-				if (onclick != null) onclick(this);
+				case 1:
+					expanded = !expanded;
+					if (onclick != null) onclick(this);	
 			}
-			else
-			{
-				if (onrightclick != null) onrightclick(this);
-			}
+		});
+		titleElement.contextmenu(function (e:Event) 
+		{
+			if (onrightclick != null) onrightclick(this);
 		});
 	}
 }
@@ -330,16 +331,17 @@ class ItemListItem extends ItemListNode
 		boilerplate();
 		this.label = label;
 
-		titleElement.on("click contextmenu", function(e)
+		titleElement.click(function(e:Event)
 		{
-			if (e.button == 0)
+			switch (e.which)
 			{
-				if (onclick != null) 	onclick(this);
+				case 1:
+					if (onclick != null) onclick(this);	
 			}
-			else
-			{
-				if (onrightclick != null) onrightclick(this);
-			}
+		});
+		titleElement.contextmenu(function (e:Event) 
+		{
+			if (onrightclick != null) onrightclick(this);
 		});
 	}
 }

@@ -13,11 +13,11 @@ class RightClickMenu
     public function new(origin: Vector)
     {
       holderElement = new JQuery('<div class="overlay">');
-      holderElement.on("mouseup", function() { close(); });
+      holderElement.on("click", function() { close(); });
 
       listElement = new JQuery('<div class="rightClickMenu">');
       listElement.offset({ left: origin.x - 8, top: origin.y - 4 });
-      listElement.on("mouseup", function(e) { e.stopPropagation(); });
+      listElement.on("click", function(e) { e.stopPropagation(); });
     }
 
     public function onClosed(callback: Void->Void):Void
@@ -30,7 +30,7 @@ class RightClickMenu
       var option = new JQuery('<div class="option">');
       if (icon != null) option.append('<div class="icon icon-' + icon + '"></div>');
       option.append('<div class="label">' + label + '</div>');
-      option.on("mouseup", function()
+      option.on("click", function()
       {
         close();
         if (callback != null) callback();
