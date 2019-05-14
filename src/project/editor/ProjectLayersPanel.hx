@@ -47,29 +47,29 @@ class ProjectLayersPanel extends ProjectEditorPanel
   {
     // new layer stuff
     buttons.empty();
-    var layerTypes = new Map();
+    var newLayerButton = Fields.createButton("plus", 'New Layer', buttons);
+    newLayerButton.on("click", function() { newLayer(); });
+
+    refreshList();
+    inspect(OGMO.project.layers[0]);
+  }
+  
+  public function newLayer():Void
+  {
+    var layerIds = [];
+    var layerOptions = [];
     for (i in 0...LayerDefinition.definitions.length)
     {
       var def = LayerDefinition.definitions[i];
-      layerTypes.set(def.id, def.label);
+      layerIds.push(def.id);
+      layerOptions.push(def.label);
     }
-    
-    var newLayerType = Fields.createOptions(layerTypes, buttons);
-    var newLayerButton = Fields.createButton("plus", null, buttons);
-    newLayerButton.on("click", function() { newLayer(newLayerType.val()); });
 
-    refreshList();
-    if (OGMO.project.layers.length > 0) inspect(OGMO.project.layers[0]);
-  }
-  
-  public function newLayer(definitionId:String):Void
-  {
-    var definition = LayerDefinition.getDefinitionById(definitionId);
-
-    Popup.openText("Create New Layer", "plus", "new_" + definitionId + "_layer", "Create", "Cancel", function(name)
+    Popup.openTextDropdown("Create New Layer", "plus", "new_layer", layerOptions, "Create", "Cancel", function(name, index)
     {
       if (name != null && name.length > 0)
       {
+        var definition = LayerDefinition.getDefinitionById(layerIds[index]);
         var template = definition.createTemplate(OGMO.project);
         template.name = name;
         OGMO.project.layers.push(template);
