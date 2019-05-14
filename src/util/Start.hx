@@ -28,9 +28,10 @@ class Start {
     ProjectEntitiesPanel.startup();
 
     // Modules
+    TileLayerTemplate.startup();
+    GridLayerTemplate.startup();
     DecalLayerTemplate.startup();
     EntityLayerTemplate.startup();
-    GridLayerTemplate.startup();
-    TileLayerTemplate.startup();
+    
   }
 }
