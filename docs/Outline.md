@@ -1,5 +1,8 @@
 # Manual
 
+## Introduction
+	- About OGMO Editor
+
 ## Getting Started
 	- Starting a New Project
     	- Project Settings
@@ -9,6 +12,10 @@
     	- Level management
 	- Saving Levels
 	- Using Level Data
+
+## Tilesets
+
+## Entities
 
 ## Tile Layers
 	- Settings
@@ -53,5 +60,6 @@
 # Reference
 
 ## Building from source
+## Contributing
 ## JSON Level Data
 ## JSON Project Data
