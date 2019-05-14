@@ -69,7 +69,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 	override function begin():Void
 	{
 		refreshList();
-		if (OGMO.project.tilesets.length > 0) inspect(OGMO.project.tilesets[0]);
+		inspect(OGMO.project.tilesets[0]);
 	}
 	
 	public function inspect(tileset:Tileset, ?saveOnChange:Bool):Void
@@ -80,10 +80,10 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 		
 		inspecting = tileset;
 		inspector.empty();
-		tilesetList.perform(function(item) { item.selected = (item.data == tileset); });
 		
 		if (tileset != null)
 		{
+			tilesetList.perform(function(item) { item.selected = (item.data == tileset); });
 			// tilemap canvas
 			var canvas = Browser.document.createCanvasElement();
       canvas.width = tileset.width * zoom.floor();
