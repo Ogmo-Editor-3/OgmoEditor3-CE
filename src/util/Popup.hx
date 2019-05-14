@@ -8,16 +8,13 @@ import js.jquery.JQuery;
 import level.data.Level;
 import util.Fields;
 
-/**
- * TODO: this class has a lot of local functions that arent compiling nicely. May have to rethink them - austin
- */
 class Popup
 {
   /* --------------------------------- */
   /* --------- MESSAGE POPUP --------- */
   /* --------------------------------- */
 
-  public static function open(label:String, icon:String, message:String, options:Array<String>, callback:Int->Void):Void
+  public static function open(label:String, icon:String, message:String, options:Array<String>, ?callback:Int->Void):Void
   {
       Popup.closePopups();
       RightClickMenu.closeMenu();

@@ -83,20 +83,27 @@ class ProjectEditor
 
   public function saveAndClose():Void
   {
-    // update project from the panels
-    for (i in 0...panels.length) panels[i].end();
+    if (OGMO.project.layers.length > 0) 
+    {
+      // update project from the panels
+      for (i in 0...panels.length) panels[i].end();
 
-    // save project
-    var data = OGMO.project.save();
-    FileSystem.saveJSON(data, OGMO.project.path);
+      // save project
+      var data = OGMO.project.save();
+      FileSystem.saveJSON(data, OGMO.project.path);
 
-    // reload the project
-    OGMO.project.unload();
-    OGMO.project = Imports.project(OGMO.project.path);
+      // reload the project
+      OGMO.project.unload();
+      OGMO.project = Imports.project(OGMO.project.path);
 
-    // goto editor
-    EDITOR.onSetProject();
-    OGMO.gotoEditorPage();
+      // goto editor
+      EDITOR.onSetProject();
+      OGMO.gotoEditorPage();
+    }
+    else 
+    {
+      Popup.open('No Layers in Project', 'warning', 'No Layers were found in the Project. The Project requires at least 1 Layer before it can be saved.', ['Okay']);
+    }
   }
 
   public function discardAndClose()
