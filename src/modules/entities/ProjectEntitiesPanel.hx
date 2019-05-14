@@ -417,6 +417,10 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 						tags += ",";
 				}
 				entityTags = Fields.createField("the,entity,tags", tags);
+				entityTags.on("blur", function (e) { 
+					updateEntity(entity); 
+					refreshList();
+				});
 				Fields.createSettingsBlock(inspector, entityTags, SettingsBlock.Full, "Tags", SettingsBlock.InlineTitle);
 				Fields.createLineBreak(inspector);
 			}
