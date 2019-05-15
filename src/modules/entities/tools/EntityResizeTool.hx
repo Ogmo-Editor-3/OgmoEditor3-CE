@@ -100,4 +100,7 @@ class EntityResizeTool extends EntityTool
 
 	override public function getIcon():String return "entity-scale";
 	override public function getName():String return "Resize";
+	override public function keyToolCtrl():Int return 3;
+	override public function keyToolShift():Int return 1;
+
 }

@@ -102,5 +102,8 @@ class GridLineTool extends GridTool
 	
 	override public function getName():String return "Line";
 	override public function getIcon():String return "line";
+	override public function keyToolAlt():Int return 4;
+	override public function keyToolCtrl():Int return 3;
+	override public function keyToolShift():Int return 1;
 
 }

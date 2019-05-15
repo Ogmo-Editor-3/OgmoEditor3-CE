@@ -113,5 +113,7 @@ class DecalRotateTool extends DecalTool
 
 	override public function getIcon():String return 'decal-rotate';
 	override public function getName():String return 'Rotate';
+	override public function keyToolAlt():Int return 2;
+	override public function keyToolShift():Int return 1;
 
 }

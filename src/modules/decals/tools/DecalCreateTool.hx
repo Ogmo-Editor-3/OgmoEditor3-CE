@@ -144,5 +144,7 @@ class DecalCreateTool extends DecalTool
 
 	override public function getIcon():String return "entity-create";
 	override public function getName():String return "Create";
+	override public function keyToolCtrl():Int return 3;
+	override public function keyToolAlt():Int return 2;
 
 }

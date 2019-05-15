@@ -211,6 +211,8 @@ class TileSelectTool extends TileTool
 
 	override public function getIcon():String return 'tile-selection';
 	override public function getName():String return 'Select';
+	override public function keyToolAlt():Int return 4;
+	override public function keyToolShift():Int return 0;
 
 }
 
