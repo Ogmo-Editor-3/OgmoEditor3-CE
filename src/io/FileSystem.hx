@@ -125,7 +125,7 @@ class FileSystem
 
 	public static function JSONtoString(data:Dynamic):String
 	{
-		return Json.stringify(data, null, '\t');
+		return new util.Stringify(data);
 	}
 
 	public static function loadJSON(path:String):Dynamic
