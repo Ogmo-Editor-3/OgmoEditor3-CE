@@ -74,4 +74,6 @@ You can learn more about this format [here]().
 
 ## Wrapping Up
 
+Now that you have an understanding for how to use OGMO Editor, we hope you use it to create wonderful content!
+
 Dig in to the rest of the manual to see all the different features OGMO Editor has to offer!
