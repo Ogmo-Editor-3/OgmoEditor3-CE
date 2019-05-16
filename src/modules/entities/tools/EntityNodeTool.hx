@@ -95,8 +95,6 @@ class EntityNodeTool extends EntityTool
 	override public function onRightUp(pos:Vector) {}
 	override public function getIcon():String return "entity-nodes";
 	override public function getName():String return "Add Node";
-	override public function keyToolCtrl():Int return 3;
-	override public function keyToolAlt():Int return 2;
-	override public function keyToolShift():Int return 1;
+	override public function keyToolAlt():Int return 1;
 
 }

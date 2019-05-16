@@ -87,7 +87,8 @@ class DecalResizeTool extends DecalTool
 
 	override public function getIcon():String return "decal-scale";
 	override public function getName():String return "Resize";
-	override public function keyToolCtrl():Int return 3;
-	override public function keyToolShift():Int return 1;
+	override public function keyToolCtrl():Int return 0;
+	override public function keyToolAlt():Int return 1;
+	override public function keyToolShift():Int return 3;
 
 }

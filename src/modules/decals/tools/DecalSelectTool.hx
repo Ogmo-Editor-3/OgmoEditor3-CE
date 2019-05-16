@@ -302,8 +302,6 @@ class DecalSelectTool extends DecalTool
 
 	override public function getIcon():String return "entity-selection";
 	override public function getName():String return "Select";
-	override public function keyToolCtrl():Int return 3;
-	override public function keyToolAlt():Int return 2;
-	override public function keyToolShift():Int return 1;
+	override public function keyToolAlt():Int return 1;
 
 }

@@ -114,7 +114,8 @@ class EntityRotateTool extends EntityTool
 
 	override public function getIcon():String return 'entity-rotate';
 	override public function getName():String return 'Rotate';
-	override public function keyToolAlt():Int return 2;
-	override public function keyToolShift():Int return 1;
+	override public function keyToolCtrl():Int return 0;
+	override public function keyToolAlt():Int return 1;
+	override public function keyToolShift():Int return 2;
 
 }
