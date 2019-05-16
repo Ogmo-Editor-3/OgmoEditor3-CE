@@ -102,6 +102,10 @@ class Ogmo
 				keyCheckMap[e.which] = false;
 				keyRelease(e.which);
 			}
+
+			// This fixes an issue with metakeys (Like CMD).
+			// While they are pressed, `keyup` events for other keys are not called.
+			if (e.which == Keys.Cmd) resetKeys();
 		});
 
 		new JQuery(Browser.window).on("mousemove", function (e:Event)
