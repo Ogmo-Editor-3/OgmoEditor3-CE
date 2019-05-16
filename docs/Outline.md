@@ -1,65 +1,65 @@
 # Manual
 
-## Introduction
-	- About OGMO Editor
+- [x] **Introduction**
+	- [x] About OGMO Editor
 
-## Getting Started
-	- Starting a New Project
-    	- Project Settings
-    	- Adding layers
-    	- Adding an Entity
-    	- Adding a Tileset
-    	- Level management
-	- Saving Levels
-	- Using Level Data
+- [x] **Getting Started**
+	- [x] Starting a New Project
+    	- [x] Project Settings
+    	- [x] Adding layers
+    	- [x] Adding an Entity
+    	- [x] Adding a Tileset
+    	- [x] Level management
+	- [x] Saving Levels
+	- [ ] Using Level Data
 
-## Tilesets
+- [ ] **Tilesets**
 
-## Entities
+- [ ] **Entities**
 
-## Tile Layers
-	- Settings
-	- Tools
-    	- Pencil
-    	- Rectangle
-    	- Line
-    	- Fill
-    	- Eyedropper
-    	- Tile Selection
+- [ ] **Tile Layers**
+	- [ ] Settings
+	- [ ] Tools
+    	- [ ] Pencil
+    	- [ ] Rectangle
+    	- [ ] Line
+    	- [ ] Fill
+    	- [ ] Eyedropper
+    	- [ ] Tile Selection
 
-## Grid Layers
-	- Settings
-    	- Adding a grid type
-	- Tools
-    	- Pencil
-    	- Rectangle
-    	- Line
-    	- Fill
-    	- Eyedropper
-    	- Grid Selection
+- [ ] **Grid Layers**
+	- [ ] Settings
+    	- [ ] Adding a grid type
+	- [ ] Tools
+    	- [ ] Pencil
+    	- [ ] Rectangle
+    	- [ ] Line
+    	- [ ] Fill
+    	- [ ] Eyedropper
+    	- [ ] Grid Selection
 
-## Entity Layers
-	- Settings
-    	- Using tags
-	- Tools
-    	- Entity Selection
-    	- Create
-    	- Resize
-    	- Rotate
-    	- Nodes
+- [ ] **Entity Layers**
+	- [ ] Settings
+    	- [ ] Using tags
+	- [ ] Tools
+    	- [ ] Entity Selection
+    	- [ ] Create
+    	- [ ] Resize
+    	- [ ] Rotate
+    	- [ ] Nodes
 
-## Decal Layers
-	- Settings
-    	- Adding image folder
-	- Tools
-    	- Decal Selection
-    	- Create
-    	- Resize
-    	- Rotate
+- [ ] **Decal Layers**
+	- [ ] Settings
+    	- [ ] Adding image folder
+	- [ ] Tools
+    	- [ ] Decal Selection
+    	- [ ] Create
+    	- [ ] Resize
+    	- [ ] Rotate
 
 # Reference
 
-## Building from source
-## Contributing
-## JSON Level Data
-## JSON Project Data
+- [x] Building from source
+- [ ] Contributing
+- [ ] JSON Level Data
+- [ ] JSON Project Data
