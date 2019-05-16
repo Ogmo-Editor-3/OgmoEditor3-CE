@@ -31,7 +31,7 @@ class Editor
 	public var locked:Bool = false;
 	public var isDirty:Bool = false;
 	public var isOverlayDirty:Bool = false;
-  public var currentLayerEditor(get, null):LayerEditor;
+	public var currentLayerEditor(get, null):LayerEditor;
 
 	var lastArrows: Vector = new Vector();
 	var mouseMoving:Bool = false;
@@ -349,7 +349,7 @@ class Editor
 
 		if (currentLayerEditor != null)
 		{
-			var paletteElement  = new JQuery(".editor_palette");
+			var paletteElement	= new JQuery(".editor_palette");
 			var selectionElement = new JQuery(".editor_selection");
 
 			paletteElement.empty();
@@ -393,7 +393,7 @@ class Editor
 	}
 
 	public function loop():Void
-	{	   
+	{		 
 		if (level != null)
 		{
 			if (currentLayerEditor != null) currentLayerEditor.loop();
@@ -418,7 +418,7 @@ class Editor
 			overlay.clear();
 			
 			if (level != null)
-				drawOverlay();		  
+				drawOverlay();			
 			lastOverlayUpdate = 0;
 		}
 	}
@@ -455,25 +455,25 @@ class Editor
 		draw.drawRect(0, 0, level.data.size.x, level.data.size.y, level.project.backgroundColor);
 
 		//Draw the layers below and including the current one
-    var i = level.layers.length - 1;
-    while(i > level.currentLayerID) 
-    {
-      if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
-      i--;
-    }
-    
+		var i = level.layers.length - 1;
+		while(i > level.currentLayerID) 
+		{
+			if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
+			i--;
+		}
+		
 		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].draw();
 
 		//Draw the layers above the current one at half alpha
 		if (level.currentLayerID > 0)
 		{
 			draw.setAlpha(0.3);
-      var i = level.currentLayerID - 1;
+			var i = level.currentLayerID - 1;
 			while (i >= 0)
-      {
-        if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
-        i--;
-      }
+			{
+				if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
+				i--;
+			}
 			draw.setAlpha(1);
 		}
 
@@ -575,11 +575,11 @@ class Editor
 
 	public function keyPress(key:Int):Void
 	{
-    inline function dPress(key:Int) 
-    {
-      if (OGMO.ctrl) EDITOR.setLayer(key - Keys.D1);
-			else EDITOR.toolBelt.setTool(key - Keys.D1);
-    }
+		inline function dPress(key:Int) 
+		{
+			if (OGMO.ctrl) EDITOR.setLayer(key - Keys.D1);
+				else EDITOR.toolBelt.setTool(key - Keys.D1);
+		}
 
 		switch (key)
 		{
@@ -609,31 +609,31 @@ class Editor
 				//Close Level
 				if (OGMO.ctrl && EDITOR.level != null && !EDITOR.locked) EDITOR.levelManager.close(EDITOR.level);
 			case Keys.D1:
-        dPress(key);
+				dPress(key);
 			case Keys.D2:
-        dPress(key);
+				dPress(key);
 			case Keys.D3:
-        dPress(key);
+				dPress(key);
 			case Keys.D4:
-        dPress(key);
+				dPress(key);
 			case Keys.D5:
-        dPress(key);
+				dPress(key);
 			case Keys.D6:
-        dPress(key);
+				dPress(key);
 			case Keys.D7:
-        dPress(key);
+				dPress(key);
 			case Keys.D8:
-        dPress(key);
+				dPress(key);
 			case Keys.D9:
-        dPress(key);
+				dPress(key);
 			case Keys.D0:
 				dPress(key);
 			case Keys.Shift:
-        if (EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
+				if (EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
 			case Keys.Ctrl:
-        if (process.platform != 'darwin' && EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
+				if (process.platform != 'darwin' && EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
 			case Keys.Cmd:
-        if (process.platform == 'darwin' && EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
+				if (process.platform == 'darwin' && EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
 			case Keys.Alt:
 				if (EDITOR.level != null && !EDITOR.toolBelt.setKeyTool(key)) defaultKeyPress(key);
 			case Keys.Up:
@@ -662,10 +662,10 @@ class Editor
 
 	public function keyRelease(key:Int):Void
 	{
-    inline function unset(key:Int)
-    {
-      if (!EDITOR.toolBelt.unsetKeyTool(key)) defaultKeyRelease(key);
-    }
+		inline function unset(key:Int)
+		{
+			if (!EDITOR.toolBelt.unsetKeyTool(key)) defaultKeyRelease(key);
+		}
 
 		switch (key)
 		{
@@ -674,11 +674,11 @@ class Editor
 			case Keys.Space:
 				mouseMoving = false;
 			case Keys.Shift:
-        unset(key);
+				unset(key);
 			case Keys.Ctrl:
-        if (process.platform != 'darwin') unset(key);
+				if (process.platform != 'darwin') unset(key);
 			case Keys.Cmd:
-        if (process.platform == 'darwin') unset(key);
+				if (process.platform == 'darwin') unset(key);
 			case Keys.Alt:
 				unset(key);
 		}
@@ -800,7 +800,7 @@ class Editor
 		}
 	}
 
-  function get_currentLayerEditor(): LayerEditor
+	function get_currentLayerEditor(): LayerEditor
 	{
 		if (level == null) return null;
 		else return layerEditors[level.currentLayerID];
