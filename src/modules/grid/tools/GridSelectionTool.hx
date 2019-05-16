@@ -202,6 +202,9 @@ class GridSelectionTool extends GridTool
 
 	override public function getIcon():String return 'grid-selection';
 	override public function getName():String return 'Select';
+	override public function keyToolAlt():Int return 4;
+	override public function keyToolCtrl():Int return 3;
+	override public function keyToolShift():Int return 1;
 
 }
 
