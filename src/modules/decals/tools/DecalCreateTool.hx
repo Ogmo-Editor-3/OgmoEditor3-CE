@@ -140,6 +140,35 @@ class DecalCreateTool extends DecalTool
 			scale.y = -scale.y;
 			EDITOR.dirty();
 		}
+		// TODO - Prep for UX overhaul PR!
+		/*else if (key == Keys.B)
+		{
+			EDITOR.level.store("move decal to back");
+			for (decal in layerEditor.selected) moveDecalToBack(decal);
+			EDITOR.dirty();
+		}
+		else if (key == Keys.F)
+		{
+			EDITOR.level.store("move decal to front");
+			for (decal in layerEditor.selected) moveDecalToFront(decal);
+			EDITOR.dirty();
+		}
+	}
+
+	function moveDecalToBack(decal:Decal)
+	{
+		var index = layer.decals.indexOf(decal);
+		if (index < 0) return;
+		layer.decals.splice(index, 1);
+		layer.decals.unshift(decal);
+	}
+
+	function moveDecalToFront(decal:Decal)
+	{
+		var index = layer.decals.indexOf(decal);
+		if (index < 0) return;
+		layer.decals.splice(index, 1);
+		layer.decals.push(decal);*/
 	}
 
 	override public function getIcon():String return "entity-create";
