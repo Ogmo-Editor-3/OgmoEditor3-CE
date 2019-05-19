@@ -108,34 +108,50 @@ class DecalSelectTool extends DecalTool
 		}
 		else if (key == Keys.B)
 		{
-			EDITOR.level.store("move decal to back");
-
-			for (decal in layerEditor.selected)
-			{
-				var index = layer.decals.indexOf(decal);
-				if (index >= 0)
-				{
-					layer.decals.splice(index, 1);
-					layer.decals.unshift(decal);
-				}
-			}
+			EDITOR.level.store("move decal back");
+			for (decal in layerEditor.selected) OGMO.shift ? moveDecalToBack(decal) : moveDecalBack(decal);
 			EDITOR.dirty();
 		}
 		else if (key == Keys.F)
 		{
-			EDITOR.level.store("move decal to front");
-
-			for (decal in layerEditor.selected)
-			{
-				var index = layer.decals.indexOf(decal);
-				if (index >= 0)
-				{
-					layer.decals.splice(index, 1);
-					layer.decals.push(decal);
-				}
-			}
+			EDITOR.level.store("move decal forward");
+			for (decal in layerEditor.selected) OGMO.shift ? moveDecalToFront(decal) : moveDecalForward(decal);
 			EDITOR.dirty();
 		}
+	}
+
+	function moveDecalBack(decal:Decal)
+	{
+		var index = layer.decals.indexOf(decal);
+		if (index < 0) return;
+		var target = 0.max(index - 1).int();
+		layer.decals.splice(index, 1);
+		layer.decals.insert(target, decal);
+	}
+
+	function moveDecalForward(decal:Decal)
+	{
+		var index = layer.decals.indexOf(decal);
+		if (index < 0) return;
+		var target = (layer.decals.length - 1).min(index + 1).int();
+		layer.decals.splice(index, 1);
+		layer.decals.insert(target, decal);
+	}
+
+	function moveDecalToBack(decal:Decal)
+	{
+		var index = layer.decals.indexOf(decal);
+		if (index < 0) return;
+		layer.decals.splice(index, 1);
+		layer.decals.unshift(decal);
+	}
+
+	function moveDecalToFront(decal:Decal)
+	{
+		var index = layer.decals.indexOf(decal);
+		if (index < 0) return;
+		layer.decals.splice(index, 1);
+		layer.decals.push(decal);
 	}
 
 	override public function onMouseDown(pos:Vector)
