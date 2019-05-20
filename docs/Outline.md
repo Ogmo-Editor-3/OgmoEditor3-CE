@@ -11,13 +11,9 @@
     	- [x] Adding a Tileset
     	- [x] Level management
 	- [x] Saving Levels
-	- [ ] Using Level Data
-
-- [ ] **Tilesets**
-
-- [ ] **Entities**
 
 - [ ] **Tile Layers**
+	- [ ] Adding a Tileset
 	- [ ] Settings
 	- [ ] Tools
     	- [ ] Pencil
@@ -39,6 +35,7 @@
     	- [ ] Grid Selection
 
 - [ ] **Entity Layers**
+    - [ ] Adding Entities
 	- [ ] Settings
     	- [ ] Using tags
 	- [ ] Tools
