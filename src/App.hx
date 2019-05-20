@@ -55,12 +55,16 @@ class App
 				mainWindow.close();
 			});
 
+			IpcMain.on('updateMenu', (e) -> {
+				util.AppMenu.build();
+			});
+
 			mainWindow.on('closed', (e) -> {
 				mainWindow = null;
 			});
 		}
 
-		mainWindow.setMenu(null);
+		// mainWindow.setMenu(null);
 
 		// Compile in debug mode to load from webpack-dev-server and open dev tools on startup
 		#if debug
