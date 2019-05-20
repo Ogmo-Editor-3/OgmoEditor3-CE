@@ -5,6 +5,7 @@ import js.node.Path;
 import js.node.Url;
 import electron.main.App as ElectronApp;
 import electron.main.BrowserWindow;
+import util.WindowStateKeeper;
 
 class App
 {
@@ -28,17 +29,26 @@ class App
 
 	static function createWindow()
 	{
+		var mainWindowState = WindowStateKeeper.create({
+			defaultWidth: 1024,
+			defaultHeight: 768
+		});
+
 		mainWindow = new BrowserWindow({
 			title: '',
 			icon: Webpack.require('./assets/img/icon32.png'),
-			width: 1024,
-			height: 768,
+			x: mainWindowState.x,
+			y: mainWindowState.y,
+			width: mainWindowState.width,
+			height: mainWindowState.height,
 			minWidth: 1024,
 			minHeight: 600,
 			webPreferences: {
 				nodeIntegration: true
 			} 
 		});
+
+		mainWindowState.manage(mainWindow);
 
 		// Closing Stuff
 		{
