@@ -12,6 +12,7 @@ import level.editor.ToolBelt;
 import util.Vector;
 import util.Keys;
 import util.Start;
+import util.AppMenu;
 
 class Ogmo
 {
@@ -143,6 +144,14 @@ class Ogmo
 		if (editor.active) editor.loop();
 		if (projectEditor.active) projectEditor.loop();
 
+		// This fixes an issue with resetting keys while the CMD key is held on OSX.
+		// While CMD is pressed, `keyup` events for other keys are not called.
+		// So we need to manually reset them (excluding shift, alt, and CMD)
+		if (keyCheckMap[Keys.Cmd]) for (i in 0...keyCheckMap.length) 
+		{
+			if (i != Keys.Cmd && i != Keys.Shift && i != Keys.Alt && keyCheckMap[i] && !keyPressMap[i]) keyCheckMap[i] = false;
+		}
+
 		// Update the KeyPress Map
 		for (i in 0...keyPressMap.length) keyPressMap[i] = false;
 	}
@@ -181,6 +190,7 @@ class Ogmo
 		editor.setActive(false);
 		projectEditor.setActive(false);
 		startPage.setActive(true);
+		IpcRenderer.send('updateMenu', 'start');
 	}
 
 	public function gotoEditorPage():Void
@@ -188,6 +198,7 @@ class Ogmo
 		startPage.setActive(false);
 		projectEditor.setActive(false);
 		editor.setActive(true);
+		IpcRenderer.send('updateMenu', 'editor');
 	}
 
 	public function gotoProjectPage():Void
@@ -195,6 +206,7 @@ class Ogmo
 		startPage.setActive(false);
 		editor.setActive(false);
 		projectEditor.setActive(true);
+		IpcRenderer.send('updateMenu', 'project');
 	}
 
 	/*
