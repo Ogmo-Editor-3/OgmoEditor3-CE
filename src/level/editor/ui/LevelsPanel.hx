@@ -66,6 +66,8 @@ class LevelsPanel extends SidePanel
       function recursiveAdd(path:String, stats:Stats, parent:PanelItem):Bool
       {
         if (OGMO.project == null) return false;
+        if (stats == null) stats = FileSystem.stat(path);
+
         // if item's directory is the root folder, add to that
         var dirname = Path.dirname(path);
         if (dirname == parent.path)
