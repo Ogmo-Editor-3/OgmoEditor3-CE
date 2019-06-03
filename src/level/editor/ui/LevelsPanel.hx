@@ -1,14 +1,13 @@
 package level.editor.ui;
 
-
-import js.Browser;
 import io.FileSystem;
+import js.node.fs.Stats;
+import js.Browser;
 import js.node.Fs;
 import js.node.Path;
 import electron.Shell;
 import util.ItemList;
-import util.Klaw;
-import util.NSFW;
+import util.Chokidar;
 import util.RightClickMenu;
 import util.Popup;
 
@@ -32,8 +31,7 @@ class LevelsPanel extends SidePanel
   public var unsavedFolder:ItemListFolder = null;
 
   var items:Array<PanelItem> = [];
-  var walkers:Array<Walker> = [];
-  var watchers:Array<NSFW> = [];
+  var watchers:Array<FSWatcher> = [];
 
   override public function populate(into:JQuery):Void
   {
@@ -56,35 +54,40 @@ class LevelsPanel extends SidePanel
     levels = new JQuery('<div class="levelsPanel">');
     into.append(levels);
 
+    var paths = OGMO.project.getAbsoluteLevelDirectories();
+
+    for (watcher in watchers) watcher.close();
+    watchers.resize(0);
+
     itemlist = new ItemList(levels);
     items.resize(0);
 
     if (OGMO.project != null) {
-      function recursiveAdd(item:Item, parent:PanelItem):Bool
+      function recursiveAdd(path:String, stats:Stats, parent:PanelItem):Bool
       {
         if (OGMO.project == null) return false;
         // if item's directory is the root folder, add to that
-        var dirname = Path.dirname(item.path);
+        var dirname = Path.dirname(path);
         if (dirname == parent.path)
         {
           // Remove any duplicates
-          for (child in parent.children) if (item.path == child.path) parent.children.remove(child);
+          for (child in parent.children) if (path == child.path) parent.children.remove(child);
 
-          if (item.stats.isDirectory())
+          if (stats.isDirectory())
           {
             // Add Folder
             parent.children.push({
-              path: item.path,
+              path: path,
               dirname: dirname,
               children: []
             });
           }
-          else if (item.stats.isFile() && item.path != OGMO.project.path)
+          else if (stats.isFile() && path != OGMO.project.path)
           {
             
             // Add File
             parent.children.push({
-              path: item.path,
+              path: path,
               dirname: dirname,
             });
           }
@@ -100,7 +103,7 @@ class LevelsPanel extends SidePanel
             var i = 0;
             while (i < parent.children.length && !found)
             {
-              found = recursiveAdd(item, parent.children[i]);
+              found = recursiveAdd(path, stats, parent.children[i]);
               i++;
             }
           }
@@ -125,49 +128,34 @@ class LevelsPanel extends SidePanel
         }
       }
 
-      var paths = OGMO.project.getAbsoluteLevelDirectories();
       for(i in 0...paths.length)
       {
-        if (walkers[i] != null) walkers[i].destroy();
-
         items[i] = {
           path: paths[i],
           dirname: Path.dirname(paths[i]),
           children: FileSystem.stat(paths[i]).isDirectory() ? [] : null
         }
 
-        walkers[i] = new Walker(paths[i], {depthLimit: OGMO.project.directoryDepth})
-        .on("data", (item:Item) -> { if(item.path != paths[i] && items[i].children != null) recursiveAdd(item, items[i]); })
-        .on("end", refresh);
-        NSFW.create(paths[i], (events) -> 
+        watchers[i] = Chokidar.watch(paths[i], {depth: OGMO.project.directoryDepth })
+        .on('add', (path:String, stats:Stats) -> 
         {
-          for (event in events)
-          {
-            switch (event.action)
-            {
-              case CREATED:
-                trace('Item ${event.file} has been added');
-                var path = Path.join(event.directory, event.file);
-                if(path != paths[i] && items[i].children != null) recursiveAdd({path: path, stats: FileSystem.stat(path)}, items[i]);
-              case DELETED:
-                trace('Item ${event.file} has been deleted');
-                var path = Path.join(event.directory, event.file);
-                if(path != paths[i] && items[i].children != null) recursiveRemove(path, items[i]);
-              case MODIFIED:
-                trace('Item ${event.file} has been modified');
-              case RENAMED:
-                trace('Item ${event.oldFile} has been renamed to ${event.newFile}');
-                var path = Path.join(event.directory, event.oldFile);
-                if(path != paths[i] && items[i].children != null) recursiveRemove(path, items[i]);
-                path = Path.join(event.directory, event.newFile);
-                if(path != paths[i] && items[i].children != null) recursiveAdd({path: path, stats: FileSystem.stat(path)}, items[i]);
-            }
-          }
-          refresh();
-        }).then(nsfw -> {
-          if (watchers[i] != null) watchers[i].stop();
-          watchers[i] = nsfw;
-          watchers[i].start();
+          if (path != paths[i] && items[i].children != null) recursiveAdd(path, stats, items[i]);
+        })
+        .on('addDir', (path:String, stats:Stats) -> 
+        {
+          if (path != paths[i] && items[i].children != null) recursiveAdd(path, stats, items[i]);
+        })
+        .on('change', (path:String, stats:Stats) -> 
+        {
+          // TODO: use this event to notify user of opened level changes? - austin
+        })
+        .on('unlink', (path:String) -> 
+        {
+          if (path != paths[i] && items[i].children != null) recursiveRemove(path, items[i]);
+        })
+        .on('unlinkDir', (path:String) -> 
+        {
+          if (path != paths[i] && items[i].children != null) recursiveRemove(path, items[i]);
         });
       }
     }

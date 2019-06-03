@@ -14,7 +14,6 @@ import modules.decals.tools.DecalSelectTool;
 import modules.decals.tools.DecalResizeTool;
 import modules.decals.tools.DecalRotateTool;
 import util.Klaw;
-import util.NSFW;
 
 typedef Files = 
 {
@@ -49,7 +48,6 @@ class DecalLayerTemplate extends LayerTemplate
 	public var doRefresh:Void->Void;
 
   var walker:Walker;
-  var watcher:NSFW;
 
   override function createEditor(id:Int): LayerEditor
   {
@@ -204,6 +202,5 @@ class DecalLayerTemplate extends LayerTemplate
 		textures = [];
 		files = { name: "root", parent: null, textures: [], subdirs: [] };
 		if (walker != null) walker.destroy();
-		if (watcher != null) watcher.stop();
 	}
 }
