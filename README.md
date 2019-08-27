@@ -6,7 +6,7 @@
 
 # Getting Started
 
-This project requires Haxe, Node v10+, and various dependencies for each of them.
+This project requires Haxe v4.0.0-rc3 or later, Node v10+, and various dependencies for each of them.
 
 ### Node
 * Install [Node](https://nodejs.org/)
