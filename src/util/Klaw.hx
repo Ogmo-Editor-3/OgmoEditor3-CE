@@ -34,10 +34,10 @@ extern class Walker extends Readable<Walker>
   public function new(root:String, ?options:WalkerOptions):Void;
 
 	@:overload(function(event:String, listener:Item->Void):Walker {})
-  @:overload(function(event:String, error:Error->Void):Walker {})
+  @:overload(function(event:String, error:js.lib.Error->Void):Walker {})
   public function on(event:String, listener:Void->Void):Walker;
 
   public function read():Item;
 
-  public function destroy(?error:Error):Void;
+  public function destroy(?error:js.lib.Error):Void;
 }

@@ -102,7 +102,7 @@ class Color
 	public static function fromHex(hex:String, opacity:Float):Color
 	{
 		var color:Color = new Color(0,0,0, opacity);
-		var result = new RegExp('^#?([A-F0-9]{2})([A-F0-9]{2})([A-F0-9]{2})$', 'i').exec(hex);
+		var result = new js.lib.RegExp('^#?([A-F0-9]{2})([A-F0-9]{2})([A-F0-9]{2})$', 'i').exec(hex);
 		if (result != null && result.length >= 4)
 		{
 			color.r = untyped parseInt(result[1], 16) / 255;
@@ -115,7 +115,7 @@ class Color
 	public static function fromHexAlpha(hex:String):Color
 	{
 		var color:Color = new Color(0,0,0,0);
-		var result = new RegExp('^#?([A-F0-9]{2})([A-F0-9]{2})([A-F0-9]{2})([A-F0-9]{2})$', 'i').exec(hex);
+		var result = new js.lib.RegExp('^#?([A-F0-9]{2})([A-F0-9]{2})([A-F0-9]{2})([A-F0-9]{2})$', 'i').exec(hex);
 		if (result != null && result.length >= 5)
 		{
 			color.r = untyped parseInt(result[1], 16) / 255;

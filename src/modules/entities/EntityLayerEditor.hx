@@ -85,7 +85,7 @@ class EntityLayerEditor extends LayerEditor
 			case Keys.D:
 				if (!OGMO.ctrl || selection.amount <= 0) return;
 				EDITOR.level.store('duplicate entities');
-				var copies:Array<Entity> = [ for (e in entities.getGroup(selection)) e.duplicate(layer.instance(EntityLayer).nextID(), template.gridSize.x * 2, template.gridSize.y * 2) ];
+				var copies:Array<Entity> = [ for (e in entities.getGroup(selection)) e.duplicate(layer.downcast(EntityLayer).nextID(), template.gridSize.x * 2, template.gridSize.y * 2) ];
 				entities.addList(copies);
 				if (OGMO.shift) selection.add(copies);
 				else selection.set(copies);

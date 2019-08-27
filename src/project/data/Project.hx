@@ -1,6 +1,6 @@
 package project.data;
 
-import js.Date;
+import js.lib.Date;
 import js.node.Path;
 import io.Export;
 import io.Imports;

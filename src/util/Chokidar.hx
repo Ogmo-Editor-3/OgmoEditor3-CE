@@ -133,7 +133,7 @@ extern class FSWatcher extends js.node.fs.FSWatcher
   @:overload(function(event:String, listener:String->Stats->Void):FSWatcher {})
   @:overload(function(event:String, listener:String->String->Stats->Void):FSWatcher {})
   @:overload(function(event:String, listener:String->String->Dynamic->Void):FSWatcher {})
-  @:overload(function(event:String, error:Error->Void):FSWatcher {})
+  @:overload(function(event:String, error:js.lib.Error->Void):FSWatcher {})
   public function on(event:String, listener:Void->Void):FSWatcher;
 }
 

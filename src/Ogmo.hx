@@ -33,8 +33,8 @@ class Ogmo
 	public var root:String = untyped Remote.app.getAppPath();
 
 	public var project(default, set):Project = null;
-	public var startTime(default, null):Float = js.Date.now();
-	public var lastTime(default, null):Float = js.Date.now();
+	public var startTime(default, null):Float = js.lib.Date.now();
+	public var lastTime(default, null):Float = js.lib.Date.now();
 	public var deltaTime(default, null):Float = 0;
 	public var totalTime(default, null):Float = 0;
 
