@@ -6,6 +6,7 @@ import util.Color;
 import project.data.Project;
 import project.data.ShapeData;
 import project.data.value.ValueTemplate;
+import rendering.Texture;
 import Enums;
 
 class EntityTemplate
@@ -34,6 +35,7 @@ class EntityTemplate
 	public var nodeGhost:Bool = true;
 	public var values:Array<ValueTemplate> = [];
 	public var tags:Array<String> = [];
+	private var texture:Null<Texture>;
 
 	//Not Exported
 	public var _icon:String = null;

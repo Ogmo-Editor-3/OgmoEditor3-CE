@@ -5,6 +5,7 @@ import project.editor.ProjectEditorPanel;
 import util.ItemList;
 import util.Fields;
 import project.editor.ValueTemplateManager;
+import js.node.Path;
 
 class ProjectEntitiesPanel extends ProjectEditorPanel
 {
@@ -486,7 +487,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 							n.setImageIcon(entity.getIcon());
 					});
 				});
-				Fields.createSettingsBlock(iconleft, entityColor, SettingsBlock.Full);
+				Fields.createSettingsBlock(iconleft, entityColor, SettingsBlock.Half);
 
 				// tile-size
 				entityTileSize = Fields.createVector(entity.tileSize);
@@ -499,6 +500,27 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				// tile-Y
 				entityTileY = Fields.createCheckbox(entity.tileY, "Tile on Y");
 				Fields.createSettingsBlock(iconright, entityTileY, SettingsBlock.Half);
+
+				Fields.createLineBreak(inspector);
+			}
+
+			// icon texture stuff
+			{
+				var texturePreview = new JQuery('<div class="texture"/>');
+
+				inspector.append(texturePreview);
+
+				Fields.createButton("plus", "Load Preview Image", inspector).on("click", function() {
+					var path = FileSystem.chooseFile("Select Preview Image", [{ name: "Images", extensions: ["png", "jpg"] }]);
+					if (FileSystem.exists(path))
+					{
+						var relative  = Path.relative(Path.dirname(OGMO.project.path), path);
+						// var tilemap = new Tileset(OGMO.project, "New Tileset", relative, 8, 8, 0, 0);
+						// OGMO.project.tilesets.push(tilemap);
+						// refreshList();
+						// inspect(tilemap);
+					}
+				 });
 
 				Fields.createLineBreak(inspector);
 			}

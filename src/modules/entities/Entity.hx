@@ -2,6 +2,7 @@ package modules.entities;
 
 import io.Imports;
 import level.data.Value;
+import rendering.Texture;
 import util.Matrix;
 
 class Entity
@@ -24,6 +25,7 @@ class Entity
 	private var _points:Array<Vector> = [];
 	private var _sizeAnchor:Vector;
 	private var _rotationAnchor:Float;
+	private var _texture:Null<Texture>;
 	private static var hoverColor:Color = new Color(1, 1, 1, 0.5);
 
 	public static function create(id:Int, template:EntityTemplate, pos:Vector):Entity
@@ -223,7 +225,14 @@ class Entity
 
 	public function draw()
 	{
-		EDITOR.draw.drawTris(_points, position, color);
+		if (_texture != null)
+		{
+			EDITOR.draw.drawTexture(position.x, position.y, _texture, origin, null, rotation);
+		}
+		else 
+		{
+			EDITOR.draw.drawTris(_points, position, color);
+		}
 
 		//Draw Node Ghosts
 		if (nodes.length > 0 && template.nodeGhost)

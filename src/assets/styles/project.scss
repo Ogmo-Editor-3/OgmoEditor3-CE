@@ -146,6 +146,31 @@
     float: right;
     overflow-y: auto;
     border-right: 1px solid #ddd;
+
+    & .texture
+    {
+        width: 70px;
+        height: 70px;
+        display: block;
+        float: left;
+        margin: 4px;
+        background: url("../img/transparent.png");
+        opacity: 0.60;
+        border: 2px solid #fff;
+        box-sizing: border-box;
+
+        & img 
+        {
+            position: absolute;
+            max-width: 100%;
+            max-height: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            image-rendering: pixelated;
+            -webkit-image-rendering: pixelated;
+        }
+    }
 }
 
 .valuetemplates
