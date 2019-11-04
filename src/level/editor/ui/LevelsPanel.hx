@@ -32,6 +32,8 @@ class LevelsPanel extends SidePanel
 
   var items:Array<PanelItem> = [];
   var watchers:Array<FSWatcher> = [];
+  var item_count:Int;
+  var warning_displayed:Bool;
 
   override public function populate(into:JQuery):Void
   {
@@ -61,6 +63,8 @@ class LevelsPanel extends SidePanel
 
     itemlist = new ItemList(levels);
     items.resize(0);
+    item_count = 0;
+    warning_displayed = false;
 
     if (OGMO.project != null) {
       function recursiveAdd(path:String, stats:Stats, parent:PanelItem):Bool
@@ -83,17 +87,26 @@ class LevelsPanel extends SidePanel
               dirname: dirname,
               children: []
             });
+
+            item_count++;
           }
           else if (stats.isFile() && path != OGMO.project.path)
           {
-            
             // Add File
             parent.children.push({
               path: path,
               dirname: dirname,
             });
+
+            item_count++;
           }
-                     
+
+          if (!warning_displayed && item_count > 10000)
+          {
+            Popup.open('Large Project Directory Detected', 'warning', 'The Project is currently in a directory with over 10000 files/sub-directories. This may impact negatively performance. Consider moving the Project to a smaller directory, or limiting the Project\'s Directory Depth (located in the Project Editor).', ['Okay']);
+            warning_displayed = true;
+          }
+
           refresh();
           return true;
         }
