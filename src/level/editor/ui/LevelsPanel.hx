@@ -103,7 +103,7 @@ class LevelsPanel extends SidePanel
 
           if (!warning_displayed && item_count > 10000)
           {
-            Popup.open('Large Project Directory Detected', 'warning', 'The Project is currently in a directory with over 10000 files/sub-directories. This may impact negatively performance. Consider moving the Project to a smaller directory, or limiting the Project\'s Directory Depth (located in the Project Editor).', ['Okay']);
+            Popup.open('Large Project Directory Detected', 'warning', 'The Project is currently in a directory with over 10000 files/sub-directories. This may impact negatively Ogmo Editor\'s performance. Consider moving the Project to a smaller directory, or limiting the Project\'s Directory Depth (located in the Project Editor).', ['Okay']);
             warning_displayed = true;
           }
 
