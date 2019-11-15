@@ -55,7 +55,12 @@ class Level
 
 		if (data == null)
 		{
-			project.levelDefaultSize.clone(this.data.size);
+			var level_size = project.levelDefaultSize.clone();
+			level_size.x = Calc.clamp(level_size.x, OGMO.project.levelMinSize.x, OGMO.project.levelMaxSize.x);
+			level_size.y = Calc.clamp(level_size.y, OGMO.project.levelMinSize.y, OGMO.project.levelMaxSize.y);
+
+			level_size.clone(this.data.size);
+
 			values = [];
 			for (lv in OGMO.project.levelValues) values.push(new Value(lv));   
 			initLayers();
