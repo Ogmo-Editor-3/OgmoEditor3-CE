@@ -1,5 +1,6 @@
 package modules.entities;
 
+import rendering.Texture;
 import util.RightClickMenu;
 import project.editor.ProjectEditorPanel;
 import util.ItemList;
@@ -470,6 +471,28 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 			// icon stuff
 			{
+				var texturePreview = new JQuery('<div class="texture"/>');
+				inspector.append(texturePreview);
+
+				if (entity.texture != null) 
+				{
+					var img = new JQuery('<img src="${entity.texture.image.src}"/>');
+					texturePreview.append(img);
+				}
+
+				Fields.createSettingsBlock(inspector, Fields.createButton("plus", "Load Preview Image", inspector).on("click", function() 
+				{
+					var path = FileSystem.chooseFile("Select Preview Image", [{ name: "Images", extensions: ["png", "jpg"] }]);
+					if (FileSystem.exists(path))
+					{
+						entity.texture = Texture.fromFile(path);
+
+						texturePreview.empty();
+						var img = new JQuery('<img src="${entity.texture.image.src}"/>');
+						texturePreview.append(img);
+					}
+				 }), SettingsBlock.Fourth);
+	
 				var iconleft = new JQuery('<div style="float: left; box-sizing: border-box; padding: 16px;">');
 				var iconright = new JQuery('<div style="width: 50%; float: left;">');
 				inspector.append(iconleft);
@@ -506,23 +529,8 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 			// icon texture stuff
 			{
-				var texturePreview = new JQuery('<div class="texture"/>');
-
-				inspector.append(texturePreview);
-
-				Fields.createButton("plus", "Load Preview Image", inspector).on("click", function() {
-					var path = FileSystem.chooseFile("Select Preview Image", [{ name: "Images", extensions: ["png", "jpg"] }]);
-					if (FileSystem.exists(path))
-					{
-						var relative  = Path.relative(Path.dirname(OGMO.project.path), path);
-						// var tilemap = new Tileset(OGMO.project, "New Tileset", relative, 8, 8, 0, 0);
-						// OGMO.project.tilesets.push(tilemap);
-						// refreshList();
-						// inspect(tilemap);
-					}
-				 });
-
-				Fields.createLineBreak(inspector);
+				
+				// Fields.createLineBreak(inspector);
 			}
 
 			// node stuff

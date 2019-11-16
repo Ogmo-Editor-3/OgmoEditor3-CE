@@ -35,7 +35,7 @@ class EntityTemplate
 	public var nodeGhost:Bool = true;
 	public var values:Array<ValueTemplate> = [];
 	public var tags:Array<String> = [];
-	private var texture:Null<Texture>;
+	public var texture:Null<Texture>;
 
 	//Not Exported
 	public var _icon:String = null;
@@ -45,7 +45,15 @@ class EntityTemplate
 
 	public function drawPreview(at:Vector)
 	{
-		EDITOR.overlay.drawTris(getPreviewPoints(), at, color.x(0.5));
+		if (texture != null)
+		{
+			EDITOR.overlay.drawTexture(at.x, at.y, texture, origin, null);
+		}
+		else 
+		{
+			EDITOR.overlay.drawTris(getPreviewPoints(), at, color.x(0.5));
+		}
+	
 	}
 
 	public static function create(project:Project):EntityTemplate
@@ -115,6 +123,7 @@ class EntityTemplate
 		e.nodeDisplay = data.nodeDisplay;
 		e.nodeGhost = data.nodeGhost;
 		e.tags = data.tags;
+		if (data.texture != null && FileSystem.exists(data.texture)) e.texture = Texture.fromFile(data.texture);
 		e.values  = ValueTemplate.loadList(data.values);
 
 		return e;
@@ -146,6 +155,7 @@ class EntityTemplate
 			nodeDisplay: nodeDisplay,
 			nodeGhost: nodeGhost,
 			tags: tags,
+			texture: texture == null ? null : texture.path,
 			values: ValueTemplate.saveList(values)
 		}
 	}

@@ -42,7 +42,7 @@ class Entity
 		e.flippedY = false;
 		e.color = template.color;
 		e.nodes = [];
-
+		e._texture = template.texture;
 		e.values = [];
 		for (value in template.values) e.values.push(new Value(value));
 
@@ -108,6 +108,7 @@ class Entity
 		e.flippedY = flippedY;
 		e.color = color;
 		e.nodes = [for (node in nodes) node.clone()];
+		e._texture = _texture;
 		e.values = [for (value in values) value.clone()];
 
 		e.updateMatrix();
@@ -227,7 +228,8 @@ class Entity
 	{
 		if (_texture != null)
 		{
-			EDITOR.draw.drawTexture(position.x, position.y, _texture, origin, null, rotation);
+			var orig = origin.clone().rotate(Math.sin(rotation * Math.PI / 180), Math.cos(rotation * Math.PI / 180));
+			EDITOR.draw.drawTexture(position.x - orig.x, position.y - orig.y, _texture, null, size.clone().div(template.size), rotation * Math.PI / 180);
 		}
 		else 
 		{
