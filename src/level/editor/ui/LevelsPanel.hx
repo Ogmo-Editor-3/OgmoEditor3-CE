@@ -32,6 +32,8 @@ class LevelsPanel extends SidePanel
 
   var items:Array<PanelItem> = [];
   var watchers:Array<FSWatcher> = [];
+  var item_count:Int;
+  var warning_displayed:Bool;
 
   override public function populate(into:JQuery):Void
   {
@@ -61,6 +63,8 @@ class LevelsPanel extends SidePanel
 
     itemlist = new ItemList(levels);
     items.resize(0);
+    item_count = 0;
+    warning_displayed = false;
 
     if (OGMO.project != null) {
       function recursiveAdd(path:String, stats:Stats, parent:PanelItem):Bool
@@ -83,17 +87,26 @@ class LevelsPanel extends SidePanel
               dirname: dirname,
               children: []
             });
+
+            item_count++;
           }
           else if (stats.isFile() && path != OGMO.project.path)
           {
-            
             // Add File
             parent.children.push({
               path: path,
               dirname: dirname,
             });
+
+            item_count++;
           }
-                     
+
+          if (!warning_displayed && item_count > 10000)
+          {
+            Popup.open('Large Project Directory Detected', 'warning', 'The Project is currently in a directory with over 10000 files/sub-directories. This may impact negatively Ogmo Editor\'s performance. Consider moving the Project to a smaller directory, or limiting the Project\'s Directory Depth (located in the Project Editor).', ['Okay']);
+            warning_displayed = true;
+          }
+
           refresh();
           return true;
         }
@@ -368,19 +381,62 @@ class LevelsPanel extends SidePanel
 
   function selectLevel(node: ItemListNode):Void
   {
-    EDITOR.levelManager.open(node.data, null,
-    function (error)
-    {
-      Popup.open("Invalid Level File", "warning", "<span class='monospace'>" + Path.basename(node.data) + "</span> is not a valid level file!<br /><span class='monospace'>" + error + "</span>", ["Okay", "Delete It", "Open with Text Editor"], function(i)
+    inline function openLevel(data:String) {
+      EDITOR.levelManager.open(data, null,
+      function (error)
       {
-        if (i == 2) Shell.openItem(node.data);
+        Popup.open("Invalid Level File", "warning", "<span class='monospace'>" + Path.basename(data) + "</span> is not a valid level file!<br /><span class='monospace'>" + error + "</span>", ["Okay", "Delete It", "Open With Default Program"], function(i)
+        {
+          if (i == 2) Shell.openItem(data);
+          else if (i == 1)
+          {
+            EDITOR.levelManager.delete(data);
+            EDITOR.levelsPanel.refresh();
+          }
+        });
+      });
+    }
+
+    inline function openImage(data:String) {
+      Popup.open('Image File: ' + Path.basename(data), "info", '<img src="file:${data}" style="display: block; margin: 0 auto;"/>', ["Okay", "Delete It", "Open With Default Program"], function(i)
+      {
+        if (i == 2) Shell.openItem(data);
         else if (i == 1)
         {
-          EDITOR.levelManager.delete(node.data);
+          EDITOR.levelManager.delete(data);
           EDITOR.levelsPanel.refresh();
         }
       });
-    });
+    }
+
+    // open the level if its unsaved
+    if ((cast node.data : String).indexOf('#') == 0) {
+      openLevel(node.data);
+      return;
+    }
+
+    var split = (cast node.data : String).split(".");
+
+    switch (split[split.length -1]){
+      default:
+        Popup.open('Unsupported File Extension', 'warning', 'Ogmo can\'t open .${split[split.length -1]} files... Yet!', ["Okay", "Delete It", "Open With Default Program"], function(i)
+        {
+          if (i == 2) Shell.openItem(node.data);
+          else if (i == 1)
+          {
+            EDITOR.levelManager.delete(node.data);
+            EDITOR.levelsPanel.refresh();
+          }
+        });
+      case "json":
+      openLevel(node.data);
+      case "png":
+      openImage(node.data);
+      case "jpg":
+      openImage(node.data);
+      case "jpeg":
+      openImage(node.data);
+    } 
   }
 
   function inspectFolder(node: ItemListNode):Void
