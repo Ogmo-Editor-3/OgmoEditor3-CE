@@ -48,4 +48,4 @@ This builds, then packages the App into an executable.
 # Credits
  - Created by [Matt Thorson](https://twitter.com/mattthorson) and [Noel Berry](https://twitter.com/noelfb)
  - Icons & Logo by [Kyle Pulver](https://twitter.com/kylepulver)
- - _TODO - add haxe contributors_
+ - Ported to Haxe and extended by [Caleb Cornett](https://twitter.com/thespydog), [Will Blanton](https://twitter.com/x01010111), and [Austin East](https://twitter.com/austinweast)
