@@ -1,5 +1,6 @@
 package io;
 
+import electron.Shell;
 import util.Popup;
 import js.node.Fs;
 import js.node.Path;
@@ -165,7 +166,7 @@ class LevelManager
 		if (level != null)
 			this.forceClose(level);
 
-		Fs.unlinkSync(path);
+		Shell.moveItemToTrash(path);
 	}
 
 	public function getUnsavedLevels(): Array<Level>
