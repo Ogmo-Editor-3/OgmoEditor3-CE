@@ -168,6 +168,7 @@ class EntityTemplate
 
 	public function getIcon():String
 	{
+		if (texture != null) return texture.image.src;
 		if (_icon == null) refreshIcon();
 		return _icon;
 	}
