@@ -2,5 +2,10 @@
   "productName": "Ogmo Editor",
   "directories": {
     "app": "bin"  
+  },
+  "fileAssociations": {
+    "ext": "ogmo",
+    "name": "OGMO Project",
+    "role": "Editor"
   }
 }
