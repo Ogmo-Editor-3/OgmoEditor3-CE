@@ -381,19 +381,62 @@ class LevelsPanel extends SidePanel
 
   function selectLevel(node: ItemListNode):Void
   {
-    EDITOR.levelManager.open(node.data, null,
-    function (error)
-    {
-      Popup.open("Invalid Level File", "warning", "<span class='monospace'>" + Path.basename(node.data) + "</span> is not a valid level file!<br /><span class='monospace'>" + error + "</span>", ["Okay", "Delete It", "Open with Text Editor"], function(i)
+    inline function openLevel(data:String) {
+      EDITOR.levelManager.open(data, null,
+      function (error)
       {
-        if (i == 2) Shell.openItem(node.data);
+        Popup.open("Invalid Level File", "warning", "<span class='monospace'>" + Path.basename(data) + "</span> is not a valid level file!<br /><span class='monospace'>" + error + "</span>", ["Okay", "Delete It", "Open With Default Program"], function(i)
+        {
+          if (i == 2) Shell.openItem(data);
+          else if (i == 1)
+          {
+            EDITOR.levelManager.delete(data);
+            EDITOR.levelsPanel.refresh();
+          }
+        });
+      });
+    }
+
+    inline function openImage(data:String) {
+      Popup.open('Image File: ' + Path.basename(data), "info", '<img src="file:${data}" style="display: block; margin: 0 auto;"/>', ["Okay", "Delete It", "Open With Default Program"], function(i)
+      {
+        if (i == 2) Shell.openItem(data);
         else if (i == 1)
         {
-          EDITOR.levelManager.delete(node.data);
+          EDITOR.levelManager.delete(data);
           EDITOR.levelsPanel.refresh();
         }
       });
-    });
+    }
+
+    // open the level if its unsaved
+    if ((cast node.data : String).indexOf('#') == 0) {
+      openLevel(node.data);
+      return;
+    }
+
+    var split = (cast node.data : String).split(".");
+
+    switch (split[split.length -1]){
+      default:
+        Popup.open('Unsupported File Extension', 'warning', 'Ogmo can\'t open .${split[split.length -1]} files... Yet!', ["Okay", "Delete It", "Open With Default Program"], function(i)
+        {
+          if (i == 2) Shell.openItem(node.data);
+          else if (i == 1)
+          {
+            EDITOR.levelManager.delete(node.data);
+            EDITOR.levelsPanel.refresh();
+          }
+        });
+      case "json":
+      openLevel(node.data);
+      case "png":
+      openImage(node.data);
+      case "jpg":
+      openImage(node.data);
+      case "jpeg":
+      openImage(node.data);
+    } 
   }
 
   function inspectFolder(node: ItemListNode):Void
