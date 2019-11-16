@@ -398,14 +398,10 @@ class LevelsPanel extends SidePanel
     }
 
     inline function openImage(data:String) {
-      Popup.open('Image File: ' + Path.basename(data), "info", '<img src="file:${data}" style="display: block; margin: 0 auto;"/>', ["Okay", "Delete It", "Open With Default Program"], function(i)
+      var message = '<img src="file:${data}" style="display: block; margin: 0 auto;"/>';
+      Popup.open('Image File: ' + Path.basename(data), "info", message, ["Okay", "Open With Default Program"], function(i)
       {
-        if (i == 2) Shell.openItem(data);
-        else if (i == 1)
-        {
-          EDITOR.levelManager.delete(data);
-          EDITOR.levelsPanel.refresh();
-        }
+        if (i == 1) Shell.openItem(data);
       });
     }
 
