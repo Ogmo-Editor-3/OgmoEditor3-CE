@@ -68,6 +68,8 @@ class Entity
 		e.nodes = Imports.nodes(data);
 		e.values = Imports.values(data, template.values);
 
+		e._texture = template.texture;
+
 		e.updateMatrix();
 		return e;
 	}
