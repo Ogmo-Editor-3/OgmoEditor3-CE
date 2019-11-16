@@ -68,6 +68,10 @@
         box-sizing: border-box;
         float: left;
 
+        & > .message {
+            overflow-x: auto;
+        }
+
         & .popupTextareaInput
         {
             width: 100%;
