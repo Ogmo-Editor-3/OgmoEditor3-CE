@@ -12,7 +12,8 @@
         "build": "webpack --config=webpack.app.config.js --mode=production && webpack --config=webpack.ogmo.config.js --mode=production",
         "dev": "webpack --config=webpack.app.config.js --mode=development && webpack-dev-server --config=webpack.ogmo.config.js --mode=development --host 0.0.0.0",
         "icons": "electron-icon-maker --input=./assets/gfx/icon.png --output=./assets/build",
-        "dist": "electron-builder --config electron-builder.json"
+        "dist": "electron-builder --config electron-builder.json",
+        "postinstall": "npx lix download"
     },
     "devDependencies": {
         "clean-webpack-plugin": "^2.0.1",
