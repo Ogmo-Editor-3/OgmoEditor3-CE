@@ -1,0 +1,4 @@
+-D jQueryExtern=3.2.1
+# @install: lix --silent download "haxelib:/jQueryExtern#3.2.1" into jQueryExtern/3.2.1/haxelib
+-cp ${HAXE_LIBCACHE}/jQueryExtern/3.2.1/haxelib/
+--macro js.jquery.Config.init()
