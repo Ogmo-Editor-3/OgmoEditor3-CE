@@ -540,7 +540,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				Fields.createSettingsBlock(inspector, entityHasNodes, SettingsBlock.Fourth);
 
 				// node ghost
-				entityNodeGhost = Fields.createCheckbox(entity.nodeGhost, "Ghost");
+				entityNodeGhost = Fields.createCheckbox(entity.nodeGhost, "Draw Ghosts");
 				Fields.createSettingsBlock(inspector, entityNodeGhost, SettingsBlock.Fourth);
 
 				// limit
