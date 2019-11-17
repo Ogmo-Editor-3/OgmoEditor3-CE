@@ -18,6 +18,7 @@ class Project
 	public var gridColor:Color = Color.fromHex("#3c4049", 0.8);
 	public var anglesRadians:Bool = true;
 	public var defaultExportMode:String = ".json";
+	public var compactExport:Bool = false;
 	public var directoryDepth:Int = 5;
 
 	public var levelDefaultSize:Vector = new Vector(320, 240);
@@ -143,6 +144,7 @@ class Project
 		levelMaxSize = Vector.load(data.levelMaxSize);
 		levelValues = ValueTemplate.loadList(data.levelValues);
 		defaultExportMode = Imports.string(data.defaultExportMode, ".json");
+		compactExport = data.compactExport;
 
 		// tilesets
 		if (data.tilesets != null) for (tileset in data.tilesets) tilesets.push(Tileset.load(this, tileset));
@@ -183,6 +185,7 @@ class Project
 			levelMaxSize: levelMaxSize.save(),
 			levelValues: ValueTemplate.saveList(this.levelValues),
 			defaultExportMode: defaultExportMode,
+			compactExport: compactExport,
 			entityTags: entities.tags,
 			layers: [for (layer in layers) layer.save()],
 			entities: [for (entity in entities.templates) entity.save()],
@@ -222,6 +225,7 @@ typedef ProjectSaveFile =
 	levelMaxSize:{ x:Float, y:Float },
 	levelValues:Array<Dynamic>, // TODO: do we need more specific than this? -01010111
 	defaultExportMode:String,
+	compactExport:Bool,
 	entityTags:Array<String>,
 	layers:Array<Dynamic>,
 	entities:Array<Dynamic>,

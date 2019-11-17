@@ -17,6 +17,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
   public var gridColor:JQuery;
   public var angleExport:JQuery;
   public var directoryDepth:JQuery;
+  public var compactExport:JQuery;
   public var levelMinSize:JQuery;
   public var levelMaxSize:JQuery;
 	public var levelValueManager:ValueTemplateManager;
@@ -33,16 +34,22 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     Fields.createSettingsBlock(root, directoryDepth, SettingsBlock.Third, "Project Directory Depth", SettingsBlock.InlineTitle);
 
     backgroundColor = Fields.createColor("Background Color", Color.white, root);
-    Fields.createSettingsBlock(root, backgroundColor, SettingsBlock.Third, "Bg Color", SettingsBlock.InlineTitle);
+    Fields.createSettingsBlock(root, backgroundColor, SettingsBlock.Fourth, "Bg Color", SettingsBlock.InlineTitle);
 
     gridColor = Fields.createColor("Grid Color", Color.white);
-    Fields.createSettingsBlock(root, gridColor, SettingsBlock.Third, "Grid Color", SettingsBlock.InlineTitle);
+    Fields.createSettingsBlock(root, gridColor, SettingsBlock.Fourth, "Grid Color", SettingsBlock.InlineTitle);
 
     var options = new Map();
+    options.set('0', 'Pretty');
+    options.set('1', 'Compact');
+    compactExport = Fields.createOptions(options);
+    Fields.createSettingsBlock(root, compactExport, SettingsBlock.Fourth, "JSON Export Format", SettingsBlock.InlineTitle);
+
+    options = new Map();
     options.set('0', 'Radians');
     options.set('1', 'Degrees');
     angleExport = Fields.createOptions(options);
-    Fields.createSettingsBlock(root, angleExport, SettingsBlock.Third, "Angle Export Mode", SettingsBlock.InlineTitle);
+    Fields.createSettingsBlock(root, angleExport, SettingsBlock.Fourth, "Angle Export Mode", SettingsBlock.InlineTitle);
 
     // level size
     levelMinSize = Fields.createVector(new Vector(0, 0));
@@ -60,6 +67,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     Fields.setField(directoryDepth, OGMO.project.directoryDepth.string());
     Fields.setColor(backgroundColor, OGMO.project.backgroundColor);
     Fields.setColor(gridColor, OGMO.project.gridColor);
+    compactExport.val(!OGMO.project.compactExport ? "0" : "1");
     angleExport.val(OGMO.project.anglesRadians ? "0" : "1");
     Fields.setVector(levelMinSize, OGMO.project.levelMinSize);
     Fields.setVector(levelMaxSize, OGMO.project.levelMaxSize);
@@ -74,6 +82,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     OGMO.project.directoryDepth = Imports.integer(Fields.getField(directoryDepth), 16);
     OGMO.project.backgroundColor = Fields.getColor(backgroundColor);
     OGMO.project.gridColor = Fields.getColor(gridColor);
+    OGMO.project.compactExport = compactExport.val() != "0";
     OGMO.project.anglesRadians = angleExport.val() == "0";
     OGMO.project.levelMinSize = Fields.getVector(levelMinSize);
     OGMO.project.levelMaxSize = Fields.getVector(levelMaxSize);

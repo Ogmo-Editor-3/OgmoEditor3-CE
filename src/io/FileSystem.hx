@@ -123,9 +123,9 @@ class FileSystem
 		return Json.parse(str);
 	}
 
-	public static function JSONtoString(data:Dynamic):String
+	public static function JSONtoString(data:Dynamic, compact:Bool = false):String
 	{
-		return new util.Stringify(data);
+		return compact ? Json.stringify(data) : new util.Stringify(data, {maxLength: 100000, maxNesting: 1});
 	}
 
 	public static function loadJSON(path:String):Dynamic
@@ -135,7 +135,7 @@ class FileSystem
 
 	public static function saveJSON(data:Dynamic, path:String):String
 	{
-		var str = FileSystem.JSONtoString(data);
+		var str = FileSystem.JSONtoString(data, OGMO.project == null ? false : OGMO.project.compactExport);
 		FileSystem.saveString(str, path);
 		return str;
 	}
