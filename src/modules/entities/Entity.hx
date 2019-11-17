@@ -242,7 +242,21 @@ class Entity
 		if (nodes.length > 0 && template.nodeGhost)
 		{
 			var c = color.x(0.5);
-			for (node in nodes) EDITOR.draw.drawTris(_points, node, c);
+			for (node in nodes)
+			{
+				if (_texture != null)
+				{
+					var orig = origin.clone().rotate(Math.sin(rotation * Math.PI / 180), Math.cos(rotation * Math.PI / 180));
+					var previousAlpha = EDITOR.draw.getAlpha();
+					EDITOR.draw.setAlpha(previousAlpha * .5);
+					EDITOR.draw.drawTexture(node.x - orig.x, node.y - orig.y, _texture, null, size.clone().div(template.size), rotation * Math.PI / 180);
+					EDITOR.draw.setAlpha(previousAlpha);
+				}
+				else
+				{
+					EDITOR.draw.drawTris(_points, node, c);
+				}
+			}
 		}
 	}
 
