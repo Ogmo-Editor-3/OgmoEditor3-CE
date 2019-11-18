@@ -63,6 +63,7 @@ class TileLayerEditor extends LayerEditor
 	
 	override function keyRepeat(key:Int):Void
 	{
+		if (OGMO.ctrl) return;
 		switch (key)
 		{
 			case Keys.W:
