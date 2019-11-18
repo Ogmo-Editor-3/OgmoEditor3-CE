@@ -1,7 +1,12 @@
 package modules.tiles.tools;
 
+import js.node.Path;
+import level.data.LevelData;
+import level.data.Level;
 import level.editor.LayerEditor;
 import util.Random;
+
+using Math;
 
 class TileAutotileTool extends TileTool
 {
@@ -13,89 +18,108 @@ class TileAutotileTool extends TileTool
 	public var random:Random = new Random();
 
 	public var map:Map<Int, Array<Int>> = [for (i in 0...256) i => []];
+	public var cardinal_map:Map<Int, Array<Int>> = [for (i in 0...16) i => []];
 	public var fallbackTile:Int = -1;
 
 	public function get_ruleset(arr:Array<Array<Int>>) {
 		map = [for (i in 0...256) i => []];
+		cardinal_map = [for (i in 0...16) i => []];
 		fallbackTile = arr[0][0];
 		for (j in 0...arr.length) for (i in 0...arr[j].length) {
-			if (arr[j][i] < 0) continue; // TODO - It might be nice to be able to set this to 0 -01010111
+			if (arr[j][i] == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
 			var key = 0;
 			var up = j > 0;
 			var down = j < arr.length - 1;
 			var left = i > 0;
 			var right = i < arr[j].length - 1;
-			if (up &&				arr[j - 1][i] >= 0)		key += 1;
-			if (up && right &&		arr[j - 1][i + 1] >= 0)	key += 2;
-			if (right &&			arr[j][i + 1] >= 0)		key += 4;
-			if (down && right &&	arr[j + 1][i + 1] >= 0)	key += 8;
-			if (down &&				arr[j + 1][i] >= 0)		key += 16;
-			if (down && left &&		arr[j + 1][i - 1] >= 0)	key += 32;
-			if (left &&				arr[j][i - 1] >= 0)		key += 64;
-			if (up && left &&		arr[j - 1][i - 1] >= 0)	key += 128;
+			if (up &&				arr[j - 1][i] != -1)		key += 1;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (down &&				arr[j + 1][i] != -1)		key += 2;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (left &&				arr[j][i - 1] != -1)		key += 4;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (right &&			arr[j][i + 1] != -1)		key += 8;	// TODO - It might be nice to be able to set this to 0 -01010111
+			cardinal_map[key].push(arr[j][i]);
+			if (up && left &&		arr[j - 1][i - 1] != -1)	key += 16;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (up && right &&		arr[j - 1][i + 1] != -1)	key += 32;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (down && left &&		arr[j + 1][i - 1] != -1)	key += 64;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (down && right &&	arr[j + 1][i + 1] != -1)	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
 			map[key].push(arr[j][i]);
 		}
+		trace(map);
 	}
 
 	public function get_tile_idx(x:Int, y:Int, arr:Array<Array<Int>>):Int {
+		var tiles = get_tiles(x, y, arr);
+		return tiles[(Math.random() * tiles.length).floor()];
+	}
+
+	function get_tiles(x:Int, y:Int, arr:Array<Array<Int>>):Array<Int> {
 		var key = 0;
+		var cardinal_key = 0;
 		var up = y > 0;
 		var down = y < arr.length - 1;
 		var left = x > 0;
 		var right = x < arr[y].length - 1;
-		if (up &&				arr[y - 1][x] >= 0)		key += 1;
-		if (up && right &&		arr[y - 1][x + 1] >= 0)	key += 2;
-		if (right &&			arr[y][x + 1] >= 0)		key += 4;
-		if (down && right &&	arr[y + 1][x + 1] >= 0)	key += 8;
-		if (down &&				arr[y + 1][x] >= 0)		key += 16;
-		if (down && left &&		arr[y + 1][x - 1] >= 0)	key += 32;
-		if (left &&				arr[y][x - 1] >= 0)		key += 64;
-		if (up && left &&		arr[y - 1][x - 1] >= 0)	key += 128;
-		if (map[key].length == 0) return fallbackTile;
-		return map[key][Math.floor(Math.random() * map[key].length)];
+		if (up &&				arr[y - 1][x] != -1)		key += 1;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (down &&				arr[y + 1][x] != -1)		key += 2;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (left &&				arr[y][x - 1] != -1)		key += 4;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (right &&			arr[y][x + 1] != -1)		key += 8;	// TODO - It might be nice to be able to set this to 0 -01010111
+		cardinal_key = key;
+		if (up && left &&		arr[y - 1][x - 1] != -1)	key += 16;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (up && right &&		arr[y - 1][x + 1] != -1)	key += 32;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (down && left &&		arr[y + 1][x - 1] != -1)	key += 64;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (down && right &&	arr[y + 1][x + 1] != -1)	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
+		return map[key].length > 0 ? map[key] : cardinal_map[cardinal_key].length > 0 ? cardinal_map[cardinal_key] : [fallbackTile];
+	}
+
+	override public function activated() {
+		drawing = false;
+		trace(layer.tileset);
+		init(layer.tileset.autotileRef);
+	}
+
+	function init(ref_path:String) {
+		var ref:{layers:Array<Dynamic>} = FileSystem.loadJSON(Path.join(Path.dirname(OGMO.project.path), ref_path));
+		var layer = ref.layers[layer.id]; // is layer.id the position of the layer in the layers array?
+		if (layer.data2D != null) get_ruleset(layer.data2D);
+		else if (layer.data != null) get_ruleset(get_2d_from_csv(layer.data));
+		else if (layer.data1D != null) get_ruleset(get_2d_from_1d(layer.data1D, layer.gridCellsX));
+	}
+
+	function get_2d_from_csv(csv:String):Array<Array<Int>> {
+		return [for (row in csv.split('\n')) [ for (n in row.split(',')) n.parseInt() ]];
+	}
+
+	function get_2d_from_1d(data:Array<Int>, width:Int):Array<Array<Int>> {
+		var out = [[]];
+		var ints = data.copy();
+		while (ints.length > 0) {
+			while (out[out.length - 1].length < width) out[out.length - 1].push(ints.shift());
+			out.push([]);
+		}
+		return out;
 	}
 	
 	override public function drawOverlay()
 	{
 		if (!drawing)
 		{
+			var pos = prevPos.clone();
+			layer.gridToLevel(pos, pos);
 			EDITOR.overlay.setAlpha(0.5);
-			var at = layer.gridToLevel(prevPos);
-			
-			if (OGMO.ctrl)
-			{
-				var tile = random.peekChoice2D(layerEditor.brush);
-				if (tile != -1 && layer.insideGrid(prevPos))
-					EDITOR.overlay.drawTile(at.x, at.y, layer.tileset, tile);
-			}
-			else
-			{
-				for (x in 0...layerEditor.brush.length)
-				{
-					for (y in 0...layerEditor.brush[x].length)
-					{
-						var id = layerEditor.brush[x][y];
-						if (id != -1)
-						{
-							var cur = new Vector(at.x + x * layer.template.gridSize.x, at.y + y * layer.template.gridSize.y);
-							if (layer.insideGrid(new Vector(prevPos.x + x, prevPos.y + y)))
-								EDITOR.overlay.drawTile(cur.x, cur.y, layer.tileset, id);
-						}
-					}
-				}
-			}
-			
+			EDITOR.overlay.drawTile(pos.x, pos.y, layer.tileset, fallbackTile);
 			EDITOR.overlay.setAlpha(1);
 		}
-	}
-
-	override public function activated()
-	{
-		drawing = false;
+		else {
+			for (y in 0...drawBrush.length) for (x in 0...drawBrush[y].length) {
+				var pos = new Vector(x, y);
+				layer.gridToLevel(pos, pos);
+				EDITOR.overlay.drawTile(pos.x, pos.y, layer.tileset, drawBrush[y][x]);
+			}
+		}
 	}
 
 	override public function onMouseDown(pos:Vector)
 	{
+		drawBrush = [for (j in 0...layer.gridCellsY) [for (i in 0...layer.gridCellsX) -1]]; // TODO - It might be nice to be able to set this to 0 -01010111
 		startDrawing(pos, layerEditor.brush);
 	}
 
@@ -121,6 +145,11 @@ class TileAutotileTool extends TileTool
 	{
 		drawing = false;
 		lastRect = null;
+		for (y in 0...drawBrush.length) for (x in 0...drawBrush[y].length) {
+			if (drawBrush[y][x] == -1) continue;
+			layer.data[x][y] = drawBrush[y][x];
+		}
+		EDITOR.dirty();
 		EDITOR.locked = false;
 	}
 
@@ -132,11 +161,15 @@ class TileAutotileTool extends TileTool
 
 	public function startDrawing(pos:Vector, tiles:Array<Array<Int>>)
 	{
+		if (layer.tileset.autotileRef == null) {
+			return;
+		}
+
 		layer.levelToGrid(pos, pos);
 		prevPos = pos;
 		drawing = true;
 		firstDraw = false;
-		drawBrush = tiles;
+		//drawBrush = tiles;
 
 		EDITOR.locked = true;
 
@@ -155,24 +188,11 @@ class TileAutotileTool extends TileTool
 				firstDraw = true;
 			}
 
-			if (OGMO.ctrl)
-			{
-				if (layer.insideGrid(pos))
-				{
-					var tile = random.nextChoice2D(drawBrush);
-					layer.data[px][py] = tile;
-					
-					lastRect = new Rectangle(pos.x, pos.y, 1, 1);
-				}
-			}
-			else
-			{
-				for (x in 0...drawBrush.length)
-					for (y in 0...drawBrush[x].length)
-						if (layer.insideGrid(new Vector(px + x, py + y)))
-							layer.data[px.int() + x][py.int() + y] = drawBrush[x][y];
-				
-				lastRect = new Rectangle(pos.x, pos.y, drawBrush.length, drawBrush[0].length);
+			drawBrush[py][px] = 1;
+			
+			for (j in 0...drawBrush.length) for (i in 0...drawBrush[j].length) {
+				if (drawBrush[j][i] == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
+				drawBrush[j][i] = get_tile_idx(i, j, drawBrush);
 			}
 			
 			EDITOR.dirty();
@@ -185,7 +205,7 @@ class TileAutotileTool extends TileTool
 			
 		var n:Rectangle;
 		if (OGMO.ctrl) n = new Rectangle(pos.x, pos.y, 1, 1);
-		else n = new Rectangle(pos.x, pos.y, drawBrush.length, drawBrush[0].length);
+		else n = new Rectangle(pos.x, pos.y, drawBrush[0].length, drawBrush.length);
 			
 		return !(n.right > lastRect.left && n.bottom > lastRect.top && n.left < lastRect.right && n.top < lastRect.bottom);
 	}

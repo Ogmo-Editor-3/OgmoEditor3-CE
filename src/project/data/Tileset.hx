@@ -21,11 +21,12 @@ class Tileset
   public var tileHeight: Int;
   public var tileSeparationX: Int;
   public var tileSeparationY: Int;
+  public var autotileRef:String;
 
   public var brokenPath:Bool = false;
 	public var brokenTexture:Bool = false;
     
-  public function new(project:Project, label:String, path:String, tileWidth:Int, tileHeight:Int, tileSepX:Int, tileSepY:Int, ?image:ImageElement)
+  public function new(project:Project, label:String, path:String, tileWidth:Int, tileHeight:Int, tileSepX:Int, tileSepY:Int, ?image:ImageElement, ?autotileRef:String)
   {
     this.label = label;
     this.path = path;
@@ -33,6 +34,7 @@ class Tileset
     this.tileHeight = tileHeight;
     this.tileSeparationX = tileSepX;
     this.tileSeparationY = tileSepY;
+    this.autotileRef = autotileRef;
       
     if (FileSystem.exists(Path.join(Path.dirname(project.path), path)))
     {
@@ -61,6 +63,7 @@ class Tileset
     data.tileHeight = tileHeight;
     data.tileSeparationX = tileSeparationX;
     data.tileSeparationY = tileSeparationY;
+    data.autotileRef = autotileRef;
     return data;
   }
   
@@ -68,7 +71,7 @@ class Tileset
   {
     var img = Browser.document.createImageElement();
     img.src = data.image;
-    return new Tileset(project, data.label, data.path, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, img);
+    return new Tileset(project, data.label, data.path, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, img, data.autotileRef);
   }
   
   public inline function getTileX(id: Int):Int return id % tileColumns;

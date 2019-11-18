@@ -117,6 +117,16 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 			tileSeparation.find("input").on("change", function() { refreshCanvas(context); });
 			Fields.createSettingsBlock(into, tileSeparation, SettingsBlock.Half, "Tile Separation", SettingsBlock.InlineTitle);
 			Fields.createLineBreak(into);
+
+			// TODO: Add non-editable text field to show whether a ref map has been selected or not
+			var autotile = Fields.createSettingsBlock(inspector, Fields.createButton('plus', 'Load Autotile Reference', inspector).on('click', () -> {
+				var path = FileSystem.chooseFile('Select Autotile Reference Map', [{ name: 'Level Files', extensions: ['json'] }]);
+				if (FileSystem.exists(path)) {
+					var relative = Path.relative(Path.dirname(OGMO.project.path), path);
+					tileset.autotileRef = relative;
+					trace(relative);
+				}
+			}), SettingsBlock.Half);
 			
 			// add canvas
 			var canvasHolder = new JQuery('<div class="project_tiles_tileset">');
