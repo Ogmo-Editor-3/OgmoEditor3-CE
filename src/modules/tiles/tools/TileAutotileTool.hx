@@ -19,7 +19,7 @@ class TileAutotileTool extends TileTool
 		map = [for (i in 0...256) i => []];
 		fallbackTile = arr[0][0];
 		for (j in 0...arr.length) for (i in 0...arr[j].length) {
-			if (arr[j][i] < 0) continue; // TODO: Make default empty tile
+			if (arr[j][i] < 0) continue; // TODO - It might be nice to be able to set this to 0 -01010111
 			var key = 0;
 			var up = j > 0;
 			var down = j < arr.length - 1;
