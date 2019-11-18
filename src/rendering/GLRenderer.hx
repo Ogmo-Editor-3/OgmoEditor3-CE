@@ -97,6 +97,11 @@ class GLRenderer
 		setDrawMode(-1);
 	}
 	
+	public function getAlpha(): Float
+	{
+		return lastAlpha;
+	}
+
 	public function setAlpha(alpha: Float): Void
 	{
 		if (alpha != lastAlpha)
