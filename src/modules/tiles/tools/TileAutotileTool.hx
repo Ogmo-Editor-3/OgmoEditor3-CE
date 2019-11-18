@@ -78,10 +78,12 @@ class TileAutotileTool extends TileTool
 
 	function init(ref_path:String) {
 		var ref:{layers:Array<Dynamic>} = FileSystem.loadJSON(Path.join(Path.dirname(OGMO.project.path), ref_path));
-		var layer = ref.layers[layer.id]; // is layer.id the position of the layer in the layers array?
+		for (l in ref.layers) if (l.name == this.layer.template.name) return init_layer(l);
+	}
+
+	function init_layer(layer:Dynamic) {		
 		if (layer.data2D != null) get_ruleset(layer.data2D);
-		else if (layer.data != null) get_ruleset(get_2d_from_csv(layer.data));
-		else if (layer.data1D != null) get_ruleset(get_2d_from_1d(layer.data1D, layer.gridCellsX));
+		else if (layer.data != null) get_ruleset(get_2d_from_1d(layer.data, layer.gridCellsX));
 	}
 
 	function get_2d_from_csv(csv:String):Array<Array<Int>> {
