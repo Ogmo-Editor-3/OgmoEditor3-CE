@@ -1,5 +1,6 @@
 package project.data;
 
+import electron.renderer.Remote;
 import js.lib.Date;
 import js.node.Path;
 import io.Export;
@@ -175,6 +176,7 @@ class Project
 	{
 		var data:ProjectSaveFile = {
 			name: name,
+			ogmoVersion : untyped Remote.app.getVersion(),
 			levelPaths: levelPaths,
 			backgroundColor: backgroundColor.toHexAlpha(),
 			gridColor: gridColor.toHexAlpha(),
@@ -215,6 +217,7 @@ class Project
 typedef ProjectSaveFile =
 {
 	name:String,
+	ogmoVersion:String,
 	levelPaths:Array<String>,
 	backgroundColor:String,
 	gridColor:String,

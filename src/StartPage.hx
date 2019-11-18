@@ -2,6 +2,7 @@ import io.Imports;
 import io.FileSystem;
 import project.data.Project;
 import js.jquery.JQuery;
+import electron.renderer.Remote;
 
 class StartPage
 {
@@ -14,6 +15,8 @@ class StartPage
 		Ogmo.startPage = this;
 		root = new JQuery(".start");
 		display = root.css("display");
+		
+		new JQuery(".start_version").text(untyped Remote.app.getVersion());
 
 		new JQuery(".start_newProject").click(function(e)
 		{
