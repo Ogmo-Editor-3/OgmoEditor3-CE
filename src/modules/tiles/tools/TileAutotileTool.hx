@@ -16,6 +16,8 @@ class TileAutotileTool extends TileTool
 	public var prevPos:Vector = new Vector();
 	public var lastRect:Rectangle = null;
 	public var random:Random = new Random();
+	public var erasing:Bool = false;
+	public var was_ctrl:Bool = false;
 
 	public var map:Map<Int, Array<Int>> = [for (i in 0...256) i => []];
 	public var cardinal_map:Map<Int, Array<Int>> = [for (i in 0...16) i => []];
@@ -43,36 +45,34 @@ class TileAutotileTool extends TileTool
 			if (down && right &&	arr[j + 1][i + 1] != -1)	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
 			map[key].push(arr[j][i]);
 		}
-		trace(map);
 	}
 
-	public function get_tile_idx(x:Int, y:Int, arr:Array<Array<Int>>):Int {
-		var tiles = get_tiles(x, y, arr);
+	public function get_tile_idx(x:Int, y:Int, arr:Array<Array<Int>>, check_data:Bool = false):Int {
+		var tiles = get_tiles(x, y, arr, check_data);
 		return tiles[(Math.random() * tiles.length).floor()];
 	}
 
-	function get_tiles(x:Int, y:Int, arr:Array<Array<Int>>):Array<Int> {
+	function get_tiles(x:Int, y:Int, arr:Array<Array<Int>>, check_data:Bool):Array<Int> {
 		var key = 0;
 		var cardinal_key = 0;
 		var up = y > 0;
 		var down = y < arr.length - 1;
 		var left = x > 0;
 		var right = x < arr[y].length - 1;
-		if (up &&				arr[y - 1][x] != -1	|| !up)		key += 1;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (down &&				arr[y + 1][x] != -1	|| !down)	key += 2;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (left &&				arr[y][x - 1] != -1	|| !left)	key += 4;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (right &&			arr[y][x + 1] != -1	|| !right)	key += 8;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (up && (arr[y - 1][x] != -1 || check_data && layer.data[x][y - 1] != -1) || !up)		key += 1;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (down && (arr[y + 1][x] != -1 || check_data && layer.data[x][y + 1] != -1) || !down)	key += 2;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (left && (arr[y][x - 1] != -1 || check_data && layer.data[x - 1][y] != -1) || !left)	key += 4;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (right && (arr[y][x + 1] != -1 || check_data && layer.data[x + 1][y] != -1) || !right)	key += 8;	// TODO - It might be nice to be able to set this to 0 -01010111
 		cardinal_key = key;
-		if (up && left &&		arr[y - 1][x - 1] != -1	|| !(up && left))		key += 16;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (up && right &&		arr[y - 1][x + 1] != -1	|| !(up && right))		key += 32;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (down && left &&		arr[y + 1][x - 1] != -1	|| !(down && left))		key += 64;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (down && right &&	arr[y + 1][x + 1] != -1	|| !(down && right))	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (up && left && (arr[y - 1][x - 1] != -1 || check_data && layer.data[x - 1][y - 1] != -1) || !(up && left))			key += 16;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (up && right && (arr[y - 1][x + 1] != -1 || check_data && layer.data[x + 1][y - 1] != -1) || !(up && right))		key += 32;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (down && left && (arr[y + 1][x - 1] != -1 || check_data && layer.data[x - 1][y + 1] != -1) || !(down && left))		key += 64;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (down && right && (arr[y + 1][x + 1] != -1 || check_data && layer.data[x + 1][y + 1] != -1) || !(down && right))	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
 		return map[key].length > 0 ? map[key] : cardinal_map[cardinal_key].length > 0 ? cardinal_map[cardinal_key] : [fallbackTile];
 	}
 
 	override public function activated() {
 		drawing = false;
-		trace(layer.tileset);
 		init(layer.tileset.autotileRef);
 	}
 
@@ -99,6 +99,10 @@ class TileAutotileTool extends TileTool
 		}
 		return out;
 	}
+
+	function init_draw_brush(from_data:Bool = false) {
+		drawBrush = [for (j in 0...layer.gridCellsY) [for (i in 0...layer.gridCellsX) from_data ? layer.data[i][j] : -1]]; // TODO - It might be nice to be able to set this to 0 -01010111
+	}
 	
 	override public function drawOverlay()
 	{
@@ -121,28 +125,30 @@ class TileAutotileTool extends TileTool
 
 	override public function onMouseDown(pos:Vector)
 	{
-		drawBrush = OGMO.ctrl 
-			? [for (j in 0...layer.gridCellsY) [for (i in 0...layer.gridCellsX) layer.data[i][j]]]
-			: [for (j in 0...layer.gridCellsY) [for (i in 0...layer.gridCellsX) -1]]; // TODO - It might be nice to be able to set this to 0 -01010111
-		startDrawing(pos, layerEditor.brush);
+		init_draw_brush();
+		startDrawing(pos);
 	}
 
 	override public function onRightDown(pos:Vector)
 	{
-		startDrawing(pos, [[-1]]); // TODO - It might be nice to be able to set this to 0 -01010111
+		init_draw_brush(true);
+		erasing = true;
+		[for (j in 0...layer.gridCellsY) [for (i in 0...layer.gridCellsX) layer.data[i][j]]];
+		startDrawing(pos);
 	}
 
 	override public function onMouseMove(pos:Vector)
 	{
 		layer.levelToGrid(pos, pos);
 
-		if (!prevPos.equals(pos))
-		{
-			if (drawing) for (point in Calc.bresenham(prevPos.x.int(), prevPos.y.int(), pos.x.int(), pos.y.int())) doDraw(point);
+		if (!prevPos.equals(pos) || was_ctrl != OGMO.ctrl)
+		{ 
+			if (drawing && drawBrush != null) for (point in Calc.bresenham(prevPos.x.int(), prevPos.y.int(), pos.x.int(), pos.y.int())) doDraw(point);
 			else EDITOR.overlayDirty();
 		}
 
 		pos.clone(prevPos);
+		was_ctrl = OGMO.ctrl;
 	}
 
 	override public function onMouseUp(pos:Vector)
@@ -155,15 +161,18 @@ class TileAutotileTool extends TileTool
 		}
 		EDITOR.dirty();
 		EDITOR.locked = false;
+		init_draw_brush();
 	}
 
 	override public function onRightUp(pos:Vector)
 	{
+		onMouseUp(pos);
+		erasing = false;
 		drawing = false;
 		EDITOR.locked = false;
 	}
 
-	public function startDrawing(pos:Vector, tiles:Array<Array<Int>>)
+	public function startDrawing(pos:Vector)
 	{
 		if (layer.tileset.autotileRef == null) {
 			return;
@@ -173,7 +182,6 @@ class TileAutotileTool extends TileTool
 		prevPos = pos;
 		drawing = true;
 		firstDraw = false;
-		//drawBrush = tiles;
 
 		EDITOR.locked = true;
 
@@ -192,13 +200,14 @@ class TileAutotileTool extends TileTool
 				firstDraw = true;
 			}
 
-			trace(drawBrush);
-			drawBrush[py][px] = 1;
-			
+			drawBrush[py][px] = erasing ? -1 : 1; // TODO - It might be nice to be able to set this to 0 -01010111
+			if (erasing) layer.data[px][py] = -1; // TODO - It might be nice to be able to set this to 0 -01010111
 			for (j in 0...drawBrush.length) for (i in 0...drawBrush[j].length) {
+				if (erasing && ((j - py).abs() > 1 || (i - px).abs() > 1)) continue;
 				if (drawBrush[j][i] == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
-				drawBrush[j][i] = get_tile_idx(i, j, drawBrush);
+				drawBrush[j][i] = get_tile_idx(i, j, drawBrush, OGMO.ctrl);
 			}
+
 			
 			EDITOR.dirty();
 		}
@@ -230,9 +239,7 @@ class TileAutotileTool extends TileTool
 		}
 	}
 
-	override public function getName():String return "Pencil";
+	override public function getName():String return "Autotile Tool";
 	override public function getIcon():String return "pencil";
-	override public function keyToolAlt():Int return 4;
-	override public function keyToolShift():Int return 1;
 
 }
