@@ -69,7 +69,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 	override function begin():Void
 	{
 		refreshList();
-		inspect(OGMO.project.tilesets[0]);
+		inspect(inspecting == null ? OGMO.project.tilesets[0] : inspecting);
 	}
 	
 	public function inspect(tileset:Tileset, ?saveOnChange:Bool):Void

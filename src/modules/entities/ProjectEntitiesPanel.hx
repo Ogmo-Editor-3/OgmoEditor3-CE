@@ -112,7 +112,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 	override function begin()
 	{
-		inspect(OGMO.project.entities.templates[0]);
+		inspect(current == null ? OGMO.project.entities.templates[0] : current);
 	}
 
 	override function end()

@@ -70,12 +70,14 @@ class ProjectEditor
           // hide previous
           if (this.panel != null)
           {
+              this.panel.end();
               this.panel.root.hide();
               this.panel.tab.removeClass("selected");
           }
 
           // show next
           this.panel = panel;
+          this.panel.begin();
           this.panel.root.show();
           this.panel.tab.addClass("selected");
       }

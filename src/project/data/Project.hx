@@ -21,6 +21,7 @@ class Project
 	public var defaultExportMode:String = ".json";
 	public var compactExport:Bool = false;
 	public var directoryDepth:Int = 5;
+	public var layerGridDefaultSize = new Vector(8, 8);
 
 	public var levelDefaultSize:Vector = new Vector(320, 240);
 	public var levelMinSize:Vector = new Vector(128, 128);
@@ -140,6 +141,7 @@ class Project
 		gridColor = Color.fromHexAlpha(data.gridColor);
 		anglesRadians = data.anglesRadians;
 		directoryDepth = data.directoryDepth;
+		if (data.layerGridDefaultSize != null) layerGridDefaultSize = Vector.load(data.layerGridDefaultSize);
 		levelDefaultSize = Vector.load(data.levelDefaultSize);
 		levelMinSize = Vector.load(data.levelMinSize);
 		levelMaxSize = Vector.load(data.levelMaxSize);
@@ -182,6 +184,7 @@ class Project
 			gridColor: gridColor.toHexAlpha(),
 			anglesRadians: anglesRadians,
 			directoryDepth: directoryDepth,
+			layerGridDefaultSize: layerGridDefaultSize.save(),
 			levelDefaultSize: levelDefaultSize.save(),
 			levelMinSize: levelMinSize.save(),
 			levelMaxSize: levelMaxSize.save(),
@@ -223,6 +226,7 @@ typedef ProjectSaveFile =
 	gridColor:String,
 	anglesRadians:Bool,
 	directoryDepth:Int,
+	layerGridDefaultSize:{ x:Float, y:Float },
 	levelDefaultSize:{ x:Float, y:Float },
 	levelMinSize:{ x:Float, y:Float },
 	levelMaxSize:{ x:Float, y:Float },
@@ -232,5 +236,5 @@ typedef ProjectSaveFile =
 	entityTags:Array<String>,
 	layers:Array<Dynamic>,
 	entities:Array<Dynamic>,
-	tilesets:Array<Dynamic>
+	tilesets:Array<Dynamic>,
 }

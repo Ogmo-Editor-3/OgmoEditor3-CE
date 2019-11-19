@@ -51,7 +51,7 @@ class ProjectLayersPanel extends ProjectEditorPanel
     newLayerButton.on("click", function() { newLayer(); });
 
     refreshList();
-    inspect(OGMO.project.layers[0]);
+    inspect(inspecting == null ? OGMO.project.layers[0] : inspecting);
   }
   
   public function newLayer():Void
