@@ -16,7 +16,7 @@ class StartPage
 		root = new JQuery(".start");
 		display = root.css("display");
 		
-		new JQuery(".start_version").text(untyped Remote.app.getVersion());
+		new JQuery(".start_version").text(OGMO.version);
 
 		new JQuery(".start_newProject").click(function(e)
 		{

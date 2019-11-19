@@ -123,15 +123,19 @@ class EntityTemplate
 		e.nodeDisplay = data.nodeDisplay;
 		e.nodeGhost = data.nodeGhost;
 		e.tags = data.tags;
-		if (data.texture != null && FileSystem.exists(data.texture)) e.texture = Texture.fromFile(data.texture);
 		e.values  = ValueTemplate.loadList(data.values);
+
+		// Try to load the texture from the filepath
+		if (data.texture != null && FileSystem.exists(data.texture)) e.texture = Texture.fromFile(data.texture);
+		// If that didnt work, try to load the base64'd version
+		if (e.texture == null && data.textureImage != null) e.texture = Texture.fromString(data.textureImage);
 
 		return e;
 	}
 
 	public function save():Dynamic
 	{
-		return {
+		var e:Dynamic = {
 			exportID: exportID,
 			name: name,
 			limit: limit,
@@ -155,9 +159,16 @@ class EntityTemplate
 			nodeDisplay: nodeDisplay,
 			nodeGhost: nodeGhost,
 			tags: tags,
-			texture: texture == null ? null : texture.path,
 			values: ValueTemplate.saveList(values)
 		}
+
+		if (texture != null) 
+		{
+			e.texture = texture.path;
+			e.textureImage = texture.image.src;
+		}
+
+		return e;
 	}
 
 	public function getPreviewPoints():Array<Vector>

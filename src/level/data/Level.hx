@@ -111,7 +111,7 @@ class Level
 		data._name = "level";
 		data._contents = "layers";
 
-		data.ogmoVersion = untyped Remote.app.getVersion();
+		data.ogmoVersion = OGMO.version;
 
 		this.data.saveInto(data);
 

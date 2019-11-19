@@ -176,7 +176,7 @@ class Project
 	{
 		var data:ProjectSaveFile = {
 			name: name,
-			ogmoVersion : untyped Remote.app.getVersion(),
+			ogmoVersion : OGMO.version,
 			levelPaths: levelPaths,
 			backgroundColor: backgroundColor.toHexAlpha(),
 			gridColor: gridColor.toHexAlpha(),

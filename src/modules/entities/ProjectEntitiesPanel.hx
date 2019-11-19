@@ -17,6 +17,8 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 	public var entities:JQuery;
 	public var entitiesNewButton:JQuery;
+	public var entitiesImportButton:JQuery;
+	public var entitiesExportButton:JQuery;
 	public var entitiesList:JQuery;
 	public var inspector:JQuery;
 	public var searchbar:JQuery;
@@ -64,6 +66,13 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 			entitiesNewButton = Fields.createButton("plus", "New Entity", entities);
 			entitiesNewButton.on("click", function() { newEntity(); });
 
+			// entity import/export
+			entitiesImportButton = Fields.createButton("new-file", "Import Entities", entities);
+			entitiesImportButton.on("click", function() { importEntities(); });
+
+			entitiesExportButton = Fields.createButton("save", "Export Entities", entities);
+			entitiesExportButton.on("click", function() { exportEntities(); });
+
 			// entitiy list
 			entitiesList = new JQuery('<div class="list">');
 			entities.append(entitiesList);
@@ -74,6 +83,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 			entitiesList.append(searchbar);
 			entitiesList.append(palette);
+
 		}
 
 		// entity inspector
@@ -608,4 +618,47 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 		OGMO.project.entities.refreshTagLists();
 	}
 
+	public function importEntities() 
+	{
+		var addedCount = 0;
+		var notAddedCount = 0;
+		var path = FileSystem.chooseFile("Select Ogmo Project or Exported Entities Templates", [{ name: "Ogmo Editor Project or Exported Entity Templates", extensions: ["ogmo", "json"] }]);
+		
+		if (FileSystem.exists(path))
+		{
+			var data:Dynamic = FileSystem.loadJSON(path);
+			if (data == null || data.entities == null) return;
+
+			for (entity in (cast data.entities : Array<EntityTemplate>)) 
+			{
+				if (OGMO.project.entities.templates.filter(e -> e.exportID == entity.exportID).length == 0) {
+					OGMO.project.entities.templates.push(EntityTemplate.load(entity));
+					addedCount++;
+				}
+				else notAddedCount++;
+			}
+		}
+
+		var str = '$addedCount Entities were imported into the Project.';
+		if (notAddedCount > 0) str += ' $notAddedCount Entities appear to be duplicates, so they were not imported.';
+
+		Popup.open("Imported Entities", "entity", str, ["Okay"]);
+
+		OGMO.project.entities.refreshTagLists();
+		refreshList();
+	}
+
+	public function exportEntities()
+	{
+		var path = FileSystem.chooseSaveFile("Export Entities", [{ name: "Ogmo Entity Templates", extensions: ["json"]}]);
+		if (path.length > 0) 
+		{
+				var data = {
+					ogmoVersion: OGMO.version,
+					entities: [for (entity in OGMO.project.entities.templates) entity.save()]
+				};
+				FileSystem.saveJSON(data, path);
+				
+		}
+	}
 }
