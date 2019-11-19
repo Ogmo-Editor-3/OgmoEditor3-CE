@@ -58,15 +58,15 @@ class TileAutotileTool extends TileTool
 		var down = y < arr.length - 1;
 		var left = x > 0;
 		var right = x < arr[y].length - 1;
-		if (up &&				arr[y - 1][x] != -1)		key += 1;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (down &&				arr[y + 1][x] != -1)		key += 2;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (left &&				arr[y][x - 1] != -1)		key += 4;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (right &&			arr[y][x + 1] != -1)		key += 8;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (up &&				arr[y - 1][x] != -1	|| !up)		key += 1;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (down &&				arr[y + 1][x] != -1	|| !down)	key += 2;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (left &&				arr[y][x - 1] != -1	|| !left)	key += 4;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (right &&			arr[y][x + 1] != -1	|| !right)	key += 8;	// TODO - It might be nice to be able to set this to 0 -01010111
 		cardinal_key = key;
-		if (up && left &&		arr[y - 1][x - 1] != -1)	key += 16;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (up && right &&		arr[y - 1][x + 1] != -1)	key += 32;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (down && left &&		arr[y + 1][x - 1] != -1)	key += 64;	// TODO - It might be nice to be able to set this to 0 -01010111
-		if (down && right &&	arr[y + 1][x + 1] != -1)	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (up && left &&		arr[y - 1][x - 1] != -1	|| !(up && left))		key += 16;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (up && right &&		arr[y - 1][x + 1] != -1	|| !(up && right))		key += 32;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (down && left &&		arr[y + 1][x - 1] != -1	|| !(down && left))		key += 64;	// TODO - It might be nice to be able to set this to 0 -01010111
+		if (down && right &&	arr[y + 1][x + 1] != -1	|| !(down && right))	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
 		return map[key].length > 0 ? map[key] : cardinal_map[cardinal_key].length > 0 ? cardinal_map[cardinal_key] : [fallbackTile];
 	}
 
