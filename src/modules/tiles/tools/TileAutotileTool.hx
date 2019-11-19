@@ -121,7 +121,9 @@ class TileAutotileTool extends TileTool
 
 	override public function onMouseDown(pos:Vector)
 	{
-		drawBrush = [for (j in 0...layer.gridCellsY) [for (i in 0...layer.gridCellsX) -1]]; // TODO - It might be nice to be able to set this to 0 -01010111
+		drawBrush = OGMO.ctrl 
+			? [for (j in 0...layer.gridCellsY) [for (i in 0...layer.gridCellsX) layer.data[i][j]]]
+			: [for (j in 0...layer.gridCellsY) [for (i in 0...layer.gridCellsX) -1]]; // TODO - It might be nice to be able to set this to 0 -01010111
 		startDrawing(pos, layerEditor.brush);
 	}
 
@@ -190,6 +192,7 @@ class TileAutotileTool extends TileTool
 				firstDraw = true;
 			}
 
+			trace(drawBrush);
 			drawBrush[py][px] = 1;
 			
 			for (j in 0...drawBrush.length) for (i in 0...drawBrush[j].length) {
