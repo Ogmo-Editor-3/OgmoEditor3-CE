@@ -7,5 +7,7 @@ class SidePanel
   public function new() {}
   public function populate(into:JQuery):Void {}
   public function refresh():Void {}
-  public function resize():Void {}
+  public function resize():Void {
+    EDITOR.dirty();
+  }
 }
