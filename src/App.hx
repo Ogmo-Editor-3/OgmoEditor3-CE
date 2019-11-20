@@ -15,7 +15,7 @@ class App
 
   static function main()
 	{
-		ElectronApp.on('window_all_closed', (e) -> {
+		ElectronApp.on('window-all-closed', (e) -> {
 			if (process.platform != 'darwin') ElectronApp.quit();
 			process.exit(0);
 		});
