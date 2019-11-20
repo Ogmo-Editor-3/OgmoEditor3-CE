@@ -291,7 +291,7 @@ class Editor
 		if (set)
 		{
 			root.css("display", "flex");
-			EDITOR.levelManager.forceCreate();
+			EDITOR.levelManager.loadLevel();
 			draw.updateCanvasSize();
 			overlay.updateCanvasSize();
 			updateZoomReadout();
