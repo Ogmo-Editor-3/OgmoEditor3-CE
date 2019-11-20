@@ -141,15 +141,17 @@ class Editor
 					new JQuery(".editor_layers").height(e.pageY);
 				if (EDITOR.resizingLeft && e.pageX != null)
 				{
-					new JQuery(".editor_panel-left").width(Math.min(400, e.pageX));
+					new JQuery(".editor_panel-left").width(e.pageX);
 					EDITOR.draw.updateCanvasSize();
 					EDITOR.overlay.updateCanvasSize();
+					EDITOR.dirty();
 				}
 				if (EDITOR.resizingRight)
 				{
-					new JQuery(".editor_panel-right").width(Math.min(400, new JQuery(Browser.window).width() - e.pageX));
+					new JQuery(".editor_panel-right").width(new JQuery(Browser.window).width() - e.pageX);
 					EDITOR.draw.updateCanvasSize();
 					EDITOR.overlay.updateCanvasSize();
+					EDITOR.dirty();
 					if (EDITOR.currentLayerEditor != null && EDITOR.currentLayerEditor.palettePanel != null)
 						EDITOR.currentLayerEditor.palettePanel.resize();
 				}
