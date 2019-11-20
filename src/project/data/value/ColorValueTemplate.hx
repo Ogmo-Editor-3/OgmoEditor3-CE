@@ -26,10 +26,10 @@ class ColorValueTemplate extends ValueTemplate
     return defaults.toHexAlpha();
   }
 
-  override function validate(val:String):String
+  override function validate(val:Dynamic):Int
   {
     //TODO!!
-    return val;
+    return cast val;
   }
 
   override function createEditor(values:Array<Value>):Null<ColorValueEditor>

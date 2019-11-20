@@ -29,14 +29,14 @@ class IntegerValueTemplate extends ValueTemplate
         return Std.string(defaults);
     }
 
-    override function validate(val:String):String
+    override function validate(val:Dynamic):Int
     {
         var number = Imports.integer(val, defaults);
         if (bounded && number < min)
             number = min
         else if (bounded && number > max)
             number = max;
-        return  Std.string(number);
+        return  number;
     }
 
     override function createEditor(values:Array<Value>):ValueEditor
