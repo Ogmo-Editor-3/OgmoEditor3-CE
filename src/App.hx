@@ -16,8 +16,11 @@ class App
   static function main()
 	{
 		ElectronApp.on('window-all-closed', (e) -> {
-			if (process.platform != 'darwin') ElectronApp.quit();
-			process.exit(0);
+			// Keep the app open if even if windows are closed on OSX (normal mac app behavior)
+			if (process.platform != 'darwin') {
+				ElectronApp.quit();
+				process.exit(0);
+			}
 		});
 
 		ElectronApp.on('ready', (e) -> createWindow());
