@@ -35,7 +35,7 @@
         "@aitodotai/json-stringify-pretty-compact": "^1.3.0",
         "chokidar": "^3.0.1",
         "electron-window-state": "^5.0.3",
-        "jquery": "^3.4.1",
+        "jquery": "2.2.0",
         "klaw": "^3.0.0"
     }
 }
