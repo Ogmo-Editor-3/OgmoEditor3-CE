@@ -106,7 +106,7 @@ class ProjectEditor
 
 	public function validate():Bool {
 		// We can't edit with no layers!
-		if (OGMO.project.layers.length > 0) {
+		if (OGMO.project.layers.length == 0) {
 			Popup.open('No Layers in Project', 'warning', 'No Layers were found in the Project. The Project requires at least 1 Layer before it can be saved.', ['Okay']);
 			return false;
 		}
