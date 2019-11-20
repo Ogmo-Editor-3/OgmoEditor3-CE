@@ -306,6 +306,15 @@ class Level
 		EDITOR.handles.refresh();
 	}
 
+	public function setZoom(zoom:Float) {
+		camera.scale(zoom, zoom);
+		updateCameraInverse();
+		EDITOR.dirty();
+
+		EDITOR.updateZoomReadout();
+		EDITOR.handles.refresh();
+	}
+
 	public function zoomCameraAt(zoom:Float, x:Float, y:Float):Void
 	{
 		setZoomRect(zoom);

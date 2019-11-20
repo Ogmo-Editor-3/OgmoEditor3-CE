@@ -220,6 +220,11 @@ class Editor
 				});
 			});
 
+			new JQuery('.sticker-zoom').click((e) -> {
+				var zoom = (EDITOR.level.zoom.round() / EDITOR.level.zoom).max(1 / EDITOR.level.zoom);
+				EDITOR.level.setZoom(zoom);
+			});
+
 			Remote.getCurrentWindow().on('focus', function (e)
 			{
 				EDITOR.levelManager.onGainFocus();
