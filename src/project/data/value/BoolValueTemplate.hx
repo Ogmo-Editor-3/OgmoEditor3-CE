@@ -26,9 +26,11 @@ class BoolValueTemplate extends ValueTemplate
     return Std.string(defaults);
   }
 
-  override function validate(val:String):String
+  override function validate(val:Dynamic):Bool
   {
-    return Std.string(Imports.bool(val, defaults));
+    //return Std.string(Imports.bool(val, defaults));
+    if (val.is(String)) return val == 'true';
+    return val.is(Bool) ? val : false;
   }
 
   override function createEditor(values:Array<Value>):ValueEditor

@@ -28,8 +28,9 @@ class EnumValueTemplate extends ValueTemplate
     return "";
   }
 
-  override function validate(val:String):String 
+  override function validate(val:Dynamic):String 
   {
+    val = val.string();
     if (choices.length > 0)
     {
       var n = choices.indexOf(val);
