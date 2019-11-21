@@ -126,7 +126,19 @@ class Ogmo
 		Start.up();
 		//Init the toolbelt
 		editor.toolBelt = new ToolBelt();
-		updateWindowTitle();		
+		updateWindowTitle();	
+
+		
+
+		// Open Project if double clicked (for mac)
+		IpcRenderer.on('open-file', (filepath) -> {
+			if (filepath !=  null) {
+			trace(filepath);
+			OGMO.project = Imports.project(filepath);
+			gotoEditorPage();
+		}
+		});
+		
 	}
 
 	public function loop(?dt:Float):Void

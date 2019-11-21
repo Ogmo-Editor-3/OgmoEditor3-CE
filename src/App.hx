@@ -12,6 +12,7 @@ class App
 
 	static var mainWindow:BrowserWindow = null;
 	static var forceClose:Bool = false;
+	static var filepath:String = null;
 
   static function main()
 	{
@@ -28,6 +29,17 @@ class App
 		// On macOS it's common to re-create a window in the app when the
 		// dock icon is clicked and there are no other windows open.
 		ElectronApp.on('activate', (e) -> if (mainWindow == null) createWindow());
+
+		ElectronApp.on("open-file", untyped (e, path) -> {
+				e.preventDefault();
+				filepath = path;
+
+				if (mainWindow != null) {
+						mainWindow.webContents.send('open-file', filepath);
+						filepath = null;
+						return;
+				}
+		});
   }
 
 	static function createWindow()
@@ -52,6 +64,13 @@ class App
 		});
 
 		mainWindowState.manage(mainWindow);
+
+		mainWindow.webContents.on('did-finish-load', function() {
+        if (filepath != null) {
+            mainWindow.webContents.send('open-file', filepath);
+            filepath = null;
+        }
+    });
 
 		// Closing Stuff
 		{
@@ -89,6 +108,7 @@ class App
       slashes: true
 		}));
 		#else
+		mainWindow.webContents.openDevTools();
 		mainWindow.loadURL(Url.format({
       protocol: 'file:',
       pathname: Path.join(__dirname, 'index.html'),
