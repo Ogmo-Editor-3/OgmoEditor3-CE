@@ -167,7 +167,7 @@ class Project
 		//Entity Templates
 		if (data.entityTags != null) for (tag in data.entityTags) entities.tags.push(tag);
 		
-		for (entity in data.entities) entities.templates.push(EntityTemplate.load(entity));
+		for (entity in data.entities) entities.templates.push(EntityTemplate.load(this, entity));
 		entities.refreshTagLists();
 
 		initLastSavePath();

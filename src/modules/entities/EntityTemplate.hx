@@ -98,7 +98,7 @@ class EntityTemplate
 		return next;
 	}
 
-	public static function load(data:Dynamic):EntityTemplate
+	public static function load(project:Project, data:Dynamic):EntityTemplate
 	{
 		var e = new EntityTemplate();
 
@@ -131,8 +131,7 @@ class EntityTemplate
 		if (data.texture != null)
 		{
 			 if (FileSystem.exists(data.texture)) e.texture = Texture.fromFile(data.texture);
-			 else if (FileSystem.exists(Path.join(Path.dirname(OGMO.project.path), data.texture))) e.texture = Texture.fromFile(Path.join(Path.dirname(OGMO.project.path), data.texture));
-			 
+			 else if (FileSystem.exists(Path.join(Path.dirname(project.path), data.texture))) e.texture = Texture.fromFile(Path.join(Path.dirname(project.path), data.texture));
 		}
 		// If that didnt work, try to load the base64'd version
 		if (e.texture == null && data.textureImage != null) e.texture = Texture.fromString(data.textureImage);
