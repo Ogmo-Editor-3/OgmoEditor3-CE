@@ -6,20 +6,10 @@
 
 # Getting Started
 
-This project requires Haxe v4.0.0 or later, Node v10+, and various dependencies for each of them.
+This project requires Node v10+, and will install various other dependencies automatically, including the haxe compiler.
 
 ### Node
 * Install [Node](https://nodejs.org/)
-
-### Haxe
-* Install [Haxe](https://haxe.org/download/)
-* Run the following commands:
-```
-haxelib setup
-haxelib install electron 4.1.4
-haxelib install jQueryExtern
-haxelib install haxe-loader
-```
 
 ## Build
 ```
@@ -33,7 +23,7 @@ Speed up development by using Webpack's dev server! Running `npm run dev` builds
 
 While running the dev server, all code that is within `#if debug` conditionals are added in.
 
-NOTES: 
+NOTES:
   * Changes to `App.hx` are not watched, and the app will need to manually be rebuilt if changes are made there.
   * The app will need to be rebuilt normally (`npm run build`) in order to run it again after using the dev server.
 

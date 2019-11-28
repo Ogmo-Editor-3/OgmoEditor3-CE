@@ -1,0 +1,4 @@
+-D electron=4.1.4
+# @install: lix --silent download "haxelib:/electron#4.1.4" into electron/4.1.4/haxelib
+-lib hxnodejs
+-cp ${HAXE_LIBCACHE}/electron/4.1.4/haxelib/src
