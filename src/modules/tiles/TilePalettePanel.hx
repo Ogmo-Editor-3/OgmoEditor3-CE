@@ -1,9 +1,9 @@
 package modules.tiles;
 
+import rendering.GLRenderer;
 import js.Browser;
 import js.jquery.Event;
 import util.Matrix;
-import js.html.CanvasRenderingContext2D;
 import js.html.CanvasElement;
 import project.data.Tileset;
 import level.editor.ui.SidePanel;
@@ -15,7 +15,7 @@ class TilePalettePanel extends SidePanel
 	public var options:JQuery;
 	
 	public var canvas:CanvasElement;
-	public var context:CanvasRenderingContext2D;
+	public var context:GLRenderer;
 	public var spacing:Int = 1;
 	public var matrix:Matrix;
 	
@@ -29,20 +29,20 @@ class TilePalettePanel extends SidePanel
   public var columns(get, never):Int;
   public var rows(get, never):Int;
 	
-	function get_tileset():Tileset { return (cast layerEditor.layer : TileLayer).tileset; }
-	function get_columns():Int { return tileset.tileColumns; }
-	function get_rows():Int { return tileset.tileRows; }
+	inline function get_tileset():Tileset { return (cast layerEditor.layer : TileLayer).tileset; }
+	inline function get_columns():Int { return tileset.tileColumns; }
+	inline function get_rows():Int { return tileset.tileRows; }
 
-    public function new(layerEditor: TileLayerEditor)
-    {
-      super();
-      this.layerEditor = layerEditor;
-      matrix = new Matrix();
-      matrix.setScale(2, 2);
-    }
+	public function new(layerEditor: TileLayerEditor)
+	{
+		super();
+		this.layerEditor = layerEditor;
+		matrix = new Matrix();
+		matrix.setScale(2, 2);
+	}
 
-    override function populate(into: JQuery):Void
-    {
+	override function populate(into: JQuery):Void
+	{
 		this.into = into;
 		
 		// options
@@ -69,8 +69,14 @@ class TilePalettePanel extends SidePanel
 		// canvas
 		{
 			canvas = Browser.document.createCanvasElement();
-			context = canvas.getContext("2d");
 			into.append(canvas);
+			
+			context = new GLRenderer("tile palette", canvas);
+			// context.clearColor = new Color(220, 220, 220);
+			context.clearColor = OGMO.project.backgroundColor;
+			context.camera = matrix;
+			
+			context.updateCanvasSize();
 			
 			// mouse down
 			var intervalId:Dynamic;
@@ -100,13 +106,14 @@ class TilePalettePanel extends SidePanel
 			new JQuery(canvas).on("mousewheel", function(e) { mouseWheel(getMouse(e), (cast e : Dynamic).originalEvent.wheelDelta); });
 		}
 
-		// refresh canas
-        refresh();
-    }
+		// refresh canvas
+		refresh();
+	}
 
 	override function resize():Void
 	{
 		super.resize();
+		context.updateCanvasSize();
 		refresh();
 	}
 	
@@ -247,30 +254,28 @@ class TilePalettePanel extends SidePanel
 		matrix.ty = Math.min(8, Math.max(- (th - vh) - 8, matrix.ty));
 	}
 
-    override function refresh():Void
-    {
+  override function refresh():Void
+  {
     canvas.width = into.width().floor() - 4;
     canvas.height = into.height().floor() - 40;
     canvas.style.width = canvas.width + "px";
     canvas.style.height = canvas.height + "px";
+
+		context.setAlpha(1);
 		
 		// clear & setup context
-		context.setTransform(0,0,0,0,0,0);
-		context.clearRect(0, 0, canvas.width, canvas.height);
-		context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-		context.imageSmoothingEnabled = false;
+		context.clear();
+		// context.setTransform(0,0,0,0,0,0);
+		// context.clearRect(0, 0, canvas.width, canvas.height);
+		// context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+		// context.imageSmoothingEnabled = false;
 		
-		var tileset = tileset;
 		var image = tileset.texture.image;
-		var spacing = spacing;
 		
 		if (tileset != null)
 		{
-			context.fillStyle = "rgb(220, 220, 220)";
-			context.fillRect(0, 0, canvas.width, canvas.height);
-
 			// draw tiles (+transparent bg)
-			context.fillStyle = "rgb(200,200,200)";
+			// context.fillStyle = "rgb(200,200,200)";
       var tx = tileset.tileSeparationX, x = 0;
 			while(tx < image.width)
 			{
@@ -280,15 +285,20 @@ class TilePalettePanel extends SidePanel
 					var drawX = x * (tileset.tileWidth + spacing);
 					var drawY = y * (tileset.tileHeight + spacing);
 					
-					context.fillRect(drawX - spacing / 2, drawY - spacing / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
-					context.fillRect(drawX + tileset.tileWidth / 2, drawY + tileset.tileHeight / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
-					context.drawImage(image, tx, ty, tileset.tileWidth, tileset.tileHeight, drawX, drawY, tileset.tileWidth, tileset.tileHeight);
+					// context.fillRect(drawX - spacing / 2, drawY - spacing / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
+					// context.fillRect(drawX + tileset.tileWidth / 2, drawY + tileset.tileHeight / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
+					// context.drawTile(drawX, drawY, tileset, tileset.coordsToID(x, y));
           ty += tileset.tileHeight + tileset.tileSeparationY;
           y++;
 				}
         tx += tileset.tileWidth + tileset.tileSeparationX; 
         x++;
 			}
+
+			context.drawTexture(0, 0, tileset.texture);
+
+			// draw grid
+			context.drawGrid(new Vector(tileset.tileWidth, tileset.tileHeight), new Vector(tileset.tileSeparationX, tileset.tileSeparationY), new Vector(tileset.width, tileset.height), matrix.a, OGMO.project.gridColor);
 			
 			// get current selection
 			var sel:Rectangle = null;
@@ -298,19 +308,21 @@ class TilePalettePanel extends SidePanel
 			// draw selection
 			if (sel != null)
 			{
-				context.fillStyle = "rgba(0,255,40,0.25)";
-				context.fillRect(
+				// context.fillStyle = "rgba(0,255,40,1)";
+				context.drawRect(
         sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
         sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
-        sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
+        sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing),
+				new Color(0,255,40,1));
 				
-				context.lineWidth = spacing;
-				context.strokeStyle = "rgba(0,255,40,1)";
-				context.strokeRect(
-        sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
-        sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
-        sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
+				// context.lineWidth = spacing;
+				// context.strokeStyle = "rgba(0,255,40,1)";
+				// context.strokeRect(
+        // sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
+        // sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
+        // sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
 			}
 		}
+		context.finishDrawing();
   }
 }

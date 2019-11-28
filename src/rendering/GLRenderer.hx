@@ -22,6 +22,7 @@ class GLRenderer
 	public var loadTextures:Bool = true;
   public var width(get,null):Int;
   public var height(get,null):Int;
+	public var camera:Null<util.Matrix> = null;
 	
 	var shapeShader: Shader;
 	var textureShader: Shader;
@@ -182,7 +183,7 @@ class GLRenderer
 			gl.uniformMatrix4fv(pUniform, false, orthoMatrix.flatten());
 
 			var mvUniform = gl.getUniformLocation(shader.program, "matrix");
-			gl.uniformMatrix3fv(mvUniform, false, EDITOR.level.camera.flatten());
+			gl.uniformMatrix3fv(mvUniform, false, (camera == null ? EDITOR.level.camera : camera).flatten());
 		}
 		
 		gl.drawArrays(drawMode, 0, Math.floor(positions.length / 2));
@@ -546,7 +547,7 @@ class GLRenderer
     }
   }
 
-  function get_width():Int return canvas.width;
+  inline function get_width():Int return canvas.width;
 
-	function get_height():Int return canvas.height;
+	inline function get_height():Int return canvas.height;
 }
