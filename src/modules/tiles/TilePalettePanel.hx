@@ -76,7 +76,7 @@ class TilePalettePanel extends SidePanel
 			context.clearColor = OGMO.project.backgroundColor;
 			context.camera = matrix;
 			
-			context.updateCanvasSize();
+			context.updateCanvasSize(false);
 			
 			// mouse down
 			var intervalId:Dynamic;
@@ -107,13 +107,14 @@ class TilePalettePanel extends SidePanel
 		}
 
 		// refresh canvas
+		clampCamera();
 		refresh();
 	}
 
 	override function resize():Void
 	{
 		super.resize();
-		context.updateCanvasSize();
+		context.updateCanvasSize(false);
 		refresh();
 	}
 	
@@ -282,12 +283,12 @@ class TilePalettePanel extends SidePanel
         var ty = tileset.tileSeparationY, y = 0;
 				while(ty < image.height)
 				{
-					var drawX = x * (tileset.tileWidth + spacing);
-					var drawY = y * (tileset.tileHeight + spacing);
+					var drawX = x * (tileset.tileWidth);
+					var drawY = y * (tileset.tileHeight);
 					
 					// context.fillRect(drawX - spacing / 2, drawY - spacing / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
 					// context.fillRect(drawX + tileset.tileWidth / 2, drawY + tileset.tileHeight / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
-					// context.drawTile(drawX, drawY, tileset, tileset.coordsToID(x, y));
+					context.drawTile(drawX, drawY, tileset, tileset.coordsToID(x, y));
           ty += tileset.tileHeight + tileset.tileSeparationY;
           y++;
 				}
@@ -295,10 +296,10 @@ class TilePalettePanel extends SidePanel
         x++;
 			}
 
-			context.drawTexture(0, 0, tileset.texture);
+			// context.drawTexture(0, 0, tileset.texture);
 
 			// draw grid
-			context.drawGrid(new Vector(tileset.tileWidth, tileset.tileHeight), new Vector(tileset.tileSeparationX, tileset.tileSeparationY), new Vector(tileset.width, tileset.height), matrix.a, OGMO.project.gridColor);
+			context.drawGrid(new Vector(tileset.tileWidth, tileset.tileHeight), new Vector(0, 0), new Vector(tileset.width, tileset.height), matrix.a, OGMO.project.gridColor);
 			
 			// get current selection
 			var sel:Rectangle = null;
@@ -310,9 +311,9 @@ class TilePalettePanel extends SidePanel
 			{
 				// context.fillStyle = "rgba(0,255,40,1)";
 				context.drawRect(
-        sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
-        sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
-        sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing),
+        sel.x * (tileset.tileWidth), 
+        sel.y * (tileset.tileHeight), 
+        sel.width * (tileset.tileWidth), sel.height * (tileset.tileHeight),
 				new Color(0,255,40,1));
 				
 				// context.lineWidth = spacing;

@@ -75,13 +75,14 @@ class GLRenderer
 	
 	// SIZE
 	
-	public function updateCanvasSize(): Void
+	public function updateCanvasSize(center:Bool = true): Void
 	{	   
 		canvas.width = canvas.parentElement.clientWidth;
 		canvas.height = canvas.parentElement.clientHeight;
 
 		gl.viewport(0, 0, canvas.width, canvas.height);
-		orthoMatrix = Matrix3D.orthographic(-canvas.width/2, canvas.width/2, canvas.height/2, -canvas.height/2, -100, 100);
+		if (center) orthoMatrix = Matrix3D.orthographic(-canvas.width/2, canvas.width/2, canvas.height/2, -canvas.height/2, -100, 100);
+		else orthoMatrix = Matrix3D.orthographic(0, canvas.width + 16, canvas.height - 16, -16, -100, 100);
 	}
 	
 	// DRAWING
