@@ -25,18 +25,18 @@ class DecalSelectionPanel extends SidePanel
     {
         holder = into;
 
-        // create list of selected entities
+        // create list of selected decal
         decalList = new ItemList(holder);
         decalList.element.addClass("entityList");
 
         var container = new JQuery('<div class="valueEditors">');
         holder.append(container);
 
-        // div for holding entity properties
+        // div for holding decal properties
         properties = new JQuery('<div>');
         container.append(properties);
 
-        // div for holding entity custom values
+        // div for holding decal custom values
         values = new JQuery('<div>');
         container.append(values);
 
@@ -45,14 +45,13 @@ class DecalSelectionPanel extends SidePanel
 
     override public function refresh()
     {
-		// var decal_layer:DecalLayer = cast layerEditor.layer;
         var sel = layerEditor.selected;
 
         // list of entities
         {
             decalList.empty();
 
-            //Sort entities into groups by template
+            //Sort decals into groups by template
             var groups:Map<String, Array<Decal>> = new Map();
 			      var count = 0;
             for (decal in sel)
@@ -178,7 +177,7 @@ class DecalSelectionPanel extends SidePanel
             }
         }
 
-        // entity values
+        // decal values
         {
             values.empty();
 
@@ -198,46 +197,6 @@ class DecalSelectionPanel extends SidePanel
                   var editor = values[0].template.createEditor(values);
                   editor.display(this.values);
                 }
-          //       var entity = sel[0];
-          //       for (value in entity.values)
-          //       {
-          //           var values:Array<Value> = [];
-
-          //           // push first value
-          //           values.push(value);
-
-          //           // check if each other entity in the selection has a matching value
-          //           var hasMatch = true;
-					// var j = 1;
-					// while (j < sel.length && hasMatch)
-					// {
-          //               var nextEntity = sel[j];
-          //               var found = false;
-					// 	var k = 0;
-					// 	while (k < nextEntity.values.length && !found)
-          //               {
-          //                   var nextValue = nextEntity.values[k];
-          //                   if (value.template.matches(nextValue.template))
-          //                   {
-          //                       trace(value.template.getHashCode() + ", " + nextValue.template.getHashCode());
-          //                       values.push(nextValue);
-          //                       found = true;
-          //                   }
-					// 		k++;
-          //               }
-          //               if (!found)
-          //                   hasMatch = false;
-
-					// 	j++;
-					// }
-
-          //           // if all entities have this match, add it
-          //           if (hasMatch)
-          //           {
-          //               var editor = value.template.createEditor(values);
-          //               editor.display(this.values);
-          //           }
-          //       }
             }
         }
     }
