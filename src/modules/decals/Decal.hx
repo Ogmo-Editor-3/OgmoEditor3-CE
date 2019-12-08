@@ -1,5 +1,6 @@
 package modules.decals;
 
+import level.data.Value;
 import rendering.Texture;
 
 class Decal
@@ -12,14 +13,16 @@ class Decal
 	public var path:String;
 	public var width(get, never):Int;
 	public var height(get, never):Int;
+	public var values:Array<Value>;
 
-	public function new(position:Vector, path:String, texture:Texture, ?scale:Vector, ?rotation:Float)
+	public function new(position:Vector, path:String, texture:Texture, ?scale:Vector, ?rotation:Float, ?values:Array<Value>)
 	{
 		this.position = position.clone();
 		this.texture = texture;
 		this.path = path;
 		this.scale = scale == null ? new Vector(1, 1) : scale.clone();
 		this.rotation = rotation == null ? 0 : rotation;
+		this.values = values == null ? [] : values;
 		origin = new Vector(width / 2, height / 2);
 	}
 
@@ -36,12 +39,13 @@ class Decal
 		}
 		if (rotatable) data.rotation = rotation;
 		data.texture = path;
+		Export.values(data, values);
 		return data;
 	}
 
 	public function clone():Decal
 	{
-		return new Decal(position, path, texture, scale, rotation);
+		return new Decal(position, path, texture, scale, rotation, values);
 	}
 
 	function get_width():Int
@@ -62,9 +66,10 @@ class Decal
 	public function resize(diff:Vector)
 	{
 		diff.scale(0.1);
+
 		scale.set(
-			scale.x + diff.x,
-			scale.y + diff.y
+			Calc.roundTo(scale.x + diff.x, 3),
+			Calc.roundTo(scale.y + diff.y, 3)
 		);
 		// TODO - there's probably a more elegant way of doing this! -01010111
 		if (OGMO.ctrl) return;

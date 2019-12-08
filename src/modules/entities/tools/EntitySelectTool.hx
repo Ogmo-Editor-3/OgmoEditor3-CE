@@ -71,6 +71,7 @@ class EntitySelectTool extends EntityTool
 		}
 		else if (mode == Move)
 		{
+			layerEditor.selection.changed = true;
 			mode = None;
 			entities = null;
 		}
@@ -98,6 +99,7 @@ class EntitySelectTool extends EntityTool
 					EDITOR.level.store('move entities');
 				}
 				for (entity in entities) entity.move(new Vector(pos.x - start.x, pos.y - start.y));
+				layerEditor.selection.changed = true;
 				EDITOR.dirty();
 				pos.clone(start);
 			}
@@ -108,6 +110,7 @@ class EntitySelectTool extends EntityTool
 			if (layerEditor.hovered.equals(hit))
 			{
 				layerEditor.hovered.set(hit);
+				layerEditor.selection.changed = true;
 				EDITOR.dirty();
 			}
 		}
@@ -133,6 +136,7 @@ class EntitySelectTool extends EntityTool
 			layer.entities.removeList(hit);
 		}
 		mode = None;
+		layerEditor.selection.changed = true;
 		EDITOR.dirty();
 	}
 
