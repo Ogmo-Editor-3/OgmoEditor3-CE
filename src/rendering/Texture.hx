@@ -3,6 +3,7 @@ package rendering;
 import js.html.webgl.RenderingContext;
 import js.Browser;
 import js.html.ImageElement;
+import js.node.Path;
 import io.FileSystem;
 import util.Vector;
 
@@ -23,7 +24,7 @@ class Texture
 	public static function fromString(data: String): Texture
 	{
 		var image = Browser.document.createImageElement();
-		image.src = data;   
+		image.src = Path.normalize(data);   
 		return new Texture(image);
 	}
 	

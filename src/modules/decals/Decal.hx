@@ -1,6 +1,7 @@
 package modules.decals;
 
 import rendering.Texture;
+import js.node.Path;
 
 class Decal
 {
@@ -35,7 +36,7 @@ class Decal
 			data.scaleY = scale.y;
 		}
 		if (rotatable) data.rotation = rotation;
-		data.texture = path;
+		data.texture = Path.posix.normalize(path);
 		return data;
 	}
 

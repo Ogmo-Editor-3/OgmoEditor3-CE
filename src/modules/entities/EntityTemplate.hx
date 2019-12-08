@@ -170,7 +170,7 @@ class EntityTemplate
 
 		if (texture != null) 
 		{
-			e.texture = Path.relative(Path.dirname(OGMO.project.path), texture.path);
+			e.texture = Path.posix.normalize(Path.relative(Path.dirname(OGMO.project.path), texture.path));
 			e.textureImage = texture.image.src;
 		}
 
