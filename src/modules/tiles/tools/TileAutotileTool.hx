@@ -72,18 +72,33 @@ class TileAutotileTool extends TileTool
 	}
 
 	override public function activated() {
+		trace('autotile activate');
 		drawing = false;
-		init(layer.tileset.autotileRef);
+		// LOAD PANEL
+		var paletteElement	= new JQuery(".editor_palette");
+		paletteElement.empty();
 	}
 
-	function init(ref_path:String) {
-		var ref:{layers:Array<Dynamic>} = FileSystem.loadJSON(Path.join(Path.dirname(OGMO.project.path), ref_path));
+	override function deactivated() {
+		// UNLOAD PANEL
+		var paletteElement	= new JQuery(".editor_palette");
+		paletteElement.empty();
+		if (EDITOR.currentLayerEditor.palettePanel != null)
+			EDITOR.currentLayerEditor.palettePanel.populate(paletteElement);
+	}
+
+	public function init(ref_path:String) {
+		trace(ref_path);
+		var ref:{layers:Array<Dynamic>} = FileSystem.loadJSON(ref_path);
 		for (l in ref.layers) if (l.name == this.layer.template.name) return init_layer(l);
 	}
 
 	function init_layer(layer:Dynamic) {		
+		trace(layer);
 		if (layer.data2D != null) get_ruleset(layer.data2D);
 		else if (layer.data != null) get_ruleset(get_2d_from_1d(layer.data, layer.gridCellsX));
+		else if (layer.dataCoords2D != null) trace('data coords 2D'); // TODO
+		else if (layer.dataCoords != null) trace('data coords'); // TODO
 	}
 
 	function get_2d_from_csv(csv:String):Array<Array<Int>> {
@@ -125,6 +140,7 @@ class TileAutotileTool extends TileTool
 
 	override public function onMouseDown(pos:Vector)
 	{
+
 		init_draw_brush();
 		startDrawing(pos);
 	}
@@ -155,7 +171,7 @@ class TileAutotileTool extends TileTool
 	{
 		drawing = false;
 		lastRect = null;
-		for (y in 0...drawBrush.length) for (x in 0...drawBrush[y].length) {
+		if (drawBrush != null && drawBrush.length > 0) for (y in 0...drawBrush.length) for (x in 0...drawBrush[y].length) {
 			if (drawBrush[y][x] == -1) continue;
 			layer.data[x][y] = drawBrush[y][x];
 		}
@@ -174,10 +190,6 @@ class TileAutotileTool extends TileTool
 
 	public function startDrawing(pos:Vector)
 	{
-		if (layer.tileset.autotileRef == null) {
-			return;
-		}
-
 		layer.levelToGrid(pos, pos);
 		prevPos = pos;
 		drawing = true;
@@ -240,6 +252,6 @@ class TileAutotileTool extends TileTool
 	}
 
 	override public function getName():String return "Autotile Tool";
-	override public function getIcon():String return "pencil";
+	override public function getIcon():String return "autotile-pencil";
 
 }

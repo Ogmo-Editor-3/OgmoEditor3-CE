@@ -381,7 +381,6 @@ class Editor
 	function setLayerUtil(id:Int):Void
 	{
 		level.currentLayerID = id;
-		toolBelt.afterSetLayer();
 
 		EDITOR.dirty();
 		updateMouseReadout();
@@ -418,6 +417,8 @@ class Editor
 
 		for (i in 0...level.layers.length)
 			layerEditors[i].active = (i == id);
+		
+		toolBelt.afterSetLayer();
 	}
 
 	public function setLayer(id:Int):Bool
