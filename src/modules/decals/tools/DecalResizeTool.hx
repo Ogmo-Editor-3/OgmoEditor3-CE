@@ -56,6 +56,7 @@ class DecalResizeTool extends DecalTool
 			}
 			decal.scale.set(1, 1);
 		}
+		layerEditor.selectedChanged = true;
 		EDITOR.dirty();
 	}
 
@@ -80,6 +81,7 @@ class DecalResizeTool extends DecalTool
 
 			for (d in decals) d.resize(new Vector(pos.x - lastPos.x, pos.y - lastPos.y));
 
+			layerEditor.selectedChanged = true;
 			EDITOR.dirty();
 			pos.clone(lastPos);
 		}
@@ -87,7 +89,7 @@ class DecalResizeTool extends DecalTool
 
 	override public function getIcon():String return "decal-scale";
 	override public function getName():String return "Resize";
-	override public function keyToolCtrl():Int return 0;
+	override public function keyToolCtrl():Int return resizing ? -1 : 0;
 	override public function keyToolAlt():Int return 1;
 	override public function keyToolShift():Int return 3;
 

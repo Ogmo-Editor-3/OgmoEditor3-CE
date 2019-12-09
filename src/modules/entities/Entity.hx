@@ -230,8 +230,11 @@ class Entity
 	{
 		if (_texture != null)
 		{
-			var orig = origin.clone().rotate(Math.sin(rotation * Math.PI / 180), Math.cos(rotation * Math.PI / 180));
-			EDITOR.draw.drawTexture(position.x - orig.x, position.y - orig.y, _texture, null, size.clone().div(template.size), rotation * Math.PI / 180);
+			var orig = origin.clone();
+			if (flippedX) orig.x -= size.x;
+			if (flippedY) orig.y -= size.y;
+			orig.rotate(Math.sin(rotation * Math.PI / 180), Math.cos(rotation * Math.PI / 180));
+			EDITOR.draw.drawTexture(position.x - orig.x, position.y - orig.y, _texture, null, size.clone().div(template.size).mult(new Vector(flippedX ? -1 : 1, flippedY ? -1 : 1)), rotation * Calc.DTR);
 		}
 		else 
 		{
@@ -246,10 +249,13 @@ class Entity
 			{
 				if (_texture != null)
 				{
-					var orig = origin.clone().rotate(Math.sin(rotation * Math.PI / 180), Math.cos(rotation * Math.PI / 180));
+					var orig = origin.clone();
+					if (flippedX) orig.x -= size.x;
+					if (flippedY) orig.y -= size.y;
+					orig.rotate(Math.sin(rotation * Math.PI / 180), Math.cos(rotation * Math.PI / 180));
 					var previousAlpha = EDITOR.draw.getAlpha();
 					EDITOR.draw.setAlpha(previousAlpha * .5);
-					EDITOR.draw.drawTexture(node.x - orig.x, node.y - orig.y, _texture, null, size.clone().div(template.size), rotation * Math.PI / 180);
+					EDITOR.draw.drawTexture(node.x - orig.x, node.y - orig.y, _texture, null, size.clone().div(template.size).mult(new Vector(flippedX ? -1 : 1, flippedY ? -1 : 1)), rotation * Math.PI / 180);
 					EDITOR.draw.setAlpha(previousAlpha);
 				}
 				else

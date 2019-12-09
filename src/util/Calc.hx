@@ -139,5 +139,11 @@ class Calc
 	{
 		return from + Calc.clamp(Calc.angleDiff(from, to), -max, max);
 	}
-
+	
+	public static function roundTo( number:Float, precision:Int):Float {
+		var num = number;
+		num = num * Math.pow(10, precision);
+		num = Math.round( num ) / Math.pow(10, precision);
+		return num;
+	}
 }

@@ -35,6 +35,7 @@ class DecalSelectTool extends DecalTool
 				layerEditor.selected = [];
 				for (decal in (cast layerEditor.layer:DecalLayer).decals)
 					layerEditor.selected.push(decal);
+				layerEditor.selectedChanged = true;
 				EDITOR.dirty();
 			}
 			else if (key == Keys.C)
@@ -52,6 +53,7 @@ class DecalSelectTool extends DecalTool
 				EDITOR.level.store("cut decals");
 				while (layerEditor.selected.length > 0)
 					layerEditor.remove(layerEditor.selected[0]);
+				layerEditor.selectedChanged = true;
 				EDITOR.dirty();
 			}
 			else if (key == Keys.V && DecalSelectTool.inClipboard.length > 0)
@@ -66,6 +68,7 @@ class DecalSelectTool extends DecalTool
 					layerEditor.selected.push(clone);
 				}
 
+				layerEditor.selectedChanged = true;
 				EDITOR.dirty();
 			}
 			else if (key == Keys.D && layerEditor.selected.length > 0)
@@ -81,29 +84,38 @@ class DecalSelectTool extends DecalTool
 				}
 
 				layerEditor.selected = newSelection;
-
+				layerEditor.selectedChanged = true;
 				EDITOR.dirty();
 			}
 		}
 		else if (key == Keys.H)
 		{
-			EDITOR.level.store("flip decal h");
-			for (decal in layerEditor.selected)
-				decal.scale.x = -decal.scale.x;
-			EDITOR.dirty();
+			if ((cast layerEditor.template : DecalLayerTemplate).scaleable)
+			{
+				EDITOR.level.store("flip decal h");
+				for (decal in layerEditor.selected)
+					decal.scale.x = -decal.scale.x;
+				layerEditor.selectedChanged = true;
+				EDITOR.dirty();
+			}
 		}
 		else if (key == Keys.V)
 		{
-			EDITOR.level.store("flip decal v");
-			for (decal in layerEditor.selected)
-				decal.scale.y = -decal.scale.y;
-			EDITOR.dirty();
+			if ((cast layerEditor.template : DecalLayerTemplate).scaleable)
+			{
+				EDITOR.level.store("flip decal v");
+				for (decal in layerEditor.selected)
+					decal.scale.y = -decal.scale.y;
+				layerEditor.selectedChanged = true;
+				EDITOR.dirty();
+			}
 		}
 		else if (key == Keys.Delete || key == Keys.Backspace)
 		{
 			EDITOR.level.store("delete decals");
 			while (layerEditor.selected.length > 0)
 				layerEditor.remove(layerEditor.selected[0]);
+			layerEditor.selectedChanged = true;
 			EDITOR.dirty();
 		}
 		else if (key == Keys.B)
@@ -187,6 +199,7 @@ class DecalSelectTool extends DecalTool
 			startMove();
 		}
 		
+		layerEditor.selectedChanged = true;
 		EDITOR.dirty();
 	}
 
@@ -225,6 +238,8 @@ class DecalSelectTool extends DecalTool
 			mode = None;
 			decals = null;
 		}
+
+		layerEditor.selectedChanged = true;
 	}
 
 	override public function onMouseMove(pos:Vector)
@@ -232,6 +247,7 @@ class DecalSelectTool extends DecalTool
 		if (mode == Select || mode == Delete)
 		{
 			pos.clone(end);
+			layerEditor.selectedChanged = true;
 			EDITOR.dirty();
 
 			var hit = layer.getRect(Rectangle.fromPoints(start, end));
@@ -257,6 +273,7 @@ class DecalSelectTool extends DecalTool
 					decal.position.y += diff.y;
 				}
 
+				layerEditor.selectedChanged = true;
 				EDITOR.dirty();
 				pos.clone(start);
 			}
@@ -275,6 +292,7 @@ class DecalSelectTool extends DecalTool
 			if (!isEqual)
 			{
 				layerEditor.hovered = hit;
+				layerEditor.selectedChanged = true;
 				EDITOR.dirty();
 			}
 		}
@@ -312,6 +330,7 @@ class DecalSelectTool extends DecalTool
 			}
 
 			mode = None;
+			layerEditor.selectedChanged = true;
 			EDITOR.dirty();
 		}
 	}
