@@ -8,7 +8,7 @@ class ToolButton
 
     public function new(tool:Tool, id:Int)
     {
-		  element = new JQuery('<div title="${tool.getName()}" class="tool icon icon-${tool.getIcon()}" id="${tool.getName()}">');
+		  element = new JQuery('<div title="${tool.getName()} [$id]" class="tool icon icon-${tool.getIcon()}" id="${tool.getName()}">');
       element.click(function (e)
       {
         EDITOR.toolBelt.setTool(id);
