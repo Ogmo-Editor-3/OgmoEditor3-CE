@@ -299,21 +299,25 @@ class Editor
 		{
 			root.css("display", "flex");
 
-			if (state != null)
-			{
-				levelManager.open(state.level, (level) -> {
-					level.camera = state.camera;
-					setLayer(state.layer);
-					level.zoomCameraAt(0, 0, 0);
+			// if (state != null)
+			// {
+			// 	levelManager.open(state.level, (level) -> {
+			// 		Browser.window.setTimeout(function ()
+			// 		{
+			// 		level.camera = state.camera;
+			// 		setLayer(state.layer);
+			// 		level.zoomCameraAt(0, 0, 0);
 					
-					dirty();
+			// 		dirty();
 
-					updateZoomReadout();
-					handles.refresh();
-				}, (str) -> levelManager.loadLevel());
-				state = null;
-			}
-			else levelManager.loadLevel();
+			// 		updateZoomReadout();
+			// 		handles.refresh();
+			// 		});
+			// 	}, (str) -> levelManager.loadLevel());
+			// 	state = null;
+			// }
+			// else 
+			levelManager.loadLevel();
 
 			draw.updateCanvasSize();
 			overlay.updateCanvasSize();
