@@ -104,6 +104,35 @@ class TilePalettePanel extends SidePanel
         refresh();
     }
 
+	public function populate_autotile(into:JQuery)
+    {
+		this.into = into;
+		
+		// options
+		{
+			options = new JQuery('<select style="width: 100%; max-width: 100%; box-sizing: border-box; border-radius: 0; border-left: 0; border-top: 0; border-right: 0; height: 40px;">');
+			var current = 0;
+			for (i in 0...OGMO.project.tilesets.length)
+			{
+				var tileset = OGMO.project.tilesets[i];
+				if (tileset == this.tileset) current = i;
+				options.append('<option value="' + i + '">' + tileset.label + '</option>');
+			}
+			options.change(function(e)
+			{
+				var next = OGMO.project.tilesets[Imports.integer(options.val(), 0)];
+				EDITOR.level.store("Set " + layerEditor.template.name + " to '" + next.label + "'");
+				(cast layerEditor.layer : TileLayer).tileset = next;
+				refresh();
+			});
+			options.val(current.string());
+			into.append(options);
+		}
+
+		// refresh canas
+        refresh();
+    }
+
 	override function resize():Void
 	{
 		super.resize();

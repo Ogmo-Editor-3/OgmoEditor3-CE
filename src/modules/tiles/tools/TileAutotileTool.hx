@@ -72,11 +72,12 @@ class TileAutotileTool extends TileTool
 	}
 
 	override public function activated() {
-		trace('autotile activate');
 		drawing = false;
 		// LOAD PANEL
 		var paletteElement	= new JQuery(".editor_palette");
 		paletteElement.empty();
+		if (EDITOR.currentLayerEditor.palettePanel != null)
+			(cast EDITOR.currentLayerEditor.palettePanel:TilePalettePanel).populate_autotile(paletteElement);
 	}
 
 	override function deactivated() {
@@ -88,13 +89,11 @@ class TileAutotileTool extends TileTool
 	}
 
 	public function init(ref_path:String) {
-		trace(ref_path);
 		var ref:{layers:Array<Dynamic>} = FileSystem.loadJSON(ref_path);
 		for (l in ref.layers) if (l.name == this.layer.template.name) return init_layer(l);
 	}
 
 	function init_layer(layer:Dynamic) {		
-		trace(layer);
 		if (layer.data2D != null) get_ruleset(layer.data2D);
 		else if (layer.data != null) get_ruleset(get_2d_from_1d(layer.data, layer.gridCellsX));
 		else if (layer.dataCoords2D != null) trace('data coords 2D'); // TODO
@@ -140,7 +139,6 @@ class TileAutotileTool extends TileTool
 
 	override public function onMouseDown(pos:Vector)
 	{
-
 		init_draw_brush();
 		startDrawing(pos);
 	}
@@ -220,7 +218,6 @@ class TileAutotileTool extends TileTool
 				drawBrush[j][i] = get_tile_idx(i, j, drawBrush, OGMO.ctrl);
 			}
 
-			
 			EDITOR.dirty();
 		}
 	}
