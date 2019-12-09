@@ -1,5 +1,6 @@
 package level.editor;
 
+import util.Matrix;
 import io.Imports;
 import util.Color;
 import js.Browser;
@@ -46,6 +47,7 @@ class Editor
 	var resizingLayers:Bool = false;
 	var resizingPalette:Bool = false;
 	var lastPaletteHeight:Float = 0;
+	var state:Null<EditorState>;
 
 	public function new()
 	{
@@ -194,6 +196,7 @@ class Editor
 			// Editor Project Button
 			new JQuery(".edit-project").click(function(e)
 			{
+				setState();
 				EDITOR.levelManager.closeAll(function ()
 				{
 					OGMO.gotoProjectPage();
@@ -213,6 +216,8 @@ class Editor
 
 			new JQuery('.refresh-project').click(function(e)
 			{
+				setState();
+				
 				EDITOR.levelManager.closeAll(function()
 				{
 					var path = OGMO.project.path;
@@ -293,7 +298,23 @@ class Editor
 		if (set)
 		{
 			root.css("display", "flex");
-			EDITOR.levelManager.loadLevel();
+
+			if (state != null)
+			{
+				levelManager.open(state.level, (level) -> {
+					level.camera = state.camera;
+					setLayer(state.layer);
+					level.zoomCameraAt(0, 0, 0);
+					
+					dirty();
+
+					updateZoomReadout();
+					handles.refresh();
+				}, (str) -> levelManager.loadLevel());
+				state = null;
+			}
+			else levelManager.loadLevel();
+
 			draw.updateCanvasSize();
 			overlay.updateCanvasSize();
 			updateZoomReadout();
@@ -303,6 +324,18 @@ class Editor
 			EDITOR.levelManager.clear();
 			level = null;
 			root.css("display", "none");
+		}
+	}
+
+	public function setState():Void
+	{
+		if (level.path != null) 
+		{
+			state = {
+				level: level.path,
+				layer: currentLayerEditor.id,
+				camera: level.camera
+			};
 		}
 	}
 
@@ -807,4 +840,10 @@ class Editor
 		if (level == null) return null;
 		else return layerEditors[level.currentLayerID];
 	}
+}
+
+typedef EditorState = {
+	level:String,
+	layer:Int,
+	camera:Matrix
 }
