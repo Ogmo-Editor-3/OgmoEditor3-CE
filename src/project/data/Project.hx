@@ -40,7 +40,7 @@ class Project
 	public function new(path:String)
 	{
 		this.name = "New Project";
-		this.path = Path.resolve(Path.normalize(path));
+		this.path = Path.resolve(path);
 	}
 	
 	public function unload()
