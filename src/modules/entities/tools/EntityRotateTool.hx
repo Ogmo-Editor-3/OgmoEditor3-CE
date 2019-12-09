@@ -120,5 +120,11 @@ class EntityRotateTool extends EntityTool
 	override public function keyToolCtrl():Int return 0;
 	override public function keyToolAlt():Int return 1;
 	override public function keyToolShift():Int return 2;
+	override function isAvailable():Bool {
+		for (entity in layerEditor.entities.list) {
+			for (e_id in layerEditor.selection.ids) if (entity.id == e_id && entity.template.rotatable) return true;
+		}
+		return false;
+	}
 
 }

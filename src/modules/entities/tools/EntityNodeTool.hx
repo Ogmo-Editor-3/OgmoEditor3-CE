@@ -96,5 +96,11 @@ class EntityNodeTool extends EntityTool
 	override public function getIcon():String return "entity-nodes";
 	override public function getName():String return "Add Node";
 	override public function keyToolAlt():Int return 1;
+	override function isAvailable():Bool {
+		for (entity in layerEditor.entities.list) {
+			for (e_id in layerEditor.selection.ids) if (entity.id == e_id && entity.template.hasNodes) return true;
+		}
+		return false;
+	}
 
 }
