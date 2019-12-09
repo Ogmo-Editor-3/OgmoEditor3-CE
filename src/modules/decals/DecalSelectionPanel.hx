@@ -74,7 +74,7 @@ class DecalSelectionPanel extends SidePanel
                 if (arr.length > 1) label = '${arr.length}x ${d.path}';
 
                 var item = new ItemListItem(label);
-                item.setImageIcon(d.texture.image.src);
+                if (d.texture != null) item.setImageIcon(d.texture.image.src);
                 decalList.add(item);
 
                 item.onclick = function (_)

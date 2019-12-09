@@ -299,25 +299,26 @@ class Editor
 		{
 			root.css("display", "flex");
 
-			// if (state != null)
-			// {
-			// 	levelManager.open(state.level, (level) -> {
-			// 		Browser.window.setTimeout(function ()
-			// 		{
-			// 		level.camera = state.camera;
-			// 		setLayer(state.layer);
-			// 		level.zoomCameraAt(0, 0, 0);
-					
-			// 		dirty();
-
-			// 		updateZoomReadout();
-			// 		handles.refresh();
-			// 		});
-			// 	}, (str) -> levelManager.loadLevel());
-			// 	state = null;
-			// }
-			// else 
+			
 			levelManager.loadLevel();
+			Browser.window.setTimeout(function ()
+			{
+				if (state != null)
+				{
+					levelManager.open(state.level, (level) -> {
+					
+					level.camera = state.camera;
+					setLayer(state.layer);
+					level.zoomCameraAt(0, 0, 0);
+					
+					dirty();
+
+					updateZoomReadout();
+					handles.refresh();
+					state = null;
+					});
+				}
+			}, 500);
 
 			draw.updateCanvasSize();
 			overlay.updateCanvasSize();
@@ -338,7 +339,7 @@ class Editor
 			state = {
 				level: level.path,
 				layer: currentLayerEditor.id,
-				camera: level.camera
+				camera: level.camera.clone()
 			};
 		}
 	}
