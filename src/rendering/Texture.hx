@@ -3,7 +3,6 @@ package rendering;
 import js.html.webgl.RenderingContext;
 import js.Browser;
 import js.html.ImageElement;
-import haxe.io.Path;
 import io.FileSystem;
 import util.Vector;
 
@@ -24,12 +23,13 @@ class Texture
 	public static function fromString(data: String): Texture
 	{
 		var image = Browser.document.createImageElement();
-		image.src = Path.normalize(data);   
+		image.src = haxe.io.Path.normalize(data);   
 		return new Texture(image);
 	}
 	
 	public static function fromFile(path: String): Texture
 	{
+		path = haxe.io.Path.normalize(path);
 		var img = FileSystem.loadImage(path);
 		if (img != null)
 		{
