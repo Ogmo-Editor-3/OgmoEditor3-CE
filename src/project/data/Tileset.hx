@@ -28,7 +28,7 @@ class Tileset
   public function new(project:Project, label:String, path:String, tileWidth:Int, tileHeight:Int, tileSepX:Int, tileSepY:Int, ?image:ImageElement)
   {
     this.label = label;
-    this.path = Path.normalize(path);
+    this.path = haxe.io.Path.normalize(path);
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
     this.tileSeparationX = tileSepX;

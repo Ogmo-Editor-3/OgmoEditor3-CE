@@ -1,7 +1,7 @@
 package modules.decals;
 
 import rendering.Texture;
-import js.node.Path;
+import haxe.io.Path;
 
 class Decal
 {
@@ -36,7 +36,7 @@ class Decal
 			data.scaleY = scale.y;
 		}
 		if (rotatable) data.rotation = rotation;
-		data.texture = Path.posix.normalize(path);
+		data.texture = Path.normalize(path);
 		return data;
 	}
 

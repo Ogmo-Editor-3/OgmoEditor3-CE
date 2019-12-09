@@ -3,7 +3,7 @@ package rendering;
 import js.html.webgl.RenderingContext;
 import js.Browser;
 import js.html.ImageElement;
-import js.node.Path;
+import haxe.io.Path;
 import io.FileSystem;
 import util.Vector;
 
