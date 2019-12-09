@@ -35,6 +35,7 @@ class EntityRotateTool extends EntityTool
 
 	override public function onMouseUp(pos:Vector)
 	{
+		layerEditor.selection.changed = true;
 		rotating = false;
 		EDITOR.locked = false;
 		EDITOR.overlayDirty();
@@ -52,6 +53,7 @@ class EntityRotateTool extends EntityTool
 		var angle = Calc.angleTo(origin, pos);
 		var initial = Calc.angleTo(origin, start);
 		for (entity in entities) entity.rotate(angle - initial);
+		layerEditor.selection.changed = true;
 		EDITOR.dirty();
 		pos.clone(last);
 	}
@@ -68,6 +70,7 @@ class EntityRotateTool extends EntityTool
 			}
 			entity.resetRotation();
 		}
+		layerEditor.selection.changed = true;
 		EDITOR.dirty();
 	}
 
