@@ -53,6 +53,8 @@ class Ogmo
 		dialog = js.Lib.require('electron').remote.dialog;
 		settings = new Settings();
 
+		version = untyped Remote.app.getVersion();
+
 		Webpack.require('./assets/styles/core.scss');
 
 		new JQuery(function () { onReady(); });

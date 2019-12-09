@@ -29,4 +29,5 @@ class Tool
 	public function keyToolShift():Int return -1;
 	public function keyToolCtrl():Int return -1;
 	public function keyToolAlt():Int return -1;
+	public function isAvailable():Bool return true;
 }

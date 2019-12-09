@@ -24,6 +24,11 @@ class LevelManager
 		});
 	}
 
+	public function loadLevel() {
+		// If no level in cache...
+		forceCreate();
+	}
+
 	public function forceCreate(): Level
 	{
 		var level = new Level(OGMO.project);

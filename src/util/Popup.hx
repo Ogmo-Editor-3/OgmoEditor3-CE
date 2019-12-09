@@ -325,7 +325,7 @@ class Popup
 
     event = function(e:Event)
     {
-      if (e.which == Keys.Enter || e.which == Keys.Escape)
+      if (/*e.which == Keys.Enter ||*/ e.which == Keys.Escape) // #71 - Prevent Enter from closing Text Box
       {
         close(e.which == Keys.Escape);
       }

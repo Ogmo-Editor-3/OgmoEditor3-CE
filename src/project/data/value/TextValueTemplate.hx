@@ -25,10 +25,10 @@ class TextValueTemplate extends ValueTemplate
     return defaults;
   }
 
-  override function validate(val:String):String
+  override function validate(val:Dynamic):String
   {
     //TODO!!
-    return val;
+    return val.string();
   }
 
   override function createEditor(values:Array<Value>): ValueEditor

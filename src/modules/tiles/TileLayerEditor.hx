@@ -63,7 +63,8 @@ class TileLayerEditor extends LayerEditor
 	
 	override function keyRepeat(key:Int):Void
 	{
-		switch (key)
+		if (OGMO.ctrl) return;
+		switch (key) // WASD
 		{
 			case Keys.W:
 				moveBrush(0, -1);            

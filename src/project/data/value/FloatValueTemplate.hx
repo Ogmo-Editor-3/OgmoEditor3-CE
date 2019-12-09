@@ -23,19 +23,19 @@ class FloatValueTemplate extends ValueTemplate
         return name + ":fl" + (bounded ? (":" + min + ":" + max) : "");
     }
 
-    override function getDefault(): String
+    override function getDefault():Float
     {
-        return '$defaults';
+        return defaults;
     }
 
-    override function validate(val: String): String
+    override function validate(val:Dynamic):Float
     {
         var number = Imports.float(val, defaults);
         if (bounded && number < min)
             number = min;
         else if (bounded && number > max)
             number = max;
-        return '$number';
+        return number;
     }
 
     override function createEditor(values:Array<Value>):ValueEditor

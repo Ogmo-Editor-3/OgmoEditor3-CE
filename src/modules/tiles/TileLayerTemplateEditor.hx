@@ -55,6 +55,6 @@ class TileLayerTemplateEditor extends LayerTemplateEditor
     var tileTemplate:TileLayerTemplate = cast template;
     tileTemplate.exportMode = Imports.integer(exportMode.val(), 0);
     tileTemplate.arrayMode = Imports.integer(arrayMode.val(), 0);
-    if (defaultTiles != null) tileTemplate.defaultTileset = OGMO.project.tilesets[Imports.integer(defaultTiles.val(), 0)].label;
+    if (defaultTiles != null && OGMO.project.tilesets.length > 0) tileTemplate.defaultTileset = OGMO.project.tilesets[Imports.integer(defaultTiles.val(), 0)].label;
   }
 }

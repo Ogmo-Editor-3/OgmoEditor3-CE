@@ -1,5 +1,6 @@
 package project.data;
 
+import electron.renderer.Remote;
 import js.lib.Date;
 import js.node.Path;
 import io.Export;
@@ -20,6 +21,7 @@ class Project
 	public var defaultExportMode:String = ".json";
 	public var compactExport:Bool = false;
 	public var directoryDepth:Int = 5;
+	public var layerGridDefaultSize = new Vector(8, 8);
 
 	public var levelDefaultSize:Vector = new Vector(320, 240);
 	public var levelMinSize:Vector = new Vector(128, 128);
@@ -139,6 +141,7 @@ class Project
 		gridColor = Color.fromHexAlpha(data.gridColor);
 		anglesRadians = data.anglesRadians;
 		directoryDepth = data.directoryDepth;
+		if (data.layerGridDefaultSize != null) layerGridDefaultSize = Vector.load(data.layerGridDefaultSize);
 		levelDefaultSize = Vector.load(data.levelDefaultSize);
 		levelMinSize = Vector.load(data.levelMinSize);
 		levelMaxSize = Vector.load(data.levelMaxSize);
@@ -164,7 +167,7 @@ class Project
 		//Entity Templates
 		if (data.entityTags != null) for (tag in data.entityTags) entities.tags.push(tag);
 		
-		for (entity in data.entities) entities.templates.push(EntityTemplate.load(entity));
+		for (entity in data.entities) entities.templates.push(EntityTemplate.load(this, entity));
 		entities.refreshTagLists();
 
 		initLastSavePath();
@@ -175,11 +178,13 @@ class Project
 	{
 		var data:ProjectSaveFile = {
 			name: name,
+			ogmoVersion : OGMO.version,
 			levelPaths: levelPaths,
 			backgroundColor: backgroundColor.toHexAlpha(),
 			gridColor: gridColor.toHexAlpha(),
 			anglesRadians: anglesRadians,
 			directoryDepth: directoryDepth,
+			layerGridDefaultSize: layerGridDefaultSize.save(),
 			levelDefaultSize: levelDefaultSize.save(),
 			levelMinSize: levelMinSize.save(),
 			levelMaxSize: levelMaxSize.save(),
@@ -215,11 +220,13 @@ class Project
 typedef ProjectSaveFile =
 {
 	name:String,
+	ogmoVersion:String,
 	levelPaths:Array<String>,
 	backgroundColor:String,
 	gridColor:String,
 	anglesRadians:Bool,
 	directoryDepth:Int,
+	layerGridDefaultSize:{ x:Float, y:Float },
 	levelDefaultSize:{ x:Float, y:Float },
 	levelMinSize:{ x:Float, y:Float },
 	levelMaxSize:{ x:Float, y:Float },
@@ -229,5 +236,5 @@ typedef ProjectSaveFile =
 	entityTags:Array<String>,
 	layers:Array<Dynamic>,
 	entities:Array<Dynamic>,
-	tilesets:Array<Dynamic>
+	tilesets:Array<Dynamic>,
 }

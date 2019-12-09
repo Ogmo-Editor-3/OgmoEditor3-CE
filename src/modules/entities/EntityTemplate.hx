@@ -1,5 +1,6 @@
 package modules.entities;
 
+import js.node.Path;
 import util.Matrix;
 import util.Vector;
 import util.Color;
@@ -41,7 +42,7 @@ class EntityTemplate
 	public var _icon:String = null;
 	public var _points:Array<Vector> = null;
 
-	public function new() {}
+	inline function new() {}
 
 	public function drawPreview(at:Vector)
 	{
@@ -92,11 +93,12 @@ class EntityTemplate
 		next.nodeDisplay = from.nodeDisplay;
 		next.nodeGhost = from.nodeGhost;
 		next.tags = from.tags;
+		next.texture = from.texture;
 
 		return next;
 	}
 
-	public static function load(data:Dynamic):EntityTemplate
+	public static function load(project:Project, data:Dynamic):EntityTemplate
 	{
 		var e = new EntityTemplate();
 
@@ -123,15 +125,23 @@ class EntityTemplate
 		e.nodeDisplay = data.nodeDisplay;
 		e.nodeGhost = data.nodeGhost;
 		e.tags = data.tags;
-		if (data.texture != null && FileSystem.exists(data.texture)) e.texture = Texture.fromFile(data.texture);
 		e.values  = ValueTemplate.loadList(data.values);
+
+		// Try to load the texture from the filepath
+		if (data.texture != null)
+		{
+			 if (FileSystem.exists(data.texture)) e.texture = Texture.fromFile(data.texture);
+			 else if (FileSystem.exists(Path.join(Path.dirname(project.path), data.texture))) e.texture = Texture.fromFile(Path.join(Path.dirname(project.path), data.texture));
+		}
+		// If that didnt work, try to load the base64'd version
+		if (e.texture == null && data.textureImage != null) e.texture = Texture.fromString(data.textureImage);
 
 		return e;
 	}
 
 	public function save():Dynamic
 	{
-		return {
+		var e:Dynamic = {
 			exportID: exportID,
 			name: name,
 			limit: limit,
@@ -155,9 +165,16 @@ class EntityTemplate
 			nodeDisplay: nodeDisplay,
 			nodeGhost: nodeGhost,
 			tags: tags,
-			texture: texture == null ? null : texture.path,
 			values: ValueTemplate.saveList(values)
 		}
+
+		if (texture != null) 
+		{
+			e.texture = haxe.io.Path.normalize(Path.relative(Path.dirname(OGMO.project.path), texture.path));
+			e.textureImage = texture.image.src;
+		}
+
+		return e;
 	}
 
 	public function getPreviewPoints():Array<Vector>

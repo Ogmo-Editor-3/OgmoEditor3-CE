@@ -9,7 +9,7 @@ class LayerTemplate
 {
   public var exportID: String;
   public var name: String = "";
-  public var gridSize: Vector = new Vector(8, 8);
+  public var gridSize: Vector = OGMO.project == null ? new Vector(8, 8) : OGMO.project.layerGridDefaultSize.clone();
   public var definition: LayerDefinition;
 
   public function new(exportID: String)

@@ -5,15 +5,20 @@ import js.jquery.JQuery;
 class ToolButton
 {
     public var element:JQuery;
+    public var tool:Tool;
+    public var id:Int;
 
     public function new(tool:Tool, id:Int)
     {
-		  element = new JQuery('<div title="${tool.getName()}" class="tool icon icon-${tool.getIcon()}" id="${tool.getName()}">');
+		  element = new JQuery('<div title="${tool.getName()} [$id]" class="tool icon icon-${tool.getIcon()}" id="${tool.getName()}">');
       element.click(function (e)
       {
+        if (element.hasClass('unavailable')) return;
         EDITOR.toolBelt.setTool(id);
         EDITOR.toolBelt.refreshToolbar();
       });
+      this.tool = tool;
+      this.id = id;
     }
 
     public function keyToolSelected():Void
@@ -37,6 +42,14 @@ class ToolButton
     public function notSelected():Void
     {
       clearState();
+    }
+
+    public function available() {
+      element.removeClass('unavailable');
+    }
+
+    public function unavailable() {
+      element.addClass('unavailable');
     }
 
     public function clearState():Void
