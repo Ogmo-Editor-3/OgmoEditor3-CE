@@ -24,9 +24,9 @@ class IntegerValueTemplate extends ValueTemplate
         return name + ":in" + (bounded ? (":" + min + ":" + max) : "");
     }
 
-    override function getDefault():String
+    override function getDefault():Int
     {
-        return Std.string(defaults);
+        return defaults;
     }
 
     override function validate(val:Dynamic):Int

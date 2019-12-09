@@ -23,9 +23,9 @@ class FloatValueTemplate extends ValueTemplate
         return name + ":fl" + (bounded ? (":" + min + ":" + max) : "");
     }
 
-    override function getDefault(): String
+    override function getDefault():Float
     {
-        return '$defaults';
+        return defaults;
     }
 
     override function validate(val:Dynamic):Float

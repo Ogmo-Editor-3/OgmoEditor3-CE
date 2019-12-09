@@ -99,7 +99,7 @@ class DecalLayerTemplate extends LayerTemplate
 				}
 				else if (item.stats.isFile())
 				{
-					parent.textures.push(item.path);
+					parent.textures.push(haxe.io.Path.normalize(item.path));
 				}
 				return true;
 			}

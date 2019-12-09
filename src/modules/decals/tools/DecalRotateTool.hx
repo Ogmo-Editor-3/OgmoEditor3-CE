@@ -51,6 +51,7 @@ class DecalRotateTool extends DecalTool
 		var angle = Calc.angleTo(origin, pos);
 		var initial = Calc.angleTo(origin, last);
 		for (decal in decals) decal.rotate(angle - initial);
+		layerEditor.selectedChanged = true;
 		EDITOR.dirty();
 		pos.clone(last);
 	}
@@ -67,6 +68,7 @@ class DecalRotateTool extends DecalTool
 			}
 			decal.rotation = 0;
 		}
+		layerEditor.selectedChanged = true;
 		EDITOR.dirty();
 	}
 
@@ -116,5 +118,6 @@ class DecalRotateTool extends DecalTool
 	override public function keyToolCtrl():Int return 0;
 	override public function keyToolAlt():Int return 1;
 	override public function keyToolShift():Int return 2;
+	override function isAvailable() return layerEditor.selected.length > 0;
 
 }

@@ -47,7 +47,7 @@ class BoolValueEditor extends ValueEditor
       {
         // change
         var was = value;
-        value = Std.string(!Imports.bool(value, true));
+        value = !Imports.bool(value, true);
 
         // update visuals
         element.find(".button_icon").removeClass("icon-" + icon);

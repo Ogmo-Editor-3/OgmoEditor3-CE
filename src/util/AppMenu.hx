@@ -47,16 +47,14 @@ class AppMenu
       
     // }
 
-    #if debug
     template.push({
-      label: 'Develop',
+      label: 'View',
       submenu: [
         { role: 'reload' },
         { role: 'forcereload' },
         { role: 'toggledevtools' },
       ]
     });
-    #end
 
     var menu = electron.main.Menu.buildFromTemplate(template);
     electron.main.Menu.setApplicationMenu(menu);

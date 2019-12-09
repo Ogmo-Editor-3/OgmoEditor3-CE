@@ -27,8 +27,10 @@ class Imports
 			return value;
 	}
 
-	public static function bool(value:String, def:Bool):Bool
+	public static function bool(value:Dynamic, def:Bool):Bool
 	{
+		if (value != null && value.is(Bool)) return value;
+
 		if (value == "true")
 			return true;
 		else if (value == "false")
@@ -37,18 +39,20 @@ class Imports
 			return def;
 	}
 
-	public static function integer(value:String, def:Int):Int
+	public static function integer(value:Dynamic, def:Int):Int
 	{
 		if (value == null) return def;
+		if (value.is(Int)) return value;
 
 		var n = Std.parseInt(value);
 		if (n == null) return def;
 		else return n;
 	}
 
-	public static function float(value:String, def:Float):Float
+	public static function float(value:Dynamic, def:Float):Float
 	{
 		if (value == null) return def;
+		if (value.is(Float)) return value;
 
 		var n = Std.parseFloat(value);
 		if (n == null) return def;
