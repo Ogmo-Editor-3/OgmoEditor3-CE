@@ -227,13 +227,7 @@ class TileAutotileTool extends TileTool
 
 	public function canDraw(pos:Vector):Bool
 	{
-		if (lastRect == null) return true;
-			
-		var n:Rectangle;
-		if (OGMO.ctrl) n = new Rectangle(pos.x, pos.y, 1, 1);
-		else n = new Rectangle(pos.x, pos.y, drawBrush[0].length, drawBrush.length);
-			
-		return !(n.right > lastRect.left && n.bottom > lastRect.top && n.left < lastRect.right && n.top < lastRect.bottom);
+		return pos.x >= 0 && pos.y >= 0 && pos.x < layer.gridCellsX && pos.y < layer.gridCellsY;
 	}
 	
 	override public function onKeyPress(key:Int)
