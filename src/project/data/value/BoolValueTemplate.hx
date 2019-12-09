@@ -21,9 +21,9 @@ class BoolValueTemplate extends ValueTemplate
     return name + ":bo";
   }
 
-  override function getDefault():String
+  override function getDefault():Dynamic
   {
-    return Std.string(defaults);
+    return defaults;
   }
 
   override function validate(val:Dynamic):Bool
