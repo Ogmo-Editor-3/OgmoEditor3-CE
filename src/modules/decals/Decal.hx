@@ -38,8 +38,9 @@ class Decal
 			data.scaleY = scale.y;
 		}
 		if (rotatable) data.rotation = rotation;
-		data.texture = path;
+		data.texture = haxe.io.Path.normalize(path);
 		Export.values(data, values);
+    
 		return data;
 	}
 
