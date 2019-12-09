@@ -527,6 +527,9 @@ class Editor
 
 		//Current Tool
 		if (EDITOR.toolBelt.current != null) EDITOR.toolBelt.current.draw();
+
+		//Check Tools availability
+		EDITOR.toolBelt.checkAvailability();
 		
 		draw.finishDrawing();
 	}
