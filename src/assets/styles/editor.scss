@@ -442,8 +442,14 @@
         }
 		.tool:after { transition: background-color 0.25s; }
         .tool:last-child { border-right: 0; border-radius: 0 0 4px 0; }
-
+        
         .tool:hover  { background: #fff; }
+        .tool.unavailable { 
+            background: #444 !important;
+            border-right: 1px solid #222;
+            cursor: not-allowed;
+            transition-duration: 0ms;
+        }
         .tool.selected { background: #fff; }
 		.tool.selected:after { background-color: #ff0044; }
         .tool.key-selected { background: #fff; }
