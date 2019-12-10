@@ -83,10 +83,8 @@ class ToolBelt
 		populateToolbar();
 	}
 
-	public function setTool(id:Int, ?force:Bool):Bool
+	public function setTool(id:Int, force:Bool = false):Bool
 	{
-		if (force == null) force = false;
-
 		var layer = EDITOR.level.currentLayer.template.definition.id;
 
 		if (id >= 0 && (id != EDITOR.currentLayerEditor.currentTool || force) && id < allTools[layer].length)
