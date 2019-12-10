@@ -80,7 +80,7 @@ class TileAutotileTool extends TileTool
 		paletteElement.empty();
 		if (EDITOR.currentLayerEditor.palettePanel != null)
 			(cast EDITOR.currentLayerEditor.palettePanel:TilePalettePanel).populateAutotile(paletteElement);
-		refMap.length > 0 ? init(refMap) : setInfo('<p>To begin, <b>CTRL+Click</b> on a level JSON in the Levels panel. <p>Fore more info on how to use the Auto Tile brush, check the <a href="https://ogmo-editor-3.github.io/docs/#/manual/introduction.md" target="_blank">OGMO Documentation</a>');
+		refMap.length > 0 ? init(refMap) : reset();
 	}
 
 	override function deactivated() {
@@ -110,6 +110,7 @@ class TileAutotileTool extends TileTool
 				return init_layer(l);
 			}
 		}
+		reset();
 		setError('$ref_name does not contain the layer "${this.layer.template.name}"');
 	}
 
@@ -120,7 +121,24 @@ class TileAutotileTool extends TileTool
 			(cast EDITOR.currentLayerEditor.palettePanel:TilePalettePanel).setInfoPanel(msg);
 	}
 
-	function setError(msg:String) {
+	function reset()
+	{
+		drawing = false;
+		firstDraw = false;
+		drawBrush = [[]];
+		erasing = false;
+		wasCtrl = false;
+		refMap = '';
+
+		map = [for (i in 0...256) i => []];
+		cardinal_map = [for (i in 0...16) i => []];
+		fallbackTile = -1;
+
+		setInfo('<p>To begin, <b>CTRL+Click</b> on a level JSON in the Levels panel. <p>Fore more info on how to use the Auto Tile brush, check the <a href="https://ogmo-editor-3.github.io/docs/#/manual/introduction.md" target="_blank">OGMO Documentation</a>');
+	}
+
+	function setError(msg:String)
+	{
 		var paletteElement	= new JQuery(".editor_palette");
 		if (EDITOR.currentLayerEditor.palettePanel != null)
 			(cast EDITOR.currentLayerEditor.palettePanel:TilePalettePanel).setErrorPanel(msg);
