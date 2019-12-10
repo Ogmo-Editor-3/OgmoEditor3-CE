@@ -29,6 +29,7 @@ class TileAutotileTool extends TileTool
 		fallbackTile = arr[0][0];
 		for (j in 0...arr.length) for (i in 0...arr[j].length) {
 			if (arr[j][i] == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
+			if (j == 0 && i == 0) continue; // Fallback tile;
 			var key = 0;
 			var up = j > 0;
 			var down = j < arr.length - 1;
