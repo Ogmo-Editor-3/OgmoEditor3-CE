@@ -35,15 +35,15 @@ class TileAutotileTool extends TileTool
 			var down = j < arr.length - 1;
 			var left = i > 0;
 			var right = i < arr[j].length - 1;
-			if (up &&				arr[j - 1][i] != -1)		key += 1;	// TODO - It might be nice to be able to set this to 0 -01010111
-			if (down &&				arr[j + 1][i] != -1)		key += 2;	// TODO - It might be nice to be able to set this to 0 -01010111
-			if (left &&				arr[j][i - 1] != -1)		key += 4;	// TODO - It might be nice to be able to set this to 0 -01010111
-			if (right &&			arr[j][i + 1] != -1)		key += 8;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (!up		|| up &&					arr[j - 1][i] != -1)		key += 1;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (!down	|| down &&					arr[j + 1][i] != -1)		key += 2;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (!left	|| left &&					arr[j][i - 1] != -1)		key += 4;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (!right	|| right &&					arr[j][i + 1] != -1)		key += 8;	// TODO - It might be nice to be able to set this to 0 -01010111
 			cardinal_map[key].push(arr[j][i]);
-			if (up && left &&		arr[j - 1][i - 1] != -1)	key += 16;	// TODO - It might be nice to be able to set this to 0 -01010111
-			if (up && right &&		arr[j - 1][i + 1] != -1)	key += 32;	// TODO - It might be nice to be able to set this to 0 -01010111
-			if (down && left &&		arr[j + 1][i - 1] != -1)	key += 64;	// TODO - It might be nice to be able to set this to 0 -01010111
-			if (down && right &&	arr[j + 1][i + 1] != -1)	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (!up && !left	|| up && left &&	arr[j - 1][i - 1] != -1)	key += 16;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (!up && !right	|| up && right &&	arr[j - 1][i + 1] != -1)	key += 32;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (!down && !left	|| down && left &&	arr[j + 1][i - 1] != -1)	key += 64;	// TODO - It might be nice to be able to set this to 0 -01010111
+			if (!down && !right	|| down && right &&	arr[j + 1][i + 1] != -1)	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
 			map[key].push(arr[j][i]);
 		}
 	}
