@@ -1,5 +1,8 @@
 package modules.tiles;
 
+import haxe.Timer;
+import modules.tiles.tools.TileAutotileTool;
+import electron.Shell;
 import js.Browser;
 import js.jquery.Event;
 import util.Matrix;
@@ -10,7 +13,7 @@ import level.editor.ui.SidePanel;
 
 class TilePalettePanel extends SidePanel
 {
-  public var layerEditor:TileLayerEditor;
+	public var layerEditor:TileLayerEditor;
 	public var into:JQuery;
 	public var options:JQuery;
 	
@@ -25,24 +28,24 @@ class TilePalettePanel extends SidePanel
 	public var selectionStartTile:Vector = null;
 	public var selectionEndTile:Vector = null;
 	public var selection:Rectangle = new Rectangle(0, 0, 1, 1);
-  public var tileset(get, never):Tileset;
-  public var columns(get, never):Int;
-  public var rows(get, never):Int;
+	public var tileset(get, never):Tileset;
+	public var columns(get, never):Int;
+	public var rows(get, never):Int;
 	
 	function get_tileset():Tileset { return (cast layerEditor.layer : TileLayer).tileset; }
 	function get_columns():Int { return tileset.tileColumns; }
 	function get_rows():Int { return tileset.tileRows; }
 
-    public function new(layerEditor: TileLayerEditor)
-    {
-      super();
-      this.layerEditor = layerEditor;
-      matrix = new Matrix();
-      matrix.setScale(2, 2);
-    }
+	public function new(layerEditor: TileLayerEditor)
+	{
+		super();
+		this.layerEditor = layerEditor;
+		matrix = new Matrix();
+		matrix.setScale(2, 2);
+	}
 
-    override function populate(into: JQuery):Void
-    {
+	override function populate(into: JQuery):Void
+	{
 		this.into = into;
 		
 		// options
@@ -101,11 +104,11 @@ class TilePalettePanel extends SidePanel
 		}
 
 		// refresh canas
-        refresh();
-    }
+		refresh();
+	}
 
-	public function populate_autotile(into:JQuery)
-    {
+	public function populateAutotile(into:JQuery)
+	{
 		this.into = into;
 		
 		// options
@@ -123,15 +126,69 @@ class TilePalettePanel extends SidePanel
 				var next = OGMO.project.tilesets[Imports.integer(options.val(), 0)];
 				EDITOR.level.store("Set " + layerEditor.template.name + " to '" + next.label + "'");
 				(cast layerEditor.layer : TileLayer).tileset = next;
-				refresh();
+				refreshAutoTile();
 			});
 			options.val(current.string());
 			into.append(options);
 		}
 
-		// refresh canas
-        refresh();
-    }
+		// info panel
+		{
+			var infoPanel = new JQuery('<div id="auto-tile-info" style="padding: 16px; font-size: 14px;"></div>');
+			into.append(infoPanel);
+		}
+
+		// canvas
+		{
+			canvas = Browser.document.createCanvasElement();
+			canvas.style.margin = '16px auto';
+			canvas.style.imageRendering = 'pixelated';
+			canvas.height = 0;
+			context = canvas.getContext("2d");
+			into.append(canvas);
+		}
+
+		// error panel
+		{
+			var errorPanel = new JQuery('<div id="auto-tile-error" style="padding: 16px; font-size: 14px; color: red;"></div>');
+			into.append(errorPanel);
+		}
+
+	}
+
+	function refreshAutoTile()
+	{
+		var tileset = tileset;
+		var image = tileset.texture.image;
+		var tile = (cast EDITOR.toolBelt.current:TileAutotileTool).fallbackTile;
+		
+		if (tileset == null || tile < 0) return;
+		
+		canvas.width = tileset.tileWidth;
+		canvas.height = tileset.tileHeight;
+		canvas.style.width = '64px';
+		canvas.style.height = (64 * (tileset.tileHeight/tileset.tileWidth)).floor() + 'px';
+		var tile_x = tileset.getTileX(tile) * tileset.tileWidth;
+		var tile_y = tileset.getTileY(tile) * tileset.tileHeight;
+		context.drawImage(image, tile_x, tile_y, tileset.tileWidth, tileset.tileHeight, 0, 0, canvas.width, canvas.height);
+	}
+
+	public function setInfoPanel(msg:String)
+	{
+		var infoPanel = Browser.document.getElementById('auto-tile-info');
+		infoPanel.innerHTML = msg;
+		refreshAutoTile();
+	}
+
+	public function setErrorPanel(msg:String)
+	{
+		var errorPanel = Browser.document.getElementById('auto-tile-error');
+		errorPanel.innerHTML = msg;
+		refreshAutoTile();
+		var ep = new JQuery(errorPanel);
+		ep.fadeIn(0);
+		Timer.delay(() -> ep.fadeOut(200), 5000);
+	}
 
 	override function resize():Void
 	{
@@ -276,12 +333,12 @@ class TilePalettePanel extends SidePanel
 		matrix.ty = Math.min(8, Math.max(- (th - vh) - 8, matrix.ty));
 	}
 
-    override function refresh():Void
-    {
-    canvas.width = into.width().floor() - 4;
-    canvas.height = into.height().floor() - 40;
-    canvas.style.width = canvas.width + "px";
-    canvas.style.height = canvas.height + "px";
+	override function refresh():Void
+	{
+		canvas.width = into.width().floor() - 4;
+		canvas.height = into.height().floor() - 40;
+		canvas.style.width = canvas.width + "px";
+		canvas.style.height = canvas.height + "px";
 		
 		// clear & setup context
 		context.setTransform(0,0,0,0,0,0);
@@ -300,10 +357,10 @@ class TilePalettePanel extends SidePanel
 
 			// draw tiles (+transparent bg)
 			context.fillStyle = "rgb(200,200,200)";
-      var tx = tileset.tileSeparationX, x = 0;
+			var tx = tileset.tileSeparationX, x = 0;
 			while(tx < image.width)
 			{
-        var ty = tileset.tileSeparationY, y = 0;
+				var ty = tileset.tileSeparationY, y = 0;
 				while(ty < image.height)
 				{
 					var drawX = x * (tileset.tileWidth + spacing);
@@ -312,11 +369,11 @@ class TilePalettePanel extends SidePanel
 					context.fillRect(drawX - spacing / 2, drawY - spacing / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
 					context.fillRect(drawX + tileset.tileWidth / 2, drawY + tileset.tileHeight / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
 					context.drawImage(image, tx, ty, tileset.tileWidth, tileset.tileHeight, drawX, drawY, tileset.tileWidth, tileset.tileHeight);
-          ty += tileset.tileHeight + tileset.tileSeparationY;
-          y++;
+					ty += tileset.tileHeight + tileset.tileSeparationY;
+					y++;
 				}
-        tx += tileset.tileWidth + tileset.tileSeparationX; 
-        x++;
+				tx += tileset.tileWidth + tileset.tileSeparationX; 
+				x++;
 			}
 			
 			// get current selection
@@ -329,17 +386,17 @@ class TilePalettePanel extends SidePanel
 			{
 				context.fillStyle = "rgba(0,255,40,0.25)";
 				context.fillRect(
-        sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
-        sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
-        sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
+				sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
+				sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
+				sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
 				
 				context.lineWidth = spacing;
 				context.strokeStyle = "rgba(0,255,40,1)";
 				context.strokeRect(
-        sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
-        sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
-        sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
+				sel.x * (tileset.tileWidth + spacing) - spacing / 2, 
+				sel.y * (tileset.tileHeight + spacing) - spacing / 2, 
+				sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
 			}
 		}
-  }
+	}
 }

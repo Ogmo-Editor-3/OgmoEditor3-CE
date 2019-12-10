@@ -17,7 +17,8 @@ class TileAutotileTool extends TileTool
 	public var lastRect:Rectangle = null;
 	public var random:Random = new Random();
 	public var erasing:Bool = false;
-	public var was_ctrl:Bool = false;
+	public var wasCtrl:Bool = false;
+	public var refMap:String = '';
 
 	public var map:Map<Int, Array<Int>> = [for (i in 0...256) i => []];
 	public var cardinal_map:Map<Int, Array<Int>> = [for (i in 0...16) i => []];
@@ -78,7 +79,8 @@ class TileAutotileTool extends TileTool
 		var paletteElement	= new JQuery(".editor_palette");
 		paletteElement.empty();
 		if (EDITOR.currentLayerEditor.palettePanel != null)
-			(cast EDITOR.currentLayerEditor.palettePanel:TilePalettePanel).populate_autotile(paletteElement);
+			(cast EDITOR.currentLayerEditor.palettePanel:TilePalettePanel).populateAutotile(paletteElement);
+		refMap.length > 0 ? init(refMap) : setInfo('<p>To begin, <b>CTRL+Click</b> on a level JSON in the Levels panel. <p>Fore more info on how to use the Auto Tile brush, check the <a href="https://ogmo-editor-3.github.io/docs/#/manual/introduction.md" target="_blank">OGMO Documentation</a>');
 	}
 
 	override function deactivated() {
@@ -90,8 +92,43 @@ class TileAutotileTool extends TileTool
 	}
 
 	public function init(ref_path:String) {
+		var ref_name = ref_path.split('/').pop();
+		if (ref_path.indexOf('.json') == -1) {
+			setError('$ref_name is not a JSON file!');
+			return;
+		}
 		var ref:{layers:Array<Dynamic>} = FileSystem.loadJSON(ref_path);
-		for (l in ref.layers) if (l.name == this.layer.template.name) return init_layer(l);
+		if (ref.layers == null || !ref.layers.is(Array)) { // TODO: Would be smarter to have a validate level function somewhere? -01010111
+			setError('$ref_name is not a valid level file!');
+			return;
+		}
+		for (l in ref.layers)
+		{
+			if (l.name == null) continue;
+			if (l.name == this.layer.template.name) {
+				refMap = ref_path;
+				return init_layer(l);
+			}
+		}
+		setError('$ref_name does not contain the layer "${this.layer.template.name}"');
+	}
+
+	function setInfo(msg:String)
+	{
+		var paletteElement	= new JQuery(".editor_palette");
+		if (EDITOR.currentLayerEditor.palettePanel != null)
+			(cast EDITOR.currentLayerEditor.palettePanel:TilePalettePanel).setInfoPanel(msg);
+	}
+
+	function setError(msg:String) {
+		var paletteElement	= new JQuery(".editor_palette");
+		if (EDITOR.currentLayerEditor.palettePanel != null)
+			(cast EDITOR.currentLayerEditor.palettePanel:TilePalettePanel).setErrorPanel(msg);
+	}
+
+	function setPanelInfo()
+	{
+		setInfo('<center><b>Reference Map: </b>${refMap.split('/').pop()}</center>');
 	}
 
 	function init_layer(layer:Dynamic) {		
@@ -99,6 +136,7 @@ class TileAutotileTool extends TileTool
 		else if (layer.data != null) get_ruleset(get_2d_from_1d(layer.data, layer.gridCellsX));
 		else if (layer.dataCoords2D != null) trace('data coords 2D'); // TODO
 		else if (layer.dataCoords != null) trace('data coords'); // TODO
+		setPanelInfo();
 	}
 
 	function get_2d_from_csv(csv:String):Array<Array<Int>> {
@@ -156,14 +194,14 @@ class TileAutotileTool extends TileTool
 	{
 		layer.levelToGrid(pos, pos);
 
-		if (!prevPos.equals(pos) || was_ctrl != OGMO.ctrl)
+		if (!prevPos.equals(pos) || wasCtrl != OGMO.ctrl)
 		{ 
 			if (drawing && drawBrush != null) for (point in Calc.bresenham(prevPos.x.int(), prevPos.y.int(), pos.x.int(), pos.y.int())) doDraw(point);
 			else EDITOR.overlayDirty();
 		}
 
 		pos.clone(prevPos);
-		was_ctrl = OGMO.ctrl;
+		wasCtrl = OGMO.ctrl;
 	}
 
 	override public function onMouseUp(pos:Vector)
