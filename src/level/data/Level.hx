@@ -309,6 +309,8 @@ class Level
 	public function setZoom(zoom:Float) {
 		camera.scale(zoom, zoom);
 		updateCameraInverse();
+		while (camera.a < 0.01 ) setZoom(0.01);
+		while (camera.a > 32 ) setZoom(-0.001);
 		EDITOR.dirty();
 
 		EDITOR.updateZoomReadout();
@@ -323,6 +325,8 @@ class Level
 		camera.scale(1 + .1 * zoom, 1 + .1 * zoom);
 		moveCamera(-x, -y);
 		updateCameraInverse();
+		while (camera.a < 0.01 ) zoomCameraAt(0.01, x, y);
+		while (camera.a > 32 ) zoomCameraAt(-0.001, x, y);
 		EDITOR.dirty();
 
 		EDITOR.updateZoomReadout();
