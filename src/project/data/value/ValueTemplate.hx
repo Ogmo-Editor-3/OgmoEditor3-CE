@@ -36,8 +36,8 @@ class ValueTemplate
     return getHashCode() == template.getHashCode();
   }
 
-  public function getDefault():String return '';
-  public function validate(val:String):String return '';
+  public function getDefault():Dynamic return '';
+  public function validate(val:Dynamic):Dynamic return '';
   public function createEditor(values:Array<Value>):Null<ValueEditor> return null;
   public function getHashCode():String return '';
   public function load(val:Dynamic):Void {}

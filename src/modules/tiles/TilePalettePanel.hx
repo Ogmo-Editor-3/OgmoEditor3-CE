@@ -106,6 +106,7 @@ class TilePalettePanel extends SidePanel
 
 	override function resize():Void
 	{
+		super.resize();
 		refresh();
 	}
 	

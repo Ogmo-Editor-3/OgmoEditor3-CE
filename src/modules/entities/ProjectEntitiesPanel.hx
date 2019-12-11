@@ -632,7 +632,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 			for (entity in (cast data.entities : Array<EntityTemplate>)) 
 			{
 				if (OGMO.project.entities.templates.filter(e -> e.exportID == entity.exportID).length == 0) {
-					OGMO.project.entities.templates.push(EntityTemplate.load(entity));
+					OGMO.project.entities.templates.push(EntityTemplate.load(OGMO.project, entity));
 					addedCount++;
 				}
 				else notAddedCount++;

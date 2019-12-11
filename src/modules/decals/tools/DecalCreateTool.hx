@@ -1,5 +1,7 @@
 package modules.decals.tools;
 
+import level.data.Value;
+
 class DecalCreateTool extends DecalTool
 {
 	public var canPreview:Bool;
@@ -42,13 +44,16 @@ class DecalCreateTool extends DecalTool
 		EDITOR.dirty();
 
 		var path = js.node.Path.relative((cast layerEditor.template:DecalLayerTemplate).folder, layerEditor.brush.path);
-		created = new Decal(pos, path, layerEditor.brush, scale);
+		var values = [for (template in (cast layerEditor.template:DecalLayerTemplate).values) new Value(template)];
+		created = new Decal(pos, path, layerEditor.brush, scale, 0, values);
 		layer.decals.push(created);
 
 		if (OGMO.keyCheckMap[Keys.Shift])
 			layerEditor.selected.push(created);
 		else
 			layerEditor.selected = [created];
+
+		layerEditor.selectedChanged = true;
 	}
 
 	override public function onMouseUp(pos:Vector)
@@ -132,13 +137,19 @@ class DecalCreateTool extends DecalTool
 	{
 		if (key == Keys.H)
 		{
-			scale.x = -scale.x;
-			EDITOR.dirty();
+			if ((cast layerEditor.template : DecalLayerTemplate).scaleable)
+			{
+				scale.x = -scale.x;
+				EDITOR.dirty();
+			}
 		}
 		else if (key == Keys.V)
 		{
-			scale.y = -scale.y;
-			EDITOR.dirty();
+			if ((cast layerEditor.template : DecalLayerTemplate).scaleable)
+			{
+				scale.y = -scale.y;
+				EDITOR.dirty();
+			}
 		}
 		// TODO - Prep for UX overhaul PR!
 		/*else if (key == Keys.B)

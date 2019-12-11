@@ -5,16 +5,16 @@ import project.data.value.ValueTemplate;
 class Value
 {
 	public var template:ValueTemplate;
-	public var value:String;
+	public var value:Dynamic;
 
-	public function new(template:ValueTemplate, ?value:String)
+	public function new(template:ValueTemplate, ?value:Dynamic)
 	{
 		this.template = template;
 		if (value == null) this.value = this.template.getDefault();
 		else this.value = this.template.validate(value);
 	}
 
-	public function set(value:String):Void
+	public function set(value:Dynamic):Void
 	{
 		this.value = template.validate(value);
 	}

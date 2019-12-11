@@ -44,7 +44,7 @@ class GLRenderer
 		this.canvas = canvas;
 		
 		// init gl
-		gl = canvas.getContext("experimental-webgl");
+		gl = canvas.getContext("webgl");
 		gl.enable(RenderingContext.BLEND);
 		gl.disable(RenderingContext.DEPTH_TEST);
 		gl.disable(RenderingContext.CULL_FACE);

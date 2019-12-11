@@ -9,6 +9,7 @@ class DecalLayerEditor extends LayerEditor
 	public var brush:Texture;
 	public var selected:Array<Decal> = [];
 	public var hovered:Array<Decal> = [];
+	public var selectedChanged:Bool = true;
 
 	public function toggleSelected(list:Array<Decal>):Void
 	{
@@ -19,6 +20,7 @@ class DecalLayerEditor extends LayerEditor
 			else selected.push(decal);
 		}
 		for (decal in removing) selected.remove(decal);
+		selectedChanged = true;
 	}
 
 	public function selectedContainsAny(list:Array<Decal>):Bool
@@ -65,9 +67,21 @@ class DecalLayerEditor extends LayerEditor
 		for (decal in selected) decal.drawSelectionBox(true);
 	}
 
+	override function loop() {
+		if (!selectedChanged) return;
+		selectedChanged = false;
+		selectionPanel.refresh();
+		EDITOR.dirty();
+	}
+
 	override function createPalettePanel():SidePanel
 	{
 		return new DecalPalettePanel(this);
+	}
+
+	override function createSelectionPanel():Null<SidePanel> 
+	{
+		return new DecalSelectionPanel(this);
 	}
 
 	override function afterUndoRedo():Void

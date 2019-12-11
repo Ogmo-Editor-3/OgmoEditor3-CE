@@ -60,9 +60,13 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 		{
 			var relative  = Path.relative(Path.dirname(OGMO.project.path), path);
 			var tilemap = new Tileset(OGMO.project, "New Tileset", relative, 8, 8, 0, 0);
-			OGMO.project.tilesets.push(tilemap);
-			refreshList();
-			inspect(tilemap);
+			
+			// delay a frame before refreshing to allow the tileset texture to load
+			haxe.Timer.delay(() -> {
+				OGMO.project.tilesets.push(tilemap);
+				refreshList();
+				inspect(tilemap);
+			}, 0);
 		}
 	}
 

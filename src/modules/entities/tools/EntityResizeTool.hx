@@ -51,6 +51,7 @@ class EntityResizeTool extends EntityTool
 
 	override public function onMouseUp(pos:Vector)
 	{
+		layerEditor.selection.changed = true;
 		resizing = false;
 		EDITOR.locked = false;
 		EDITOR.overlayDirty();
@@ -68,6 +69,7 @@ class EntityResizeTool extends EntityTool
 			}
 			entity.resetSize();
 		}
+		layerEditor.selection.changed = true;
 		EDITOR.dirty();
 	}
 
@@ -93,6 +95,7 @@ class EntityResizeTool extends EntityTool
 			var diff = new Vector(pos.x - start.x, pos.y - start.y);
 			for (e in entities) e.resize(diff);
 
+			layerEditor.selection.changed = true;
 			EDITOR.dirty();
 			pos.clone(lastPos);
 		}
@@ -103,5 +106,11 @@ class EntityResizeTool extends EntityTool
 	override public function keyToolCtrl():Int return 0;
 	override public function keyToolAlt():Int return 1;
 	override public function keyToolShift():Int return 3;
+	override function isAvailable():Bool {
+		for (entity in layerEditor.entities.list) {
+			for (e_id in layerEditor.selection.ids) if (entity.id == e_id && (entity.template.resizeableX || entity.template.resizeableY)) return true;
+		}
+		return false;
+	}
 
 }
