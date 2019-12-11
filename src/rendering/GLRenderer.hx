@@ -486,9 +486,9 @@ class GLRenderer
 		while (i < size.x)
 		{
 			positions.push(i);
-      positions.push(1);
+      positions.push(1  + gridOffset.y);
 			positions.push(i);
-      positions.push(size.y - 1);
+      positions.push(size.y - 1 + gridOffset.y);
 
       add_color(col, 2);
 
@@ -498,9 +498,9 @@ class GLRenderer
     i = intY + gridOffset.y;
 		while (i < size.y)
 		{
-			positions.push(1);
+			positions.push(1 + gridOffset.x);
       positions.push(i);
-			positions.push(size.x - 1);
+			positions.push(size.x - 1  + gridOffset.x);
       positions.push(i);
 
 			add_color(col, 2);
