@@ -335,6 +335,7 @@ class TilePalettePanel extends SidePanel
 
 	override function refresh():Void
 	{
+		if (EDITOR.toolBelt.current.is(TileAutotileTool)) return;
 		canvas.width = into.width().floor() - 4;
 		canvas.height = into.height().floor() - 40;
 		canvas.style.width = canvas.width + "px";
