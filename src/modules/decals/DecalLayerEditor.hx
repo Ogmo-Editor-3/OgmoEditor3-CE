@@ -36,17 +36,17 @@ class DecalLayerEditor extends LayerEditor
 		selected.remove(decal);
 	}
 
-	override function draw(): Void
+	override function draw(offsetX:Float = 0, offsetY:Float = 0): Void
 	{
 		// draw decals
 		for (decal in (cast layer : DecalLayer).decals)
 		{
 			if (decal.texture != null)
-				EDITOR.draw.drawTexture(decal.position.x, decal.position.y, decal.texture, decal.origin, decal.scale, decal.rotation);
+				EDITOR.draw.drawTexture(decal.position.x + offsetX, decal.position.y + offsetY, decal.texture, decal.origin, decal.scale, decal.rotation);
 			else
 			{
-				var ox = decal.position.x;
-				var oy = decal.position.y;
+				var ox = decal.position.x + offsetX;
+				var oy = decal.position.y + offsetY;
 				var w = decal.width;
 				var h = decal.height;
 				EDITOR.draw.drawRect(ox - w / 2, oy - h / 2, w, 1, Color.red);
@@ -58,13 +58,13 @@ class DecalLayerEditor extends LayerEditor
 			}
 		}
 
-		if (active) for (decal in hovered) decal.drawSelectionBox(false);
+		if (active) for (decal in hovered) decal.drawSelectionBox(false, offsetX, offsetY);
 	}
 	
-	override function drawOverlay()
+	override function drawOverlay(offsetX:Float = 0, offsetY:Float = 0)
 	{
 		if (selected.length <= 0) return;
-		for (decal in selected) decal.drawSelectionBox(true);
+		for (decal in selected) decal.drawSelectionBox(true, offsetX, offsetY);
 	}
 
 	override function loop() {

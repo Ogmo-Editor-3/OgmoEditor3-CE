@@ -447,7 +447,30 @@ class Editor
 			isDirty = false;
 			draw.clear();
 			
-			if (level != null) drawLevel();
+			
+			var pad = new Vector();
+
+			for (l in levelManager.levels)
+			{
+					l.data.offset.clone(pad).sub(level.data.offset);
+					drawBackground(l, pad);
+			}
+
+			var tempLevel = level;
+			
+			for (l in levelManager.levels)
+			{
+				if (l != tempLevel && !l.data.offset.equals(level.data.offset)) 
+				{
+					l.data.offset.clone(pad).sub(level.data.offset);
+					EDITOR.level = l;
+					drawLevel(0.8, pad, false);
+				}
+			}
+
+			pad.set(0,0);
+			EDITOR.level = tempLevel;
+			if (level != null) drawLevel(1, pad);
 		}
 		
 		//Draw the overlay
@@ -485,54 +508,60 @@ class Editor
 			ACTUAL DRAWING
 	*/
 	
-	public function drawLevel():Void
+	public function drawLevel(alpha:Float = 1, pad:Vector, main:Bool = true):Void
 	{	
-		draw.setAlpha(1);
-
-		//Background
-		draw.drawRect(12, 12, level.data.size.x, level.data.size.y, Color.black.x(.8));
-		draw.drawRect(-1, -1, level.data.size.x + 2, level.data.size.y + 2, Color.black);
-		draw.drawRect(0, 0, level.data.size.x, level.data.size.y, level.project.backgroundColor);
-
 		//Draw the layers below and including the current one
 		var i = level.layers.length - 1;
 		while(i > level.currentLayerID) 
 		{
-			if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
+			if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw(pad.x, pad.y);
 			i--;
 		}
 		
-		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].draw();
+		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].draw(pad.x, pad.y);
 
 		//Draw the layers above the current one at half alpha
 		if (level.currentLayerID > 0)
 		{
-			draw.setAlpha(0.3);
+			draw.setAlpha(alpha * 0.3);
 			var i = level.currentLayerID - 1;
 			while (i >= 0)
 			{
-				if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
+				if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw(pad.x, pad.y);
 				i--;
 			}
-			draw.setAlpha(1);
+			draw.setAlpha(alpha);
 		}
 
-		//Resize handles
-		if (EDITOR.handles.canResize) EDITOR.handles.draw();
+		if (main)
+		{
+			//Resize handles
+			if (EDITOR.handles.canResize) EDITOR.handles.draw();
+				
+			//Grid
+			if (level.currentLayer != null && level.gridVisible) draw.drawGrid(level.currentLayer.template.gridSize, level.currentLayer.offset.clone().add(pad), level.data.size, level.camera.a, level.project.gridColor);
 			
-		//Grid
-		if (level.currentLayer != null && level.gridVisible) draw.drawGrid(level.currentLayer.template.gridSize, level.currentLayer.offset, level.data.size, level.camera.a, level.project.gridColor);
-		
-		//Do the current layer's drawAbove
-		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].drawAbove();
+			//Do the current layer's drawAbove
+			if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].drawAbove(pad.x, pad.y);
 
-		//Current Tool
-		if (EDITOR.toolBelt.current != null) EDITOR.toolBelt.current.draw();
+			//Current Tool
+			if (EDITOR.toolBelt.current != null) EDITOR.toolBelt.current.draw();
 
-		//Check Tools availability
-		EDITOR.toolBelt.checkAvailability();
-		
+			//Check Tools availability
+			EDITOR.toolBelt.checkAvailability();
+		}
+
 		draw.finishDrawing();
+	}
+
+	public function drawBackground(level:Level, pad:Vector)
+	{
+		draw.setAlpha(1);
+
+		//Background
+		draw.drawRect(12 + pad.x, 12 + pad.y, level.data.size.x, level.data.size.y, Color.black.x(.8));
+		draw.drawRect(-1 + pad.x, -1 + pad.y, level.data.size.x + 2, level.data.size.y + 2, Color.black);
+		draw.drawRect(pad.x, pad.y, level.data.size.x, level.data.size.y, level.project.backgroundColor);
 	}
 	
 	public function drawOverlay():Void

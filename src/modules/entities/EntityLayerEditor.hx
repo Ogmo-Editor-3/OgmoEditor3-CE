@@ -17,36 +17,36 @@ class EntityLayerEditor extends LayerEditor
 		brush = 0;
 	}
 
-	override function draw()
+	override function draw(offsetX:Float = 0, offsetY:Float = 0)
 	{
 		// Draw Hover
 		if (active && hovered.amount > 0)
 		{
-			for (ent in entities.getGroup(hovered)) ent.drawHoveredBox();
+			for (ent in entities.getGroup(hovered)) ent.drawHoveredBox(offsetX, offsetY);
 		}
 
 		// Draw Entities
 		var hasNodes:Array<Entity> = [];
 		for (ent in entities.list)
 		{
-			ent.draw();
+			ent.draw(offsetX, offsetY);
 			if (!active && ent.canDrawNodes) hasNodes.push(ent);
 		}
 
 		// Draw node lines
-		if (hasNodes.length > 0) for (ent in hasNodes) ent.drawNodeLines();
+		if (hasNodes.length > 0) for (ent in hasNodes) ent.drawNodeLines(offsetX, offsetY);
 	}
 
-	override function drawAbove()
+	override function drawAbove(offsetX:Float = 0, offsetY:Float = 0)
 	{
 		// Draw Nodes
-		for (ent in entities.list) if (ent.canDrawNodes) ent.drawNodeLines();
+		for (ent in entities.list) if (ent.canDrawNodes) ent.drawNodeLines(offsetX, offsetY);
 	}
 
-	override function drawOverlay()
+	override function drawOverlay(offsetX:Float = 0, offsetY:Float = 0)
 	{
 		if (selection.amount <= 0) return;
-		for (entity in entities.getGroup(selection)) entity.drawSelectionBox();
+		for (entity in entities.getGroup(selection)) entity.drawSelectionBox(offsetX, offsetY);
 	}
 
 	override function loop()

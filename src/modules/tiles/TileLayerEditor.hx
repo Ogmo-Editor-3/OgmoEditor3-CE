@@ -13,12 +13,12 @@ class TileLayerEditor extends LayerEditor
 			super(id);
 	}
 
-	override function draw():Void
+	override function draw(offsetX:Float = 0, offsetY:Float = 0):Void
 	{
 		for (x in 0...layer.gridCellsX) for (y in 0...layer.gridCellsY)
 		{
 			var l:TileLayer = cast layer;
-			if (l.data[x][y] != -1) EDITOR.draw.drawTile(x * l.template.gridSize.x, y * layer.template.gridSize.y, l.tileset, l.data[x][y]);
+			if (l.data[x][y] != -1) EDITOR.draw.drawTile(x * l.template.gridSize.x + offsetX, y * layer.template.gridSize.y + offsetY, l.tileset, l.data[x][y]);
 		}
 	}
 	

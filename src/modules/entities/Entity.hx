@@ -26,6 +26,7 @@ class Entity
 	private var _sizeAnchor:Vector;
 	private var _rotationAnchor:Float;
 	private var _texture:Null<Texture>;
+	private var _offset = new Vector();
 	private static var hoverColor:Color = new Color(1, 1, 1, 0.5);
 
 	public static function create(id:Int, template:EntityTemplate, pos:Vector):Entity
@@ -226,8 +227,11 @@ class Entity
 			DRAWING
 	*/
 
-	public function draw()
+	public function draw(offsetX:Float = 0, offsetY:Float = 0)
 	{
+		_offset.set(offsetX, offsetY);
+
+		position.add(_offset);
 		if (_texture != null)
 		{
 			var orig = origin.clone();
@@ -240,6 +244,7 @@ class Entity
 		{
 			EDITOR.draw.drawTris(_points, position, color);
 		}
+		position.sub(_offset);
 
 		//Draw Node Ghosts
 		if (nodes.length > 0 && template.nodeGhost)
@@ -247,6 +252,7 @@ class Entity
 			var c = color.x(0.5);
 			for (node in nodes)
 			{
+				node.add(_offset);
 				if (_texture != null)
 				{
 					var orig = origin.clone();
@@ -262,20 +268,27 @@ class Entity
 				{
 					EDITOR.draw.drawTris(_points, node, c);
 				}
+				node.sub(_offset);
 			}
 		}
 	}
 
-	public function drawHoveredBox()
+	public function drawHoveredBox(offsetX:Float = 0, offsetY:Float = 0)
 	{
+		_offset.set(offsetX, offsetY);
+		position.add(_offset);
 		var corners = getCorners(position, 8 / EDITOR.level.zoom);
+		position.sub(_offset);
 		EDITOR.draw.drawTri(corners[0], corners[1], corners[2], Entity.hoverColor);
 		EDITOR.draw.drawTri(corners[1], corners[2], corners[3], Entity.hoverColor);
 	}
 
-	public function drawSelectionBox()
+	public function drawSelectionBox(offsetX:Float = 0, offsetY:Float = 0)
 	{
+		_offset.set(offsetX, offsetY);
+		position.add(_offset);
 		var corners = getCorners(position, 8 / EDITOR.level.zoom);
+		position.sub(_offset);
 		EDITOR.overlay.drawLine(corners[0], corners[1], Color.green);
 		EDITOR.overlay.drawLine(corners[1], corners[3], Color.green);
 		EDITOR.overlay.drawLine(corners[2], corners[3], Color.green);
@@ -318,30 +331,34 @@ class Entity
 		return template.nodeDisplay != NodeDisplayModes.NONE && nodes.length > 0;
 	}
 
-	public function drawNodeLines()
+	public function drawNodeLines(offsetX:Float = 0, offsetY:Float = 0)
 	{
+		_offset.set(offsetX, offsetY);
+		var pos = position.clone().add(_offset);
+		for (node in nodes) node.add(_offset);
 		switch (template.nodeDisplay)
 		{
 			case NodeDisplayModes.PATH:
-				var prev:Vector = position;
+				var prev:Vector = pos;
 				for (node in nodes)
 				{
 					EDITOR.draw.drawLine(prev, node, Color.white);
 					prev = node;
 				}
 			case NodeDisplayModes.CIRCUIT:
-				var prev:Vector = position;
+				var prev:Vector = pos;
 				for (node in nodes)
 				{
 					EDITOR.draw.drawLine(prev, node, Color.white);
 					prev = node;
 				}
 
-				if (nodes.length > 1) EDITOR.draw.drawLine(prev, position, Color.white);
+				if (nodes.length > 1) EDITOR.draw.drawLine(prev, pos, Color.white);
 			case NodeDisplayModes.FAN:
-				for (node in nodes) EDITOR.draw.drawLine(position, node, Color.white);
+				for (node in nodes) EDITOR.draw.drawLine(pos, node, Color.white);
 			default:
 		}
+		for (node in nodes) node.sub(_offset);
 	}
 
 	/*

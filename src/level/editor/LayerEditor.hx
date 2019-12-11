@@ -3,6 +3,7 @@ package level.editor;
 import project.data.LayerTemplate;
 import level.data.Layer;
 import level.editor.ui.SidePanel;
+import util.Vector;
 
 class LayerEditor
 {
@@ -26,17 +27,17 @@ class LayerEditor
 	/**
 	 * Draw this layer's content using editor.draw (GL Renderer)
 	 */
-	public function draw():Void {}
+	public function draw(offsetX:Float = 0, offsetY:Float = 0):Void {}
 
 	/**
 	 * If this is the current layer, draw stuff above the grid using editor.draw (GL Renderer)
 	 */
-	public function drawAbove():Void {}
+	public function drawAbove(offsetX:Float = 0, offsetY:Float = 0):Void {}
 
 	/**
 	 * If this is the current layer, draw stuff using editor.overlay (Canvas2D Renderer)
 	 */
-	public function drawOverlay():Void {}
+	public function drawOverlay(offsetX:Float = 0, offsetY:Float = 0):Void {}
 
 	/**
 	 * Override me!

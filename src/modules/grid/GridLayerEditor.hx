@@ -16,7 +16,7 @@ class GridLayerEditor extends LayerEditor
 		brushRight = (cast template : GridLayerTemplate).transparent;
 	}
 
-	override function draw():Void
+	override function draw(offsetX:Float = 0, offsetY:Float = 0):Void
 	{
 		for (y in 0...(cast layer : GridLayer).data[0].length)
 		{
@@ -36,8 +36,8 @@ class GridLayerEditor extends LayerEditor
 				var c = (cast template : GridLayerTemplate).legend[last];
 				if (c != null && !c.equals(Color.transparent))
 					EDITOR.draw.drawRect(
-						layer.offset.x + startX * template.gridSize.x,
-						layer.offset.y + y * template.gridSize.y,
+						layer.offset.x + startX * template.gridSize.x + offsetX,
+						layer.offset.y + y * template.gridSize.y + offsetY,
 						template.gridSize.x * range,
 						template.gridSize.y,
 						c);

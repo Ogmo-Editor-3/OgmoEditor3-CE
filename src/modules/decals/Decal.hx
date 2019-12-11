@@ -78,9 +78,14 @@ class Decal
 		scale.y = Calc.snap(scale.y, 1);
 	}
 
-	public function drawSelectionBox(origin:Bool)
+	public function drawSelectionBox(origin:Bool, offsetX:Float = 0, offsetY:Float = 0)
 	{
 		var corners = getCorners(2);
+		for (corner in corners) 
+		{
+			corner.x += offsetX;
+			corner.y += offsetY;
+		}
 		EDITOR.overlay.drawLine(corners[0], corners[1], Color.green);
 		EDITOR.overlay.drawLine(corners[1], corners[3], Color.green);
 		EDITOR.overlay.drawLine(corners[2], corners[3], Color.green);
@@ -96,7 +101,7 @@ class Decal
 			Vector.midPoint(corners[1], corners[3]),
 			Color.white
 		);
-		EDITOR.overlay.drawRect(position.x - 2, position.y - 2, 4, 4, Color.white);
+		EDITOR.overlay.drawRect(position.x - 2 + offsetX, position.y - 2 + offsetY, 4, 4, Color.white);
 	}
 
 	public function getCorners(pad:Float):Array<Vector>
