@@ -10,7 +10,7 @@ class ToolButton
 
     public function new(tool:Tool, id:Int)
     {
-		  element = new JQuery('<div title="${tool.getName()} [$id]" class="tool icon icon-${tool.getIcon()}" id="${tool.getName()}">');
+		  element = new JQuery('<div title="${tool.getName()} [${id + 1}]" class="tool icon icon-${tool.getIcon()}" id="${tool.getName()}">');
       element.click(function (e)
       {
         if (element.hasClass('unavailable')) return;

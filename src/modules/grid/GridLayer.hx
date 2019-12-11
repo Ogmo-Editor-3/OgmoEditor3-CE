@@ -39,7 +39,7 @@ class GridLayer extends Layer
 		else if (template.arrayMode == TWO)
 		{
 			data._contents = "grid2D";
-			data.grid2D = this.data;
+			data.grid2D = flip2dArray(this.data);
 		}
 		else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
 
@@ -68,7 +68,7 @@ class GridLayer extends Layer
 		}
 		else if (arrayMode == TWO)
 		{
-			this.data = data.grid2D;
+			this.data = flip2dArray(data.grid2D);
 		}
 		else throw "Invalid Tile Layer Array Mode: " + arrayMode;
 		// this.data = flip2dArray(this.data);
