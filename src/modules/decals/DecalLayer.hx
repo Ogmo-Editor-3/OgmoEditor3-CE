@@ -6,48 +6,47 @@ import level.data.Layer;
 
 class DecalLayer extends Layer
 {
-
 	public var decals:Array<Decal> = [];
 
-    override function save():Dynamic
-    {
-      var data = super.save();
-      data._contents = "decals";
-		  data.decals = [];
+	override function save():Dynamic
+	{
+		var data = super.save();
+		data._contents = "decals";
+		data.decals = [];
+		for (decal in decals) data.decals.push(decal.save((cast template : DecalLayerTemplate).scaleable, (cast template : DecalLayerTemplate).rotatable));
+		data.folder = (cast template : DecalLayerTemplate).folder;
 
-		  for (decal in decals) data.decals.push(decal.save((cast template : DecalLayerTemplate).scaleable, (cast template : DecalLayerTemplate).rotatable));
+		return data;
+	}
 
-      return data;
-    }
+	override function load(data:Dynamic):Void
+	{
+		super.load(data);
 
-    override function load(data:Dynamic):Void
-    {
-      super.load(data);
+		var decals = Imports.contentsArray(data, "decals");
 
-		  var decals = Imports.contentsArray(data, "decals");
+		for (decal in decals)
+		{
+			var position = Imports.vector(decal, "x", "y");
+			var path = haxe.io.Path.normalize(decal.texture);
+			var relative = Path.join((cast template : DecalLayerTemplate).folder, path);
+			var texture:Texture = null;
+			var scale = Imports.vector(decal, "scaleX", "scaleY", new Vector(1, 1));
+			var rotation = Imports.float(decal.rotation, 0);
+			var values = Imports.values(decal.values, (cast template:DecalLayerTemplate).values);
 
-      for (decal in decals)
-      {
-        var position = Imports.vector(decal, "x", "y");
-        var path = haxe.io.Path.normalize(decal.texture);
-        var relative = Path.join((cast template : DecalLayerTemplate).folder, path);
-        var texture:Texture = null;
-        var scale = Imports.vector(decal, "scaleX", "scaleY", new Vector(1, 1));
-        var rotation = Imports.float(decal.rotation, 0);
-				var values = Imports.values(decal.values, (cast template:DecalLayerTemplate).values);
+			trace(path + ", " + relative);
 
-        trace(path + ", " + relative);
+			for (tex in (cast template : DecalLayerTemplate).textures)
+				if (tex.path == relative)
+				{
+					texture  = tex;
+					break;
+				}
 
-        for (tex in (cast template : DecalLayerTemplate).textures)
-          if (tex.path == relative)
-          {
-            texture  = tex;
-            break;
-          }
-
-        this.decals.push(new Decal(position, path, texture, scale, rotation, values));
-      }
-    }
+			this.decals.push(new Decal(position, path, texture, scale, rotation, values));
+		}
+	}
 
 	public function getFirstAt(pos:Vector):Array<Decal>
 	{
