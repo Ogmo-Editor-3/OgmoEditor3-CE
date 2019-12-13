@@ -118,6 +118,6 @@ class DecalRotateTool extends DecalTool
 	override public function keyToolCtrl():Int return 0;
 	override public function keyToolAlt():Int return 1;
 	override public function keyToolShift():Int return 2;
-	override function isAvailable() return layerEditor.selected.length > 0;
+	override function isAvailable() return (cast layerEditor.template : DecalLayerTemplate).rotatable && layerEditor.selected.length > 0;
 
 }
