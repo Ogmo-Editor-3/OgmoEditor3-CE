@@ -1,7 +1,7 @@
 {
     "name": "ogmoeditor",
     "productName": "Ogmo",
-    "version": "3.2.1",
+    "version": "3.2.2",
     "description": "A general-case level editor for indie game developers!",
     "repository": "https://github.com/TheSpydog/OgmoEditor3-CE",
     "license": "MIT",
