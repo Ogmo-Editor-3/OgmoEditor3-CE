@@ -67,6 +67,11 @@ class LayerEditor
 	 */
 	public function loop():Void {}
 
+	/**
+	 * Override me!
+	 */
+	public function refresh():Void {}
+
 	/*
 		KEYBOARD
 	*/

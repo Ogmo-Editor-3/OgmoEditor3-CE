@@ -380,6 +380,7 @@ class Editor
 
 	function beforeSetLayer():Void
 	{
+		for (editor in layerEditors) editor.refresh();
 		toolBelt.beforeSetLayer();
 	}
 

@@ -57,6 +57,10 @@ class EntityLayerEditor extends LayerEditor
 		EDITOR.dirty();
 	}
 
+	override function refresh() {
+		selection.clear();
+	}
+
 	override function createPalettePanel():SidePanel return new EntityPalettePanel(this);
 	
 	override function createSelectionPanel():SidePanel return new EntitySelectionPanel(this);

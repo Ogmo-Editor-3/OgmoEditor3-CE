@@ -74,6 +74,11 @@ class DecalLayerEditor extends LayerEditor
 		EDITOR.dirty();
 	}
 
+	override function refresh() {
+		selected.resize(0);
+		selectedChanged = true;
+	}
+
 	override function createPalettePanel():SidePanel
 	{
 		return new DecalPalettePanel(this);
