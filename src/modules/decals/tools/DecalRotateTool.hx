@@ -34,6 +34,7 @@ class DecalRotateTool extends DecalTool
 
 	override public function onMouseUp(pos:Vector)
 	{
+		if (!rotating) return;
 		rotating = false;
 		EDITOR.locked = false;
 		EDITOR.overlayDirty();

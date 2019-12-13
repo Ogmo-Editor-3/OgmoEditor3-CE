@@ -230,6 +230,7 @@ class DecalSelectTool extends DecalTool
 			else
 				layerEditor.selected = hits;
 
+			layerEditor.selectedChanged = true;
 			mode = None;
 			EDITOR.overlayDirty();
 		}
@@ -239,7 +240,6 @@ class DecalSelectTool extends DecalTool
 			decals = null;
 		}
 
-		layerEditor.selectedChanged = true;
 	}
 
 	override public function onMouseMove(pos:Vector)

@@ -194,7 +194,7 @@ class DecalSelectionPanel extends SidePanel
                       if (value.template.matches(valueTemplate)) values.push(value);
                     }
                   }
-                  var editor = values[0].template.createEditor(values);
+                  var editor = valueTemplate.createEditor(values);
                   editor.display(this.values);
                 }
             }

@@ -39,6 +39,7 @@ class DecalResizeTool extends DecalTool
 
 	override public function onMouseUp(pos:Vector)
 	{
+		if (!resizing) return;
 		resizing = false;
 		EDITOR.locked = false;
 		EDITOR.overlayDirty();
