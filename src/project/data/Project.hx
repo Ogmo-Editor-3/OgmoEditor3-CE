@@ -1,5 +1,6 @@
 package project.data;
 
+import project.data.value.EnumValueTemplate;
 import electron.renderer.Remote;
 import js.lib.Date;
 import js.node.Path;
@@ -166,6 +167,7 @@ class Project
 
 		//Entity Templates
 		if (data.entityTags != null) for (tag in data.entityTags) entities.tags.push(tag);
+		if (data.globalEntityEnums != null) entities.globalEnums = cast ValueTemplate.loadList(data.globalEntityEnums);
 		
 		for (entity in data.entities) entities.templates.push(EntityTemplate.load(this, entity));
 		entities.refreshTagLists();
@@ -192,6 +194,7 @@ class Project
 			defaultExportMode: defaultExportMode,
 			compactExport: compactExport,
 			entityTags: entities.tags,
+			globalEntityEnums: ValueTemplate.saveList(cast entities.globalEnums),
 			layers: [for (layer in layers) layer.save()],
 			entities: [for (entity in entities.templates) entity.save()],
 			tilesets: [for (tileset in tilesets) tileset.save()],
@@ -234,6 +237,7 @@ typedef ProjectSaveFile =
 	defaultExportMode:String,
 	compactExport:Bool,
 	entityTags:Array<String>,
+	globalEntityEnums:Array<EnumValueTemplate>,
 	layers:Array<Dynamic>,
 	entities:Array<Dynamic>,
 	tilesets:Array<Dynamic>,

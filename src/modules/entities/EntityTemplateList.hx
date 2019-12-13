@@ -1,15 +1,19 @@
 package modules.entities;
 
+import project.data.value.EnumValueTemplate;
+
 class EntityTemplateList
 {
 	public var templates: Array<EntityTemplate>;
 	public var tags:Array<String>;
 	public var tagLists:Map<String, Array<EntityTemplate>>;
+	public var globalEnums:Array<EnumValueTemplate>;
 
 	public function new() {
 		templates = [];
 		tags = [];
 		tagLists = new Map();
+		globalEnums = [];
 	}
 
 	public function add(template:EntityTemplate)
