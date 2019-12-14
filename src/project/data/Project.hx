@@ -1,5 +1,7 @@
 package project.data;
 
+import sys.io.File;
+import js.node.vm.Script;
 import electron.renderer.Remote;
 import js.lib.Date;
 import js.node.Path;
@@ -20,6 +22,7 @@ class Project
 	public var anglesRadians:Bool = true;
 	public var defaultExportMode:String = ".json";
 	public var compactExport:Bool = false;
+	public var externalScript:String;
 	public var directoryDepth:Int = 5;
 	public var layerGridDefaultSize = new Vector(8, 8);
 
@@ -36,6 +39,7 @@ class Project
 	public var path:String;
 	public var lastSavePath:String;
 	public var _nextUnsavedLevelID:Int = 0;
+	public var scriptObject:Dynamic;
 
 	public function new(path:String)
 	{
@@ -148,6 +152,7 @@ class Project
 		levelValues = ValueTemplate.loadList(data.levelValues);
 		defaultExportMode = Imports.string(data.defaultExportMode, ".json");
 		compactExport = data.compactExport;
+		externalScript = data.externalScript;
 
 		// tilesets
 		if (data.tilesets != null) for (tileset in data.tilesets) tilesets.push(Tileset.load(this, tileset));
@@ -170,6 +175,16 @@ class Project
 		for (entity in data.entities) entities.templates.push(EntityTemplate.load(this, entity));
 		entities.refreshTagLists();
 
+		// load and run the external script and save the execution context
+		if (externalScript.length > 0) {
+			var scriptLocation:String = getAbsoluteLevelPath(externalScript);
+			if (sys.FileSystem.exists(scriptLocation)) {
+				var contents:String = File.getContent(scriptLocation);
+				var scriptContext:Script = new Script(contents, {filename: scriptLocation});
+				scriptObject = scriptContext.runInThisContext();
+			}
+		}
+
 		initLastSavePath();
 		return this;
 	}
@@ -191,6 +206,7 @@ class Project
 			levelValues: ValueTemplate.saveList(this.levelValues),
 			defaultExportMode: defaultExportMode,
 			compactExport: compactExport,
+			externalScript: externalScript,
 			entityTags: entities.tags,
 			layers: [for (layer in layers) layer.save()],
 			entities: [for (entity in entities.templates) entity.save()],
@@ -233,6 +249,7 @@ typedef ProjectSaveFile =
 	levelValues:Array<Dynamic>, // TODO: do we need more specific than this? -01010111
 	defaultExportMode:String,
 	compactExport:Bool,
+	externalScript:String,
 	entityTags:Array<String>,
 	layers:Array<Dynamic>,
 	entities:Array<Dynamic>,
