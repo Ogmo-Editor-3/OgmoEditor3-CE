@@ -1,7 +1,5 @@
 package project.data;
 
-import sys.io.File;
-import js.node.vm.Script;
 import electron.renderer.Remote;
 import js.lib.Date;
 import js.node.Path;
@@ -39,7 +37,7 @@ class Project
 	public var path:String;
 	public var lastSavePath:String;
 	public var _nextUnsavedLevelID:Int = 0;
-	public var scriptObject:Dynamic;
+	public var projectHooks:ProjectHooks;
 
 	public function new(path:String)
 	{
@@ -175,15 +173,9 @@ class Project
 		for (entity in data.entities) entities.templates.push(EntityTemplate.load(this, entity));
 		entities.refreshTagLists();
 
-		// load and run the external script and save the execution context
-		if (externalScript.length > 0) {
-			var scriptLocation:String = getAbsoluteLevelPath(externalScript);
-			if (sys.FileSystem.exists(scriptLocation)) {
-				var contents:String = File.getContent(scriptLocation);
-				var scriptContext:Script = new Script(contents, {filename: scriptLocation});
-				scriptObject = scriptContext.runInThisContext();
-			}
-		}
+		// load user project hooks
+		var scriptLocation:String = getAbsoluteLevelPath(externalScript);
+		projectHooks = new ProjectHooks(scriptLocation);
 
 		initLastSavePath();
 		return this;
@@ -212,6 +204,8 @@ class Project
 			entities: [for (entity in entities.templates) entity.save()],
 			tilesets: [for (tileset in tilesets) tileset.save()],
 		};
+
+		data = projectHooks.BeforeSaveProject(this, data);
 
 		initLastSavePath();
 		return data;

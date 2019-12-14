@@ -121,10 +121,8 @@ class Level
 		for (layer in layers)
 			data.layers.push(layer.save());
 
-		if (project.scriptObject && project.scriptObject.saveLevel) {
-			data = project.scriptObject.saveLevel(project, data);
-		}
-		
+		data = project.projectHooks.BeforeSaveLevel(project, data);
+
 		return data;
 	}
 
