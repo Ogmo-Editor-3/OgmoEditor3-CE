@@ -174,7 +174,7 @@ class Project
 		entities.refreshTagLists();
 
 		// load user project hooks
-		var scriptLocation:String = getAbsoluteLevelPath(externalScript);
+		var scriptLocation:String = externalScript != null ? getAbsoluteLevelPath(externalScript) : "";
 		projectHooks = new ProjectHooks(scriptLocation);
 
 		initLastSavePath();
