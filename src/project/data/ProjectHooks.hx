@@ -6,6 +6,7 @@ import js.node.vm.Script;
 class ProjectHooks
 {
   private var script:Script;
+  private var beforeLoadLevelFn:Dynamic;
   private var beforeSaveLevelFn:Dynamic;
   private var beforeSaveProjectFn:Dynamic;
 
@@ -26,8 +27,17 @@ class ProjectHooks
       return;
     }
 
+    beforeLoadLevelFn = js.Lib.typeof(scriptObject.beforeLoadLevel) == "function" ? scriptObject.beforeLoadLevel : null;
     beforeSaveLevelFn = js.Lib.typeof(scriptObject.beforeSaveLevel) == "function" ? scriptObject.beforeSaveLevel : null;
     beforeSaveProjectFn = js.Lib.typeof(scriptObject.beforeSaveProject) == "function" ? scriptObject.beforeSaveProject : null; 
+  }
+
+  public function BeforeLoadLevel(project:Project, data:Dynamic):Dynamic {
+    if (beforeLoadLevelFn == null) {
+      return data;
+    }
+    
+    return beforeLoadLevelFn(project, data);
   }
 
   public function BeforeSaveLevel(project:Project, data:Dynamic):Dynamic {

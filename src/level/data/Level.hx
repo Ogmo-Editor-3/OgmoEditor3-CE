@@ -78,6 +78,8 @@ class Level
 	
 	public function load(data:Dynamic):Level
 	{
+		data = this.project.projectHooks.BeforeLoadLevel(this.project, data);
+
 		this.data.loadFrom(data);
 		values = Imports.values(data, OGMO.project.levelValues);
 		
