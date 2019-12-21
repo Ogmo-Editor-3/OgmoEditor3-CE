@@ -71,7 +71,7 @@
         float: left;
 
         & .button { width: 100%; float: left;}
-        & .button:first-child { margin-bottom: 4%; }
+        & .button:not():last-child { margin-bottom: 4%; }
     }
 
     &_content
