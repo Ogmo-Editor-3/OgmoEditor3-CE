@@ -20,6 +20,7 @@ class Project
 	public var anglesRadians:Bool = true;
 	public var defaultExportMode:String = ".json";
 	public var compactExport:Bool = false;
+	public var externalScript:String;
 	public var directoryDepth:Int = 5;
 	public var layerGridDefaultSize = new Vector(8, 8);
 
@@ -36,6 +37,7 @@ class Project
 	public var path:String;
 	public var lastSavePath:String;
 	public var _nextUnsavedLevelID:Int = 0;
+	public var projectHooks:ProjectHooks;
 
 	public function new(path:String)
 	{
@@ -148,6 +150,7 @@ class Project
 		levelValues = ValueTemplate.loadList(data.levelValues);
 		defaultExportMode = Imports.string(data.defaultExportMode, ".json");
 		compactExport = data.compactExport;
+		externalScript = data.externalScript;
 
 		// tilesets
 		if (data.tilesets != null) for (tileset in data.tilesets) tilesets.push(Tileset.load(this, tileset));
@@ -170,6 +173,10 @@ class Project
 		for (entity in data.entities) entities.templates.push(EntityTemplate.load(this, entity));
 		entities.refreshTagLists();
 
+		// load user project hooks
+		var scriptLocation:String = externalScript != null ? getAbsoluteLevelPath(externalScript) : "";
+		projectHooks = new ProjectHooks(scriptLocation);
+
 		initLastSavePath();
 		return this;
 	}
@@ -191,11 +198,14 @@ class Project
 			levelValues: ValueTemplate.saveList(this.levelValues),
 			defaultExportMode: defaultExportMode,
 			compactExport: compactExport,
+			externalScript: externalScript,
 			entityTags: entities.tags,
 			layers: [for (layer in layers) layer.save()],
 			entities: [for (entity in entities.templates) entity.save()],
 			tilesets: [for (tileset in tilesets) tileset.save()],
 		};
+
+		data = projectHooks.BeforeSaveProject(this, data);
 
 		initLastSavePath();
 		return data;
@@ -233,6 +243,7 @@ typedef ProjectSaveFile =
 	levelValues:Array<Dynamic>, // TODO: do we need more specific than this? -01010111
 	defaultExportMode:String,
 	compactExport:Bool,
+	externalScript:String,
 	entityTags:Array<String>,
 	layers:Array<Dynamic>,
 	entities:Array<Dynamic>,

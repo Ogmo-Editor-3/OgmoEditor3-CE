@@ -14,6 +14,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
 
   public var projectName:JQuery;
   public var backgroundColor:JQuery;
+  public var externalScript:JQuery;
   public var gridColor:JQuery;
   public var angleExport:JQuery;
   public var directoryDepth:JQuery;
@@ -33,6 +34,9 @@ class ProjectGeneralPanel extends ProjectEditorPanel
 
     directoryDepth = Fields.createField("00", "5");
     Fields.createSettingsBlock(root, directoryDepth, SettingsBlock.Third, "Project Directory Depth", SettingsBlock.InlineTitle);
+
+    externalScript = Fields.createField("External Script Location");
+    Fields.createSettingsBlock(root, externalScript, SettingsBlock.Full, "External Script Location", SettingsBlock.InlineTitle);
 
     backgroundColor = Fields.createColor("Background Color", Color.white, root);
     Fields.createSettingsBlock(root, backgroundColor, SettingsBlock.Half, "Bg Color", SettingsBlock.InlineTitle);
@@ -72,6 +76,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     Fields.setColor(backgroundColor, OGMO.project.backgroundColor);
     Fields.setColor(gridColor, OGMO.project.gridColor);
     compactExport.val(!OGMO.project.compactExport ? "0" : "1");
+    Fields.setField(externalScript, OGMO.project.externalScript);
     angleExport.val(OGMO.project.anglesRadians ? "0" : "1");
     Fields.setVector(layerGridDefaultSize, OGMO.project.layerGridDefaultSize);
     Fields.setVector(levelMinSize, OGMO.project.levelMinSize);
@@ -88,6 +93,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     OGMO.project.backgroundColor = Fields.getColor(backgroundColor);
     OGMO.project.gridColor = Fields.getColor(gridColor);
     OGMO.project.compactExport = compactExport.val() != "0";
+    OGMO.project.externalScript = externalScript.val();
     OGMO.project.anglesRadians = angleExport.val() == "0";
     OGMO.project.layerGridDefaultSize = Fields.getVector(layerGridDefaultSize);
     OGMO.project.levelMinSize = Fields.getVector(levelMinSize);
