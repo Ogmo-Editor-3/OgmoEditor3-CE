@@ -153,7 +153,7 @@ class Level
 			ACTUAL SAVING
 	*/
 
-	public function doSave():Bool
+	public function doSave(refresh:Bool = true):Bool
 	{
 		if (path == null)
 			return doSaveAs();
@@ -166,10 +166,13 @@ class Level
 			if (EDITOR.level == this)
 				OGMO.updateWindowTitle();
 
-			if (exists)
-				EDITOR.levelsPanel.refreshLabelsAndIcons();
-			else
-				EDITOR.levelsPanel.refresh();
+			if (refresh) 
+			{
+				if (exists)
+					EDITOR.levelsPanel.refreshLabelsAndIcons();
+				else
+					EDITOR.levelsPanel.refresh();
+			}
 
 			return true;
 		}
