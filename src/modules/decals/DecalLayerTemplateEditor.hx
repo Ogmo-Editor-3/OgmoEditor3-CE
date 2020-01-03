@@ -31,9 +31,8 @@ class DecalLayerTemplateEditor extends LayerTemplateEditor
     Fields.createLineBreak(into);
 
     // folders
-    folderHolder = new JQuery("<div>");
-    into.append(folderHolder);
-    folder = Fields.createFolderpath(decalTemplate.folder, false, folderHolder);
+    folder = Fields.createFolderpath(decalTemplate.folder, false);
+    Fields.createSettingsBlock(into, folder, SettingsBlock.Full);
 
     // create custom values
     valueManager = new ValueTemplateManager(into, decalTemplate.values);
@@ -49,7 +48,7 @@ class DecalLayerTemplateEditor extends LayerTemplateEditor
     decalTemplate.includeImageSequence = Fields.getCheckbox(includeImageSequenceField);
     decalTemplate.scaleable = Fields.getCheckbox(scaleable);
     decalTemplate.rotatable = Fields.getCheckbox(rotatable);
-    decalTemplate.folder = Fields.getFolderpath(folder);
+    decalTemplate.folder = Fields.getPath(folder);
 
     // save custom values
     valueManager.save();

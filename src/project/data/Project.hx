@@ -21,6 +21,7 @@ class Project
 	public var defaultExportMode:String = ".json";
 	public var compactExport:Bool = false;
 	public var externalScript:String;
+	public var playCommand:String;
 	public var directoryDepth:Int = 5;
 	public var layerGridDefaultSize = new Vector(8, 8);
 
@@ -152,6 +153,7 @@ class Project
 		defaultExportMode = Imports.string(data.defaultExportMode, ".json");
 		compactExport = data.compactExport;
 		externalScript = data.externalScript;
+		playCommand = data.playCommand;
 
 		// tilesets
 		if (data.tilesets != null) for (tileset in data.tilesets) tilesets.push(Tileset.load(this, tileset));
@@ -200,6 +202,7 @@ class Project
 			defaultExportMode: defaultExportMode,
 			compactExport: compactExport,
 			externalScript: externalScript,
+			playCommand: playCommand,
 			entityTags: entities.tags,
 			layers: [for (layer in layers) layer.save()],
 			entities: [for (entity in entities.templates) entity.save()],
@@ -245,6 +248,7 @@ typedef ProjectSaveFile =
 	defaultExportMode:String,
 	compactExport:Bool,
 	externalScript:String,
+	playCommand:String,
 	entityTags:Array<String>,
 	layers:Array<Dynamic>,
 	entities:Array<Dynamic>,

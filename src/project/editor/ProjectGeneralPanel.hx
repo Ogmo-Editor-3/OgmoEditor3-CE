@@ -15,6 +15,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
   public var projectName:JQuery;
   public var backgroundColor:JQuery;
   public var externalScript:JQuery;
+  public var playCommand:JQuery;
   public var gridColor:JQuery;
   public var angleExport:JQuery;
   public var directoryDepth:JQuery;
@@ -35,14 +36,23 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     directoryDepth = Fields.createField("00", "5");
     Fields.createSettingsBlock(root, directoryDepth, SettingsBlock.Third, "Project Directory Depth", SettingsBlock.InlineTitle);
 
-    externalScript = Fields.createField("External Script Location");
-    Fields.createSettingsBlock(root, externalScript, SettingsBlock.Full, "External Script Location", SettingsBlock.InlineTitle);
+    Fields.createLineBreak(root);
+
+    externalScript = Fields.createFilepath("External Script", true, [{name: 'External Script', extensions: ['js']}], null, function() { Fields.setPath(externalScript, ''); });
+    Fields.createSettingsBlock(root, externalScript, SettingsBlock.Half, "External Script", SettingsBlock.InlineTitle);
+
+    playCommand = Fields.createField("Play Command", "");
+    Fields.createSettingsBlock(root, playCommand, SettingsBlock.Half, "Play Command", SettingsBlock.InlineTitle);
+
+    Fields.createLineBreak(root);
 
     backgroundColor = Fields.createColor("Background Color", Color.white, root);
     Fields.createSettingsBlock(root, backgroundColor, SettingsBlock.Half, "Bg Color", SettingsBlock.InlineTitle);
 
     gridColor = Fields.createColor("Grid Color", Color.white);
     Fields.createSettingsBlock(root, gridColor, SettingsBlock.Half, "Grid Color", SettingsBlock.InlineTitle);
+
+    Fields.createLineBreak(root);
 
     var options = new Map();
     options.set('0', 'Pretty');
@@ -58,6 +68,8 @@ class ProjectGeneralPanel extends ProjectEditorPanel
 
     layerGridDefaultSize = Fields.createVector(new Vector(0, 0));
     Fields.createSettingsBlock(root, layerGridDefaultSize, SettingsBlock.Third, "Layer Grid Default Size", SettingsBlock.InlineTitle);
+
+    Fields.createLineBreak(root);
 
     // level size
     levelMinSize = Fields.createVector(new Vector(0, 0));
@@ -76,7 +88,8 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     Fields.setColor(backgroundColor, OGMO.project.backgroundColor);
     Fields.setColor(gridColor, OGMO.project.gridColor);
     compactExport.val(!OGMO.project.compactExport ? "0" : "1");
-    Fields.setField(externalScript, OGMO.project.externalScript);
+    Fields.setPath(externalScript, OGMO.project.externalScript);
+    Fields.setField(playCommand, OGMO.project.playCommand);
     angleExport.val(OGMO.project.anglesRadians ? "0" : "1");
     Fields.setVector(layerGridDefaultSize, OGMO.project.layerGridDefaultSize);
     Fields.setVector(levelMinSize, OGMO.project.levelMinSize);
@@ -93,7 +106,8 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     OGMO.project.backgroundColor = Fields.getColor(backgroundColor);
     OGMO.project.gridColor = Fields.getColor(gridColor);
     OGMO.project.compactExport = compactExport.val() != "0";
-    OGMO.project.externalScript = externalScript.val();
+    OGMO.project.externalScript = Fields.getPath(externalScript);
+    OGMO.project.playCommand = Fields.getField(playCommand);
     OGMO.project.anglesRadians = angleExport.val() == "0";
     OGMO.project.layerGridDefaultSize = Fields.getVector(layerGridDefaultSize);
     OGMO.project.levelMinSize = Fields.getVector(levelMinSize);

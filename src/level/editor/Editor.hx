@@ -1,5 +1,7 @@
 package level.editor;
 
+import js.node.ChildProcess;
+import haxe.io.Path;
 import util.Matrix;
 import io.Imports;
 import util.Color;
@@ -226,6 +228,27 @@ class Editor
 					OGMO.gotoEditorPage();
 				});
 			});
+
+			new JQuery('.play-command').click(function(e)
+				{
+					if (OGMO.project.playCommand.length == 0)
+					{
+						Popup.open('No Play Command Set', 'warning', 'No Play Command has been set for this Project.', ['Okay']);
+						return;
+					}
+
+					// Sys.setCwd(Path.directory(OGMO.project.path));
+					// Sys.command('ls');
+					var processOptions:ChildProcessExecOptions = {
+						cwd: Path.directory(OGMO.project.path)
+					}
+					
+					var ex = ChildProcess.exec(OGMO.project.playCommand, processOptions, (a,b,c) -> {
+						if (a != null) Popup.open('Play Command: "${OGMO.project.playCommand}"', 'warning', '$a', ['Okay']);
+						else Popup.open('Play Command: "${OGMO.project.playCommand}"', 'warning', 'Output: $b', ['Okay']);
+					});
+					Popup.open('Running Play Command', 'warning', 'Running Play Command from the Project Directory: "${OGMO.project.playCommand}"', ['Okay', 'Kill'], (i) -> if (i == 1) ex.kill());
+				});
 
 			new JQuery('.sticker-zoom').click((e) -> {
 				var zoom = (EDITOR.level.zoom.round() / EDITOR.level.zoom).max(1 / EDITOR.level.zoom);
