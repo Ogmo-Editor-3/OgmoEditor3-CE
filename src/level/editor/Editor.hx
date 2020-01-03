@@ -51,6 +51,8 @@ class Editor
 	var lastPaletteHeight:Float = 0;
 	var state:Null<EditorState>;
 
+	var executingPlayCommand:Null<Dynamic>;
+
 	public function new()
 	{
 		EDITOR = this;
@@ -230,25 +232,25 @@ class Editor
 			});
 
 			new JQuery('.play-command').click(function(e)
+			{
+				if (OGMO.project.playCommand.length == 0)
 				{
-					if (OGMO.project.playCommand.length == 0)
-					{
-						Popup.open('No Play Command Set', 'warning', 'No Play Command has been set for this Project.', ['Okay']);
-						return;
-					}
-
-					// Sys.setCwd(Path.directory(OGMO.project.path));
-					// Sys.command('ls');
+					Popup.open('No Play Command Set', 'warning', 'No Play Command has been set for this Project.', ['Okay']);
+					return;
+				}
+				
+				if (executingPlayCommand == null)
+				{
 					var processOptions:ChildProcessExecOptions = {
 						cwd: Path.directory(OGMO.project.path)
 					}
-					
-					var ex = ChildProcess.exec(OGMO.project.playCommand, processOptions, (a,b,c) -> {
+					executingPlayCommand = ChildProcess.exec(OGMO.project.playCommand, processOptions, (a,b,c) -> {
 						if (a != null) Popup.open('Play Command: "${OGMO.project.playCommand}"', 'warning', '$a', ['Okay']);
 						else Popup.open('Play Command: "${OGMO.project.playCommand}"', 'warning', 'Output: $b', ['Okay']);
 					});
-					Popup.open('Running Play Command', 'warning', 'Running Play Command from the Project Directory: "${OGMO.project.playCommand}"', ['Okay', 'Kill'], (i) -> if (i == 1) ex.kill());
-				});
+				}
+				Popup.open('Running Play Command', 'warning', 'Running Play Command from the Project Directory: "${OGMO.project.playCommand}"', ['Okay', 'Kill'], (i) -> if (i == 1) executingPlayCommand.kill());
+			});
 
 			new JQuery('.sticker-zoom').click((e) -> {
 				var zoom = (EDITOR.level.zoom.round() / EDITOR.level.zoom).max(1 / EDITOR.level.zoom);
