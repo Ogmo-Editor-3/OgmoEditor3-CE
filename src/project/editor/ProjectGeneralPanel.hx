@@ -69,7 +69,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
     levelValueManager = new ValueTemplateManager(root, [], 'Level Values');
   }
 
-  override function begin():Void
+  override function begin(reset:Bool = false):Void
   {
     Fields.setField(projectName, OGMO.project.name);
     Fields.setField(directoryDepth, OGMO.project.directoryDepth.string());

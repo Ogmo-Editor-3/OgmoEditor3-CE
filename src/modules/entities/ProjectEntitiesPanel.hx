@@ -110,8 +110,9 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 		});
 	}
 
-	override function begin()
+	override function begin(reset:Bool = false)
 	{
+		if (reset) current = null;
 		inspect(current == null ? OGMO.project.entities.templates[0] : current);
 	}
 

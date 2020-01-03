@@ -43,12 +43,14 @@ class ProjectLayersPanel extends ProjectEditorPanel
     root.append(inspector);
   }
 
-  override public function begin():Void
+  override public function begin(reset:Bool = false):Void
   {
     // new layer stuff
     buttons.empty();
     var newLayerButton = Fields.createButton("plus", 'New Layer', buttons);
     newLayerButton.on("click", function() { newLayer(); });
+
+    if (reset) inspecting = null;
 
     refreshList();
     inspect(inspecting == null ? OGMO.project.layers[0] : inspecting);

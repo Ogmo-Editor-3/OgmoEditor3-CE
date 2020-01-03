@@ -179,7 +179,7 @@ class ProjectEditor
 			for (i in 0...panels.length) if (start == null || panels[i].order < start.order) start = panels[i];
 
 			setPanel(start);
-			for (i in 0...panels.length) panels[i].begin();
+			for (i in 0...panels.length) panels[i].begin(true);
 			OGMO.updateWindowTitle();
 		}
 		active = set;

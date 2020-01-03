@@ -70,8 +70,9 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 		}
 	}
 
-	override function begin():Void
+	override function begin(reset:Bool = false):Void
 	{
+		if (reset) inspecting = null;
 		refreshList();
 		inspect(inspecting == null ? OGMO.project.tilesets[0] : inspecting);
 	}

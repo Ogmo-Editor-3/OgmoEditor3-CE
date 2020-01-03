@@ -21,6 +21,6 @@ class ProjectEditorPanel
         root.addClass("project_" + id + "_panel");
     }
 
-    public function begin():Void {}
+    public function begin(reset:Bool = false):Void {}
     public function end():Void {}
 }
