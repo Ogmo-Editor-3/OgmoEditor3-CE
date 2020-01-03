@@ -36,7 +36,7 @@ class ProjectHooks
     beforeSaveProjectFn = js.Lib.typeof(scriptObject.beforeSaveProject) == "function" ? scriptObject.beforeSaveProject : null; 
   }
 
-  public function BeforeLoadLevel(project:Project, data:Dynamic):Dynamic {
+  public function beforeLoadLevel(project:Project, data:Dynamic):Dynamic {
     if (beforeLoadLevelFn == null) {
       return data;
     }
@@ -44,7 +44,7 @@ class ProjectHooks
     return beforeLoadLevelFn(project, data);
   }
 
-  public function BeforeSaveLevel(project:Project, data:Dynamic):Dynamic {
+  public function beforeSaveLevel(project:Project, data:Dynamic):Dynamic {
     if (beforeSaveLevelFn == null) {
       return data;
     }
@@ -52,7 +52,7 @@ class ProjectHooks
     return beforeSaveLevelFn(project, data);
   }
 
-  public function BeforeSaveProject(project:Project, data:Dynamic):Dynamic {
+  public function beforeSaveProject(project:Project, data:Dynamic):Dynamic {
     if (beforeSaveProjectFn == null) {
       return data;
     }

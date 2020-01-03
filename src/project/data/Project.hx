@@ -206,7 +206,7 @@ class Project
 			tilesets: [for (tileset in tilesets) tileset.save()],
 		};
 
-		data = projectHooks.BeforeSaveProject(this, data);
+		data = projectHooks.beforeSaveProject(this, data);
 
 		initLastSavePath();
 		return data;

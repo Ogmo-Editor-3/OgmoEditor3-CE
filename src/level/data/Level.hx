@@ -78,7 +78,7 @@ class Level
 	
 	public function load(data:Dynamic):Level
 	{
-		data = this.project.projectHooks.BeforeLoadLevel(this.project, data);
+		data = this.project.projectHooks.beforeLoadLevel(this.project, data);
 
 		this.data.loadFrom(data);
 		values = Imports.values(data, OGMO.project.levelValues);
@@ -123,7 +123,7 @@ class Level
 		for (layer in layers)
 			data.layers.push(layer.save());
 
-		data = project.projectHooks.BeforeSaveLevel(project, data);
+		data = project.projectHooks.beforeSaveLevel(project, data);
 
 		return data;
 	}
