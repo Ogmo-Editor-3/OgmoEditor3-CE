@@ -10,12 +10,16 @@ class ProjectHooks
   private var beforeSaveLevelFn:Dynamic;
   private var beforeSaveProjectFn:Dynamic;
 
-  public function new(scriptFile:String) {
+  public function new(scriptFile:String = '') {
+    set(scriptFile);
+  }
+
+  public function set(scriptFile:String) {
     if (scriptFile.length <= 0) {
       return;
     }
 
-    if (!sys.FileSystem.exists(scriptFile)) {
+    if (!sys.FileSystem.exists(scriptFile) || sys.FileSystem.isDirectory(scriptFile)) {
       return;
     }
 

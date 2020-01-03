@@ -43,6 +43,7 @@ class Project
 	{
 		this.name = "New Project";
 		this.path = Path.resolve(path);
+		this.projectHooks = new ProjectHooks();
 	}
 	
 	public function unload()
@@ -175,7 +176,7 @@ class Project
 
 		// load user project hooks
 		var scriptLocation:String = externalScript != null ? getAbsoluteLevelPath(externalScript) : "";
-		projectHooks = new ProjectHooks(scriptLocation);
+		projectHooks.set(scriptLocation);
 
 		initLastSavePath();
 		return this;
