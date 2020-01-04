@@ -17,6 +17,8 @@ import rendering.GLRenderer;
 import util.Vector;
 import util.Keys;
 
+import js.node.child_process.ChildProcess as ChildProcessObject;
+
 class Editor
 {	
 	public var root: JQuery;
@@ -51,7 +53,7 @@ class Editor
 	var lastPaletteHeight:Float = 0;
 	var state:Null<EditorState>;
 
-	var executingPlayCommand:Null<Dynamic>;
+	var executingPlayCommand:Null<ChildProcessObject>;
 
 	public function new()
 	{
@@ -241,15 +243,27 @@ class Editor
 				
 				if (executingPlayCommand == null)
 				{
-					var processOptions:ChildProcessExecOptions = {
-						cwd: Path.directory(OGMO.project.path)
-					}
-					executingPlayCommand = ChildProcess.exec(OGMO.project.playCommand, processOptions, (a,b,c) -> {
-						if (a != null) Popup.open('Play Command: "${OGMO.project.playCommand}"', 'warning', '$a', ['Okay']);
-						else Popup.open('Play Command: "${OGMO.project.playCommand}"', 'warning', 'Output: $b', ['Okay']);
+					executingPlayCommand = ChildProcess.spawn(OGMO.project.playCommand, {
+						cwd: Path.directory(OGMO.project.path),
+						shell: true
+					});
+
+					var err = '';
+					var out = '';
+
+					executingPlayCommand.stderr.on('data', (data) -> err += data.toString());
+					executingPlayCommand.stdout.on('data', (data) -> out += data.toString());
+
+					executingPlayCommand.on('exit', () -> {
+						if (err.length > 0) Popup.open('Errored Play Command: "${OGMO.project.playCommand}"', 'warning', '${err}', ['Okay']);
+						else Popup.open('Play Command: "${OGMO.project.playCommand}"', 'sparkle', 'Output: ${out}', ['Okay']);
+						executingPlayCommand = null;
 					});
 				}
-				Popup.open('Running Play Command', 'warning', 'Running Play Command from the Project Directory: "${OGMO.project.playCommand}"', ['Okay', 'Kill'], (i) -> if (i == 1) executingPlayCommand.kill());
+				Popup.open('Running Play Command', 'sparkle', 'Running Play Command from the Project Directory: "${OGMO.project.playCommand}"', ['Okay', 'Kill'], (i) -> if (i == 1) {
+					executingPlayCommand.kill();
+					executingPlayCommand = null;
+				});
 			});
 
 			new JQuery('.sticker-zoom').click((e) -> {
@@ -358,6 +372,8 @@ class Editor
 		{
 			EDITOR.levelManager.clear();
 			level = null;
+			if (executingPlayCommand != null) executingPlayCommand.kill();
+			executingPlayCommand = null;
 			root.css("display", "none");
 		}
 	}
