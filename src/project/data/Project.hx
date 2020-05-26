@@ -88,7 +88,7 @@ class Project
 	}
 
 	/*
-			LEVEL PATHS
+		LEVEL PATHS
 	*/
 
 	public function getAbsoluteLevelPath(path:String):String
@@ -134,7 +134,7 @@ class Project
 	}
 
 	/*
-			SAVE AND LOAD
+		SAVE AND LOAD
 	*/
 
 	public function load(data:ProjectSaveFile):Project
@@ -216,7 +216,7 @@ class Project
 	}
 
 	/*
-			DEBUG
+		DEBUG
 	*/
 
 	public function logLayers()

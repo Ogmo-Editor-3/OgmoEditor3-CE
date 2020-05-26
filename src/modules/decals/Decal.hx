@@ -40,7 +40,7 @@ class Decal
 		if (rotatable) data.rotation = rotation;
 		data.texture = haxe.io.Path.normalize(path);
 		Export.values(data, values);
-    
+
 		return data;
 	}
 

@@ -269,7 +269,7 @@ class Fields
 	public static function createFolderpath(path:String, deleteable:Bool, ?into:JQuery, ?onDelete:Void->Void):JQuery
 	{
 		var holder = new JQuery('<div class="filepath">');
-    var element = new JQuery('<input disabled>');
+		var element = new JQuery('<input disabled>');
 		element.val(path);
 		holder.append(element);
 

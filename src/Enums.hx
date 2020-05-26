@@ -1,22 +1,22 @@
 @:enum
 abstract TileExportModes (Int) from Int to Int
 {
-  var IDS;
-  var COORDS;
+	var IDS;
+	var COORDS;
 }
 
 @:enum
 abstract ArrayExportModes (Int) from Int to Int
 {
-  var ONE;
-  var TWO;
+	var ONE;
+	var TWO;
 }
 
 @:enum
 abstract NodeDisplayModes (Int) from Int to Int
 {
-  var PATH;
-  var CIRCUIT;
-  var FAN;
-  var NONE;
+	var PATH;
+	var CIRCUIT;
+	var FAN;
+	var NONE;
 }

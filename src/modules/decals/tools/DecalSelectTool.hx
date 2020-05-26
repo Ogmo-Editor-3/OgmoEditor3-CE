@@ -75,7 +75,7 @@ class DecalSelectTool extends DecalTool
 			{
 				EDITOR.level.store("duplicated decals");
 
-				var newSelection:Array<Decal>  = [];
+				var newSelection:Array<Decal> = [];
 				for (decal in layerEditor.selected)
 				{
 					var clone = new Decal(decal.position.clone().add(new Vector(32, 32)), decal.path, decal.texture, decal.scale.clone(), decal.rotation);

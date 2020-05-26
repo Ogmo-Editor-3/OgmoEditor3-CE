@@ -89,7 +89,7 @@ class Ogmo
 			switch (e.which)
 			{
 				case Keys.Space:
-					if  (e.target == Browser.document.body) e.preventDefault();
+					if (e.target == Browser.document.body) e.preventDefault();
 				case Keys.Z:
 				case Keys.Y:
 					if (ogmo.ctrl) e.preventDefault();
@@ -126,7 +126,7 @@ class Ogmo
 		Start.up();
 		//Init the toolbelt
 		editor.toolBelt = new ToolBelt();
-		updateWindowTitle();		
+		updateWindowTitle();
 	}
 
 	public function loop(?dt:Float):Void
@@ -135,7 +135,7 @@ class Ogmo
 		
 		// Time update
 		{
-			var now = Date.now().getTime();		   
+			var now = Date.now().getTime();
 			deltaTime = (now - lastTime) / 1000;
 			totalTime = (now - startTime) / 1000;
 			lastTime = now;
@@ -184,7 +184,7 @@ class Ogmo
 	}
 
 	/*
-			SWITCH PAGES
+		SWITCH PAGES
 	*/
 
 	public function gotoStartPage():Void
@@ -212,7 +212,7 @@ class Ogmo
 	}
 
 	/*
-			TAB
+		TAB
 	*/
 
 	public function onPopupStart():Void
@@ -227,7 +227,7 @@ class Ogmo
 	}
 
 	/*
-			KEYBOARD
+		KEYBOARD
 	*/
 
 	public function keyPress(key:Dynamic):Void
@@ -280,7 +280,7 @@ class Ogmo
 	}
 
 	/*
-			KEYBOARD HELPERS
+		KEYBOARD HELPERS
 	*/
 
 	function get_ctrl():Bool

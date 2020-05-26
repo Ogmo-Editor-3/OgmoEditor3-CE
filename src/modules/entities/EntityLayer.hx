@@ -6,7 +6,6 @@ import util.Vector;
 
 class EntityLayer extends Layer
 {
-
 	public var entities:EntityList;
 
 	public function new(level:Level, id:Int, ?entities:EntityList, ?nextID:Int)

@@ -7,64 +7,64 @@ import level.data.Value;
 
 class FloatValueTemplate extends ValueTemplate
 {
-    public static function startup()
-    {
-        var n = new ValueDefinition(FloatValueTemplate, FloatValueTemplateEditor, "value-float", "Float");
-        ValueDefinition.definitions.push(n);
-    }
-    
-    public var defaults:Float = 0;
-    public var bounded:Bool = false;
-    public var min:Float = 0;
-    public var max:Float = 100;
+	public static function startup()
+	{
+		var n = new ValueDefinition(FloatValueTemplate, FloatValueTemplateEditor, "value-float", "Float");
+		ValueDefinition.definitions.push(n);
+	}
 
-    override function getHashCode(): String
-    {
-        return name + ":fl" + (bounded ? (":" + min + ":" + max) : "");
-    }
+	public var defaults:Float = 0;
+	public var bounded:Bool = false;
+	public var min:Float = 0;
+	public var max:Float = 100;
 
-    override function getDefault():Float
-    {
-        return defaults;
-    }
+	override function getHashCode(): String
+	{
+		return name + ":fl" + (bounded ? (":" + min + ":" + max) : "");
+	}
 
-    override function validate(val:Dynamic):Float
-    {
-        var number = Imports.float(val, defaults);
-        if (bounded && number < min)
-            number = min;
-        else if (bounded && number > max)
-            number = max;
-        return number;
-    }
+	override function getDefault():Float
+	{
+		return defaults;
+	}
 
-    override function createEditor(values:Array<Value>):ValueEditor
-    {
-        var editor = new FieldValueEditor();
-        editor.load(this, values);
-        return editor;
-    }
+	override function validate(val:Dynamic):Float
+	{
+		var number = Imports.float(val, defaults);
+		if (bounded && number < min)
+			number = min;
+		else if (bounded && number > max)
+			number = max;
+		return number;
+	}
 
-    override function load(data:Dynamic):Void
-    {
-      name = data.name;
-      defaults = data.defaults;
-      bounded = data.bounded;
-      min = Imports.float(data.min, 0);
-      max = Imports.float(data.max, 100);
-    }
+	override function createEditor(values:Array<Value>):ValueEditor
+	{
+		var editor = new FieldValueEditor();
+		editor.load(this, values);
+		return editor;
+	}
 
-    override function save():Dynamic
-    {
-      var data:Dynamic = {};
+	override function load(data:Dynamic):Void
+	{
+		name = data.name;
+		defaults = data.defaults;
+		bounded = data.bounded;
+		min = Imports.float(data.min, 0);
+		max = Imports.float(data.max, 100);
+	}
 
-      data.name = name;
-      data.definition = definition.label;
-      data.defaults = defaults;
-      data.bounded = bounded;
-      data.min = min;
-      data.max = max;
+	override function save():Dynamic
+	{
+		var data:Dynamic = {};
 
-      return data;
-    }
+		data.name = name;
+		data.definition = definition.label;
+		data.defaults = defaults;
+		data.bounded = bounded;
+		data.min = min;
+		data.max = max;
+
+		return data;
+	}
 }

@@ -16,7 +16,7 @@ import util.Vector;
 class Imports
 {
 	/*
-			HELPERS
+		HELPERS
 	*/
 
 	public static function string(value:String, def:String):String
@@ -130,7 +130,7 @@ class Imports
 	}
 
 	/*
-			LEVEL
+		LEVEL
 	*/
 
 	public static function level(path:String): Level
@@ -195,7 +195,7 @@ class Imports
 	}
 
 	/*
-			PROJECT
+		PROJECT
 	*/
 
 	public static function project(path:String): Project
@@ -208,7 +208,7 @@ class Imports
 	}
 
 	/*
-			CONVERSION
+		CONVERSION
 	*/
 
 	private static function XMLtoJSON(doc:Document):Dynamic

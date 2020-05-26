@@ -24,8 +24,8 @@ class UndoStack
 	{
 		this.level = level;
 		sticker = new JQuery(".sticker-action");
-    undoStates = [];
-    redoStates = [];
+		undoStates = [];
+		redoStates = [];
 	}
 
 	public function store(description:String):Void

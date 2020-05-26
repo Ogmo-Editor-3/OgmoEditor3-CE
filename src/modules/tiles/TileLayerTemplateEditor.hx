@@ -6,31 +6,31 @@ import project.editor.LayerTemplateEditor;
 class TileLayerTemplateEditor extends LayerTemplateEditor
 {
 	public var exportMode:JQuery;
-  public var arrayMode:JQuery;
+	public var arrayMode:JQuery;
 	public var defaultTiles:JQuery = null;
 
-  override function importInto(into:JQuery)
-  {
-    super.importInto(into);
-    var tileTemplate:TileLayerTemplate = cast template;
+	override function importInto(into:JQuery)
+	{
+		super.importInto(into);
+		var tileTemplate:TileLayerTemplate = cast template;
 
-    // export mode
-    var options:Map<String, String> = new Map();
-    options.set(TileExportModes.IDS.string(), "IDs");
-    options.set(TileExportModes.COORDS.string(), "Coords");
-    
-    exportMode = Fields.createOptions(options);
-    exportMode.val(tileTemplate.exportMode);
-    Fields.createSettingsBlock(into, exportMode, SettingsBlock.Half, "Tile Export Mode", SettingsBlock.InlineTitle);
+		// export mode
+		var options:Map<String, String> = new Map();
+		options.set(TileExportModes.IDS.string(), "IDs");
+		options.set(TileExportModes.COORDS.string(), "Coords");
 
-    // array mode
-    options = new Map();
-    options.set(ArrayExportModes.ONE.string(), "1D");
-    options.set(ArrayExportModes.TWO.string(), "2D");
+		exportMode = Fields.createOptions(options);
+		exportMode.val(tileTemplate.exportMode);
+		Fields.createSettingsBlock(into, exportMode, SettingsBlock.Half, "Tile Export Mode", SettingsBlock.InlineTitle);
 
-    arrayMode = Fields.createOptions(options);
-    arrayMode.val(tileTemplate.arrayMode);
-    Fields.createSettingsBlock(into, arrayMode, SettingsBlock.Half, "Tile Array Mode", SettingsBlock.InlineTitle);
+		// array mode
+		options = new Map();
+		options.set(ArrayExportModes.ONE.string(), "1D");
+		options.set(ArrayExportModes.TWO.string(), "2D");
+
+		arrayMode = Fields.createOptions(options);
+		arrayMode.val(tileTemplate.arrayMode);
+		Fields.createSettingsBlock(into, arrayMode, SettingsBlock.Half, "Tile Array Mode", SettingsBlock.InlineTitle);
 
 		// default tileset
 		if (OGMO.project.tilesets.length > 0)
@@ -47,14 +47,14 @@ class TileLayerTemplateEditor extends LayerTemplateEditor
 			defaultTiles.val(current.string());
 			Fields.createSettingsBlock(into, defaultTiles, SettingsBlock.Full, "Default Tileset", SettingsBlock.InlineTitle);
 		}
-  }
+	}
 
-  override function save()
-  {
-    super.save();
-    var tileTemplate:TileLayerTemplate = cast template;
-    tileTemplate.exportMode = Imports.integer(exportMode.val(), 0);
-    tileTemplate.arrayMode = Imports.integer(arrayMode.val(), 0);
-    if (defaultTiles != null && OGMO.project.tilesets.length > 0) tileTemplate.defaultTileset = OGMO.project.tilesets[Imports.integer(defaultTiles.val(), 0)].label;
-  }
+	override function save()
+	{
+		super.save();
+		var tileTemplate:TileLayerTemplate = cast template;
+		tileTemplate.exportMode = Imports.integer(exportMode.val(), 0);
+		tileTemplate.arrayMode = Imports.integer(arrayMode.val(), 0);
+		if (defaultTiles != null && OGMO.project.tilesets.length > 0) tileTemplate.defaultTileset = OGMO.project.tilesets[Imports.integer(defaultTiles.val(), 0)].label;
+	}
 }

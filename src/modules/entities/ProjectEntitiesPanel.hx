@@ -50,7 +50,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 	public var entityNodeDisplay:JQuery;
 	public var entityNodeLimit:JQuery;
 	public var entityNodeGhost:JQuery;
-	
+
 	// Entity Value Template Mananger
 	public var entityValueManager:ValueTemplateManager;
 
@@ -430,8 +430,8 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 						tags += ",";
 				}
 				entityTags = Fields.createField("the,entity,tags", tags);
-				entityTags.on("blur", function (e) { 
-					updateEntity(entity); 
+				entityTags.on("blur", function (e) {
+					updateEntity(entity);
 					refreshList();
 				});
 				Fields.createSettingsBlock(inspector, entityTags, SettingsBlock.Full, "Tags", SettingsBlock.InlineTitle);
@@ -485,13 +485,13 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 				var texturePreview = new JQuery('<div class="texture"/>');
 				inspector.append(texturePreview);
 
-				if (entity.texture != null) 
+				if (entity.texture != null)
 				{
 					var img = new JQuery('<img src="${entity.texture.image.src}"/>');
 					texturePreview.append(img);
 				}
 
-				Fields.createSettingsBlock(inspector, Fields.createButton("plus", "Load Preview Image", inspector).on("click", function() 
+				Fields.createSettingsBlock(inspector, Fields.createButton("plus", "Load Preview Image", inspector).on("click", function()
 				{
 					var path = FileSystem.chooseFile("Select Preview Image", [{ name: "Images", extensions: ["png", "jpg"] }]);
 					if (FileSystem.exists(path))
@@ -503,12 +503,12 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 						texturePreview.append(img);
 					}
 				 }), SettingsBlock.Fourth);
-	
+
 				var iconleft = new JQuery('<div style="float: left; box-sizing: border-box; padding: 16px;">');
 				var iconright = new JQuery('<div style="width: 50%; float: left;">');
 				inspector.append(iconleft);
 				inspector.append(iconright);
-				
+
 				// entity Color
 				entityColor = Fields.createColor("Entity Icon Color", entity.color, null, function(c)
 				{
@@ -540,7 +540,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 
 			// icon texture stuff
 			{
-				
+
 				// Fields.createLineBreak(inspector);
 			}
 
@@ -619,18 +619,18 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 		OGMO.project.entities.refreshTagLists();
 	}
 
-	public function importEntities() 
+	public function importEntities()
 	{
 		var addedCount = 0;
 		var notAddedCount = 0;
 		var path = FileSystem.chooseFile("Select Ogmo Project or Exported Entities Templates", [{ name: "Ogmo Editor Project or Exported Entity Templates", extensions: ["ogmo", "json"] }]);
-		
+
 		if (FileSystem.exists(path))
 		{
 			var data:Dynamic = FileSystem.loadJSON(path);
 			if (data == null || data.entities == null) return;
 
-			for (entity in (cast data.entities : Array<EntityTemplate>)) 
+			for (entity in (cast data.entities : Array<EntityTemplate>))
 			{
 				if (OGMO.project.entities.templates.filter(e -> e.exportID == entity.exportID).length == 0) {
 					OGMO.project.entities.templates.push(EntityTemplate.load(OGMO.project, entity));
@@ -652,14 +652,14 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 	public function exportEntities()
 	{
 		var path = FileSystem.chooseSaveFile("Export Entities", [{ name: "Ogmo Entity Templates", extensions: ["json"]}]);
-		if (path.length > 0) 
+		if (path.length > 0)
 		{
 				var data = {
 					ogmoVersion: OGMO.version,
 					entities: [for (entity in OGMO.project.entities.templates) entity.save()]
 				};
 				FileSystem.saveJSON(data, path);
-				
+
 		}
 	}
 }

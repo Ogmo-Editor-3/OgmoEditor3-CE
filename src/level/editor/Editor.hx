@@ -344,7 +344,6 @@ class Editor
 		{
 			root.css("display", "flex");
 
-			
 			levelManager.loadLevel();
 			Browser.window.setTimeout(function ()
 			{
@@ -407,7 +406,7 @@ class Editor
 		var layerId = 0;
 		if (this.level != null)
 			layerId = this.level.currentLayerID;
-		
+
 		beforeSetLayer();
 		this.level = level;
 		if (this.level != null)
@@ -437,7 +436,7 @@ class Editor
 
 		if (currentLayerEditor != null)
 		{
-			var paletteElement	= new JQuery(".editor_palette");
+			var paletteElement = new JQuery(".editor_palette");
 			var selectionElement = new JQuery(".editor_selection");
 
 			paletteElement.empty();
@@ -494,19 +493,19 @@ class Editor
 		{
 			isDirty = false;
 			draw.clear();
-			
+
 			if (level != null) drawLevel();
 		}
-		
+
 		//Draw the overlay
 		lastOverlayUpdate += OGMO.deltaTime;
 		if (isOverlayDirty)// || lastOverlayUpdate >= 1 / 6) <-- Uncomment to re-enable overlay animation
 		{
 			isOverlayDirty = false;
 			overlay.clear();
-			
+
 			if (level != null)
-				drawOverlay();			
+				drawOverlay();
 			lastOverlayUpdate = 0;
 		}
 	}
@@ -516,7 +515,7 @@ class Editor
 		isDirty = true;
 		isOverlayDirty = true;
 	}
-	
+
 	public function overlayDirty():Void
 	{
 		isOverlayDirty = true;
@@ -528,13 +527,13 @@ class Editor
 		EDITOR.dirty();
 		return layerEditors[id].visible;
 	}
-	
+
 	/*
-			ACTUAL DRAWING
+		ACTUAL DRAWING
 	*/
-	
+
 	public function drawLevel():Void
-	{	
+	{
 		draw.setAlpha(1);
 
 		//Background
@@ -549,7 +548,7 @@ class Editor
 			if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
 			i--;
 		}
-		
+
 		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].draw();
 
 		//Draw the layers above the current one at half alpha
@@ -567,7 +566,7 @@ class Editor
 
 		//Resize handles
 		if (EDITOR.handles.canResize) EDITOR.handles.draw();
-			
+
 		//Grid
 		if (level.currentLayer != null && level.gridVisible) draw.drawGrid(level.currentLayer.template.gridSize, level.currentLayer.offset, level.data.size, level.camera.a, level.project.gridColor);
 		
@@ -582,27 +581,27 @@ class Editor
 		
 		draw.finishDrawing();
 	}
-	
+
 	public function drawOverlay():Void
-	{	
+	{
 		overlay.setAlpha(1);
-		
+
 		//Current Layer Overlay
 		if (EDITOR.layerEditors[level.currentLayerID] != null) EDITOR.layerEditors[level.currentLayerID].drawOverlay();
-		
+
 		//Current Tool Overlay
 		if (EDITOR.toolBelt.current != null)
 			EDITOR.toolBelt.current.drawOverlay();
-		
+
 		//Zoom Rect
 		if (level.zoomRect != null)
 			overlay.drawLineRect(level.zoomRect, Color.white);
-			
+
 		overlay.finishDrawing();
 	}
 
 	/*
-			TRANSFORMATIONS
+		TRANSFORMATIONS
 	*/
 
 	public function windowToCanvas(pos: Vector, ?into: Vector): Vector
@@ -661,7 +660,7 @@ class Editor
 	}
 
 	/*
-			KEYBOARD
+		KEYBOARD
 	*/
 
 	public function keyPress(key:Int):Void
@@ -690,7 +689,7 @@ class Editor
 				//Save Level
 				if (OGMO.ctrl && EDITOR.level != null && !EDITOR.locked)
 				{
-					if (OGMO.shift)	EDITOR.level.doSaveAs();
+					if (OGMO.shift) EDITOR.level.doSaveAs();
 					else EDITOR.level.doSave();
 				}
 			case Keys.N:
@@ -774,7 +773,7 @@ class Editor
 				unset(key);
 		}
 	}
-	
+
 	function defaultKeyPress(key:Int):Void
 	{
 		if (level != null && currentLayerEditor != null)
@@ -783,7 +782,7 @@ class Editor
 			if (toolBelt.current != null) toolBelt.current.onKeyPress(key);
 		}
 	}
-	
+
 	function defaultKeyRepeat(key:Int):Void
 	{
 		if (level != null && currentLayerEditor != null)
@@ -792,13 +791,13 @@ class Editor
 			if (toolBelt.current != null) toolBelt.current.onKeyRepeat(key);
 		}
 	}
-	
+
 	function defaultKeyRelease(key:Int):Void
 	{
 		if (level != null && currentLayerEditor != null)
 		{
 			currentLayerEditor.keyRelease(key);
-			if (toolBelt.current != null)	toolBelt.current.onKeyRelease(key);
+			if (toolBelt.current != null) toolBelt.current.onKeyRelease(key);
 		}
 	}
 

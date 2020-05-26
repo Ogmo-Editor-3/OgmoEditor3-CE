@@ -18,7 +18,7 @@ class TilePencilTool extends TileTool
 		{
 			EDITOR.overlay.setAlpha(0.5);
 			var at = layer.gridToLevel(prevPos);
-			
+
 			if (OGMO.ctrl)
 			{
 				var tile = random.peekChoice2D(layerEditor.brush);
@@ -41,7 +41,7 @@ class TilePencilTool extends TileTool
 					}
 				}
 			}
-			
+
 			EDITOR.overlay.setAlpha(1);
 		}
 	}
@@ -118,7 +118,7 @@ class TilePencilTool extends TileTool
 				{
 					var tile = random.nextChoice2D(drawBrush);
 					layer.data[px][py] = tile;
-					
+
 					lastRect = new Rectangle(pos.x, pos.y, 1, 1);
 				}
 			}
@@ -128,7 +128,7 @@ class TilePencilTool extends TileTool
 					for (y in 0...drawBrush[x].length)
 						if (layer.insideGrid(new Vector(px + x, py + y)))
 							layer.data[px.int() + x][py.int() + y] = drawBrush[x][y];
-				
+
 				lastRect = new Rectangle(pos.x, pos.y, drawBrush.length, drawBrush[0].length);
 			}
 			
@@ -139,11 +139,11 @@ class TilePencilTool extends TileTool
 	public function canDraw(pos:Vector):Bool
 	{
 		if (lastRect == null) return true;
-			
+
 		var n:Rectangle;
 		if (OGMO.ctrl) n = new Rectangle(pos.x, pos.y, 1, 1);
 		else n = new Rectangle(pos.x, pos.y, drawBrush.length, drawBrush[0].length);
-			
+
 		return !(n.right > lastRect.left && n.bottom > lastRect.top && n.left < lastRect.right && n.top < lastRect.bottom);
 	}
 	
@@ -166,5 +166,4 @@ class TilePencilTool extends TileTool
 	override public function getIcon():String return "pencil";
 	override public function keyToolAlt():Int return 4;
 	override public function keyToolShift():Int return 1;
-
 }

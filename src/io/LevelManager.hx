@@ -11,7 +11,7 @@ class LevelManager
 {
 	public var levels:Array<Level> = [];
 
-  public function new () {}
+	public function new () {}
 
 	public function create(?onSuccess:Level->Void):Void
 	{
@@ -192,7 +192,7 @@ class LevelManager
 			or anything on their undo/redo stacks
 		*/
 
-    var i = 0;
+		var i = 0;
 		while (i < levels.length)
 		{
 			if (levels[i].safeToClose)
@@ -200,7 +200,7 @@ class LevelManager
 				levels.splice(i, 1);
 				i--;
 			}
-      i++;
+			i++;
 		}
 	}
 
@@ -281,7 +281,7 @@ class LevelManager
 	}
 
 	/*
-			FILE OPS
+		FILE OPS
 	*/
 
 	public function onFolderDelete(dir:String):Void
@@ -311,7 +311,7 @@ class LevelManager
 	}
 
 	/*
-			DEBUG
+		DEBUG
 	*/
 
 	public function log():Void

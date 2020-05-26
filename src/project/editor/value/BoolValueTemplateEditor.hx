@@ -6,27 +6,27 @@ import util.Fields;
 
 class BoolValueTemplateEditor extends ValueTemplateEditor
 {
-  public var nameField:JQuery;
-  public var defaultField:JQuery;
+	public var nameField:JQuery;
+	public var defaultField:JQuery;
 
-  override function importInto(into:JQuery)
-  {
-    var boolTemplate:BoolValueTemplate = cast template;
+	override function importInto(into:JQuery)
+	{
+		var boolTemplate:BoolValueTemplate = cast template;
 
-    // name
-    nameField = Fields.createField("Name", boolTemplate.name);
-    Fields.createSettingsBlock(into, nameField, SettingsBlock.Half, "Name", SettingsBlock.InlineTitle);
+		// name
+		nameField = Fields.createField("Name", boolTemplate.name);
+		Fields.createSettingsBlock(into, nameField, SettingsBlock.Half, "Name", SettingsBlock.InlineTitle);
 
-    // default val
-    defaultField = Fields.createCheckbox(boolTemplate.defaults, "Default");
-    Fields.createSettingsBlock(into, defaultField, SettingsBlock.Half);
-  }
+		// default val
+		defaultField = Fields.createCheckbox(boolTemplate.defaults, "Default");
+		Fields.createSettingsBlock(into, defaultField, SettingsBlock.Half);
+	}
 
-  override function save()
-  {
-    var boolTemplate:BoolValueTemplate = cast template;
+	override function save()
+	{
+		var boolTemplate:BoolValueTemplate = cast template;
 
-    boolTemplate.name = Fields.getField(nameField);
-    boolTemplate.defaults = Fields.getCheckbox(defaultField);
-  }
+		boolTemplate.name = Fields.getField(nameField);
+		boolTemplate.defaults = Fields.getCheckbox(defaultField);
+	}
 }

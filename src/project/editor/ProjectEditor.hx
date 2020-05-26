@@ -69,22 +69,22 @@ class ProjectEditor
 
 	public function setPanel(panel:ProjectEditorPanel):Void
 	{
-			if (this.panel != panel)
+		if (this.panel != panel)
+		{
+			// hide previous
+			if (this.panel != null)
 			{
-					// hide previous
-					if (this.panel != null)
-					{
-							this.panel.end();
-							this.panel.root.hide();
-							this.panel.tab.removeClass("selected");
-					}
-
-					// show next
-					this.panel = panel;
-					this.panel.begin();
-					this.panel.root.show();
-					this.panel.tab.addClass("selected");
+					this.panel.end();
+					this.panel.root.hide();
+					this.panel.tab.removeClass("selected");
 			}
+
+			// show next
+			this.panel = panel;
+			this.panel.begin();
+			this.panel.root.show();
+			this.panel.tab.addClass("selected");
+		}
 	}
 
 	public function saveAndClose(updateLevels:Bool = false):Void

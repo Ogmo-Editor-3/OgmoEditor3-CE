@@ -68,7 +68,7 @@ class FileSystem
 				defaultId: 1
 			}
 		);
-		
+
 		return (result == 0);
 	}
 
@@ -96,7 +96,7 @@ class FileSystem
 	{
 		return Fs.readFileSync(path, "utf8");
 	}
-	
+
 	public static function loadImage(path:String):ImageElement
 	{
 		if (FileSystem.exists(path))
@@ -115,7 +115,7 @@ class FileSystem
 	}
 
 	/*
-			JSON
+		JSON
 	*/
 
 	public static function stringToJSON(str:String):Dynamic
@@ -141,7 +141,7 @@ class FileSystem
 	}
 
 	/*
-			XML
+		XML
 	*/
 
 	public static function stringToXML(str:String):Document

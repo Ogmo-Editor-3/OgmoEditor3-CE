@@ -62,7 +62,7 @@ class Level
 			level_size.clone(this.data.size);
 
 			values = [];
-			for (lv in OGMO.project.levelValues) values.push(new Value(lv));   
+			for (lv in OGMO.project.levelValues) values.push(new Value(lv));
 			initLayers();
 		}
 		else load(data);
@@ -150,7 +150,7 @@ class Level
 	}
 
 	/*
-			ACTUAL SAVING
+		ACTUAL SAVING
 	*/
 
 	public function doSave(refresh:Bool = true):Bool
@@ -225,7 +225,7 @@ class Level
 	}
 
 	/*
-			HELPERS
+		HELPERS
 	*/
 
 	public function getLayerByExportID(exportID:String): Layer
@@ -240,7 +240,7 @@ class Level
 	}
 
 	/*
-			UNDO STATE HELPERS
+		UNDO STATE HELPERS
 	*/
 
 	public function store(description:String):Void
@@ -254,7 +254,7 @@ class Level
 	}
 
 	/*
-			TRANSFORMATIONS
+		TRANSFORMATIONS
 	*/
 
 	public function resize(newSize: Vector, shift: Vector):Void
@@ -272,7 +272,7 @@ class Level
 	}
 
 	/*
-			CAMERA
+		CAMERA
 	*/
 
 	public function updateCameraInverse():Void

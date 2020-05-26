@@ -43,7 +43,7 @@ class DecalLayer extends Layer
 			for (tex in (cast template : DecalLayerTemplate).textures)
 				if (tex.path == relative)
 				{
-					texture  = tex;
+					texture	= tex;
 					break;
 				}
 
@@ -53,14 +53,14 @@ class DecalLayer extends Layer
 
 	public function getFirstAt(pos:Vector):Array<Decal>
 	{
-    var i = decals.length - 1;
+		var i = decals.length - 1;
 		while (i >= 0)
 		{
 			var decal = decals[i];
 			if (pos.x > decal.position.x - decal.width / 2 && pos.y > decal.position.y - decal.height / 2 &&
 				pos.x < decal.position.x + decal.width / 2 && pos.y < decal.position.y + decal.height / 2)
 				return [decal];
-      i--;
+			i--;
 		}
 		return [];
 	}
@@ -75,7 +75,7 @@ class DecalLayer extends Layer
 			if (pos.x > decal.position.x - decal.width / 2 && pos.y > decal.position.y - decal.height / 2 &&
 				pos.x < decal.position.x + decal.width / 2 && pos.y < decal.position.y + decal.height / 2)
 				list.push(decal);
-      i--;
+			i--;
 		}
 		return list;
 	}
@@ -90,29 +90,29 @@ class DecalLayer extends Layer
 			if (rect.right > decal.position.x - decal.width / 2 && rect.bottom > decal.position.y - decal.height / 2 &&
 				rect.left < decal.position.x + decal.width / 2 && rect.top < decal.position.y + decal.height / 2)
 				list.push(decal);
-      i--;
+			i--;
 		}
 		return list;
 	}
 
-  override function clone():DecalLayer
-  {
+	override function clone():DecalLayer
+	{
 		var layer = new DecalLayer(level, id);
 		for (decal in decals) layer.decals.push(decal.clone());
-    return layer;
-  }
+		return layer;
+	}
 
-  override function resize(newSize:Vector, shiftBy:Vector):Void
-  {
-      shift(shiftBy);
-  }
+	override function resize(newSize:Vector, shiftBy:Vector):Void
+	{
+		shift(shiftBy);
+	}
 
-  override function shift(amount:Vector):Void
-  {
+	override function shift(amount:Vector):Void
+	{
 		for (decal in decals)
 		{
 			decal.position.x += amount.x;
 			decal.position.y += amount.y;
 		}
-  }
+	}
 }

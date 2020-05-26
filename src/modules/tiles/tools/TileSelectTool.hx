@@ -4,7 +4,6 @@ import modules.tiles.tools.TileTool;
 
 class TileSelectTool extends TileTool
 {
-
 	var mode:SelectModes = None;
 	var start:Vector = new Vector();
 	var end:Vector = new Vector();
@@ -213,7 +212,6 @@ class TileSelectTool extends TileTool
 	override public function getName():String return 'Select';
 	override public function keyToolAlt():Int return 4;
 	override public function keyToolShift():Int return 0;
-
 }
 
 enum SelectModes

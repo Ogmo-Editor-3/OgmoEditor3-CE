@@ -46,7 +46,7 @@ class TileLineTool extends TileTool
 				}
 			}
 			EDITOR.overlay.setAlpha(1);
-			
+
 			if (random != null) random.popState();
 		}
 	}
@@ -158,14 +158,14 @@ class TileLineTool extends TileTool
 	function get_anyChanges():Bool
 	{
 		var ret = false;
-		
+
 		var random:Random = null;
 		if (OGMO.ctrl)
 		{
 			random = this.random;
 			random.pushState();
 		}
-		
+
 		for (p in points)
 		{
 			if (layer.insideGrid(p))
@@ -177,7 +177,7 @@ class TileLineTool extends TileTool
 				}
 			}
 		}
-		
+
 		if (random != null)
 			random.popState();
 
@@ -188,5 +188,4 @@ class TileLineTool extends TileTool
 	override public function getIcon():String return "line";
 	override public function keyToolAlt():Int return 4;
 	override public function keyToolShift():Int return 0;
-
 }

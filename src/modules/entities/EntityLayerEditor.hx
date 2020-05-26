@@ -5,7 +5,6 @@ import level.editor.LayerEditor;
 
 class EntityLayerEditor extends LayerEditor
 {
-
 	public var selection:EntityGroup = new EntityGroup();
 	public var hovered:EntityGroup = new EntityGroup();
 	public var brush:Int = -1;
