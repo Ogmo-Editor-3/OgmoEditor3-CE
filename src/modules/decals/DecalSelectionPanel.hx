@@ -143,6 +143,33 @@ class DecalSelectionPanel extends SidePanel
 					Fields.createSettingsBlock(properties, decalRot, SettingsBlock.Full, "Rotation", SettingsBlock.OverTitle);
 				}
 
+				var decalOrigin = Fields.createVector(decal.origin);
+				decalOrigin.find(".vecX").on('change keydown paste input', function(e) {
+					var origin = Fields.getVector(decalOrigin);
+					if (!origin.x.isNaN() && decal.origin.x != origin.x)
+					{
+						EDITOR.level.store("Changed Decal X Origin from '" + decal.origin.x + "'	to '" + origin.x + "'");
+
+						for (decal in sel) decal.origin.x = origin.x;
+
+						EDITOR.level.unsavedChanges = true;
+						EDITOR.dirty();
+					}
+				});
+				decalOrigin.find(".vecY").on('change keydown paste input', function(e) {
+					var origin = Fields.getVector(decalOrigin);
+					if (!origin.y.isNaN() && decal.origin.y != origin.y)
+					{
+						EDITOR.level.store("Changed Decal Y Origin from '" + decal.origin.y + "'	to '" + origin.y + "'");
+
+						for (decal in sel) decal.origin.y = origin.y;
+
+						EDITOR.level.unsavedChanges = true;
+						EDITOR.dirty();
+					}
+				});
+				Fields.createSettingsBlock(properties, decalOrigin, SettingsBlock.Full, "Origin", SettingsBlock.OverTitle);
+
 				if ((cast layerEditor.template : DecalLayerTemplate).scaleable)
 				{
 					var decalScale = Fields.createVector(decal.scale);

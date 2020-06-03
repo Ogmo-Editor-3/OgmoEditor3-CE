@@ -32,6 +32,7 @@ class DecalLayer extends Layer
 			var path = haxe.io.Path.normalize(decal.texture);
 			var relative = Path.join((cast template : DecalLayerTemplate).folder, path);
 			var texture:Texture = null;
+			var origin = Imports.vector(decal, "originX", "originY", new Vector(0.5, 0.5));
 			var scale = Imports.vector(decal, "scaleX", "scaleY", new Vector(1, 1));
 			var rotation = Imports.float(decal.rotation, 0);
 
@@ -47,7 +48,7 @@ class DecalLayer extends Layer
 					break;
 				}
 
-			this.decals.push(new Decal(position, path, texture, scale, rotation, values));
+			this.decals.push(new Decal(position, path, texture, origin, scale, rotation, values));
 		}
 	}
 
@@ -57,8 +58,8 @@ class DecalLayer extends Layer
 		while (i >= 0)
 		{
 			var decal = decals[i];
-			if (pos.x > decal.position.x - decal.width / 2 && pos.y > decal.position.y - decal.height / 2 &&
-				pos.x < decal.position.x + decal.width / 2 && pos.y < decal.position.y + decal.height / 2)
+			if (pos.x > decal.position.x - decal.width * decal.origin.x && pos.y > decal.position.y - decal.height * decal.origin.y &&
+				pos.x < decal.position.x + decal.width * (1-decal.origin.x) && pos.y < decal.position.y + decal.height * (1-decal.origin.y))
 				return [decal];
 			i--;
 		}
@@ -72,8 +73,8 @@ class DecalLayer extends Layer
 		while (i >= 0)
 		{
 			var decal = decals[i];
-			if (pos.x > decal.position.x - decal.width / 2 && pos.y > decal.position.y - decal.height / 2 &&
-				pos.x < decal.position.x + decal.width / 2 && pos.y < decal.position.y + decal.height / 2)
+			if (pos.x > decal.position.x - decal.width * decal.origin.x && pos.y > decal.position.y - decal.height * decal.origin.y &&
+				pos.x < decal.position.x + decal.width * (1-decal.origin.x) && pos.y < decal.position.y + decal.height * (1-decal.origin.y))
 				list.push(decal);
 			i--;
 		}
@@ -87,8 +88,8 @@ class DecalLayer extends Layer
 		while (i >= 0)
 		{
 			var decal = decals[i];
-			if (rect.right > decal.position.x - decal.width / 2 && rect.bottom > decal.position.y - decal.height / 2 &&
-				rect.left < decal.position.x + decal.width / 2 && rect.top < decal.position.y + decal.height / 2)
+			if (rect.right > decal.position.x - decal.width * decal.origin.x && rect.bottom > decal.position.y - decal.height * decal.origin.y &&
+				rect.left < decal.position.x + decal.width * (1-decal.origin.x) && rect.top < decal.position.y + decal.height * (1-decal.origin.y))
 				list.push(decal);
 			i--;
 		}

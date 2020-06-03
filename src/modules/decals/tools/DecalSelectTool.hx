@@ -63,7 +63,7 @@ class DecalSelectTool extends DecalTool
 				layerEditor.selected = [];
 				for (decal in DecalSelectTool.inClipboard)
 				{
-					var clone = new Decal(decal.position.clone(), decal.path, decal.texture, decal.scale.clone(), decal.rotation);
+					var clone = new Decal(decal.position.clone(), decal.path, decal.texture, decal.origin.clone(), decal.scale.clone(), decal.rotation);
 					(cast layerEditor.layer:DecalLayer).decals.push(clone);
 					layerEditor.selected.push(clone);
 				}
@@ -78,7 +78,7 @@ class DecalSelectTool extends DecalTool
 				var newSelection:Array<Decal> = [];
 				for (decal in layerEditor.selected)
 				{
-					var clone = new Decal(decal.position.clone().add(new Vector(32, 32)), decal.path, decal.texture, decal.scale.clone(), decal.rotation);
+					var clone = new Decal(decal.position.clone().add(new Vector(32, 32)), decal.path, decal.texture, decal.origin.clone(), decal.scale.clone(), decal.rotation);
 					(cast layerEditor.layer:DecalLayer).decals.push(clone);
 					newSelection.push(clone);
 				}
