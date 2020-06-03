@@ -15,7 +15,7 @@ class Decal
 	public var height(get, never):Int;
 	public var values:Array<Value>;
 
-	public function new(position:Vector, path:String, texture:Texture, ?scale:Vector, ?rotation:Float, ?values:Array<Value>)
+	public function new(position:Vector, path:String, texture:Texture, ?origin:Vector, ?scale:Vector, ?rotation:Float, ?values:Array<Value>)
 	{
 		this.position = position.clone();
 		this.texture = texture;
@@ -23,7 +23,7 @@ class Decal
 		this.scale = scale == null ? new Vector(1, 1) : scale.clone();
 		this.rotation = rotation == null ? 0 : rotation;
 		this.values = values == null ? [] : values;
-		origin = new Vector(width / 2, height / 2);
+		this.origin = origin == null ? new Vector(0.5, 0.5) : origin.clone();
 	}
 
 	public function save(scaleable:Bool, rotatable:Bool):Dynamic
@@ -39,6 +39,8 @@ class Decal
 		}
 		if (rotatable) data.rotation = rotation;
 		data.texture = haxe.io.Path.normalize(path);
+		data.originX = origin.x;
+		data.originY = origin.y;
 		Export.values(data, values);
 
 		return data;
@@ -102,10 +104,10 @@ class Decal
 	public function getCorners(pad:Float):Array<Vector>
 	{
 		var corners:Array<Vector> = [
-			new Vector(-pad - width/2 * scale.x, -pad - height/2 * scale.y),
-			new Vector(pad + width/2 * scale.x, -pad - height/2 * scale.y),
-			new Vector(-pad - width/2 * scale.x, pad + height/2 * scale.y),
-			new Vector(pad + width/2 * scale.x, pad + height/2 * scale.y)
+			new Vector(-pad - width * origin.x * scale.x, -pad - height * origin.y * scale.y),
+			new Vector(pad + width * (1-origin.x) * scale.x, -pad - height * origin.y * scale.y),
+			new Vector(-pad - width * origin.x * scale.x, pad + height * (1-origin.y) * scale.y),
+			new Vector(pad + width * (1-origin.x) * scale.x, pad + height * (1-origin.y) * scale.y)
 		];
 
 		for (corner in corners)
