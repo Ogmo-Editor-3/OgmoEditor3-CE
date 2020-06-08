@@ -19,11 +19,15 @@ enum SettingsBlock
 	OverTitle;
 }
 
+typedef FieldAttributes = {
+	disabled: Bool
+}
+
 class Fields
 {
-	public static function createField(label:String, ?value:String, ?into:JQuery):JQuery
+	public static function createField(label:String, ?value:String, ?into:JQuery, ?attributes:FieldAttributes):JQuery
 	{
-		var element = new JQuery('<input>');
+		var element = new JQuery('<input>', attributes);
 		
 		if (value == null || value.length <= 0)
 		{
