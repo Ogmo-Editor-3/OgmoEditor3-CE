@@ -1,12 +1,8 @@
 package rendering;
 
-import electron.NativeImage;
-import js.node.Fs;
-import js.html.ImageData;
-import js.Browser;
-import js.lib.Uint8Array;
 import js.html.CanvasElement;
 import js.lib.Float32Array;
+import js.lib.Uint8Array;
 import js.html.webgl.RenderingContext;
 import js.html.webgl.Buffer;
 import js.Syntax;
@@ -77,11 +73,16 @@ class GLRenderer
 		gl.deleteBuffer(uvBuffer);
 	}
 
+	// OFFSCREEN RENDERING
+
 	var offscreenTexture: js.html.webgl.Texture;
 	var offscreenFramebuffer: js.html.webgl.Framebuffer;
+	var offscreenTextureSize: Vector;
 
 	public function setupRenderTarget(size: Vector): Void
 	{
+		offscreenTextureSize = size;
+
 		offscreenTexture = gl.createTexture();
 		gl.bindTexture(RenderingContext.TEXTURE_2D, offscreenTexture);
 
@@ -111,37 +112,21 @@ class GLRenderer
 		var canRead = gl.checkFramebufferStatus(RenderingContext.FRAMEBUFFER) == RenderingContext.FRAMEBUFFER_COMPLETE;
 	}
 
-	public function getRenderTargetPixels(size: Vector)
+	public function getRenderTargetPixels(): Uint8Array
 	{
-		var pixels = new Uint8Array(Math.floor(size.x) * Math.floor(size.y) * 4);
-		gl.readPixels(0, 0, Math.floor(size.x), Math.floor(size.y), RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, pixels);
-
-		var canvas = Browser.document.createCanvasElement();
-		canvas.width = Math.floor(size.x);
-		canvas.height = Math.floor(size.y);
-
-		var ctx = canvas.getContext("2d");
-		var imageData: ImageData = ctx.createImageData(size.x, size.y);
-		for (i in 0...imageData.data.length)
-			imageData.data[i] = pixels[i];
-		ctx.putImageData(imageData, 0, 0);
-
-		var path = FileSystem.chooseSaveFile("Level as image", [{ name: "Image", extensions: ["png"]}]);
-		if (path.length > 0)
-		{
-			var nativeImage = js.Lib.require('electron').nativeImage;
-			var img = nativeImage.createFromDataURL(canvas.toDataURL("image/png"));
-			Fs.writeFileSync(path, img.toPNG());
-		}
-
-		canvas.remove();
+		var pixels = new Uint8Array(Math.floor(offscreenTextureSize.x) * Math.floor(offscreenTextureSize.y) * 4);
+		gl.readPixels(0, 0, Math.floor(offscreenTextureSize.x), Math.floor(offscreenTextureSize.y), RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, pixels);
+		return pixels;
 	}
 
-	public function finishRenderTarget(): Void
+	public function doneRenderTarget(): Void
 	{
 		gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
 		updateCanvasSize();
+	}
 
+	public function destroyRenderTarget(): Void
+	{
 		gl.deleteTexture(offscreenTexture);
 		gl.deleteFramebuffer(offscreenFramebuffer);
 	}

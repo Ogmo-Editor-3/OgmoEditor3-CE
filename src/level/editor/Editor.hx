@@ -585,9 +585,9 @@ class Editor
 		if (saveLevelAsImageRequested)
 		{
 			saveLevelAsImageRequested = false;
+			var camBackup = EDITOR.level.camera.clone();
 
 			draw.setAlpha(1);
-
 			draw.setupRenderTarget(level.data.size);
 
 			var i = level.layers.length - 1;
@@ -599,8 +599,16 @@ class Editor
 
 			draw.finishDrawing();
 
-			draw.getRenderTargetPixels(level.data.size);
-			draw.finishRenderTarget();
+			var pixels = draw.getRenderTargetPixels();
+			var path = FileSystem.chooseSaveFile("Level as image", [{ name: "Image", extensions: ["png"]}]);
+			if (path.length > 0)
+				FileSystem.saveRGBAToPNG(pixels, Math.floor(level.data.size.x), Math.floor(level.data.size.y), path);
+
+			draw.doneRenderTarget();
+			draw.destroyRenderTarget();
+
+			EDITOR.level.camera = camBackup;
+			EDITOR.level.updateCameraInverse();
 		}
 	}
 
