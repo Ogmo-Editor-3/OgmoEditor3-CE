@@ -9,7 +9,7 @@ class TileData
 	static public inline var EMPTY_TILE = -1; // TODO - It might be nice to be able to set this to 0 -01010111
 
 	static public inline var FLAG_FLIP_HORIZONTAL		= 0x40000000;
-	static public inline var FLAG_FLIP_VERTICAL		= 0x20000000;
+	static public inline var FLAG_FLIP_VERTICAL			= 0x20000000;
 	static public inline var FLAG_FLIP_ANTIDIAGONALLY	= 0x10000000;
 
 	public var idx = EMPTY_TILE;
@@ -62,7 +62,9 @@ class TileData
 		tile.flipX = (value & FLAG_FLIP_HORIZONTAL) > 0;
 		tile.flipY = (value & FLAG_FLIP_VERTICAL) > 0;
 		tile.flipAntiDiagonally = (value & FLAG_FLIP_ANTIDIAGONALLY) > 0;
-		tile.idx = value & ~(FLAG_FLIP_HORIZONTAL | FLAG_FLIP_VERTICAL | FLAG_FLIP_ANTIDIAGONALLY);
+		tile.idx = Std.int(Math.abs(value)) & ~(FLAG_FLIP_HORIZONTAL | FLAG_FLIP_VERTICAL | FLAG_FLIP_ANTIDIAGONALLY);
+		if (value < 0)
+			tile.idx *= -1;
 		return tile.idx;
 	}
 
