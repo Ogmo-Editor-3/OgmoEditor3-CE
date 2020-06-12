@@ -4,10 +4,112 @@ import level.data.Level;
 import project.data.Tileset;
 import level.data.Layer;
 
+// Clockwise, in degrees
+@:enum
+abstract TileRotation(Float) {
+  var None = 0;
+  var Ninety = 90;
+  var OneEighty = 180;
+  var TwoSeventy = 270;
+}
+
+class TileData
+{
+	static final FLAG_FLIP_HORIZONTAL		= 0x40000000;
+	static final FLAG_FLIP_VERTICAL			= 0x20000000;
+	static final FLAG_FLIP_ANTIDIAGONALLY	= 0x10000000;
+
+	public var idx = -1; // TODO - It might be nice to be able to set this to 0 -01010111
+	public var flipX = false;
+	public var flipY = false;
+	public var flipAntiDiagonally = false;
+
+	public function new(idx:Int = -1) // TODO - It might be nice to be able to set this to 0 -01010111
+	{
+		this.idx = idx;
+	}
+
+	public function copy(src:TileData):TileData
+	{
+		idx = src.idx;
+		flipX = src.flipX;
+		flipY = src.flipY;
+		flipAntiDiagonally = src.flipAntiDiagonally;
+
+		return this;
+	}
+
+	public function equals(rhs:TileData):Bool
+	{
+		return
+			idx == rhs.idx &&
+			flipX == rhs.flipX &&
+			flipY == rhs.flipY &&
+			flipAntiDiagonally == rhs.flipAntiDiagonally;
+	}
+
+	static public function encodeInt(tile:TileData, value:Int):Int
+	{
+		if (tile.flipX)
+			value |= FLAG_FLIP_HORIZONTAL;
+		if (tile.flipY)
+			value |= FLAG_FLIP_VERTICAL;
+		if (tile.flipAntiDiagonally)
+			value |= FLAG_FLIP_ANTIDIAGONALLY;
+		return value;
+	}
+
+	static public function decodeInt(tile:TileData, value:Int):Int
+	{
+		tile.flipX = (value & FLAG_FLIP_HORIZONTAL) > 0;
+		tile.flipY = (value & FLAG_FLIP_VERTICAL) > 0;
+		tile.flipAntiDiagonally = (value & FLAG_FLIP_ANTIDIAGONALLY) > 0;
+		tile.idx = value & ~(FLAG_FLIP_HORIZONTAL | FLAG_FLIP_VERTICAL | FLAG_FLIP_ANTIDIAGONALLY);
+		return tile.idx;
+	}
+
+	public function encode():Int
+	{
+		return encodeInt(this, this.idx);
+	}
+
+	public function decode(value:Int):Int
+	{
+		return decodeInt(this, value);
+	}
+
+	public function doFlip(horizontal:Bool)
+	{
+		if (horizontal)
+			flipX = !flipX;
+		else
+			flipY = !flipY;
+	}
+
+	static private final rotateClockwiseMask = [5, 4, 1, 0, 7, 6, 3, 2];
+	static private final rotateCounterClockwiseMask = [3, 2, 7, 6, 1, 0, 5, 4];
+
+	public function doRotate(clockwise:Bool)
+	{
+		var rotateMask = clockwise ? rotateClockwiseMask : rotateCounterClockwiseMask;
+
+		var mask =
+			(flipX ? 4 : 0) |
+			(flipY ? 2 : 0) |
+			(flipAntiDiagonally ? 1 : 0);
+
+		mask = rotateMask[mask];
+
+		flipX = (mask & 4) != 0;
+		flipY = (mask & 2) != 0;
+		flipAntiDiagonally = (mask & 1) != 0;
+	}
+}
+
 class TileLayer extends Layer
 {
 	public var tileset:Tileset = null;
-	public var data:Array<Array<Int>>;
+	public var data:Array<Array<TileData>>;
 	
 	public function new(level:Level, id:Int)
 	{
@@ -17,13 +119,12 @@ class TileLayer extends Layer
 
 	function initData():Void
 	{
-		var empty = -1;
 		data = [];
 		for (x in 0...gridCellsX)
 		{
-			var a: Array<Int> = [];
+			var a: Array<TileData> = [];
 			data.push(a);
-			for (y in 0...gridCellsY) a.push(empty);
+			for (y in 0...gridCellsY) a.push(new TileData());
 		}
 
 		if (tileset == null && template != null) tileset = OGMO.project.getTileset((cast template : TileLayerTemplate).defaultTileset);
@@ -44,12 +145,13 @@ class TileLayer extends Layer
 			if(template.arrayMode == ONE)
 			{
 				data._contents = "data";
-				data.data = [for(column in flippedData) for (i in column) i];
+				data.data = [for (column in flippedData) for (tile in column) tile.encode()];
 			}
 			else if (template.arrayMode == TWO)
 			{
 				data._contents = "data2D";
-				data.data2D = flippedData;
+				data.data2D = Calc.createArray2D(gridCellsX, gridCellsY, -1);
+				for (x in 0...flippedData.length) for (y in 0...flippedData[x].length) data.data2D[x][y] = flippedData[x][y].encode();
 			}
 			else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
 		}
@@ -58,7 +160,7 @@ class TileLayer extends Layer
 			if(template.arrayMode == ONE)
 			{
 				data._contents = "dataCoords";
-				data.dataCoords = [for(column in flippedData) for (i in column) i == -1 ? [-1] : [tileset.getTileX(i), tileset.getTileY(i)]];
+				data.dataCoords = [for(column in flippedData) for (tile in column) tile.idx == -1 ? [-1] : [TileData.encodeInt(tile, tileset.getTileX(tile.idx)), tileset.getTileY(tile.idx)]];
 			}
 			else if (template.arrayMode == TWO)
 			{
@@ -68,8 +170,8 @@ class TileLayer extends Layer
 					arr[y] = [];
 					for (x in 0...flippedData[y].length)
 					{
-						var	i = flippedData[y][x];
-						arr[y][x] = i == -1 ? [-1] : [tileset.getTileX(i), tileset.getTileY(i)];
+						var tile = flippedData[y][x];
+						arr[y][x] = tile.idx == -1 ? [-1] : [TileData.encodeInt(tile, tileset.getTileX(tile.idx)), tileset.getTileY(tile.idx)];
 					}
 				}
 				data._contents = "dataCoords2D";
@@ -106,12 +208,15 @@ class TileLayer extends Layer
 				{
 					var x = i % gridCellsX;
 					var y = (i / gridCellsX).int();
-					this.data[y][x] = content[i];
+					this.data[y][x].decode(content[i]);
 				}
 			}
 			else if (arrayMode == TWO)
 			{
-				this.data = data.data2D;
+				var content:Array<Array<Int>> = data.data;
+				for (y in 0...data.data2D.length)
+					for (x in 0...data.data2D[y].length)
+						this.data[y][x].decode(data.data[y][x]);
 			}
 			else throw "Invalid Tile Layer Array Mode: " + arrayMode;
 		}
@@ -124,8 +229,12 @@ class TileLayer extends Layer
 				{
 					var x = i % gridCellsX;
 					var y = (i / gridCellsX).int();
-					if (content[i][0] == -1) this.data[y][x] = -1;
-					else this.data[y][x] = tileset.coordsToID(content[i][0], content[i][1]);
+					if (content[i][0] == -1) this.data[y][x].idx = -1;
+					else
+					{
+						var decodedX = TileData.decodeInt(this.data[y][x], content[i][0]);
+						this.data[y][x].idx = tileset.coordsToID(decodedX, content[i][1]);
+					}
 				}
 			}
 			else if (arrayMode == TWO)
@@ -135,8 +244,12 @@ class TileLayer extends Layer
 				{
 					for (x in 0...content[y].length)
 					{
-						if (content[y][x][0] == -1) this.data[y][x] = -1;
-						else this.data[y][x] = tileset.coordsToID(content[y][x][0], content[y][x][1]);
+						if (content[y][x][0] == -1) this.data[y][x].idx = -1;
+						else
+						{
+							var decodedX = TileData.decodeInt(this.data[y][x], content[y][x][0]);
+							this.data[y][x].idx = tileset.coordsToID(decodedX, content[y][x][1]);
+						}
 					}
 				}
 			}
@@ -151,7 +264,16 @@ class TileLayer extends Layer
 		var t = new TileLayer(level, id);
 		t.offset = offset.clone();
 		t.tileset = tileset;
-		t.data = Calc.cloneArray2D(data);
+
+		var deepCopy = Calc.createArray2D(gridCellsX, gridCellsY, new TileData());
+		for (x in 0...data.length) for (y in 0...data[x].length)
+		{
+			var tile = new TileData();
+			tile.copy(data[x][y]);
+			deepCopy[x][y] = tile;
+		}
+		t.data = deepCopy;
+
 		return t;
 	}
 
@@ -163,10 +285,8 @@ class TileLayer extends Layer
 
 	public function addRow(end:Bool):Void
 	{
-		var empty = -1;
-
-		if (end) for (i in 0...data.length) data[i].push(empty);
-		else for (i in 0...data.length) data[i].insert(0, empty);
+		if (end) for (i in 0...data.length) data[i].push(new TileData());
+		else for (i in 0...data.length) data[i].insert(0, new TileData());
 	}
 
 	public function subtractColumn(end:Bool):Void
@@ -177,9 +297,8 @@ class TileLayer extends Layer
 
 	public function addColumn(end:Bool):Void
 	{
-		var empty = -1;
-		var a: Array<Int> = [];
-		for (y in 0...gridCellsY) a.push(empty);
+		var a: Array<TileData> = [];
+		for (y in 0...gridCellsY) a.push(new TileData());
 
 		if (end) data.push(a);
 		else data.insert(0, a);
@@ -286,7 +405,6 @@ class TileLayer extends Layer
 		//Actually shift
 		if (s.x != 0 || s.y != 0)
 		{
-			var empty = -1;
 			var nData = Calc.cloneArray2D(data);
 			for (x in 0...data.length)
 			{
@@ -296,7 +414,7 @@ class TileLayer extends Layer
 					&& (y - s.y) >= 0 && (y - s.y) < data[x].length)
 							nData[x][y] = data[x - s.x.floor()][y - s.y.floor()];
 					else
-							nData[x][y] = empty;
+							nData[x][y] = new TileData();
 				}
 			}
 			data = nData;
@@ -306,9 +424,9 @@ class TileLayer extends Layer
 	/**
 	 * Ogmo's internal data array is flipped from what you'd normally expect in a tilemap data export, so this utility is necessary to flip between Ogmo's structure and the exported structure.
 	 **/
-	function flip2dArray(arr:Array<Array<Int>>):Array<Array<Int>>
+	function flip2dArray(arr:Array<Array<TileData>>):Array<Array<TileData>>
 	{
-		var flipped:Array<Array<Int>> = [];
+		var flipped:Array<Array<TileData>> = [];
 		for (x in 0...arr.length)
 		{
 			for (y in 0...arr[x].length)

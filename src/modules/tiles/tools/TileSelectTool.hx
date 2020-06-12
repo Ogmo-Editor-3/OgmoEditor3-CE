@@ -1,5 +1,6 @@
 package modules.tiles.tools;
 
+import modules.tiles.TileLayer.TileData;
 import modules.tiles.tools.TileTool;
 
 class TileSelectTool extends TileTool
@@ -7,7 +8,7 @@ class TileSelectTool extends TileTool
 	var mode:SelectModes = None;
 	var start:Vector = new Vector();
 	var end:Vector = new Vector();
-	var selection:Array<Array<Int>> = [];
+	var selection:Array<Array<TileData>> = [];
 	var rect:Rectangle = new Rectangle();
 	var freeRect:Rectangle = new Rectangle();
 	var offset:Vector = new Vector();
@@ -47,16 +48,16 @@ class TileSelectTool extends TileTool
 		//EDITOR.overlay.setAlpha(0.75);
 		for (x in 0...selection.length) for (y in 0...selection[x].length)
 		{
-			var id = selection[x][y];
+			var tile = selection[x][y];
 			var cur = new Vector(trueAt.x + x * layer.template.gridSize.x, trueAt.y + y * layer.template.gridSize.y);
 			if (!layer.insideGrid(new Vector(freeRect.x + x, freeRect.y + y))) continue;
-			if (id == -1) // TODO - It might be nice to be able to set this to 0 -01010111
+			if (tile.idx == -1) // TODO - It might be nice to be able to set this to 0 -01010111
 			{
 				if (!OGMO.ctrl) EDITOR.overlay.drawRect(cur.x, cur.y, layer.template.gridSize.x, layer.template.gridSize.y, Color.red.x(0.2));
 				continue;
 			}
 			EDITOR.overlay.drawRect(cur.x, cur.y, layer.template.gridSize.x, layer.template.gridSize.y, Color.red.x(0.25));
-			EDITOR.overlay.drawTile(cur.x, cur.y, layer.tileset, id);
+			EDITOR.overlay.drawTile(cur.x, cur.y, layer.tileset, tile);
 			trace('\n at: ${at.x} / ${at.y} \n cur: ${cur.x} / ${cur.y}');
 		}
 		//EDITOR.overlay.setAlpha(1);
@@ -89,8 +90,8 @@ class TileSelectTool extends TileTool
 		updateRect();
 		if (OGMO.ctrl) return; 
 		for (x in 0...rect.width.int()) for (y in 0...rect.height.int()) 
-			if (selection[x][y] != -1) // TODO - It might be nice to be able to set this to 0 -01010111
-				layer.data[rect.x.int() + x][rect.y.int() + y] = -1; // TODO - It might be nice to be able to set this to 0 -01010111
+			if (selection[x][y].idx != -1) // TODO - It might be nice to be able to set tile idx to 0 -01010111
+				layer.data[rect.x.int() + x][rect.y.int() + y] = new TileData(); // TODO - It might be nice to be able to set tile idx to 0 -01010111
 		EDITOR.dirty();
 	}
 
@@ -135,8 +136,8 @@ class TileSelectTool extends TileTool
 		mode = None;
 		EDITOR.overlayDirty();
 		if (rect.width <= 0 || rect.height <= 0) return;
-		selection = Calc.createArray2D(rect.width.int(), rect.height.int(), -1); // TODO - It might be nice to be able to set this to 0 -01010111
-		for (x in 0...rect.width.int()) for (y in 0...rect.height.int()) selection[x][y] = layer.data[rect.x.int() + x][rect.y.int() + y];
+		selection = Calc.createArray2D(rect.width.int(), rect.height.int(), new TileData());
+		for (x in 0...rect.width.int()) for (y in 0...rect.height.int()) selection[x][y] = new TileData().copy(layer.data[rect.x.int() + x][rect.y.int() + y]);
 	}
 
 	function placeSelection(pos:Vector)
@@ -144,9 +145,9 @@ class TileSelectTool extends TileTool
 		mode = None;
 		for (x in 0...freeRect.width.int()) for (y in 0...freeRect.height.int())
 		{
-			if (OGMO.ctrl && selection[x][y] == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
+			if (OGMO.ctrl && selection[x][y].idx == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
 			if (layer.insideGrid(new Vector(freeRect.x + x, freeRect.y + y)))
-				layer.data[freeRect.x.int() + x][freeRect.y.int() + y] = selection[x][y];
+				layer.data[freeRect.x.int() + x][freeRect.y.int() + y].copy(selection[x][y]);
 		}
 		EDITOR.dirty();
 	}
@@ -187,7 +188,7 @@ class TileSelectTool extends TileTool
 		for (x in 0...freeRect.width.int()) for (y in 0...freeRect.height.int())
 		{
 			if (layer.insideGrid(new Vector(freeRect.x + x, freeRect.y + y)))
-				layer.data[freeRect.x.int() + x][freeRect.y.int() + y] = -1; // TODO - It might be nice to be able to set this to 0 -01010111
+				layer.data[freeRect.x.int() + x][freeRect.y.int() + y] = new TileData(); // TODO - It might be nice to be able to set tile idx to 0 -01010111
 		}
 		EDITOR.dirty();
 		deselectTiles();

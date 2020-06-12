@@ -1,12 +1,13 @@
 package modules.tiles.tools;
 
+import modules.tiles.TileLayer.TileData;
 import util.Random;
 
 class TileRectangleTool extends TileTool
 {
 	public var drawing:Bool = false;
 	public var deleting:Bool = false;
-	public var brush:Array<Array<Int>>;
+	public var brush:Array<Array<TileData>>;
 	public var start:Vector = new Vector();
 	public var end:Vector = new Vector();
 	public var rect:Rectangle = new Rectangle();
@@ -38,7 +39,7 @@ class TileRectangleTool extends TileTool
 				for (y in 0...rect.height.int())
 				{
 					var tile = brushAt(brush, rect.x.int() + x - start.x.int(), rect.y.int() + y - start.y.int(), random);
-					if (tile != -1)
+					if (tile.idx != -1)
 						EDITOR.overlay.drawTile(at.x + x * layer.template.gridSize.x, at.y + y * layer.template.gridSize.y, layer.tileset, tile);
 				}
 			}
@@ -72,7 +73,7 @@ class TileRectangleTool extends TileTool
 		drawing = true;
 		deleting = true;
 		start = end = pos;
-		brush = [[-1]]; // TODO - It might be nice to be able to set this to 0 -01010111
+		brush = [[new TileData()]];
 		updateRect();
 	}
 
@@ -119,6 +120,8 @@ class TileRectangleTool extends TileTool
 
 	override public function onKeyPress(key:Int)
 	{
+		super.onKeyPress(key);
+
 		if (OGMO.keyIsCtrl(key))
 			EDITOR.overlayDirty();
 	}
@@ -143,7 +146,7 @@ class TileRectangleTool extends TileTool
 			EDITOR.level.store("rectangle fill");
 			for (i in 0...rect.width.int())
 				for (j in 0...rect.height.int())
-					layer.data[rect.x.int() + i][rect.y.int() + j] = brushAt(brush, rect.x.int() + i - start.x.int(), rect.y.int() + j - start.y.int(), random);
+					layer.data[rect.x.int() + i][rect.y.int() + j].copy(brushAt(brush, rect.x.int() + i - start.x.int(), rect.y.int() + j - start.y.int(), random));
 		}
 	}
 
@@ -162,7 +165,7 @@ class TileRectangleTool extends TileTool
 		{
 			for (j in 0...rect.height.int())
 			{
-				if (layer.data[rect.x.int() + i][rect.y.int() + j] != brushAt(brush, rect.x.int() + i - start.x.int(), rect.y.int() + j - start.y.int(), random))
+				if (!layer.data[rect.x.int() + i][rect.y.int() + j].equals(brushAt(brush, rect.x.int() + i - start.x.int(), rect.y.int() + j - start.y.int(), random)))
 				{
 					ret = true;
 					break;

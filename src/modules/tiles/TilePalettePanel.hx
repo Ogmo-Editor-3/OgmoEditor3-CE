@@ -1,5 +1,6 @@
 package modules.tiles;
 
+import modules.tiles.TileLayer.TileData;
 import js.Browser;
 import js.jquery.Event;
 import util.Matrix;
@@ -211,7 +212,7 @@ class TilePalettePanel extends SidePanel
 				for (y in 0...selection.height.floor())
 				{
 					var id:Int = selection.x.floor() + x + (selection.y.floor() + y) * columns;
-					layerEditor.brush[x].push(id);
+					layerEditor.brush[x].push(new TileData(id));
 				}
 			}
 
