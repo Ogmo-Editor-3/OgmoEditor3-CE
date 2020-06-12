@@ -4,27 +4,20 @@ import level.data.Level;
 import project.data.Tileset;
 import level.data.Layer;
 
-// Clockwise, in degrees
-@:enum
-abstract TileRotation(Float) {
-  var None = 0;
-  var Ninety = 90;
-  var OneEighty = 180;
-  var TwoSeventy = 270;
-}
-
 class TileData
 {
-	static final FLAG_FLIP_HORIZONTAL		= 0x40000000;
-	static final FLAG_FLIP_VERTICAL			= 0x20000000;
-	static final FLAG_FLIP_ANTIDIAGONALLY	= 0x10000000;
+	static public inline var EMPTY_TILE = -1; // TODO - It might be nice to be able to set this to 0 -01010111
 
-	public var idx = -1; // TODO - It might be nice to be able to set this to 0 -01010111
+	static public inline var FLAG_FLIP_HORIZONTAL		= 0x40000000;
+	static public inline var FLAG_FLIP_VERTICAL		= 0x20000000;
+	static public inline var FLAG_FLIP_ANTIDIAGONALLY	= 0x10000000;
+
+	public var idx = EMPTY_TILE;
 	public var flipX = false;
 	public var flipY = false;
 	public var flipAntiDiagonally = false;
 
-	public function new(idx:Int = -1) // TODO - It might be nice to be able to set this to 0 -01010111
+	public function new(idx:Int = EMPTY_TILE)
 	{
 		this.idx = idx;
 	}
@@ -46,6 +39,11 @@ class TileData
 			flipX == rhs.flipX &&
 			flipY == rhs.flipY &&
 			flipAntiDiagonally == rhs.flipAntiDiagonally;
+	}
+
+	public function isEmptyTile():Bool
+	{
+		return idx == EMPTY_TILE;
 	}
 
 	static public function encodeInt(tile:TileData, value:Int):Int
@@ -150,7 +148,7 @@ class TileLayer extends Layer
 			else if (template.arrayMode == TWO)
 			{
 				data._contents = "data2D";
-				data.data2D = Calc.createArray2D(gridCellsX, gridCellsY, -1);
+				data.data2D = Calc.createArray2D(gridCellsX, gridCellsY, TileData.EMPTY_TILE);
 				for (x in 0...flippedData.length) for (y in 0...flippedData[x].length) data.data2D[x][y] = flippedData[x][y].encode();
 			}
 			else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
@@ -160,7 +158,7 @@ class TileLayer extends Layer
 			if(template.arrayMode == ONE)
 			{
 				data._contents = "dataCoords";
-				data.dataCoords = [for(column in flippedData) for (tile in column) tile.idx == -1 ? [-1] : [TileData.encodeInt(tile, tileset.getTileX(tile.idx)), tileset.getTileY(tile.idx)]];
+				data.dataCoords = [for(column in flippedData) for (tile in column) tile.isEmptyTile() ? [TileData.EMPTY_TILE] : [TileData.encodeInt(tile, tileset.getTileX(tile.idx)), tileset.getTileY(tile.idx)]];
 			}
 			else if (template.arrayMode == TWO)
 			{
@@ -171,7 +169,7 @@ class TileLayer extends Layer
 					for (x in 0...flippedData[y].length)
 					{
 						var tile = flippedData[y][x];
-						arr[y][x] = tile.idx == -1 ? [-1] : [TileData.encodeInt(tile, tileset.getTileX(tile.idx)), tileset.getTileY(tile.idx)];
+						arr[y][x] = tile.isEmptyTile() ? [TileData.EMPTY_TILE] : [TileData.encodeInt(tile, tileset.getTileX(tile.idx)), tileset.getTileY(tile.idx)];
 					}
 				}
 				data._contents = "dataCoords2D";
@@ -229,7 +227,7 @@ class TileLayer extends Layer
 				{
 					var x = i % gridCellsX;
 					var y = (i / gridCellsX).int();
-					if (content[i][0] == -1) this.data[y][x].idx = -1;
+					if (content[i][0] == TileData.EMPTY_TILE) this.data[y][x].idx = TileData.EMPTY_TILE;
 					else
 					{
 						var decodedX = TileData.decodeInt(this.data[y][x], content[i][0]);
@@ -244,7 +242,7 @@ class TileLayer extends Layer
 				{
 					for (x in 0...content[y].length)
 					{
-						if (content[y][x][0] == -1) this.data[y][x].idx = -1;
+						if (content[y][x][0] == TileData.EMPTY_TILE) this.data[y][x].idx = TileData.EMPTY_TILE;
 						else
 						{
 							var decodedX = TileData.decodeInt(this.data[y][x], content[y][x][0]);

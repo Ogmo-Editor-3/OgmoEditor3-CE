@@ -20,7 +20,7 @@ class TileLayerEditor extends LayerEditor
 		{
 			var l:TileLayer = cast layer;
 			var tile = l.data[x][y];
-			if (tile.idx != -1) EDITOR.draw.drawTile(x * l.template.gridSize.x, y * layer.template.gridSize.y, l.tileset, tile);
+			if (!tile.isEmptyTile()) EDITOR.draw.drawTile(x * l.template.gridSize.x, y * layer.template.gridSize.y, l.tileset, tile);
 		}
 	}
 	
@@ -103,7 +103,7 @@ class TileLayerEditor extends LayerEditor
 	{
 		for (x in 0...brush.length) for (y in 0...brush[x].length)
 		{
-			if (brush[x][y].idx == -1 || brush[x][y].idx != brush[0][0].idx + x + y * (cast layer : TileLayer).tileset.tileColumns)
+			if (brush[x][y].isEmptyTile() || brush[x][y].idx != brush[0][0].idx + x + y * (cast layer : TileLayer).tileset.tileColumns)
 				return false;
 		}
 		return true;

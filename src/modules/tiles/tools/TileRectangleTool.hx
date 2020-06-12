@@ -39,7 +39,7 @@ class TileRectangleTool extends TileTool
 				for (y in 0...rect.height.int())
 				{
 					var tile = brushAt(brush, rect.x.int() + x - start.x.int(), rect.y.int() + y - start.y.int(), random);
-					if (tile.idx != -1)
+					if (!tile.isEmptyTile())
 						EDITOR.overlay.drawTile(at.x + x * layer.template.gridSize.x, at.y + y * layer.template.gridSize.y, layer.tileset, tile);
 				}
 			}

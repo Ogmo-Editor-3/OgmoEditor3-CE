@@ -23,7 +23,7 @@ class TilePencilTool extends TileTool
 			if (OGMO.ctrl)
 			{
 				var tile = random.peekChoice2D(layerEditor.brush);
-				if (tile.idx != -1 && layer.insideGrid(prevPos))
+				if (!tile.isEmptyTile() && layer.insideGrid(prevPos))
 					EDITOR.overlay.drawTile(at.x, at.y, layer.tileset, tile);
 			}
 			else
@@ -33,7 +33,7 @@ class TilePencilTool extends TileTool
 					for (y in 0...layerEditor.brush[x].length)
 					{
 						var tile = layerEditor.brush[x][y];
-						if (tile.idx != -1)
+						if (!tile.isEmptyTile())
 						{
 							var cur = new Vector(at.x + x * layer.template.gridSize.x, at.y + y * layer.template.gridSize.y);
 							if (layer.insideGrid(new Vector(prevPos.x + x, prevPos.y + y)))
