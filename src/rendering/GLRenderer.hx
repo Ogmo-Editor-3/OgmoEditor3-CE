@@ -1,5 +1,10 @@
 package rendering;
 
+import electron.NativeImage;
+import js.node.Fs;
+import js.html.ImageData;
+import js.Browser;
+import js.lib.Uint8Array;
 import js.html.CanvasElement;
 import js.lib.Float32Array;
 import js.html.webgl.RenderingContext;
@@ -70,6 +75,75 @@ class GLRenderer
 		gl.deleteBuffer(posBuffer);
 		gl.deleteBuffer(colBuffer);
 		gl.deleteBuffer(uvBuffer);
+	}
+
+	var offscreenTexture: js.html.webgl.Texture;
+	var offscreenFramebuffer: js.html.webgl.Framebuffer;
+
+	public function setupRenderTarget(size: Vector): Void
+	{
+		offscreenTexture = gl.createTexture();
+		gl.bindTexture(RenderingContext.TEXTURE_2D, offscreenTexture);
+
+		var level = 0;
+		var internalFormat = RenderingContext.RGBA;
+		var border = 0;
+		var format = RenderingContext.RGBA;
+		var type = RenderingContext.UNSIGNED_BYTE;
+		var data = null;
+		gl.texImage2D(RenderingContext.TEXTURE_2D, level, internalFormat, Math.floor(size.x), Math.floor(size.y), border, format, type, data);
+
+		gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.LINEAR);
+		gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, RenderingContext.CLAMP_TO_EDGE);
+		gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, RenderingContext.CLAMP_TO_EDGE);
+
+		offscreenFramebuffer = gl.createFramebuffer();
+		gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, offscreenFramebuffer);
+		gl.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, offscreenTexture, level);
+
+		gl.clearColor(0, 0, 0, 0);
+		gl.clear(RenderingContext.COLOR_BUFFER_BIT| RenderingContext.DEPTH_BUFFER_BIT);
+
+		gl.viewport(0, 0, Math.floor(size.x), Math.floor(size.y));
+		orthoMatrix = Matrix3D.orthographic(0, size.x, 0, size.y, -100, 100);
+		EDITOR.level.camera.setIdentity();
+
+		var canRead = gl.checkFramebufferStatus(RenderingContext.FRAMEBUFFER) == RenderingContext.FRAMEBUFFER_COMPLETE;
+	}
+
+	public function getRenderTargetPixels(size: Vector)
+	{
+		var pixels = new Uint8Array(Math.floor(size.x) * Math.floor(size.y) * 4);
+		gl.readPixels(0, 0, Math.floor(size.x), Math.floor(size.y), RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, pixels);
+
+		var canvas = Browser.document.createCanvasElement();
+		canvas.width = Math.floor(size.x);
+		canvas.height = Math.floor(size.y);
+
+		var ctx = canvas.getContext("2d");
+		var imageData: ImageData = ctx.createImageData(size.x, size.y);
+		for (i in 0...imageData.data.length)
+			imageData.data[i] = pixels[i];
+		ctx.putImageData(imageData, 0, 0);
+
+		var path = FileSystem.chooseSaveFile("Level as image", [{ name: "Image", extensions: ["png"]}]);
+		if (path.length > 0)
+		{
+			var nativeImage = js.Lib.require('electron').nativeImage;
+			var img = nativeImage.createFromDataURL(canvas.toDataURL("image/png"));
+			Fs.writeFileSync(path, img.toPNG());
+		}
+
+		canvas.remove();
+	}
+
+	public function finishRenderTarget(): Void
+	{
+		gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
+		updateCanvasSize();
+
+		gl.deleteTexture(offscreenTexture);
+		gl.deleteFramebuffer(offscreenFramebuffer);
 	}
 
 	// SIZE

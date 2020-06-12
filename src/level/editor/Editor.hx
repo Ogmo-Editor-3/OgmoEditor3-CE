@@ -580,6 +580,25 @@ class Editor
 		EDITOR.toolBelt.checkAvailability();
 		
 		draw.finishDrawing();
+
+		if (OGMO.alt)
+		{
+			draw.setAlpha(1);
+
+			draw.setupRenderTarget(level.data.size);
+
+			var i = level.layers.length - 1;
+			while(i >= 0) 
+			{
+				if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
+				i--;
+			}
+
+			draw.finishDrawing();
+
+			draw.getRenderTargetPixels(level.data.size);
+			draw.finishRenderTarget();
+		}
 	}
 
 	public function drawOverlay():Void
