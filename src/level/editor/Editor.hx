@@ -45,6 +45,7 @@ class Editor
 	var mouseInside:Bool = false;
 	var middleClickMove:Bool = false;
 	var lastOverlayUpdate:Float = 0;
+	var saveLevelAsImageRequested:Bool = false;
 
 	var resizingLeft:Bool = false;
 	var resizingRight:Bool = false;
@@ -581,8 +582,10 @@ class Editor
 		
 		draw.finishDrawing();
 
-		if (OGMO.alt)
+		if (saveLevelAsImageRequested)
 		{
+			saveLevelAsImageRequested = false;
+
 			draw.setAlpha(1);
 
 			draw.setupRenderTarget(level.data.size);
@@ -617,6 +620,12 @@ class Editor
 			overlay.drawLineRect(level.zoomRect, Color.white);
 
 		overlay.finishDrawing();
+	}
+
+	public function saveLevelAsImage():Void
+	{
+		saveLevelAsImageRequested = true;
+		isDirty = true;
 	}
 
 	/*
