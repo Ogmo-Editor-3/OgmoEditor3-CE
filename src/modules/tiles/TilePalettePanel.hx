@@ -272,11 +272,11 @@ class TilePalettePanel extends SidePanel
 
 			// draw tiles (+transparent bg)
 			context.fillStyle = "rgb(200,200,200)";
-			var tx = tileset.tileSeparationX, x = 0;
-			while(tx < image.width)
+			var tx = tileset.tileSeparationX + tileset.tileMarginX, x = 0;
+			while(tx < image.width - tileset.tileMarginX)
 			{
-				var ty = tileset.tileSeparationY, y = 0;
-				while(ty < image.height)
+				var ty = tileset.tileSeparationY + tileset.tileMarginY, y = 0;
+				while(ty < image.height - tileset.tileMarginY)
 				{
 					var drawX = x * (tileset.tileWidth + spacing);
 					var drawY = y * (tileset.tileHeight + spacing);
