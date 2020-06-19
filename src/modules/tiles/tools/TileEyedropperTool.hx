@@ -51,7 +51,7 @@ class TileEyedropperTool extends TileTool
 			
 			if (rect.width > 0 && rect.height > 0)
 			{
-				var brush:Array<Array<Int>> = Calc.createArray2D(rect.width.int(), rect.height.int(), -1);             
+				var brush:Array<Array<Int>> = Calc.createArray2D(rect.width.int(), rect.height.int(), -1);
 				for (x in 0...rect.width.int())
 					for (y in 0...rect.height.int())
 						brush[x][y] = layer.data[rect.x.int() + x][rect.y.int() + y];

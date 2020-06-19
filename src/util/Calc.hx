@@ -54,7 +54,7 @@ class Calc
 		for (i in 0...lengthA)
 		{
 			var row:Array<T> = [];
-			for (j in 0...lengthB) row.push(val);          
+			for (j in 0...lengthB) row.push(val);
 			ret.push(row);
 		}
 		

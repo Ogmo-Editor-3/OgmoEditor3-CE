@@ -149,6 +149,4 @@ class ToolBelt
 	{
 		for (button in buttons) button.tool.isAvailable() ? button.available() : button.unavailable();
 	}
-	
-
 }

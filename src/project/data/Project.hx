@@ -20,6 +20,8 @@ class Project
 	public var anglesRadians:Bool = true;
 	public var defaultExportMode:String = ".json";
 	public var compactExport:Bool = false;
+	public var externalScript:String;
+	public var playCommand:String;
 	public var directoryDepth:Int = 5;
 	public var layerGridDefaultSize = new Vector(8, 8);
 
@@ -36,11 +38,13 @@ class Project
 	public var path:String;
 	public var lastSavePath:String;
 	public var _nextUnsavedLevelID:Int = 0;
+	public var projectHooks:ProjectHooks;
 
 	public function new(path:String)
 	{
 		this.name = "New Project";
 		this.path = Path.resolve(path);
+		this.projectHooks = new ProjectHooks();
 	}
 	
 	public function unload()
@@ -84,7 +88,7 @@ class Project
 	}
 
 	/*
-			LEVEL PATHS
+		LEVEL PATHS
 	*/
 
 	public function getAbsoluteLevelPath(path:String):String
@@ -130,7 +134,7 @@ class Project
 	}
 
 	/*
-			SAVE AND LOAD
+		SAVE AND LOAD
 	*/
 
 	public function load(data:ProjectSaveFile):Project
@@ -148,6 +152,8 @@ class Project
 		levelValues = ValueTemplate.loadList(data.levelValues);
 		defaultExportMode = Imports.string(data.defaultExportMode, ".json");
 		compactExport = data.compactExport;
+		externalScript = data.externalScript;
+		playCommand = data.playCommand;
 
 		// tilesets
 		if (data.tilesets != null) for (tileset in data.tilesets) tilesets.push(Tileset.load(this, tileset));
@@ -170,6 +176,10 @@ class Project
 		for (entity in data.entities) entities.templates.push(EntityTemplate.load(this, entity));
 		entities.refreshTagLists();
 
+		// load user project hooks
+		var scriptLocation:String = externalScript != null ? getAbsoluteLevelPath(externalScript) : "";
+		projectHooks.set(scriptLocation);
+
 		initLastSavePath();
 		return this;
 	}
@@ -191,18 +201,22 @@ class Project
 			levelValues: ValueTemplate.saveList(this.levelValues),
 			defaultExportMode: defaultExportMode,
 			compactExport: compactExport,
+			externalScript: externalScript,
+			playCommand: playCommand,
 			entityTags: entities.tags,
 			layers: [for (layer in layers) layer.save()],
 			entities: [for (entity in entities.templates) entity.save()],
 			tilesets: [for (tileset in tilesets) tileset.save()],
 		};
 
+		data = projectHooks.beforeSaveProject(this, data);
+
 		initLastSavePath();
 		return data;
 	}
 
 	/*
-			DEBUG
+		DEBUG
 	*/
 
 	public function logLayers()
@@ -233,6 +247,8 @@ typedef ProjectSaveFile =
 	levelValues:Array<Dynamic>, // TODO: do we need more specific than this? -01010111
 	defaultExportMode:String,
 	compactExport:Bool,
+	externalScript:String,
+	playCommand:String,
 	entityTags:Array<String>,
 	layers:Array<Dynamic>,
 	entities:Array<Dynamic>,

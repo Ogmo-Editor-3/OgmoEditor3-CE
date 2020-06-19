@@ -35,6 +35,7 @@ class EntityRotateTool extends EntityTool
 
 	override public function onMouseUp(pos:Vector)
 	{
+		if (!rotating) return;
 		layerEditor.selection.changed = true;
 		rotating = false;
 		EDITOR.locked = false;

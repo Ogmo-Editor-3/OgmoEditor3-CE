@@ -6,59 +6,62 @@ import level.data.Layer;
 
 class DecalLayer extends Layer
 {
-
 	public var decals:Array<Decal> = [];
 
-    override function save():Dynamic
-    {
-      var data = super.save();
-      data._contents = "decals";
-		  data.decals = [];
+	override function save():Dynamic
+	{
+		var data = super.save();
+		data._contents = "decals";
+		data.decals = [];
+		for (decal in decals) data.decals.push(decal.save((cast template : DecalLayerTemplate).scaleable, (cast template : DecalLayerTemplate).rotatable));
+		data.folder = (cast template : DecalLayerTemplate).folder;
 
-		  for (decal in decals) data.decals.push(decal.save((cast template : DecalLayerTemplate).scaleable, (cast template : DecalLayerTemplate).rotatable));
+		return data;
+	}
 
-      return data;
-    }
+	override function load(data:Dynamic):Void
+	{
+		super.load(data);
 
-    override function load(data:Dynamic):Void
-    {
-      super.load(data);
+		var decals = Imports.contentsArray(data, "decals");
 
-		  var decals = Imports.contentsArray(data, "decals");
+		for (decal in decals)
+		{
+			
+			var position = Imports.vector(decal, "x", "y");
+			var path = haxe.io.Path.normalize(decal.texture);
+			var relative = Path.join((cast template : DecalLayerTemplate).folder, path);
+			var texture:Texture = null;
+			var origin = Imports.vector(decal, "originX", "originY", new Vector(0.5, 0.5));
+			var scale = Imports.vector(decal, "scaleX", "scaleY", new Vector(1, 1));
+			var rotation = Imports.float(decal.rotation, 0);
 
-      for (decal in decals)
-      {
-        var position = Imports.vector(decal, "x", "y");
-        var path = haxe.io.Path.normalize(decal.texture);
-        var relative = Path.join((cast template : DecalLayerTemplate).folder, path);
-        var texture:Texture = null;
-        var scale = Imports.vector(decal, "scaleX", "scaleY", new Vector(1, 1));
-        var rotation = Imports.float(decal.rotation, 0);
-				var values = Imports.values(decal.values, (cast template:DecalLayerTemplate).values);
+			if (decal.values == null) decal.values = [];
+			var values = Imports.values(decal.values, (cast template:DecalLayerTemplate).values);
 
-        trace(path + ", " + relative);
+			trace(path + ", " + relative);
 
-        for (tex in (cast template : DecalLayerTemplate).textures)
-          if (tex.path == relative)
-          {
-            texture  = tex;
-            break;
-          }
+			for (tex in (cast template : DecalLayerTemplate).textures)
+				if (tex.path == relative)
+				{
+					texture	= tex;
+					break;
+				}
 
-        this.decals.push(new Decal(position, path, texture, scale, rotation, values));
-      }
-    }
+			this.decals.push(new Decal(position, path, texture, origin, scale, rotation, values));
+		}
+	}
 
 	public function getFirstAt(pos:Vector):Array<Decal>
 	{
-    var i = decals.length - 1;
+		var i = decals.length - 1;
 		while (i >= 0)
 		{
 			var decal = decals[i];
-			if (pos.x > decal.position.x - decal.width / 2 && pos.y > decal.position.y - decal.height / 2 &&
-				pos.x < decal.position.x + decal.width / 2 && pos.y < decal.position.y + decal.height / 2)
+			if (pos.x > decal.position.x - decal.width * decal.origin.x && pos.y > decal.position.y - decal.height * decal.origin.y &&
+				pos.x < decal.position.x + decal.width * (1-decal.origin.x) && pos.y < decal.position.y + decal.height * (1-decal.origin.y))
 				return [decal];
-      i--;
+			i--;
 		}
 		return [];
 	}
@@ -70,10 +73,10 @@ class DecalLayer extends Layer
 		while (i >= 0)
 		{
 			var decal = decals[i];
-			if (pos.x > decal.position.x - decal.width / 2 && pos.y > decal.position.y - decal.height / 2 &&
-				pos.x < decal.position.x + decal.width / 2 && pos.y < decal.position.y + decal.height / 2)
+			if (pos.x > decal.position.x - decal.width * decal.origin.x && pos.y > decal.position.y - decal.height * decal.origin.y &&
+				pos.x < decal.position.x + decal.width * (1-decal.origin.x) && pos.y < decal.position.y + decal.height * (1-decal.origin.y))
 				list.push(decal);
-      i--;
+			i--;
 		}
 		return list;
 	}
@@ -85,32 +88,32 @@ class DecalLayer extends Layer
 		while (i >= 0)
 		{
 			var decal = decals[i];
-			if (rect.right > decal.position.x - decal.width / 2 && rect.bottom > decal.position.y - decal.height / 2 &&
-				rect.left < decal.position.x + decal.width / 2 && rect.top < decal.position.y + decal.height / 2)
+			if (rect.right > decal.position.x - decal.width * decal.origin.x && rect.bottom > decal.position.y - decal.height * decal.origin.y &&
+				rect.left < decal.position.x + decal.width * (1-decal.origin.x) && rect.top < decal.position.y + decal.height * (1-decal.origin.y))
 				list.push(decal);
-      i--;
+			i--;
 		}
 		return list;
 	}
 
-  override function clone():DecalLayer
-  {
+	override function clone():DecalLayer
+	{
 		var layer = new DecalLayer(level, id);
 		for (decal in decals) layer.decals.push(decal.clone());
-    return layer;
-  }
+		return layer;
+	}
 
-  override function resize(newSize:Vector, shiftBy:Vector):Void
-  {
-      shift(shiftBy);
-  }
+	override function resize(newSize:Vector, shiftBy:Vector):Void
+	{
+		shift(shiftBy);
+	}
 
-  override function shift(amount:Vector):Void
-  {
+	override function shift(amount:Vector):Void
+	{
 		for (decal in decals)
 		{
 			decal.position.x += amount.x;
 			decal.position.y += amount.y;
 		}
-  }
+	}
 }

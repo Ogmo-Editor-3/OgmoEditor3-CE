@@ -4,60 +4,60 @@ import js.Node.process;
 
 typedef MenuTemplate = 
 {
-  ?label:String,
-  ?role:String,
-  ?type:String,
-  ?submenu:Array<MenuTemplate>
+	?label:String,
+	?role:String,
+	?type:String,
+	?submenu:Array<MenuTemplate>
 }
 
 class AppMenu 
 {
-  public static function build() 
-  {
-    var template:Array<MenuTemplate> = [];
-    
-    if (process.platform == 'darwin') template.push({
-      label: 'Ogmo',
-      submenu: [
-        { role: 'about' },
-        { type: 'separator' },
-        { role: 'services' },
-        { type: 'separator' },
-        { role: 'hide' },
-        { role: 'hideothers' },
-        { role: 'unhide' },
-        { type: 'separator' },
-        { role: 'quit' }
-      ]
-    });
+	public static function build() 
+	{
+		var template:Array<MenuTemplate> = [];
 
-    // TODO - add menu items based on the current app state
-    // if (Ogmo.startPage.active)
-    // {
-      
-    // }
+		if (process.platform == 'darwin') template.push({
+			label: 'Ogmo',
+			submenu: [
+				{ role: 'about' },
+				{ type: 'separator' },
+				{ role: 'services' },
+				{ type: 'separator' },
+				{ role: 'hide' },
+				{ role: 'hideothers' },
+				{ role: 'unhide' },
+				{ type: 'separator' },
+				{ role: 'quit' }
+			]
+		});
 
-    // if (Ogmo.editor.active)
-    // {
-      
-    // }
+		// TODO - add menu items based on the current app state
+		// if (Ogmo.startPage.active)
+		// {
+			
+		// }
 
-    // if (Ogmo.projectEditor.active)
-    // {
-      
-    // }
+		// if (Ogmo.editor.active)
+		// {
+			
+		// }
 
-    template.push({
-      label: 'View',
-      submenu: [
-        { role: 'reload' },
-        { role: 'forcereload' },
-        { role: 'toggledevtools' },
-      ]
-    });
+		// if (Ogmo.projectEditor.active)
+		// {
+			
+		// }
 
-    var menu = electron.main.Menu.buildFromTemplate(template);
-    electron.main.Menu.setApplicationMenu(menu);
-    // OGMO.app.setMenu(template);
-  }
+		template.push({
+			label: 'View',
+			submenu: [
+				{ role: 'reload' },
+				{ role: 'forcereload' },
+				{ role: 'toggledevtools' },
+			]
+		});
+
+		var menu = electron.main.Menu.buildFromTemplate(template);
+		electron.main.Menu.setApplicationMenu(menu);
+		// OGMO.app.setMenu(template);
+	}
 }

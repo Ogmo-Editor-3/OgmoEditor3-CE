@@ -70,8 +70,8 @@
         box-sizing: border-box;
         float: left;
 
-        & .button { width: 100%; float: left;}
-        & .button:first-child { margin-bottom: 4%; }
+        & .button { width: 100%; float: left; margin-top: 10px; }
+        & .button:not():last-child { margin-bottom: 4%; }
     }
 
     &_content

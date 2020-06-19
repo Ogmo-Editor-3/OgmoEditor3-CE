@@ -17,15 +17,15 @@ import util.Klaw;
 
 typedef Files = 
 {
-  ?name: String,
+	?name: String,
 	?dirname:String,
-  ?parent: Files, 
-  ?textures: Array<Dynamic>, 
-  ?subdirs: Array<Files>
+	?parent: Files,
+	?textures: Array<Dynamic>,
+	?subdirs: Array<Files>
 }
 
 class DecalLayerTemplate extends LayerTemplate
-{   
+{
 	public static function startup()
 	{
 		var tools:Array<Tool> = [
@@ -47,20 +47,20 @@ class DecalLayerTemplate extends LayerTemplate
 	public var rotatable:Bool;
 	public var doRefresh:Void->Void;
 
-  var walker:Walker;
+	var walker:Walker;
 
-  override function createEditor(id:Int): LayerEditor
-  {
+	override function createEditor(id:Int): LayerEditor
+	{
 		return new DecalLayerEditor(id);
-  }
+	}
 
-  override function createLayer(level:Level, id:Int):DecalLayer
-  {
-  	return new DecalLayer(level, id);
-  }
+	override function createLayer(level:Level, id:Int):DecalLayer
+	{
+		return new DecalLayer(level, id);
+	}
 
-  override function save():Dynamic
-  {
+	override function save():Dynamic
+	{
 		var data:Dynamic = super.save();
 		data.folder = folder;
 		data.includeImageSequence = includeImageSequence;
@@ -68,10 +68,10 @@ class DecalLayerTemplate extends LayerTemplate
 		data.rotatable = rotatable;
 		data.values = ValueTemplate.saveList(values);
 		return data;
-  }
-  
-  override function load(data:Dynamic):DecalLayerTemplate
-  {
+	}
+
+	override function load(data:Dynamic):DecalLayerTemplate
+	{
 		super.load(data);
 		folder = data.folder;
 		includeImageSequence = data.includeImageSequence;
@@ -79,7 +79,7 @@ class DecalLayerTemplate extends LayerTemplate
 		rotatable = data.rotatable;
 		values = ValueTemplate.loadList(data.values);
 		return this;
-  }
+	}
 
 	override function projectWasLoaded(project:Project):Void
 	{
@@ -120,9 +120,11 @@ class DecalLayerTemplate extends LayerTemplate
 		// starts reading all directories
 		var path = Path.join(Path.dirname(project.path), folder);
 		files.dirname = path;
-		if (FileSystem.exists(path)) walker = new Walker(path)
+		if (FileSystem.exists(path))
+		{
+			walker = new Walker(path)
 			.on("data", (item:Item) -> { if(item.path != path) recursiveAdd(item, files); })
-    	.on("end", () -> {
+			.on("end", () -> {
 				// remove sequences
 				if (!includeImageSequence)
 				{
@@ -161,7 +163,7 @@ class DecalLayerTemplate extends LayerTemplate
 						obj.textures = newList;
 
 						// do the same on subdirectories
-						for  (subdir in obj.subdirs) removeSequence(subdir);
+						for	(subdir in obj.subdirs) removeSequence(subdir);
 					}
 
 					removeSequence(files);
@@ -174,7 +176,7 @@ class DecalLayerTemplate extends LayerTemplate
 					for (texture in obj.textures)
 					{
 						var ext = Path.extname(texture);
-						if (ext != ".png" && ext != ".jpeg" && ext  != ".jpg" && ext != ".bmp")
+						if (ext != ".png" && ext != ".jpeg" && ext != ".jpg" && ext != ".bmp")
 							continue;
 							
 						var tex = Texture.fromFile(texture);
@@ -194,6 +196,7 @@ class DecalLayerTemplate extends LayerTemplate
 				loadTextures(files);
 				if (doRefresh != null) doRefresh();
 			});
+		}
 	}
 
 	override function projectWasUnloaded()

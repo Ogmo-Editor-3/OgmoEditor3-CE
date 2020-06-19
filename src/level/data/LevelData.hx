@@ -11,11 +11,11 @@ class LevelData
 	public var offset:Vector;
 	public var values:Array<Value>;
 
-  public function new() {
-    size = new Vector();
+	public function new() {
+		size = new Vector();
 		offset = new Vector();
-	  values = [];
-  }
+		values = [];
+	}
 
 	public function clone():LevelData
 	{

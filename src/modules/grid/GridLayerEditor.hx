@@ -59,5 +59,4 @@ class GridLayerEditor extends LayerEditor
 	{
 		EDITOR.toolBelt.current.activated();
 	}
-
 }

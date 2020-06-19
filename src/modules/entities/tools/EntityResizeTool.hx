@@ -51,6 +51,7 @@ class EntityResizeTool extends EntityTool
 
 	override public function onMouseUp(pos:Vector)
 	{
+		if (!resizing) return;
 		layerEditor.selection.changed = true;
 		resizing = false;
 		EDITOR.locked = false;

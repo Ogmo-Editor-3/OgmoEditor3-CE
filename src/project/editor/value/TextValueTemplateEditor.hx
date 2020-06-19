@@ -6,27 +6,27 @@ import util.Fields;
 
 class TextValueTemplateEditor extends ValueTemplateEditor
 {
-  public var nameField:JQuery;
-  public var defaultField:JQuery;
+	public var nameField:JQuery;
+	public var defaultField:JQuery;
 
-  override function importInto(into:JQuery)
-  {
-    var textTemplate:TextValueTemplate = cast template;
+	override function importInto(into:JQuery)
+	{
+		var textTemplate:TextValueTemplate = cast template;
 
-    // name
-    nameField = Fields.createField("Name", textTemplate.name);
-    Fields.createSettingsBlock(into, nameField, SettingsBlock.Full, "Name", SettingsBlock.InlineTitle);
+		// name
+		nameField = Fields.createField("Name", textTemplate.name);
+		Fields.createSettingsBlock(into, nameField, SettingsBlock.Full, "Name", SettingsBlock.InlineTitle);
 
-    // default val
-    defaultField = Fields.createTextarea("...", textTemplate.defaults);
-    Fields.createSettingsBlock(into, defaultField, SettingsBlock.Full, "Default");
-  }
+		// default val
+		defaultField = Fields.createTextarea("...", textTemplate.defaults);
+		Fields.createSettingsBlock(into, defaultField, SettingsBlock.Full, "Default");
+	}
 
-  override function save()
-  {
-    var textTemplate:TextValueTemplate = cast template;
+	override function save()
+	{
+		var textTemplate:TextValueTemplate = cast template;
 
-    textTemplate.name = Fields.getField(nameField);
-    textTemplate.defaults = Fields.getField(defaultField);
-  }
+		textTemplate.name = Fields.getField(nameField);
+		textTemplate.defaults = Fields.getField(defaultField);
+	}
 }

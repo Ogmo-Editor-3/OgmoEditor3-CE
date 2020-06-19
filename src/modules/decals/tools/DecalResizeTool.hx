@@ -39,6 +39,7 @@ class DecalResizeTool extends DecalTool
 
 	override public function onMouseUp(pos:Vector)
 	{
+		if (!resizing) return;
 		resizing = false;
 		EDITOR.locked = false;
 		EDITOR.overlayDirty();
@@ -92,6 +93,6 @@ class DecalResizeTool extends DecalTool
 	override public function keyToolCtrl():Int return resizing ? -1 : 0;
 	override public function keyToolAlt():Int return 1;
 	override public function keyToolShift():Int return 3;
-	override function isAvailable():Bool return layerEditor.selected.length > 0;
+	override function isAvailable():Bool return (cast layerEditor.template : DecalLayerTemplate).scaleable && layerEditor.selected.length > 0;
 
 }

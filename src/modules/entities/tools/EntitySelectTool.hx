@@ -107,7 +107,7 @@ class EntitySelectTool extends EntityTool
 		else if (mode == None)
 		{
 			var hit = layer.entities.getAt(pos);
-			if (layerEditor.hovered.equals(hit))
+			if (!layerEditor.hovered.equals(hit))
 			{
 				layerEditor.hovered.set(hit);
 				layerEditor.selection.changed = true;

@@ -5,7 +5,6 @@ import level.editor.LayerEditor;
 
 class EntityLayerEditor extends LayerEditor
 {
-
 	public var selection:EntityGroup = new EntityGroup();
 	public var hovered:EntityGroup = new EntityGroup();
 	public var brush:Int = -1;
@@ -55,6 +54,10 @@ class EntityLayerEditor extends LayerEditor
 		selection.changed = false;
 		selectionPanel.refresh();
 		EDITOR.dirty();
+	}
+
+	override function refresh() {
+		selection.clear();
 	}
 
 	override function createPalettePanel():SidePanel return new EntityPalettePanel(this);

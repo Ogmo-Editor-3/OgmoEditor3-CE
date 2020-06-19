@@ -180,11 +180,11 @@ class LevelsPanel extends SidePanel
 
 	override function refresh():Void
 	{
-		if (refreshTimer == null) refreshTimer = Browser.window.setTimeout(() -> 
-		{ 
+		if (refreshTimer == null) refreshTimer = Browser.window.setTimeout(() ->
+		{
 			refreshTimer = null;
 			if (levels == null) return;
-					
+
 			var scroll = levels.scrollTop();
 			currentSearch = getSearchQuery();
 
@@ -254,7 +254,7 @@ class LevelsPanel extends SidePanel
 									// Events
 									filenode.onclick = selectLevel;
 									filenode.onrightclick = inspectLevel;
-								}      
+								}
 							}
 							// search for directory to add
 							if (item.children != null) for (child in item.children) recursiveAdd(child, item);
@@ -270,7 +270,7 @@ class LevelsPanel extends SidePanel
 				if (currentSearch != "")
 				{
 					var i = itemlist.children.length - 1;
-					while (i >= 0) 
+					while (i >= 0)
 					{
 						recursiveFilter(itemlist, itemlist.children[i], currentSearch);
 						i--;
@@ -340,7 +340,7 @@ class LevelsPanel extends SidePanel
 					if (opened[n.data] != null) n.expandNoSlide(opened[n.data]);
 
 					// Toggle opened flag
-					if (n.children.length > 0)  n.onclick = function(current) { opened[n.data] = n.expanded; }
+					if (n.children.length > 0)	n.onclick = function(current) { opened[n.data] = n.expanded; }
 
 					recursiveFolderExpandCheck(n);
 				}
@@ -363,7 +363,6 @@ class LevelsPanel extends SidePanel
 				if (recursiveFilter(node, node.children[i], search)) childMatch = true;
 				i--;
 			}
-					
 			if (!childMatch) parent.remove(node);
 			else if (node.isFolder) node.expandNoSlide(true);
 
@@ -377,7 +376,7 @@ class LevelsPanel extends SidePanel
 	}
 
 	/*
-					CLICKS
+		CLICKS
 	*/
 
 	function selectLevel(node: ItemListNode):Void
@@ -438,7 +437,7 @@ class LevelsPanel extends SidePanel
 			openImage(node.data);
 			case "jpeg":
 			openImage(node.data);
-		} 
+		}
 	}
 
 	function inspectFolder(node: ItemListNode):Void

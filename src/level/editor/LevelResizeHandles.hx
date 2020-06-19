@@ -13,9 +13,9 @@ class LevelResizeHandles
 	public var start:Vector = new Vector();
 	public var startSize: Vector = new Vector();
 	public var sticker:JQuery;
-  public var canResize(get, never):Bool;
-  public var canResizeX(get, never):Bool;
-  public var canResizeY(get, never):Bool;
+	public var canResize(get, never):Bool;
+	public var canResizeX(get, never):Bool;
+	public var canResizeY(get, never):Bool;
 
 	public function new()
 	{
@@ -227,17 +227,17 @@ class LevelResizeHandles
 				pan.x *= (newSize.x - EDITOR.level.data.size.x);
 				pan.y *= (newSize.y - EDITOR.level.data.size.y);
 				start.x -= pan.x;
-		        start.y -= pan.y;
-                pan.x *= EDITOR.level.camera.a;
-                pan.y *= EDITOR.level.camera.d;
-                EDITOR.level.moveCamera(-pan.x, -pan.y);              
+				start.y -= pan.y;
+				pan.x *= EDITOR.level.camera.a;
+				pan.y *= EDITOR.level.camera.d;
+				EDITOR.level.moveCamera(-pan.x, -pan.y);
 
-                //Store undo
-                if (!firstChange)
-                {
-                    firstChange = true;
-                    EDITOR.level.storeFull(h.anchor.x >= 1, h.anchor.y >= 1, "resize level");
-                }
+				//Store undo
+				if (!firstChange)
+				{
+					firstChange = true;
+					EDITOR.level.storeFull(h.anchor.x >= 1, h.anchor.y >= 1, "resize level");
+				}
 
                 //Calc shift amount
                 var shift = new Vector();

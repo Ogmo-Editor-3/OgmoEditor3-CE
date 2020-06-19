@@ -7,6 +7,7 @@ class DecalCreateTool extends DecalTool
 	public var canPreview:Bool;
 	public var previewAt:Vector = new Vector();
 	public var scale:Vector = new Vector(1, 1);
+	public var origin:Vector = new Vector(0.5, 0.5);
 	public var created:Decal = null;
 
 	public var deleting:Bool = false;
@@ -45,7 +46,7 @@ class DecalCreateTool extends DecalTool
 
 		var path = js.node.Path.relative((cast layerEditor.template:DecalLayerTemplate).folder, layerEditor.brush.path);
 		var values = [for (template in (cast layerEditor.template:DecalLayerTemplate).values) new Value(template)];
-		created = new Decal(pos, path, layerEditor.brush, scale, 0, values);
+		created = new Decal(pos, path, layerEditor.brush, origin, scale, 0, values);
 		layer.decals.push(created);
 
 		if (OGMO.keyCheckMap[Keys.Shift])

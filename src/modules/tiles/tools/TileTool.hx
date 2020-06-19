@@ -5,7 +5,6 @@ import util.Random;
 
 class TileTool extends Tool
 {
-
 	public var layerEditor(get, never):TileLayerEditor;
 	function get_layerEditor():TileLayerEditor return cast EDITOR.currentLayerEditor;
 
@@ -31,5 +30,4 @@ class TileTool extends Tool
 	{
 		return brush[Math.floor(Math.random() * brush.length)][Math.floor(Math.random() * brush[0].length)];
 	}
-
 }

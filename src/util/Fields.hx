@@ -269,7 +269,7 @@ class Fields
 	public static function createFolderpath(path:String, deleteable:Bool, ?into:JQuery, ?onDelete:Void->Void):JQuery
 	{
 		var holder = new JQuery('<div class="filepath">');
-    var element = new JQuery('<input disabled>');
+		var element = new JQuery('<input disabled>');
 		element.val(path);
 		holder.append(element);
 
@@ -295,7 +295,41 @@ class Fields
 		return holder;
 	}
 
-	public static function getFolderpath(element:JQuery):String
+	public static function createFilepath(path:String, deleteable:Bool, filters:Array<electron.FileFilter>, ?into:JQuery, ?onDelete:Void->Void):JQuery
+		{
+			var holder = new JQuery('<div class="filepath">');
+			var element = new JQuery('<input disabled>');
+			element.val(path);
+			holder.append(element);
+	
+			var button = Fields.createButton("save", "Select", holder);
+			button.on("click", function()
+			{
+				var folder = Path.relative(Path.dirname(OGMO.project.path), FileSystem.chooseFile("Select File", filters));
+				if (folder.length > 0) element.val(folder);
+			});
+	
+			if (deleteable)
+			{
+				var del = Fields.createButton("trash", "Delete", holder);
+				del.on("click", function()
+				{
+					if (onDelete != null) onDelete();
+					if (into != null) holder.remove();
+				});
+			}
+	
+			if (into != null) into.append(holder);
+	
+			return holder;
+		}
+
+	public static function setPath(element:JQuery, val:String):JQuery
+	{
+		return element.find("input").val(val);
+	}
+
+	public static function getPath(element:JQuery):String
 	{
 		return element.find("input").val();
 	}

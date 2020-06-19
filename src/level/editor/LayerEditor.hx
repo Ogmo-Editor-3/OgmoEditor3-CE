@@ -12,9 +12,8 @@ class LayerEditor
 	public var visible:Bool = true;
 	public var palettePanel:SidePanel;
 	public var selectionPanel:SidePanel;
-  public var template(get, never):LayerTemplate;
+	public var template(get, never):LayerTemplate;
 	public var layer(get, never):Layer;
-
 
 	public function new(id:Int)
 	{
@@ -47,7 +46,7 @@ class LayerEditor
 		return null;
 	}
 
-  /**
+	/**
 	 * Override me!
 	 * @return Null<SidePanel>
 	 */
@@ -67,6 +66,11 @@ class LayerEditor
 	 */
 	public function loop():Void {}
 
+	/**
+	 * Override me!
+	 */
+	public function refresh():Void {}
+
 	/*
 		KEYBOARD
 	*/
@@ -77,7 +81,7 @@ class LayerEditor
 
 	public function keyRepeat(key:Int):Void {}
 
-  function get_template():LayerTemplate
+	function get_template():LayerTemplate
 	{
 		return OGMO.project.layers[this.id];
 	}

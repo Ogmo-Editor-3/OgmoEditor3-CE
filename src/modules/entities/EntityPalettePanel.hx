@@ -48,7 +48,7 @@ class EntityPalettePanel extends SidePanel
 		// make the list
 		palette.empty();
 		var itemlist = new ItemList(palette);
-		
+
 		for (j in -1...OGMO.project.entities.tags.length)
 		{
 			var tagName = (j < 0 ? untaggedName : OGMO.project.entities.tags[j]);

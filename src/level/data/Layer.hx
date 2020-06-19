@@ -62,7 +62,7 @@ class Layer
 	}
 
 	/*
-			GRID
+		GRID
 	*/
 
 	public function levelToGrid(pos: Vector, ?into: Vector):Vector

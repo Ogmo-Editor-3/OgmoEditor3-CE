@@ -7,10 +7,10 @@ class TileLayerEditor extends LayerEditor
 	public var brush:Array<Array<Int>> = [[0]];
 	public var brushIsContiguous(get, never):Bool;
 	public var brushRectangle(get, never):Rectangle;
-		
+
 	public function new(id:Int)
 	{
-			super(id);
+		super(id);
 	}
 
 	override function draw():Void
@@ -29,49 +29,49 @@ class TileLayerEditor extends LayerEditor
 		
 	public function moveBrush(x:Int, y:Int):Void
 	{
-			if (brushIsContiguous)
-			{
-				var layer:TileLayer = cast this.layer;
-				var atX = layer.tileset.getTileX(brush[0][0]);
-				var atY = layer.tileset.getTileY(brush[0][0]);       
-				atX += x;
-				atY += y;
-				
-				var w = brush.length;
-				var h = brush[0].length;
-				
-				if (atX < 0)
-						atX = layer.tileset.tileColumns - w;
-				else if (atX > layer.tileset.tileColumns - w)
-						atX = 0;
-						
-				if (atY < 0)
-						atY = layer.tileset.tileRows - h;
-				else if (atY > layer.tileset.tileRows - h)
-						atY = 0;
-				
-				setBrushRect(layer.tileset.coordsToID(atX, atY));
-				palettePanel.refresh(); 
-				EDITOR.overlayDirty();               
-			}
+		if (brushIsContiguous)
+		{
+			var layer:TileLayer = cast this.layer;
+			var atX = layer.tileset.getTileX(brush[0][0]);
+			var atY = layer.tileset.getTileY(brush[0][0]);
+			atX += x;
+			atY += y;
+
+			var w = brush.length;
+			var h = brush[0].length;
+
+			if (atX < 0)
+				atX = layer.tileset.tileColumns - w;
+			else if (atX > layer.tileset.tileColumns - w)
+				atX = 0;
+
+			if (atY < 0)
+				atY = layer.tileset.tileRows - h;
+			else if (atY > layer.tileset.tileRows - h)
+				atY = 0;
+
+			setBrushRect(layer.tileset.coordsToID(atX, atY));
+			palettePanel.refresh();
+			EDITOR.overlayDirty();
+		}
 	}
-	
+
 	public function setBrushRect(topLeft:Int):Void
 	{
 		for (x in 0...brush.length) for (y in 0...brush[x].length) brush[x][y] = topLeft + x + y * (cast layer : TileLayer).tileset.tileColumns;
 	}
-	
+
 	override function keyRepeat(key:Int):Void
 	{
 		if (OGMO.ctrl) return;
 		switch (key) // WASD
 		{
 			case Keys.W:
-				moveBrush(0, -1);            
+				moveBrush(0, -1);
 			case Keys.A:
-				moveBrush(-1, 0);            
+				moveBrush(-1, 0);
 			case Keys.D:
-				moveBrush(1, 0);            
+				moveBrush(1, 0);
 			case Keys.S:
 				moveBrush(0, 1);
 		}
@@ -81,8 +81,9 @@ class TileLayerEditor extends LayerEditor
 	{
 		for (x in 0...brush.length) for (y in 0...brush[x].length)
 		{
-			if (brush[x][y] == -1 || brush[x][y] != brush[0][0] + x + y * (cast layer : TileLayer).tileset.tileColumns) return false;
-		}                      
+			if (brush[x][y] == -1 || brush[x][y] != brush[0][0] + x + y * (cast layer : TileLayer).tileset.tileColumns)
+				return false;
+		}
 		return true;
 	}
 	
@@ -101,5 +102,4 @@ class TileLayerEditor extends LayerEditor
 	{
 		EDITOR.toolBelt.current.activated();
 	}
-	
 }

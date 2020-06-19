@@ -28,7 +28,7 @@ class OverlayRenderer
 	// SIZE
 	
 	public function updateCanvasSize()
-	{       
+	{
 		canvas.width = canvas.parentElement.clientWidth;
 		canvas.height = canvas.parentElement.clientHeight;
 	}
@@ -39,8 +39,8 @@ class OverlayRenderer
 	public function clear()
 	{
 		context.setTransform(1, 0, 0, 1, 0, 0);
-		context.clearRect(0, 0, canvas.width, canvas.height);  
-		context.translate(canvas.width/2, canvas.height/2);   
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.translate(canvas.width/2, canvas.height/2);
 	}
 	
 	public function prepareForLevel(level:Level)
@@ -51,10 +51,10 @@ class OverlayRenderer
 		{
 			var dash = 10 / level.zoom;
 			dashedLine[0] = dash * .6;
-			dashedLine[1] = dash * .4;       
+			dashedLine[1] = dash * .4;
 			context.lineDashOffset = -((OGMO.totalTime * 1 * dash) % dash);
 			
-			context.lineWidth = 2 / level.zoom;  
+			context.lineWidth = 2 / level.zoom;
 		}
 	}
 	

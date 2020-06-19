@@ -5,7 +5,6 @@ import project.editor.LayerTemplateEditor;
 
 class EntityLayerTemplateEditor extends LayerTemplateEditor
 {
-
 	public var excluded:JQuery;
 	public var required:JQuery;
 
@@ -32,20 +31,20 @@ class EntityLayerTemplateEditor extends LayerTemplateEditor
 
 	override public function save()
 	{
-        super.save();
-        var entityTemplate:EntityLayerTemplate = cast template;
-        
-        var requiredString = Fields.getField(required);
-        if (requiredString.length > 0)
-            entityTemplate.requiredTags = requiredString.split(',');
-        else
-            entityTemplate.requiredTags = [];
-            
-        var excludedString = Fields.getField(excluded);
-        if (excludedString.length > 0)
-            entityTemplate.excludedTags = Fields.getField(excluded).split(',');
-        else
-            entityTemplate.excludedTags = [];
+		super.save();
+		var entityTemplate:EntityLayerTemplate = cast template;
+
+		var requiredString = Fields.getField(required);
+		if (requiredString.length > 0)
+			entityTemplate.requiredTags = requiredString.split(',');
+		else
+			entityTemplate.requiredTags = [];
+
+		var excludedString = Fields.getField(excluded);
+		if (excludedString.length > 0)
+			entityTemplate.excludedTags = Fields.getField(excluded).split(',');
+		else
+			entityTemplate.excludedTags = [];
 	}
 
 }

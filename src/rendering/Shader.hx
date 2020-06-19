@@ -39,8 +39,8 @@ class Shader
 
 		// get attributes
 		vertexPositionAttribute = gl.getAttribLocation(program, "a_position");
-		vertexColorAttribute = gl.getAttribLocation(program, "a_color"); 
-		vertexUVAttribute = gl.getAttribLocation(program, "a_textcoord");	  
+		vertexColorAttribute = gl.getAttribLocation(program, "a_color");
+		vertexUVAttribute = gl.getAttribLocation(program, "a_textcoord");
 	}
 	
 	public function dispose(): Void
@@ -71,7 +71,8 @@ class Shader
 		gl.compileShader(shader);
 
 		// See if it compiled successfully
-		if (!gl.getShaderParameter(shader, RenderingContext.COMPILE_STATUS)) throw "An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader);
+		if (!gl.getShaderParameter(shader, RenderingContext.COMPILE_STATUS))
+			throw "An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader);
 
 		return shader;
 	}

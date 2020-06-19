@@ -275,7 +275,6 @@ class TileAutotileTool extends TileTool
 				if (drawBrush[j][i] == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
 				drawBrush[j][i] = get_tile_idx(i, j, drawBrush, OGMO.ctrl);
 			}
-			trace(drawBrush);
 
 			EDITOR.dirty();
 		}

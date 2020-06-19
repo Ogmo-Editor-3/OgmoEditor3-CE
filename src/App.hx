@@ -13,7 +13,7 @@ class App
 	static var mainWindow:BrowserWindow = null;
 	static var forceClose:Bool = false;
 
-  static function main()
+	static function main()
 	{
 		ElectronApp.on('window-all-closed', (e) -> {
 			// Keep the app open if even if windows are closed on OSX (normal mac app behavior)
@@ -28,7 +28,7 @@ class App
 		// On macOS it's common to re-create a window in the app when the
 		// dock icon is clicked and there are no other windows open.
 		ElectronApp.on('activate', (e) -> if (mainWindow == null) createWindow());
-  }
+	}
 
 	static function createWindow()
 	{
@@ -83,17 +83,17 @@ class App
 		#if debug
 		mainWindow.webContents.openDevTools();
 		mainWindow.loadURL(Url.format({
-      protocol: 'http:',
-      host: 'localhost:8080',
-      pathname: 'index.html',
-      slashes: true
+			protocol: 'http:',
+			host: 'localhost:8080',
+			pathname: 'index.html',
+			slashes: true
 		}));
 		#else
 		mainWindow.loadURL(Url.format({
-      protocol: 'file:',
-      pathname: Path.join(__dirname, 'index.html'),
-      slashes: true
-    }));
+			protocol: 'file:',
+			pathname: Path.join(__dirname, 'index.html'),
+			slashes: true
+		}));
 		#end
 	}
 

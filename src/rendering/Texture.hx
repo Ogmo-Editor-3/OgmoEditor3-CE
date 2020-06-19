@@ -7,7 +7,7 @@ import io.FileSystem;
 import util.Vector;
 
 /*
-	WARNING!  
+	WARNING!
 	We assume that all Textures are created AFTER ALL GL Renderers are created
 	Also, all Textures are disposed BEFORE ALL GL Renderers are disposed
 */
@@ -17,13 +17,13 @@ class Texture
 	public var image: ImageElement;
 	public var textures:Map<String, js.html.webgl.Texture> = new Map();
 	public var center:Vector;
-  public var width(get, null):Int;
-  public var height(get, null):Int;
+	public var width(get, null):Int;
+	public var height(get, null):Int;
 
 	public static function fromString(data: String): Texture
 	{
 		var image = Browser.document.createImageElement();
-		image.src = haxe.io.Path.normalize(data);   
+		image.src = haxe.io.Path.normalize(data);
 		return new Texture(image);
 	}
 	
@@ -55,7 +55,7 @@ class Texture
 		{
 			if (GLRenderer.renderers[name].loadTextures)
 			{
-				var gl = GLRenderer.renderers[name].gl;		   
+				var gl = GLRenderer.renderers[name].gl;
 				var tex = gl.createTexture();
 				
 				gl.bindTexture(RenderingContext.TEXTURE_2D, tex);

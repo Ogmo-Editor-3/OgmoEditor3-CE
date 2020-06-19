@@ -357,33 +357,33 @@ class ShapeData
 	}
 
 	public function addTri(p1x:Float, p1y:Float, p2x:Float, p2y:Float, p3x:Float, p3y:Float)
-    {
-    	points.push(new Vector(p1x, p1y));
-    	points.push(new Vector(p2x, p2y));
-    	points.push(new Vector(p3x, p3y));
-    }
+	{
+		points.push(new Vector(p1x, p1y));
+		points.push(new Vector(p2x, p2y));
+		points.push(new Vector(p3x, p3y));
+	}
 
-    public function addRect(p1x:Float, p1y:Float, p2x:Float, p2y:Float)
-    {
-    	points.push(new Vector(p1x, p1y));
-    	points.push(new Vector(p2x, p1y));
-    	points.push(new Vector(p1x, p2y));
+	public function addRect(p1x:Float, p1y:Float, p2x:Float, p2y:Float)
+	{
+		points.push(new Vector(p1x, p1y));
+		points.push(new Vector(p2x, p1y));
+		points.push(new Vector(p1x, p2y));
 
-    	points.push(new Vector(p2x, p1y));
-    	points.push(new Vector(p1x, p2y));
-    	points.push(new Vector(p2x, p2y));
-    }
+		points.push(new Vector(p2x, p1y));
+		points.push(new Vector(p1x, p2y));
+		points.push(new Vector(p2x, p2y));
+	}
 
-    public function addBox(p1x:Float, p1y:Float, p2x:Float, p2y:Float, p3x:Float, p3y:Float, p4x:Float, p4y:Float)
-    {
-    	points.push(new Vector(p1x, p1y));
-    	points.push(new Vector(p2x, p2y));
-    	points.push(new Vector(p3x, p3y));
+	public function addBox(p1x:Float, p1y:Float, p2x:Float, p2y:Float, p3x:Float, p3y:Float, p4x:Float, p4y:Float)
+	{
+		points.push(new Vector(p1x, p1y));
+		points.push(new Vector(p2x, p2y));
+		points.push(new Vector(p3x, p3y));
 
-    	points.push(new Vector(p1x, p1y));
-    	points.push(new Vector(p3x, p3y));
-    	points.push(new Vector(p4x, p4y));
-    }
+		points.push(new Vector(p1x, p1y));
+		points.push(new Vector(p3x, p3y));
+		points.push(new Vector(p4x, p4y));
+	}
 
 	public function toImage(color:Color, origin:Vector, size:Vector, tileSize:Vector):String
 	{
@@ -406,26 +406,26 @@ class ShapeData
 
 		// Get add X/Y
 		var add:Vector = new Vector();
-        add.x = (origin.x / size.x) * Math.min(1, size.x / size.y) * s;
-        add.x += (1 - Math.min(1, size.x / size.y)) * 0.5 * s;
-        add.y = (origin.y / size.y) * Math.min(1, size.y / size.x) * s;
-        add.y += (1 - Math.min(1, size.y / size.x)) * 0.5 * s;
+		add.x = (origin.x / size.x) * Math.min(1, size.x / size.y) * s;
+		add.x += (1 - Math.min(1, size.x / size.y)) * 0.5 * s;
+		add.y = (origin.y / size.y) * Math.min(1, size.y / size.x) * s;
+		add.y += (1 - Math.min(1, size.y / size.x)) * 0.5 * s;
 
-        // Draw
-        context.beginPath();
+		// Draw
+		context.beginPath();
 		var i = 0;
 		while (i < points.length - 2)
-        {
-            context.moveTo(points[i].x + add.x, points[i].y + add.y);
-            context.lineTo(points[i + 1].x + add.x, points[i + 1].y + add.y);
-            context.lineTo(points[i + 2].x + add.x, points[i + 2].y + add.y);
+		{
+			context.moveTo(points[i].x + add.x, points[i].y + add.y);
+			context.lineTo(points[i + 1].x + add.x, points[i + 1].y + add.y);
+			context.lineTo(points[i + 2].x + add.x, points[i + 2].y + add.y);
 			i += 3;
-        }
-        context.closePath();
-        context.fillStyle = color.toHex();
-        context.fill();
+		}
+		context.closePath();
+		context.fillStyle = color.toHex();
+		context.fill();
 
-        return canvas.toDataURL();
+		return canvas.toDataURL();
 	}
 
 }

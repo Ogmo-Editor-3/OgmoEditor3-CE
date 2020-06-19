@@ -1,5 +1,7 @@
 package project.editor;
 
+import level.data.Level;
+import util.Klaw;
 import util.Popup;
 import io.Imports;
 import io.FileSystem;
@@ -26,6 +28,8 @@ class ProjectEditor
 
 		// close Window
 		root.find(".project_save").click(function(e) { saveAndClose(); });
+
+		root.find(".project_save_update").click(function(e) { saveAndClose(true); });
 
 		root.find(".project_cancel").click(function(e)
 		{
@@ -65,25 +69,25 @@ class ProjectEditor
 
 	public function setPanel(panel:ProjectEditorPanel):Void
 	{
-			if (this.panel != panel)
+		if (this.panel != panel)
+		{
+			// hide previous
+			if (this.panel != null)
 			{
-					// hide previous
-					if (this.panel != null)
-					{
-							this.panel.end();
-							this.panel.root.hide();
-							this.panel.tab.removeClass("selected");
-					}
-
-					// show next
-					this.panel = panel;
-					this.panel.begin();
-					this.panel.root.show();
-					this.panel.tab.addClass("selected");
+					this.panel.end();
+					this.panel.root.hide();
+					this.panel.tab.removeClass("selected");
 			}
+
+			// show next
+			this.panel = panel;
+			this.panel.begin();
+			this.panel.root.show();
+			this.panel.tab.addClass("selected");
+		}
 	}
 
-	public function saveAndClose():Void
+	public function saveAndClose(updateLevels:Bool = false):Void
 	{
 		// validate that we have all we need
 		if (!validate()) return;
@@ -99,9 +103,42 @@ class ProjectEditor
 		OGMO.project.unload();
 		OGMO.project = Imports.project(OGMO.project.path);
 
-		// goto editor
-		EDITOR.onSetProject();
-		OGMO.gotoEditorPage();
+		if (updateLevels)
+		{
+			Popup.open('Save Project and Update Levels?', 'save', 'Save Project changes and Update all Level files in the Project?', ['Okay', 'Cancel'], (i) -> {
+				if (i != 0) return;
+				var level = new Level(OGMO.project);
+				for (path in OGMO.project.getAbsoluteLevelDirectories()) 
+				{
+					var walker = new Walker(path, { depthLimit: OGMO.project.directoryDepth });
+					walker.on("data", (item:Item) -> { 
+						if(haxe.io.Path.extension(item.path) == 'json' && FileSystem.exists(item.path)) 
+						{
+							var levelData = FileSystem.loadJSON(item.path);
+							if (levelData.ogmoVersion != null && levelData.layers != null)
+							{
+								level.load(levelData);
+								level.path = item.path;
+								level.doSave(false);
+							}
+						} 
+					});
+					walker.on('end', () -> {
+						// goto editor
+						EDITOR.levelManager.close(level);
+						EDITOR.onSetProject();
+						OGMO.gotoEditorPage();
+						walker.destroy();
+					});
+				}
+			});
+		}
+		else
+		{
+			// goto editor
+			EDITOR.onSetProject();
+			OGMO.gotoEditorPage();	
+		}
 	}
 
 	public function validate():Bool {
@@ -142,7 +179,7 @@ class ProjectEditor
 			for (i in 0...panels.length) if (start == null || panels[i].order < start.order) start = panels[i];
 
 			setPanel(start);
-			for (i in 0...panels.length) panels[i].begin();
+			for (i in 0...panels.length) panels[i].begin(true);
 			OGMO.updateWindowTitle();
 		}
 		active = set;

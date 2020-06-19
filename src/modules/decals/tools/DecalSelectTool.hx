@@ -63,7 +63,7 @@ class DecalSelectTool extends DecalTool
 				layerEditor.selected = [];
 				for (decal in DecalSelectTool.inClipboard)
 				{
-					var clone = new Decal(decal.position.clone(), decal.path, decal.texture, decal.scale.clone(), decal.rotation);
+					var clone = new Decal(decal.position.clone(), decal.path, decal.texture, decal.origin.clone(), decal.scale.clone(), decal.rotation);
 					(cast layerEditor.layer:DecalLayer).decals.push(clone);
 					layerEditor.selected.push(clone);
 				}
@@ -75,10 +75,10 @@ class DecalSelectTool extends DecalTool
 			{
 				EDITOR.level.store("duplicated decals");
 
-				var newSelection:Array<Decal>  = [];
+				var newSelection:Array<Decal> = [];
 				for (decal in layerEditor.selected)
 				{
-					var clone = new Decal(decal.position.clone().add(new Vector(32, 32)), decal.path, decal.texture, decal.scale.clone(), decal.rotation);
+					var clone = new Decal(decal.position.clone().add(new Vector(32, 32)), decal.path, decal.texture, decal.origin.clone(), decal.scale.clone(), decal.rotation);
 					(cast layerEditor.layer:DecalLayer).decals.push(clone);
 					newSelection.push(clone);
 				}
@@ -230,6 +230,7 @@ class DecalSelectTool extends DecalTool
 			else
 				layerEditor.selected = hits;
 
+			layerEditor.selectedChanged = true;
 			mode = None;
 			EDITOR.overlayDirty();
 		}
@@ -239,7 +240,6 @@ class DecalSelectTool extends DecalTool
 			decals = null;
 		}
 
-		layerEditor.selectedChanged = true;
 	}
 
 	override public function onMouseMove(pos:Vector)

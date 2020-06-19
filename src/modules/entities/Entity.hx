@@ -129,7 +129,7 @@ class Entity
 	}
 
 	/*
-			TRANSFORMATIONS
+		TRANSFORMATIONS
 	*/
 
 	public function move(amount:Vector)
@@ -200,7 +200,7 @@ class Entity
 	}
 
 	/*
-			MATRIX
+		MATRIX
 	*/
 
 	public function updateMatrix()
@@ -223,7 +223,7 @@ class Entity
 	}
 
 	/*
-			DRAWING
+		DRAWING
 	*/
 
 	public function draw()
@@ -283,7 +283,7 @@ class Entity
 	}
 
 	/*
-			NODES
+		NODES
 	*/
 
 	public function getNodeAt(pos:Vector):Vector
@@ -345,7 +345,7 @@ class Entity
 	}
 
 	/*
-			COLLISION CHECKS
+		COLLISION CHECKS
 	*/
 
 	public function getCorners(offset:Vector, pad:Float):Array<Vector>

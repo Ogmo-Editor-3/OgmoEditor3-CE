@@ -10,7 +10,7 @@ import project.data.LayerDefinition;
 
 class TileLayerTemplate extends LayerTemplate
 {
-  public static function startup()
+	public static function startup()
 	{
 		var tools:Array<Tool> = [
         new TilePencilTool(),
@@ -25,40 +25,40 @@ class TileLayerTemplate extends LayerTemplate
     LayerDefinition.definitions.push(n);
 	}
 
-  public var exportMode:Int = TileExportModes.IDS;
-  public var arrayMode:Int = ArrayExportModes.ONE;
+	public var exportMode:Int = TileExportModes.IDS;
+	public var arrayMode:Int = ArrayExportModes.ONE;
 	public var defaultTileset:String = null;
-    
-  override function createEditor(id:Int): LayerEditor
-  {
-    return new TileLayerEditor(id);
-  }
 
-  override function createLayer(level:Level, id:Int):Layer
-  {
-    return new TileLayer(level, id);
-  }
+	override function createEditor(id:Int): LayerEditor
+	{
+		return new TileLayerEditor(id);
+	}
 
-  override function save():Dynamic
-  {
-    var data:Dynamic = super.save();
-              
-    data.exportMode = exportMode;
-    data.arrayMode = arrayMode;
-    if (defaultTileset != null) data.defaultTileset = defaultTileset;
-    else data.defaultTileset = "";
-        
-    return data;
-  }
-  
-  override function load(data: Dynamic):LayerTemplate
-  {
-    super.load(data);
-      
-    exportMode = Imports.integer(data.exportMode, TileExportModes.IDS);
-    arrayMode = Imports.integer(data.arrayMode, ArrayExportModes.ONE);
-    defaultTileset = data.defaultTileset;
-      
-    return this;
-  }
+	override function createLayer(level:Level, id:Int):Layer
+	{
+		return new TileLayer(level, id);
+	}
+
+	override function save():Dynamic
+	{
+		var data:Dynamic = super.save();
+
+		data.exportMode = exportMode;
+		data.arrayMode = arrayMode;
+		if (defaultTileset != null) data.defaultTileset = defaultTileset;
+		else data.defaultTileset = "";
+
+		return data;
+	}
+
+	override function load(data: Dynamic):LayerTemplate
+	{
+		super.load(data);
+
+		exportMode = Imports.integer(data.exportMode, TileExportModes.IDS);
+		arrayMode = Imports.integer(data.arrayMode, ArrayExportModes.ONE);
+		defaultTileset = data.defaultTileset;
+
+		return this;
+	}
 }

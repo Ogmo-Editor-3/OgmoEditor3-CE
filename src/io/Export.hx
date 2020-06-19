@@ -45,7 +45,7 @@ class Export
 	];
 
 	/*
-			HELPERS
+		HELPERS
 	*/
 
 	public static function nodes(into:Dynamic, nodes:Array<Vector>)
@@ -76,7 +76,7 @@ class Export
 	}
 
 	/*
-			LEVEL
+		LEVEL
 	*/
 
 	public static function levelToString(level:Level, xml:Bool):String
@@ -122,7 +122,7 @@ class Export
 	}
 
 	/*
-			PROJECT
+		PROJECT
 	*/
 
 	public static function project(project:Project, path:String)
@@ -135,7 +135,7 @@ class Export
 	}
 
 	/*
-			CONVERSION
+		CONVERSION
 	*/
 
 	//Strips out our helper vars that we use to convert JSON to XML

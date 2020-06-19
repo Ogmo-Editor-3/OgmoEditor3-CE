@@ -48,7 +48,7 @@ class ItemListNode
 	}
 
 	/*
-					SELECTED
+		SELECTED
 	*/
 
 	public var selected(default, set):Bool = false;
@@ -64,7 +64,7 @@ class ItemListNode
 	}
 
 	/*
-					EXPANDED
+		EXPANDED
 	*/
 
 	public var expanded(default, set):Bool = false;
@@ -102,7 +102,7 @@ class ItemListNode
 	}
 
 	/*
-					HIGHLIGHT
+		HIGHLIGHT
 	*/
 
 	public var highlighted(default, set):Bool = false;
@@ -118,7 +118,7 @@ class ItemListNode
 	}
 
 	/*
-					LABEL
+		LABEL
 	*/
 
 	public var label(default, set):String;
@@ -129,7 +129,7 @@ class ItemListNode
 	}
 
 	/*
-					ICONS
+		ICONS
 	*/
 
 	public function setKylesetIcon(icon:String):Void
@@ -158,7 +158,7 @@ class ItemListNode
 	}
 
 	/*
-					CHILDREN MANAGEMENT
+		CHILDREN MANAGEMENT
 	*/
 
 	public function add(item:ItemListNode):ItemListNode
@@ -240,7 +240,7 @@ class ItemListNode
 	}
 
 	/*
-					DO STUFF ON CHILDREN
+		DO STUFF ON CHILDREN
 	*/
 
 	public function unselectAll():Void

@@ -41,20 +41,24 @@ class DecalLayerEditor extends LayerEditor
 		// draw decals
 		for (decal in (cast layer : DecalLayer).decals)
 		{
-			if (decal.texture != null)
-				EDITOR.draw.drawTexture(decal.position.x, decal.position.y, decal.texture, decal.origin, decal.scale, decal.rotation);
+			if (decal.texture != null){
+				var originInPixels = new Vector(decal.width * decal.origin.x, decal.height * decal.origin.y);
+				EDITOR.draw.drawTexture(decal.position.x, decal.position.y, decal.texture, originInPixels, decal.scale, decal.rotation);
+			}
 			else
 			{
 				var ox = decal.position.x;
 				var oy = decal.position.y;
 				var w = decal.width;
 				var h = decal.height;
-				EDITOR.draw.drawRect(ox - w / 2, oy - h / 2, w, 1, Color.red);
-				EDITOR.draw.drawRect(ox - w / 2, oy - h / 2, 1, h, Color.red);
-				EDITOR.draw.drawRect(ox + w / 2 - 1, oy - h / 2, 1, h, Color.red);
-				EDITOR.draw.drawRect(ox - w / 2, oy + h / 2 - 1, w, 1, Color.red);
-				EDITOR.draw.drawLine(new Vector(ox - w / 2, oy - h / 2), new Vector(ox + w / 2, oy + h / 2), Color.red);
-				EDITOR.draw.drawLine(new Vector(ox + w / 2, oy - h / 2), new Vector(ox - w / 2, oy + h / 2), Color.red);
+				var originx = decal.origin.x * w;
+				var originy = decal.origin.y * h;
+				EDITOR.draw.drawRect(ox - originx, oy - originy, w, 1, Color.red);
+				EDITOR.draw.drawRect(ox - originx, oy - originy, 1, h, Color.red);
+				EDITOR.draw.drawRect(ox + originx - 1, oy - originy, 1, h, Color.red);
+				EDITOR.draw.drawRect(ox - originx, oy + originy - 1, w, 1, Color.red);
+				EDITOR.draw.drawLine(new Vector(ox - originx, oy - originy), new Vector(ox + originx, oy + originy), Color.red);
+				EDITOR.draw.drawLine(new Vector(ox + originx, oy - originy), new Vector(ox - originx, oy + originy), Color.red);
 			}
 		}
 
@@ -72,6 +76,11 @@ class DecalLayerEditor extends LayerEditor
 		selectedChanged = false;
 		selectionPanel.refresh();
 		EDITOR.dirty();
+	}
+
+	override function refresh() {
+		selected.resize(0);
+		selectedChanged = true;
 	}
 
 	override function createPalettePanel():SidePanel

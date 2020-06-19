@@ -71,6 +71,6 @@ class StartPage
 	public function keyPress(key:Int):Void {}
 
 	public function keyRepeat(key:Int):Void {}
-  
+
 	public function keyRelease(key:Int):Void {}
 }

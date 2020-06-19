@@ -11,27 +11,26 @@ import modules.tiles.TileLayerTemplate;
 import modules.tiles.ProjectTilesetsPanel;
 
 class Start {
-  public static function up() {
-    // Value Templates
-    BoolValueTemplate.startup();
-    ColorValueTemplate.startup();
-    EnumValueTemplate.startup();
-    FloatValueTemplate.startup();
-    IntegerValueTemplate.startup();
-    StringValueTemplate.startup();
-    TextValueTemplate.startup();
+	public static function up() {
+		// Value Templates
+		BoolValueTemplate.startup();
+		ColorValueTemplate.startup();
+		EnumValueTemplate.startup();
+		FloatValueTemplate.startup();
+		IntegerValueTemplate.startup();
+		StringValueTemplate.startup();
+		TextValueTemplate.startup();
 
-    // Editor Panels
-    ProjectGeneralPanel.startup();
-    ProjectLayersPanel.startup();
-    ProjectTilesetsPanel.startup();
-    ProjectEntitiesPanel.startup();
+		// Editor Panels
+		ProjectGeneralPanel.startup();
+		ProjectLayersPanel.startup();
+		ProjectTilesetsPanel.startup();
+		ProjectEntitiesPanel.startup();
 
-    // Modules
-    TileLayerTemplate.startup();
-    GridLayerTemplate.startup();
-    DecalLayerTemplate.startup();
-    EntityLayerTemplate.startup();
-    
-  }
+		// Modules
+		TileLayerTemplate.startup();
+		GridLayerTemplate.startup();
+		DecalLayerTemplate.startup();
+		EntityLayerTemplate.startup();
+	}
 }
