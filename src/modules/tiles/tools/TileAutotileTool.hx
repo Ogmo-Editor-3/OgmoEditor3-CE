@@ -27,7 +27,7 @@ class TileAutotileTool extends TileTool
 	public function get_ruleset(arr:Array<Array<Int>>) {
 		map = [for (i in 0...256) i => []];
 		cardinal_map = [for (i in 0...16) i => []];
-		fallbackTile = arr[0][0];
+		fallbackTile = arr[0][0] >= 0 ? arr[0][0] : get_most_common_tile(arr);
 		for (j in 0...arr.length) for (i in 0...arr[j].length) {
 			if (arr[j][i] == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
 			if (j == 0 && i == 0) continue; // Fallback tile;
@@ -47,6 +47,23 @@ class TileAutotileTool extends TileTool
 			if (!down && !right	|| down && right &&	arr[j + 1][i + 1] != -1)	key += 128;	// TODO - It might be nice to be able to set this to 0 -01010111
 			map[key].push(arr[j][i]);
 		}
+	}
+
+	function get_most_common_tile(arr:Array<Array<Int>>) {
+		var tile_count_map:Map<Int, Int> = [];
+		for (row in arr) for (n in row) if (n >= 0) {
+			if (!tile_count_map.exists(n)) tile_count_map.set(n, 0);
+			tile_count_map[n]++;
+		}
+		var out = -1;
+		var count = 0;
+		for (key => value in tile_count_map) {
+			if (value > count) {
+				out = key;
+				count = value;
+			}
+		}
+		return out;
 	}
 
 	public function get_tile_idx(x:Int, y:Int, arr:Array<Array<Int>>, check_data:Bool = false):Int {
