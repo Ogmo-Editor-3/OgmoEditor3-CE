@@ -64,7 +64,6 @@ class Decal
 	public function rotate(diff:Float)
 	{
 		rotation = rotation + diff;
-		trace(rotation);
 	}
 
 	public function resize(diff:Vector)

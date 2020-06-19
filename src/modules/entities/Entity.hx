@@ -191,7 +191,6 @@ class Entity
 			rotation = Calc.snap(rotation, 360 / template.rotationDegrees);
 			updateMatrix();
 		}
-		trace(rotation);
 	}
 
 	public function resetRotation()
