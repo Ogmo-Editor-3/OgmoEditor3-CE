@@ -21,7 +21,7 @@ class Decal
 		this.texture = texture;
 		this.path = path;
 		this.scale = scale == null ? new Vector(1, 1) : scale.clone();
-		this.rotation = rotation == null ? 0 : rotation;
+		this.rotation = rotation == null ? 0 : OGMO.project.anglesRadians ? rotation : rotation * Calc.DTR;
 		this.values = values == null ? [] : values;
 		this.origin = origin == null ? new Vector(0.5, 0.5) : origin.clone();
 	}
@@ -37,7 +37,7 @@ class Decal
 			data.scaleX = scale.x;
 			data.scaleY = scale.y;
 		}
-		if (rotatable) data.rotation = rotation;
+		if (rotatable) data.rotation = OGMO.project.anglesRadians ? rotation : rotation * Calc.RTD;
 		data.texture = haxe.io.Path.normalize(path);
 		data.originX = origin.x;
 		data.originY = origin.y;
@@ -64,6 +64,7 @@ class Decal
 	public function rotate(diff:Float)
 	{
 		rotation = rotation + diff;
+		trace(rotation);
 	}
 
 	public function resize(diff:Vector)

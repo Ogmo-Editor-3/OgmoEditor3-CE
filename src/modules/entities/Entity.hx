@@ -61,7 +61,7 @@ class Entity
 		e.position = Imports.vector(data, "x", "y");
 		e.size = Imports.vector(data, "width", "height", template.size);
 		e.origin = Imports.vector(data, "originX", "originY", template.origin);
-		e.rotation = Imports.float(data.rotation, 0);
+		e.rotation = Imports.float(data.rotation, 0) * (OGMO.project.anglesRadians ? Calc.RTD : 1);
 		e.flippedX = Imports.bool(data.flippedX, false);
 		e.flippedY = Imports.bool(data.flippedY, false);
 		e.color = Imports.color(data.color, false, template.color);
@@ -86,7 +86,7 @@ class Entity
 		if (template.resizeableX) data.width = size.x;
 		if (template.resizeableY) data.height = size.y;
 		if (template.originAnchored) origin.saveInto(data, "originX", "originY");
-		if (template.rotatable) data.rotation = rotation;
+		if (template.rotatable) data.rotation = OGMO.project.anglesRadians ? rotation * Calc.DTR : rotation;
 		if (template.canFlipX) data.flippedX = flippedX;
 		if (template.canFlipY) data.flippedY = flippedY;
 		if (template.canSetColor) data.color = Export.color(color, false);
@@ -191,6 +191,7 @@ class Entity
 			rotation = Calc.snap(rotation, 360 / template.rotationDegrees);
 			updateMatrix();
 		}
+		trace(rotation);
 	}
 
 	public function resetRotation()
