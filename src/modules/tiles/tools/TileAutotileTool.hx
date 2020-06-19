@@ -151,7 +151,7 @@ class TileAutotileTool extends TileTool
 		cardinal_map = [for (i in 0...16) i => []];
 		fallbackTile = -1;
 
-		setInfo('<p>To begin, <b>CTRL+Click</b> on a level JSON in the Levels panel. <p>Fore more info on how to use the Auto Tile brush, check the <a href="https://ogmo-editor-3.github.io/docs/#/manual/introduction.md" target="_blank">OGMO Documentation</a>');
+		setInfo('<p>To begin, <b>CTRL+Click</b> on a level JSON in the Levels panel to select a Reference Map. <p>Fore more info on how to use the Auto Tile brush, check the <a href="https://ogmo-editor-3.github.io/docs/#/manual/introduction.md" target="_blank">OGMO Documentation</a>');
 	}
 
 	function setError(msg:String)
@@ -163,7 +163,7 @@ class TileAutotileTool extends TileTool
 
 	function setPanelInfo()
 	{
-		setInfo('<center><b>Reference Map: </b>${refMap.split('/').pop()}</center>');
+		setInfo('<center><b>Reference Map: </b>${refMap.split('/').pop()}<p><b>CTRL+Click</b> on a level JSON in the Levels panel to select a new Reference Map.</center>');
 	}
 
 	function init_layer(layer:Dynamic) {		
