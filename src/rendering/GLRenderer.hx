@@ -20,14 +20,14 @@ class GLRenderer
 	public var gl: RenderingContext; 
 	public var clearColor:Color = Color.fromHex("#171a20", 1);
 	public var loadTextures:Bool = true;
-  public var width(get,null):Int;
-  public var height(get,null):Int;
+	public var width(get,null):Int;
+	public var height(get,null):Int;
 	
 	var shapeShader: Shader;
 	var textureShader: Shader;
 	var orthoMatrix: Matrix3D;
 	var posBuffer: Buffer;
-	var colBuffer: Buffer;  
+	var colBuffer: Buffer;	
 	var uvBuffer: Buffer; 
 	var positions: Array<Float> = [];
 	var colors: Array<Float> = [];
@@ -75,7 +75,7 @@ class GLRenderer
 	// SIZE
 	
 	public function updateCanvasSize(): Void
-	{	   
+	{		 
 		canvas.width = canvas.parentElement.clientWidth;
 		canvas.height = canvas.parentElement.clientHeight;
 
@@ -264,17 +264,17 @@ class GLRenderer
 		var uvh = clipH / texture.height;
 		
 		uvs.push(uvx);
-    uvs.push(uvy);
+		uvs.push(uvy);
 		uvs.push(uvx + uvw);
-    uvs.push(uvy);
+		uvs.push(uvy);
 		uvs.push(uvx + uvw);
-    uvs.push(uvy + uvh);
+		uvs.push(uvy + uvh);
 		uvs.push(uvx);
-    uvs.push(uvy);
+		uvs.push(uvy);
 		uvs.push(uvx + uvw);
-    uvs.push(uvy + uvh);
+		uvs.push(uvy + uvh);
 		uvs.push(uvx);
-    uvs.push(uvy + uvh);
+		uvs.push(uvy + uvh);
 	}
 
 	public function drawTile(x:Float, y:Float, tileset: Tileset, id: Int): Void
@@ -287,17 +287,17 @@ class GLRenderer
 		var th = tileset.tileHeight;
 		
 		positions.push(x);
-    positions.push(y);
+		positions.push(y);
 		positions.push(x + tw);
-    positions.push(y);
+		positions.push(y);
 		positions.push(x);
-    positions.push(y + th);
+		positions.push(y + th);
 		positions.push(x + tw);
-    positions.push(y);
+		positions.push(y);
 		positions.push(x);
-    positions.push(y + th);
+		positions.push(y + th);
 		positions.push(x + tw);
-    positions.push(y + th);
+		positions.push(y + th);
 		
 		// use this to push in the UVs a bit to aVoid seems
 		var texel = new Vector(1 / tileset.width, 1 / tileset.height);
@@ -307,17 +307,17 @@ class GLRenderer
 		var uvh = tileset.tileHeight / tileset.height - texel.y * .02;
 		
 		uvs.push(uvx);
-    uvs.push(uvy);
+		uvs.push(uvy);
 		uvs.push(uvx + uvw);
-    uvs.push(uvy);
+		uvs.push(uvy);
 		uvs.push(uvx);
-    uvs.push(uvy + uvh);
+		uvs.push(uvy + uvh);
 		uvs.push(uvx + uvw);
-    uvs.push(uvy);
+		uvs.push(uvy);
 		uvs.push(uvx);
-    uvs.push(uvy + uvh);
+		uvs.push(uvy + uvh);
 		uvs.push(uvx + uvw);
-    uvs.push(uvy + uvh);
+		uvs.push(uvy + uvh);
 	}
 	
 	// GEOMETRY
@@ -327,19 +327,19 @@ class GLRenderer
 		setDrawMode(RenderingContext.TRIANGLES);
 
 		positions.push(x);
-    positions.push(y);
+		positions.push(y);
 		positions.push(x + w);
-    positions.push(y);
+		positions.push(y);
 		positions.push(x);
-    positions.push(y + h);
+		positions.push(y + h);
 		positions.push(x + w);
-    positions.push(y);
+		positions.push(y);
 		positions.push(x);
-    positions.push(y + h);
+		positions.push(y + h);
 		positions.push(x + w);
-    positions.push(y + h);
+		positions.push(y + h);
 
-    add_color(col, 6);
+		add_color(col, 6);
 	}
 
 	public function drawRectLines(x:Float, y:Float, w:Float, h:Float, col:Color)
@@ -355,13 +355,13 @@ class GLRenderer
 		setDrawMode(RenderingContext.TRIANGLES);
 		
 		positions.push(x1);
-    positions.push(y1);
-    positions.push(x2);
-    positions.push(y2);
-    positions.push(x3);
-    positions.push(y3);
+		positions.push(y1);
+		positions.push(x2);
+		positions.push(y2);
+		positions.push(x3);
+		positions.push(y3);
 
-    add_color(col, 3);
+		add_color(col, 3);
 	}
 
 	public function drawTri(p1: Vector, p2: Vector, p3: Vector, col: Color): Void
@@ -369,11 +369,11 @@ class GLRenderer
 		setDrawMode(RenderingContext.TRIANGLES);
 		
 		positions.push(p1.x);
-    positions.push(p1.y);
-    positions.push(p2.x);
-    positions.push(p2.y);
-    positions.push(p3.x);
-    positions.push(p3.y);
+		positions.push(p1.y);
+		positions.push(p2.x);
+		positions.push(p2.y);
+		positions.push(p3.x);
+		positions.push(p3.y);
 
 		add_color(col, 3);
 	}
@@ -382,17 +382,17 @@ class GLRenderer
 	{
 		setDrawMode(RenderingContext.TRIANGLES);
 		
-    var i = 0;
+		var i = 0;
 		while (i < points.length - 2) 
-    {
+		{
 			drawTriangle(
 				points[i].x + offset.x, points[i].y + offset.y,
 				points[i + 1].x + offset.x, points[i + 1].y + offset.y,
 				points[i + 2].x + offset.x, points[i + 2].y + offset.y,
 				col
 			);
-      i += 3;
-    }
+			i += 3;
+		}
 	}
 
 	public function drawLine(a: Vector, b: Vector, col: Color): Void
@@ -400,9 +400,9 @@ class GLRenderer
 		setDrawMode(RenderingContext.LINES);
 		
 		positions.push(a.x);
-    positions.push(a.y);
-    positions.push(b.x);
-    positions.push(b.y);
+		positions.push(a.y);
+		positions.push(b.x);
+		positions.push(b.y);
 
 		add_color(col, 2);
 	}
@@ -420,23 +420,23 @@ class GLRenderer
 			Vector.fromAngle(seg * i, radius, cur);
 
 			positions.push(at.x + last.x);
-      positions.push(at.y + last.y);
-      positions.push(at.x + cur.x);
-      positions.push(at.y + cur.y);
+			positions.push(at.y + last.y);
+			positions.push(at.x + cur.x);
+			positions.push(at.y + cur.y);
 			positions.push(at.x - last.x);
-      positions.push(at.y - last.y);
-      positions.push(at.x - cur.x);
-      positions.push(at.y - cur.y);
+			positions.push(at.y - last.y);
+			positions.push(at.x - cur.x);
+			positions.push(at.y - cur.y);
 			positions.push(at.x + last.x);
-      positions.push(at.y - last.y);
-      positions.push(at.x + cur.x);
-      positions.push(at.y - cur.y);
+			positions.push(at.y - last.y);
+			positions.push(at.x + cur.x);
+			positions.push(at.y - cur.y);
 			positions.push(at.x - last.x);
-      positions.push(at.y + last.y);
-      positions.push(at.x - cur.x);
-      positions.push(at.y + cur.y);
+			positions.push(at.y + last.y);
+			positions.push(at.x - cur.x);
+			positions.push(at.y + cur.y);
 
-      add_color(col, 8);
+			add_color(col, 8);
 
 			cur.clone(last);
 		}
@@ -462,11 +462,11 @@ class GLRenderer
 		}
 
 		for (i in 0...Math.floor(p.length / 2)) {
-      colors.push(col.r);
-      colors.push(col.g);
-      colors.push(col.b);
-      colors.push(col.a);
-    }
+			colors.push(col.r);
+			colors.push(col.g);
+			colors.push(col.b);
+			colors.push(col.a);
+		}
 	}
 
 	public function drawGrid(gridSize: Vector, gridOffset: Vector, size: Vector, zoom: Float, col: Color): Void
@@ -486,26 +486,26 @@ class GLRenderer
 		while (i < size.x)
 		{
 			positions.push(i);
-      positions.push(1  + gridOffset.y);
+			positions.push(1	+ gridOffset.y);
 			positions.push(i);
-      positions.push(size.y - 1 + gridOffset.y);
-
-      add_color(col, 2);
-
-      i += intX;
-		}
-
-    i = intY + gridOffset.y;
-		while (i < size.y)
-		{
-			positions.push(1 + gridOffset.x);
-      positions.push(i);
-			positions.push(size.x - 1  + gridOffset.x);
-      positions.push(i);
+			positions.push(size.y - 1 + gridOffset.y);
 
 			add_color(col, 2);
 
-      i += intY;
+			i += intX;
+		}
+
+		i = intY + gridOffset.y;
+		while (i < size.y)
+		{
+			positions.push(1 + gridOffset.x);
+			positions.push(i);
+			positions.push(size.x - 1	+ gridOffset.x);
+			positions.push(i);
+
+			add_color(col, 2);
+
+			i += intY;
 		}
 	}
 
@@ -536,17 +536,17 @@ class GLRenderer
 		add_color(col, 8);
 	}
 
-  inline function add_color(col:Color, amt:Int = 1) {
-    for (i in 0...(amt)) 
-    {
-      colors.push(col.r);
-      colors.push(col.g);
-      colors.push(col.b);
-      colors.push(col.a);
-    }
-  }
+	inline function add_color(col:Color, amt:Int = 1) {
+		for (i in 0...(amt)) 
+		{
+			colors.push(col.r);
+			colors.push(col.g);
+			colors.push(col.b);
+			colors.push(col.a);
+		}
+	}
 
-  function get_width():Int return canvas.width;
+	function get_width():Int return canvas.width;
 
 	function get_height():Int return canvas.height;
 }
