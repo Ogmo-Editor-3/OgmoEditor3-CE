@@ -187,6 +187,7 @@ class TileAutotileTool extends TileTool
 		}
 		else {
 			for (y in 0...drawBrush.length) for (x in 0...drawBrush[y].length) {
+				if (drawBrush[y][x] < 0) continue;
 				var pos = new Vector(x, y);
 				layer.gridToLevel(pos, pos);
 				EDITOR.overlay.drawTile(pos.x, pos.y, layer.tileset, drawBrush[y][x]);
@@ -274,6 +275,7 @@ class TileAutotileTool extends TileTool
 				if (drawBrush[j][i] == -1) continue; // TODO - It might be nice to be able to set this to 0 -01010111
 				drawBrush[j][i] = get_tile_idx(i, j, drawBrush, OGMO.ctrl);
 			}
+			trace(drawBrush);
 
 			EDITOR.dirty();
 		}
