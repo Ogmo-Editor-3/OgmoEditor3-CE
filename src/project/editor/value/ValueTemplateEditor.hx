@@ -1,10 +1,7 @@
 package project.editor.value;
 
 import js.jquery.JQuery;
-import project.data.ValueDefinition.ValueDisplayType;
-import project.data.ValueDefinition.ValueDisplayTypeLabel;
 import project.data.value.ValueTemplate;
-import util.Fields;
 
 class ValueTemplateEditor
 {
@@ -22,18 +19,5 @@ class ValueTemplateEditor
 	 */
 	public function importInto(into:JQuery) {}
 
-	public function save()
-	{
-		template.display = Type.createEnum(ValueDisplayType, displayChoicesField.val());
-	}
-
-	private function createDisplaySettings(into:JQuery)
-	{
-		var displayTypeChoices = new Map<String, String>();
-		for (prop in Type.allEnums(ValueDisplayType))
-			displayTypeChoices.set(Std.string(prop), ValueDisplayTypeLabel.labels[Type.enumIndex(prop)]);
-		displayChoicesField = Fields.createOptions(displayTypeChoices);
-		displayChoicesField.val(Std.string(template.display));
-		Fields.createSettingsBlock(into, displayChoicesField, SettingsBlock.Full, "Display in editor", SettingsBlock.InlineTitle);
-	}
+	public function save() {}
 }

@@ -572,7 +572,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 			}
 
 			// custom variables
-			entityValueManager = new ValueTemplateManager(inspector, entity.values, 'Custom Values');
+			entityValueManager = new ValueTemplateManager(inspector, entity.values, 'Custom Values', true);
 
 		}
 	}

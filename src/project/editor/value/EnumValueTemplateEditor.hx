@@ -23,14 +23,10 @@ class EnumValueTemplateEditor extends ValueTemplateEditor
 		// choices
 		choicesField = Fields.createTextarea("...", choices);
 		Fields.createSettingsBlock(into, choicesField, SettingsBlock.Full, "Choices (one per line)");
-
-		createDisplaySettings(into);
 	}
 
 	override function save()
 	{
-		super.save();
-
 		var enumTemplate:EnumValueTemplate = cast template;
 		enumTemplate.name = Fields.getField(nameField);
 		var choices = Fields.getField(choicesField);

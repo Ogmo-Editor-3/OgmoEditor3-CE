@@ -20,14 +20,10 @@ class ColorValueTemplateEditor extends ValueTemplateEditor
 		// default val
 		defaultField = Fields.createColor("Default Color", colorTemplate.defaults);
 		Fields.createSettingsBlock(into, defaultField, SettingsBlock.Half, "Default", SettingsBlock.InlineTitle);
-
-		createDisplaySettings(into);
 	}
 
 	override function save()
 	{
-		super.save();
-
 		var colorTemplate:ColorValueTemplate = cast template;
 
 		colorTemplate.name = Fields.getField(nameField);

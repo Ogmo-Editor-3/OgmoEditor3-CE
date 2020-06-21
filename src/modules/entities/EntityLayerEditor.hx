@@ -38,7 +38,7 @@ class EntityLayerEditor extends LayerEditor
 		// Draw node lines
 		if (hasNodes.length > 0) for (ent in hasNodes) ent.drawNodeLines();
 
-		// Draw entity display texts
+		// Draw entity property display texts
 		var lookup = new Map<Int, Entity>();
 		for (ent in entities.list)
 		{
@@ -58,7 +58,7 @@ class EntityLayerEditor extends LayerEditor
 
 				text.setCanvasPosition(new Vector(avgX, minY));
 				text.setAlpha(EDITOR.draw.getAlpha());
-				text.setHTML(ent.getDisplayTextHTML());
+				text.setHTML(ent.getPropertyDisplayHTML());
 
 				var minZoom = 1.0;
 				var maxZoom = 2.0;

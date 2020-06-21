@@ -290,7 +290,7 @@ class Entity
 		EDITOR.overlay.drawLine(corners[2], corners[0], Color.green);
 	}
 
-	public function getDisplayTextHTML():String
+	public function getPropertyDisplayHTML():String
 	{
 		var ret = "";
 

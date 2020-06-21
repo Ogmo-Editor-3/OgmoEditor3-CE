@@ -32,14 +32,10 @@ class StringValueTemplateEditor extends ValueTemplateEditor
 		// trim whitespace
 		trimField = Fields.createCheckbox(stringTemplate.trimWhitespace, "Trim Whitespace");
 		Fields.createSettingsBlock(into, trimField, SettingsBlock.Half);
-
-		createDisplaySettings(into);
 	}
 
 	override function save()
 	{
-		super.save();
-
 		var stringTemplate:StringValueTemplate = cast template;
 
 		stringTemplate.name = Fields.getField(nameField);

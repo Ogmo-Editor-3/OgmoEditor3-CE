@@ -8,7 +8,7 @@ class ValueTemplate
 {
 	public var name:String;
 	public var definition:ValueDefinition;
-	public var display:ValueDisplayType;
+	public var display:ValueDisplayType = ValueDisplayType.Hidden;
 
 	public static function saveList(list:Array<ValueTemplate>):Dynamic
 	{
