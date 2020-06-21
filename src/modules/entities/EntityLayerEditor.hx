@@ -2,6 +2,7 @@ package modules.entities;
 
 import level.editor.ui.SidePanel;
 import level.editor.LayerEditor;
+import rendering.FloatingText;
 
 class EntityLayerEditor extends LayerEditor
 {
@@ -9,6 +10,8 @@ class EntityLayerEditor extends LayerEditor
 	public var hovered:EntityGroup = new EntityGroup();
 	public var brush:Int = -1;
 	public var entities(get, never):EntityList;
+
+	private var entityTexts = new Map<Int, FloatingText>();
 
 	public function new(id:Int)
 	{
@@ -34,6 +37,47 @@ class EntityLayerEditor extends LayerEditor
 
 		// Draw node lines
 		if (hasNodes.length > 0) for (ent in hasNodes) ent.drawNodeLines();
+
+		// Draw entity display texts
+		var lookup = new Map<Int, Entity>();
+		for (ent in entities.list)
+		{
+			lookup.set(ent.id, ent);
+			if (!entityTexts.exists(ent.id))
+				entityTexts.set(ent.id, new FloatingText("text_property_display"));
+		}
+		var toRemove = new Array<Int>();
+		for (id => text in entityTexts)
+		{
+			var ent = lookup.get(id);
+			if (ent != null)
+			{
+				var corners = ent.getCorners(ent.position, 8 / EDITOR.level.zoom);
+				var avgX = (corners[0].x + corners[1].x + corners[2].x + corners[3].x) / 4.0;
+				var minY = Math.min(Math.min(corners[0].y, corners[1].y), Math.min(corners[2].y, corners[3].y));
+
+				text.setCanvasPosition(new Vector(avgX, minY));
+				text.setAlpha(EDITOR.draw.getAlpha());
+				text.setHTML(ent.getDisplayTextHTML());
+
+				var minZoom = 1.0;
+				var maxZoom = 2.0;
+				var zoom = Math.min(maxZoom, Math.max(minZoom, EDITOR.level.zoom));
+				var scale = (zoom - minZoom) / (maxZoom - minZoom);
+				var minFontSize = 0.9;
+				var maxFontSize = 1.15;
+				var fontSize = minFontSize + (maxFontSize - minFontSize) * scale;
+				text.setFontSize(fontSize);
+				text.setHidden(EDITOR.level.zoom < minZoom);
+			}
+			else
+			{
+				text.destroy();
+				toRemove.push(id);
+			}
+		}
+		for (id in toRemove)
+			entityTexts.remove(id);
 	}
 
 	override function drawAbove()
@@ -58,6 +102,9 @@ class EntityLayerEditor extends LayerEditor
 
 	override function refresh() {
 		selection.clear();
+		for (text in entityTexts)
+			text.destroy();
+		entityTexts.clear();
 	}
 
 	override function createPalettePanel():SidePanel return new EntityPalettePanel(this);

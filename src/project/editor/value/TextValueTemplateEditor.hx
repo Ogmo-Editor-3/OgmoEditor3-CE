@@ -20,10 +20,14 @@ class TextValueTemplateEditor extends ValueTemplateEditor
 		// default val
 		defaultField = Fields.createTextarea("...", textTemplate.defaults);
 		Fields.createSettingsBlock(into, defaultField, SettingsBlock.Full, "Default");
+
+		createDisplaySettings(into);
 	}
 
 	override function save()
 	{
+		super.save();
+
 		var textTemplate:TextValueTemplate = cast template;
 
 		textTemplate.name = Fields.getField(nameField);

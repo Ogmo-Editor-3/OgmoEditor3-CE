@@ -2,6 +2,14 @@ package modules.entities;
 
 import io.Imports;
 import level.data.Value;
+import project.data.value.TextValueTemplate;
+import project.data.value.StringValueTemplate;
+import project.data.value.IntegerValueTemplate;
+import project.data.value.FloatValueTemplate;
+import project.data.value.EnumValueTemplate;
+import project.data.value.ColorValueTemplate;
+import project.data.value.BoolValueTemplate;
+import project.data.ValueDefinition.ValueDisplayType;
 import rendering.Texture;
 import util.Matrix;
 
@@ -280,6 +288,57 @@ class Entity
 		EDITOR.overlay.drawLine(corners[1], corners[3], Color.green);
 		EDITOR.overlay.drawLine(corners[2], corners[3], Color.green);
 		EDITOR.overlay.drawLine(corners[2], corners[0], Color.green);
+	}
+
+	public function getDisplayTextHTML():String
+	{
+		var ret = "";
+
+		for (val in values)
+		{
+			if (val.template.display == ValueDisplayType.ValueOnly)
+			{
+				if (val.template.definition.type == BoolValueTemplate)
+					if (val.value == true)
+						ret += '<p">✔ ${val.template.name}</p>';
+					else
+						ret += '<p class="value_bool_false">${val.template.name}</p>';
+				else if (val.template.definition.type == ColorValueTemplate)
+					ret += '<p class="value_color" style="background-color: ${val.value};">&nbsp;</p>';
+				else if (val.template.definition.type == EnumValueTemplate)
+					ret += '<p>• ${val.value}</p>';
+				else if (val.template.definition.type == FloatValueTemplate)
+					ret += '<p>${val.value}</p>';
+				else if (val.template.definition.type == IntegerValueTemplate)
+					ret += '<p>${val.value}</p>';
+				else if (val.template.definition.type == StringValueTemplate)
+					ret += '<p>"${val.value}"</p>';
+				else if (val.template.definition.type == TextValueTemplate)
+					ret += '<p>« ${val.value} »</p>';
+			}
+			else
+			{
+				if (val.template.definition.type == BoolValueTemplate)
+					if (val.value == true)
+						ret += '<p">✔ ${val.template.name}</p>';
+					else
+						ret += '<p class="value_bool_false">${val.template.name}</p>';
+				else if (val.template.definition.type == ColorValueTemplate)
+					ret += '<p>${val.template.name} = <span class="value_color" style="background-color: ${val.value}; display: inline-block;">&nbsp;</span></p>';
+				else if (val.template.definition.type == EnumValueTemplate)
+					ret += '<p>${val.template.name} = • ${val.value}</p>';
+				else if (val.template.definition.type == FloatValueTemplate)
+					ret += '<p>${val.template.name} = ${val.value}</p>';
+				else if (val.template.definition.type == IntegerValueTemplate)
+					ret += '<p>${val.template.name} = ${val.value}</p>';
+				else if (val.template.definition.type == StringValueTemplate)
+					ret += '<p>${val.template.name} = "${val.value}"</p>';
+				else if (val.template.definition.type == TextValueTemplate)
+					ret += '<p>${val.template.name} = « ${val.value} »</p>';
+			}
+		}
+
+		return ret;
 	}
 
 	/*

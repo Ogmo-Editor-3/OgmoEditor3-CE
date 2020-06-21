@@ -20,10 +20,14 @@ class BoolValueTemplateEditor extends ValueTemplateEditor
 		// default val
 		defaultField = Fields.createCheckbox(boolTemplate.defaults, "Default");
 		Fields.createSettingsBlock(into, defaultField, SettingsBlock.Half);
+
+		createDisplaySettings(into);
 	}
 
 	override function save()
 	{
+		super.save();
+
 		var boolTemplate:BoolValueTemplate = cast template;
 
 		boolTemplate.name = Fields.getField(nameField);

@@ -8,6 +8,7 @@ class ValueTemplate
 {
 	public var name:String;
 	public var definition:ValueDefinition;
+	public var display:ValueDisplayType;
 
 	public static function saveList(list:Array<ValueTemplate>):Dynamic
 	{
@@ -40,6 +41,20 @@ class ValueTemplate
 	public function validate(val:Dynamic):Dynamic return '';
 	public function createEditor(values:Array<Value>):Null<ValueEditor> return null;
 	public function getHashCode():String return '';
-	public function load(val:Dynamic):Void {}
-	public function save():Dynamic return {};
+
+	public function load(data:Dynamic):Void
+	{
+		name = data.name;
+		if (data.display != null)
+			display = ValueDisplayType.createByIndex(data.display);
+	}
+
+	public function save():Dynamic
+	{
+		var data:Dynamic = {};
+		data.name = name;
+		data.definition = definition.label;
+		data.display = Type.enumIndex(this.display);
+		return data;
+	}
 }

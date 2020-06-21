@@ -42,7 +42,7 @@ class StringValueTemplate extends ValueTemplate
 
 	override function load(data:Dynamic):Void
 	{
-		name = data.name;
+		super.load(data);
 		defaults = data.defaults;
 		maxLength = Imports.integer(data.maxLength, 0);
 		trimWhitespace = data.trimWhitespace;
@@ -50,9 +50,7 @@ class StringValueTemplate extends ValueTemplate
 
 	override function save():Dynamic
 	{
-		var data:Dynamic = {};
-		data.name = name;
-		data.definition = definition.label;
+		var data:Dynamic = super.save();
 		data.defaults = defaults;
 		data.maxLength = maxLength;
 		data.trimWhitespace = trimWhitespace;

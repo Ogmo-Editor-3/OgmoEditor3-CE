@@ -47,6 +47,7 @@ class ColorValueEditor extends ValueEditor
 
 					element.find(".button_text").html(value);
 					conflict = false;
+					EDITOR.dirty();
 				}
 			});
 		});

@@ -35,10 +35,14 @@ class IntegerValueTemplateEditor extends ValueTemplateEditor
 
 		boundedField = Fields.createCheckbox(intTemplate.bounded, "Clamp");
 		Fields.createSettingsBlock(into, boundedField, SettingsBlock.Fourth);
+
+		createDisplaySettings(into);
 	}
 
 	override function save()
 	{
+		super.save();
+
 		var intTemplate:IntegerValueTemplate = cast template;
 
 		intTemplate.name = Fields.getField(nameField);

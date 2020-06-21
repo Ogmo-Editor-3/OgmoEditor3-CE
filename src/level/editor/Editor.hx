@@ -13,6 +13,7 @@ import io.LevelManager;
 import level.data.Level;
 import level.editor.ui.LayersPanel;
 import level.editor.ui.LevelsPanel;
+import rendering.FloatingText;
 import rendering.GLRenderer;
 import util.Vector;
 import util.Keys;
@@ -24,6 +25,7 @@ class Editor
 	public var root: JQuery;
 	public var draw: GLRenderer;
 	public var overlay: GLRenderer;
+	public var textOverlay: JQuery;
 
 	public var layerEditors: Array<LayerEditor> = [];
 	public var level: Level = null;
@@ -63,13 +65,20 @@ class Editor
 		overlay = new GLRenderer("overlay", cast new JQuery(".editor_canvas#overlay")[0]);
 		overlay.clearColor = Color.transparent;
 		root = new JQuery(".editor");
+		textOverlay = new JQuery(".editor_text_overlay#text_overlay");
 
 		//Events
 		{
 			//Center Camera button
-			new JQuery(".sticker-center").click(function (e)
+			new JQuery(".sticker-centercam").click(function (e)
 			{
 				if (EDITOR.level != null) EDITOR.level.centerCamera();
+			});
+
+			//Toggle Property Display
+			new JQuery('.sticker-propertydisplay').click(function (e)
+			{
+				FloatingText.visible = !FloatingText.visible;
 			});
 			
 			new JQuery(Browser.window).resize(function(e)
@@ -684,6 +693,12 @@ class Editor
 				{
 					EDITOR.level.gridVisible = !EDITOR.level.gridVisible;
 					EDITOR.dirty();
+				}
+			case Keys.T:
+				//Toggle Property Display
+				if (OGMO.ctrl)
+				{
+					FloatingText.visible = !FloatingText.visible;
 				}
 			case Keys.S:
 				//Save Level

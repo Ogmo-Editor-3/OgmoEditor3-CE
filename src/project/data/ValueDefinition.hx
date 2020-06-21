@@ -3,6 +3,21 @@ package project.data;
 import project.data.value.ValueTemplate;
 import project.editor.value.ValueTemplateEditor;
 
+enum ValueDisplayType
+{
+	Hidden;
+	ValueOnly;
+	NameAndValue;
+}
+class ValueDisplayTypeLabel
+{
+	public static var labels = [
+		"Hidden",
+		"Value Only",
+		"Name And Value",
+	];
+}
+
 class ValueDefinition
 {
 	public static var definitions: Array<ValueDefinition> = [];

@@ -35,10 +35,14 @@ class FloatValueTemplateEditor extends ValueTemplateEditor
 
 		boundedField = Fields.createCheckbox(floatTemplate.bounded, "Clamp");
 		Fields.createSettingsBlock(into, boundedField, SettingsBlock.Fourth);
+
+		createDisplaySettings(into);
 	}
 
 	override function save()
 	{
+		super.save();
+
 		var floatTemplate:FloatValueTemplate = cast template;
 
 		floatTemplate.name = Fields.getField(nameField);
