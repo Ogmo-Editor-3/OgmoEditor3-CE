@@ -37,6 +37,25 @@ class FloatingText
             EDITOR.textOverlay.css('visibility', newVisible ? 'visible' : 'hidden');
         return visible = newVisible;
     }
+    static public var visibleFade(default, set) = true;
+    static private var visibleFadeCache = new CachedProperty<Bool>();
+    static function set_visibleFade(newVisibleFade)
+    {
+        if (visibleFadeCache.update(newVisibleFade))
+        {
+            if (newVisibleFade)
+            {
+                EDITOR.textOverlay.addClass('editor_text_overlay-visible');
+                EDITOR.textOverlay.removeClass('editor_text_overlay-invisible');
+            }
+            else
+            {
+                EDITOR.textOverlay.addClass('editor_text_overlay-invisible');
+                EDITOR.textOverlay.removeClass('editor_text_overlay-visible');
+            }
+        }
+        return visibleFade = newVisibleFade;
+    }
 
     private var styleClass:String;
     private var element:JQuery;
@@ -46,7 +65,6 @@ class FloatingText
     private var bottom = new CachedProperty<Int>();
     private var html = new CachedProperty<String>();
     private var fontSize = new CachedProperty<Float>();
-    private var hidden = new CachedProperty<Bool>();
 
     public function new(styleClass:String)
     {
@@ -90,22 +108,5 @@ class FloatingText
     {
         if (this.fontSize.update(fontSize))
             element.css('font-size', '${fontSize}${units}');
-    }
-
-    public function setHidden(hidden:Bool)
-    {
-        if (this.hidden.update(hidden))
-        {
-            if (hidden)
-            {
-                EDITOR.textOverlay.addClass('${styleClass}_invisible');
-                EDITOR.textOverlay.removeClass('${styleClass}_visible');
-            }
-            else
-            {
-                EDITOR.textOverlay.addClass('${styleClass}_visible');
-                EDITOR.textOverlay.removeClass('${styleClass}_invisible');
-            }
-        }
     }
 }

@@ -39,6 +39,9 @@ class EntityLayerEditor extends LayerEditor
 		if (hasNodes.length > 0) for (ent in hasNodes) ent.drawNodeLines();
 
 		// Draw entity property display texts
+		var minZoom = 1.0;
+		var maxZoom = 2.0;
+		FloatingText.visibleFade = EDITOR.level.zoom >= minZoom;
 		var lookup = new Map<Int, Entity>();
 		for (ent in entities.list)
 		{
@@ -60,15 +63,12 @@ class EntityLayerEditor extends LayerEditor
 				text.setAlpha(EDITOR.draw.getAlpha());
 				text.setHTML(ent.getPropertyDisplayHTML());
 
-				var minZoom = 1.0;
-				var maxZoom = 2.0;
 				var zoom = Math.min(maxZoom, Math.max(minZoom, EDITOR.level.zoom));
 				var scale = (zoom - minZoom) / (maxZoom - minZoom);
 				var minFontSize = 0.9;
 				var maxFontSize = 1.15;
 				var fontSize = minFontSize + (maxFontSize - minFontSize) * scale;
 				text.setFontSize(fontSize);
-				text.setHidden(EDITOR.level.zoom < minZoom);
 			}
 			else
 			{
@@ -175,5 +175,12 @@ class EntityLayerEditor extends LayerEditor
 	inline function get_entities():EntityList {
 		var el:EntityLayer = cast layer;
 		return el.entities;
+	}
+
+	override  function set_visible(newVisible:Bool):Bool {
+		if (!newVisible)
+			for (text in entityTexts)
+				text.setAlpha(0);
+		return super.set_visible(newVisible);
 	}
 }

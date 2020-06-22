@@ -571,6 +571,18 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+
+    &-visible
+    {
+        opacity: 1;
+        transition: opacity 0.7s;
+    }
+
+    &-invisible
+    {
+        opacity: 0;
+        transition: opacity 0.7s;
+    }
 }
 
 .text_property_display
@@ -600,16 +612,4 @@
         box-shadow: 0 0 0 2px black;
         width: 3.3em;
     }
-}
-
-.text_property_display_visible
-{
-    opacity: 1;
-    transition: opacity 0.7s;
-}
-
-.text_property_display_invisible
-{
-    opacity: 0;
-    transition: opacity 0.7s;
 }
