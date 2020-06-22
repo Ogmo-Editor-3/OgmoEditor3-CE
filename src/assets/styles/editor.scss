@@ -359,6 +359,14 @@
         flex: 0 1;
         min-height: 30px;
     }
+
+    & .entityId
+    {
+        text-transform: uppercase;
+        color: #666;
+        padding: 0 5px;
+        padding-bottom: 10px;
+    }
 }
 
 .valueEditors

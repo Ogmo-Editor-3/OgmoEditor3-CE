@@ -11,6 +11,7 @@ class EntitySelectionPanel extends SidePanel
 	public var holder: JQuery;
 	public var layerEditor:EntityLayerEditor;
 	public var entityList:ItemList;
+	public var entityId:JQuery;
 	public var properties:JQuery;
 	public var values:JQuery;
 
@@ -27,6 +28,9 @@ class EntitySelectionPanel extends SidePanel
 		// create list of selected entities
 		entityList = new ItemList(holder);
 		entityList.element.addClass("entityList");
+
+		entityId = new JQuery('<div class="entityId">');
+		holder.append(entityId);
 
 		var container = new JQuery('<div class="valueEditors">');
 		holder.append(container);
@@ -92,14 +96,25 @@ class EntitySelectionPanel extends SidePanel
 			entityList.element.css("min-height", Math.min(8, count) * 25 + "px");
 		}
 
+		// show ID if we only have 1 entity selected
+		{
+			entityId.empty();
+
+			if (sel.length == 1) 
+			{
+				var entity = sel[0];
+				entityId.append(new JQuery('<div>Id - ${entity.id}</div>'));
+			}
+		}
+
 		// entity properties
 		{
 			properties.empty();
+			
 			if (sel.length > 0)
 			{
 				var entity = sel[0];
-				var entityId = Fields.createField("Id", Std.string(entity.id), { disabled: true });
-				Fields.createSettingsBlock(properties, entityId, SettingsBlock.Full, "Id", SettingsBlock.OverTitle);
+
 				var entityPos = Fields.createVector(entity.position);
 				entityPos.find(".vecX").on('change keydown paste input', function(e) {
 					var pos = Fields.getVector(entityPos);
