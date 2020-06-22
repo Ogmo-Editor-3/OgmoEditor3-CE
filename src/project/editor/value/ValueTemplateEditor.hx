@@ -6,7 +6,6 @@ import project.data.value.ValueTemplate;
 class ValueTemplateEditor
 {
 	public var template:ValueTemplate;
-	public var displayChoicesField:JQuery;
 
 	public function new(template:ValueTemplate)
 	{
