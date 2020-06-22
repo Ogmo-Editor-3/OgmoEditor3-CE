@@ -300,7 +300,7 @@ class Entity
 			{
 				if (val.template.definition.type == BoolValueTemplate)
 					if (val.value == true)
-						ret += '<p">✔ ${val.template.name}</p>';
+						ret += '<p>✔ ${val.template.name}</p>';
 					else
 						ret += '<p class="value_bool_false">${val.template.name}</p>';
 				else if (val.template.definition.type == ColorValueTemplate)
@@ -320,7 +320,7 @@ class Entity
 			{
 				if (val.template.definition.type == BoolValueTemplate)
 					if (val.value == true)
-						ret += '<p">✔ ${val.template.name}</p>';
+						ret += '<p>✔ ${val.template.name}</p>';
 					else
 						ret += '<p class="value_bool_false">${val.template.name}</p>';
 				else if (val.template.definition.type == ColorValueTemplate)
