@@ -98,6 +98,8 @@ class EntitySelectionPanel extends SidePanel
 			if (sel.length > 0)
 			{
 				var entity = sel[0];
+				var entityId = Fields.createField("Id", Std.string(entity.id), { disabled: true });
+				Fields.createSettingsBlock(properties, entityId, SettingsBlock.Full, "Id", SettingsBlock.OverTitle);
 				var entityPos = Fields.createVector(entity.position);
 				entityPos.find(".vecX").on('change keydown paste input', function(e) {
 					var pos = Fields.getVector(entityPos);
