@@ -564,13 +564,19 @@
 }
 
 // TEXT
-.editor_text_overlay
+.editor_html_overlay
 {
     pointer-events: none;
     position: absolute;
     width: 100%;
     height: 100%;
     overflow: hidden;
+}
+
+.editor_html_property_display_overlay
+{
+    width: 100%;
+    height: 100%;
 
     &.visible
     {

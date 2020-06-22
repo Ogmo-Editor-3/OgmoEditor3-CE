@@ -13,7 +13,7 @@ import io.LevelManager;
 import level.data.Level;
 import level.editor.ui.LayersPanel;
 import level.editor.ui.LevelsPanel;
-import rendering.FloatingText;
+import rendering.FloatingHTML.FloatingHTMLPropertyDisplay;
 import rendering.GLRenderer;
 import util.Vector;
 import util.Keys;
@@ -25,7 +25,8 @@ class Editor
 	public var root: JQuery;
 	public var draw: GLRenderer;
 	public var overlay: GLRenderer;
-	public var textOverlay: JQuery;
+	public var htmlOverlay: JQuery;
+	public var htmlPropertyDisplayOverlay: JQuery;
 
 	public var layerEditors: Array<LayerEditor> = [];
 	public var level: Level = null;
@@ -65,7 +66,8 @@ class Editor
 		overlay = new GLRenderer("overlay", cast new JQuery(".editor_canvas#overlay")[0]);
 		overlay.clearColor = Color.transparent;
 		root = new JQuery(".editor");
-		textOverlay = new JQuery(".editor_text_overlay#text_overlay");
+		htmlOverlay = new JQuery(".editor_html_overlay#html_overlay");
+		htmlPropertyDisplayOverlay = new JQuery(".editor_html_property_display_overlay#html_property_display_overlay");
 
 		//Events
 		{
@@ -78,7 +80,7 @@ class Editor
 			//Toggle Property Display
 			new JQuery('.sticker-propertydisplay').click(function (e)
 			{
-				FloatingText.visible = !FloatingText.visible;
+				FloatingHTMLPropertyDisplay.visible = !FloatingHTMLPropertyDisplay.visible;
 			});
 			
 			new JQuery(Browser.window).resize(function(e)
@@ -698,7 +700,7 @@ class Editor
 				//Toggle Property Display
 				if (OGMO.ctrl)
 				{
-					FloatingText.visible = !FloatingText.visible;
+					FloatingHTMLPropertyDisplay.visible = !FloatingHTMLPropertyDisplay.visible;
 				}
 			case Keys.S:
 				//Save Level

@@ -2,7 +2,7 @@ package modules.entities;
 
 import level.editor.ui.SidePanel;
 import level.editor.LayerEditor;
-import rendering.FloatingText;
+import rendering.FloatingHTML.FloatingHTMLPropertyDisplay;
 
 class EntityLayerEditor extends LayerEditor
 {
@@ -11,7 +11,7 @@ class EntityLayerEditor extends LayerEditor
 	public var brush:Int = -1;
 	public var entities(get, never):EntityList;
 
-	private var entityTexts = new Map<Int, FloatingText>();
+	private var entityTexts = new Map<Int, FloatingHTMLPropertyDisplay>();
 
 	public function new(id:Int)
 	{
@@ -39,43 +39,47 @@ class EntityLayerEditor extends LayerEditor
 		if (hasNodes.length > 0) for (ent in hasNodes) ent.drawNodeLines();
 
 		// Draw entity property display texts
-		var minZoom = 1.0;
-		var maxZoom = 2.0;
-		FloatingText.visibleFade = EDITOR.level.zoom >= minZoom;
-		for (ent in entities.list)
 		{
-			if (!entityTexts.exists(ent.id))
-				entityTexts.set(ent.id, new FloatingText("text_property_display"));
-		}
-		var toRemove = new Array<Int>();
-		for (id => text in entityTexts)
-		{
-			var ent = entities.getByID(id);
-			if (ent != null)
-			{
-				var corners = ent.getCorners(ent.position, 8 / EDITOR.level.zoom);
-				var avgX = (corners[0].x + corners[1].x + corners[2].x + corners[3].x) / 4.0;
-				var minY = Math.min(Math.min(corners[0].y, corners[1].y), Math.min(corners[2].y, corners[3].y));
+			var minZoom = 1.0;
+			var maxZoom = 2.0;
+			var zoom = Math.min(maxZoom, Math.max(minZoom, EDITOR.level.zoom));
+			var scale = (zoom - minZoom) / (maxZoom - minZoom);
+			var minFontSize = 0.9;
+			var maxFontSize = 1.15;
+			var fontSize = minFontSize + (maxFontSize - minFontSize) * scale;
+			FloatingHTMLPropertyDisplay.visibleFade = EDITOR.level.zoom >= minZoom;
 
-				text.setCanvasPosition(new Vector(avgX, minY));
-				text.setAlpha(EDITOR.draw.getAlpha());
-				text.setHTML(ent.getPropertyDisplayHTML());
-
-				var zoom = Math.min(maxZoom, Math.max(minZoom, EDITOR.level.zoom));
-				var scale = (zoom - minZoom) / (maxZoom - minZoom);
-				var minFontSize = 0.9;
-				var maxFontSize = 1.15;
-				var fontSize = minFontSize + (maxFontSize - minFontSize) * scale;
-				text.setFontSize(fontSize);
-			}
-			else
+			for (ent in entities.list)
 			{
-				text.destroy();
-				toRemove.push(id);
+				if (!entityTexts.exists(ent.id))
+					entityTexts.set(ent.id, new FloatingHTMLPropertyDisplay());
 			}
+
+			var toRemove = new Array<Int>();
+			for (id => text in entityTexts)
+			{
+				var entity = entities.getByID(id);
+				if (entity != null)
+				{
+					var corners = entity.getCorners(entity.position, 8 / EDITOR.level.zoom);
+					var avgX = (corners[0].x + corners[1].x + corners[2].x + corners[3].x) / 4.0;
+					var minY = Math.min(Math.min(corners[0].y, corners[1].y), Math.min(corners[2].y, corners[3].y));
+
+					text.setEntity(entity);
+					text.setCanvasPosition(new Vector(avgX, minY));
+					text.setOpacity(EDITOR.draw.getAlpha());
+					text.setFontSize(fontSize);
+				}
+				else
+				{
+					text.destroy();
+					toRemove.push(id);
+				}
+			}
+
+			for (id in toRemove)
+				entityTexts.remove(id);
 		}
-		for (id in toRemove)
-			entityTexts.remove(id);
 	}
 
 	override function drawAbove()
@@ -178,7 +182,7 @@ class EntityLayerEditor extends LayerEditor
 	override  function set_visible(newVisible:Bool):Bool {
 		if (!newVisible)
 			for (text in entityTexts)
-				text.setAlpha(0);
+				text.setOpacity(0);
 		return super.set_visible(newVisible);
 	}
 }
