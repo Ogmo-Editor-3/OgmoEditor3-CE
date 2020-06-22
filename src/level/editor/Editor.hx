@@ -45,6 +45,7 @@ class Editor
 	var mouseInside:Bool = false;
 	var middleClickMove:Bool = false;
 	var lastOverlayUpdate:Float = 0;
+	var saveLevelAsImageRequested:Bool = false;
 
 	var resizingLeft:Bool = false;
 	var resizingRight:Bool = false;
@@ -580,6 +581,35 @@ class Editor
 		EDITOR.toolBelt.checkAvailability();
 		
 		draw.finishDrawing();
+
+		if (saveLevelAsImageRequested)
+		{
+			saveLevelAsImageRequested = false;
+			var camBackup = EDITOR.level.camera.clone();
+
+			draw.setAlpha(1);
+			draw.setupRenderTarget(level.data.size);
+
+			var i = level.layers.length - 1;
+			while(i >= 0) 
+			{
+				if (EDITOR.layerEditors[i] != null && EDITOR.layerEditors[i].visible) EDITOR.layerEditors[i].draw();
+				i--;
+			}
+
+			draw.finishDrawing();
+
+			var pixels = draw.getRenderTargetPixels();
+			var path = FileSystem.chooseSaveFile("Level as image", [{ name: "Image", extensions: ["png"]}], level.displayNameNoExtension + ".png");
+			if (path.length > 0)
+				FileSystem.saveRGBAToPNG(pixels, Math.floor(level.data.size.x), Math.floor(level.data.size.y), path);
+
+			draw.doneRenderTarget();
+			draw.destroyRenderTarget();
+
+			EDITOR.level.camera = camBackup;
+			EDITOR.level.updateCameraInverse();
+		}
 	}
 
 	public function drawOverlay():Void
@@ -598,6 +628,12 @@ class Editor
 			overlay.drawLineRect(level.zoomRect, Color.white);
 
 		overlay.finishDrawing();
+	}
+
+	public function saveLevelAsImage():Void
+	{
+		saveLevelAsImageRequested = true;
+		isDirty = true;
 	}
 
 	/*

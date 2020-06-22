@@ -722,6 +722,14 @@ class LevelsPanel extends SidePanel
 			Shell.openItem(node.data);
 		});
 
+		if (EDITOR.levelManager.isOpen(node.data))
+		{
+			menu.addOption("Save as Image", "image", function()
+			{
+				EDITOR.saveLevelAsImage();
+			});
+		}
+
 		node.highlighted = true;
 		menu.open();
 	}

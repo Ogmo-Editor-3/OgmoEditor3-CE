@@ -5,7 +5,9 @@ import js.jquery.JQuery;
 import haxe.Json;
 import js.Browser;
 import js.html.Document;
+import js.html.ImageData;
 import js.html.ImageElement;
+import js.lib.Uint8Array;
 import js.node.Buffer;
 import js.node.Fs;
 import electron.FileFilter;
@@ -29,13 +31,14 @@ class FileSystem
 		return '';
 	}
 
-	public static function chooseSaveFile(title:String, filters:Array<FileFilter>):String
+	public static function chooseSaveFile(title:String, filters:Array<FileFilter>, ?defaultPath:String):String
 	{
 		var file = Ogmo.dialog.showSaveDialog(
 			Remote.getCurrentWindow(),
 			{
 				title: title,
-				filters: filters
+				filters: filters,
+				defaultPath: defaultPath
 			}
 		);
 		if (file != null) return file;
@@ -112,6 +115,25 @@ class FileSystem
 	public static function saveString(data:String, path:String)
 	{
 		Fs.writeFileSync(path, data);
+	}
+
+	public static function saveRGBAToPNG(data:Uint8Array, width:Int, height:Int, path:String)
+	{
+		var canvas = Browser.document.createCanvasElement();
+		canvas.width = width;
+		canvas.height = height;
+
+		var ctx = canvas.getContext("2d");
+		var imageData:ImageData = ctx.createImageData(Math.ffloor(width), Math.ffloor(height));
+		for (i in 0...imageData.data.length)
+			imageData.data[i] = data[i];
+		ctx.putImageData(imageData, 0, 0);
+
+		var nativeImage = js.Lib.require('electron').nativeImage;
+		var img = nativeImage.createFromDataURL(canvas.toDataURL("image/png"));
+		Fs.writeFileSync(path, img.toPNG());
+
+		canvas.remove();
 	}
 
 	/*

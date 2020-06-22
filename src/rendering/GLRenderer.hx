@@ -2,6 +2,7 @@ package rendering;
 
 import js.html.CanvasElement;
 import js.lib.Float32Array;
+import js.lib.Uint8Array;
 import js.html.webgl.RenderingContext;
 import js.html.webgl.Buffer;
 import js.Syntax;
@@ -70,6 +71,64 @@ class GLRenderer
 		gl.deleteBuffer(posBuffer);
 		gl.deleteBuffer(colBuffer);
 		gl.deleteBuffer(uvBuffer);
+	}
+
+	// OFFSCREEN RENDERING
+
+	var offscreenTexture: js.html.webgl.Texture;
+	var offscreenFramebuffer: js.html.webgl.Framebuffer;
+	var offscreenTextureSize: Vector;
+
+	public function setupRenderTarget(size: Vector): Void
+	{
+		offscreenTextureSize = size;
+
+		offscreenTexture = gl.createTexture();
+		gl.bindTexture(RenderingContext.TEXTURE_2D, offscreenTexture);
+
+		var level = 0;
+		var internalFormat = RenderingContext.RGBA;
+		var border = 0;
+		var format = RenderingContext.RGBA;
+		var type = RenderingContext.UNSIGNED_BYTE;
+		var data = null;
+		gl.texImage2D(RenderingContext.TEXTURE_2D, level, internalFormat, Math.floor(size.x), Math.floor(size.y), border, format, type, data);
+
+		gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.LINEAR);
+		gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, RenderingContext.CLAMP_TO_EDGE);
+		gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, RenderingContext.CLAMP_TO_EDGE);
+
+		offscreenFramebuffer = gl.createFramebuffer();
+		gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, offscreenFramebuffer);
+		gl.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, offscreenTexture, level);
+
+		gl.clearColor(0, 0, 0, 0);
+		gl.clear(RenderingContext.COLOR_BUFFER_BIT| RenderingContext.DEPTH_BUFFER_BIT);
+
+		gl.viewport(0, 0, Math.floor(size.x), Math.floor(size.y));
+		orthoMatrix = Matrix3D.orthographic(0, size.x, 0, size.y, -100, 100);
+		EDITOR.level.camera.setIdentity();
+
+		var canRead = gl.checkFramebufferStatus(RenderingContext.FRAMEBUFFER) == RenderingContext.FRAMEBUFFER_COMPLETE;
+	}
+
+	public function getRenderTargetPixels(): Uint8Array
+	{
+		var pixels = new Uint8Array(Math.floor(offscreenTextureSize.x) * Math.floor(offscreenTextureSize.y) * 4);
+		gl.readPixels(0, 0, Math.floor(offscreenTextureSize.x), Math.floor(offscreenTextureSize.y), RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, pixels);
+		return pixels;
+	}
+
+	public function doneRenderTarget(): Void
+	{
+		gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
+		updateCanvasSize();
+	}
+
+	public function destroyRenderTarget(): Void
+	{
+		gl.deleteTexture(offscreenTexture);
+		gl.deleteFramebuffer(offscreenFramebuffer);
 	}
 
 	// SIZE
