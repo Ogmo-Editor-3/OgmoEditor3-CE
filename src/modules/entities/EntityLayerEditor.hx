@@ -3,6 +3,8 @@ package modules.entities;
 import level.editor.ui.SidePanel;
 import level.editor.LayerEditor;
 import rendering.FloatingHTML.FloatingHTMLPropertyDisplay;
+import rendering.FloatingHTML.PositionAlignV;
+import rendering.FloatingHTML.PositionAlignH;
 
 class EntityLayerEditor extends LayerEditor
 {
@@ -66,7 +68,7 @@ class EntityLayerEditor extends LayerEditor
 					var minY = Math.min(Math.min(corners[0].y, corners[1].y), Math.min(corners[2].y, corners[3].y));
 
 					text.setEntity(entity);
-					text.setCanvasPosition(new Vector(avgX, minY));
+					text.setCanvasPosition(new Vector(avgX, minY), PositionAlignH.Left, PositionAlignV.Bottom);
 					text.setOpacity(EDITOR.draw.getAlpha());
 					text.setFontSize(fontSize);
 				}

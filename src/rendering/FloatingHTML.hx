@@ -37,6 +37,17 @@ class CachedProperty<T>
     }
 }
 
+enum PositionAlignH
+{
+    Left;
+    Right;
+}
+enum PositionAlignV
+{
+    Top;
+    Bottom;
+}
+
 class FloatingHTML
 {
     private var styleClass:String;
@@ -66,18 +77,39 @@ class FloatingHTML
             element.html(html);
     }
 
-    public function setCanvasPosition(pos:Vector)
+    public function setCanvasPosition(pos:Vector, alignX:PositionAlignH = PositionAlignH.Left, alignY:PositionAlignV = PositionAlignV.Top)
     {
         var screenSpace = EDITOR.level.camera.transformPoint(pos);
         screenSpace.x += EDITOR.draw.width / 2;
         screenSpace.y += EDITOR.draw.height / 2;
-        var left = Math.floor(screenSpace.x);
-        var bottom = Math.floor(EDITOR.draw.height - screenSpace.y);
+        var x = Math.floor(screenSpace.x);
+        var y = Math.floor(screenSpace.y);
+        if (alignX == PositionAlignH.Right)
+            x = EDITOR.draw.width - x;
+        if (alignY == PositionAlignV.Bottom)
+            y = EDITOR.draw.height - y;
 
-        if (this.left.update(left))
-            element.css('left', '${left}px');
-        if (this.bottom.update(bottom))
-            element.css('bottom', '${bottom}px');
+        if (alignX == PositionAlignH.Left)
+        {
+            if (this.left.update(x))
+                element.css('left', '${x}px');
+        }
+        else
+        {
+            if (this.right.update(x))
+                element.css('right', '${x}px');
+        }
+
+        if (alignY == PositionAlignV.Top)
+        {
+            if (this.top.update(y))
+                element.css('top', '${y}px');
+        }
+        else
+        {
+            if (this.bottom.update(y))
+                element.css('bottom', '${y}px');
+        }
     }
 
     public function setOpacity(opacity:Float)
