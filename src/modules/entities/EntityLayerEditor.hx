@@ -42,17 +42,15 @@ class EntityLayerEditor extends LayerEditor
 		var minZoom = 1.0;
 		var maxZoom = 2.0;
 		FloatingText.visibleFade = EDITOR.level.zoom >= minZoom;
-		var lookup = new Map<Int, Entity>();
 		for (ent in entities.list)
 		{
-			lookup.set(ent.id, ent);
 			if (!entityTexts.exists(ent.id))
 				entityTexts.set(ent.id, new FloatingText("text_property_display"));
 		}
 		var toRemove = new Array<Int>();
 		for (id => text in entityTexts)
 		{
-			var ent = lookup.get(id);
+			var ent = entities.getByID(id);
 			if (ent != null)
 			{
 				var corners = ent.getCorners(ent.position, 8 / EDITOR.level.zoom);
