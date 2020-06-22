@@ -45,13 +45,13 @@ class FloatingText
         {
             if (newVisibleFade)
             {
-                EDITOR.textOverlay.addClass('editor_text_overlay-visible');
-                EDITOR.textOverlay.removeClass('editor_text_overlay-invisible');
+                EDITOR.textOverlay.addClass('visible');
+                EDITOR.textOverlay.removeClass('invisible');
             }
             else
             {
-                EDITOR.textOverlay.addClass('editor_text_overlay-invisible');
-                EDITOR.textOverlay.removeClass('editor_text_overlay-visible');
+                EDITOR.textOverlay.addClass('invisible');
+                EDITOR.textOverlay.removeClass('visible');
             }
         }
         return visibleFade = newVisibleFade;
