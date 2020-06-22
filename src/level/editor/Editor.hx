@@ -600,7 +600,7 @@ class Editor
 			draw.finishDrawing();
 
 			var pixels = draw.getRenderTargetPixels();
-			var path = FileSystem.chooseSaveFile("Level as image", [{ name: "Image", extensions: ["png"]}]);
+			var path = FileSystem.chooseSaveFile("Level as image", [{ name: "Image", extensions: ["png"]}], level.displayNameNoExtension + ".png");
 			if (path.length > 0)
 				FileSystem.saveRGBAToPNG(pixels, Math.floor(level.data.size.x), Math.floor(level.data.size.y), path);
 

@@ -31,13 +31,14 @@ class FileSystem
 		return '';
 	}
 
-	public static function chooseSaveFile(title:String, filters:Array<FileFilter>):String
+	public static function chooseSaveFile(title:String, filters:Array<FileFilter>, ?defaultPath:String):String
 	{
 		var file = Ogmo.dialog.showSaveDialog(
 			Remote.getCurrentWindow(),
 			{
 				title: title,
-				filters: filters
+				filters: filters,
+				defaultPath: defaultPath
 			}
 		);
 		if (file != null) return file;

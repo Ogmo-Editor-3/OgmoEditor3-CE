@@ -36,6 +36,7 @@ class Level
 	public var safeToClose(get, null):Bool;
 	public var displayName(get, null):String;
 	public var displayNameNoStar(get, null):String;
+	public var displayNameNoExtension(get, null):String;
 	public var managerPath(get, null):String;
 	public var currentLayer(get, null):Layer;
 	public var externallyDeleted(get, null):Bool;
@@ -380,6 +381,14 @@ class Level
 			str = "Unsaved Level " + (unsavedID + 1);
 		else
 			str = Path.basename(path);
+
+		return str;
+	}
+
+	function get_displayNameNoExtension():String
+	{
+		var str:String = displayNameNoStar;
+		str = Path.basename(str, Path.extname(str));
 
 		return str;
 	}
