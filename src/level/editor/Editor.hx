@@ -13,7 +13,7 @@ import io.LevelManager;
 import level.data.Level;
 import level.editor.ui.LayersPanel;
 import level.editor.ui.LevelsPanel;
-import level.editor.ui.PropertyDisplay;
+import level.editor.ui.PropertyDisplay.PropertyDisplayDropdown;
 import level.editor.ui.StickerDropdown;
 import rendering.GLRenderer;
 import util.Vector;
@@ -42,7 +42,7 @@ class Editor
 	public var isDirty:Bool = false;
 	public var isOverlayDirty:Bool = false;
 	public var currentLayerEditor(get, null):LayerEditor;
-	public var propertyDisplay: PropertyDisplay = new PropertyDisplay();
+	public var propertyDisplayDropdown: PropertyDisplayDropdown;
 
 	var lastArrows: Vector = new Vector();
 	var mouseMoving:Bool = false;
@@ -73,6 +73,8 @@ class Editor
 		htmlPropertyDisplayOverlay = new JQuery(".editor_html_property_display_overlay#html_property_display_overlay");
 		stickerDropdown = new StickerDropdown();
 
+		propertyDisplayDropdown = new PropertyDisplayDropdown(OGMO.settings.propertyDisplay);
+
 		//Events
 		{
 			//Center Camera button
@@ -84,7 +86,7 @@ class Editor
 			//Toggle Property Display
 			new JQuery('.sticker-propertydisplay').click(function (e)
 			{
-				EDITOR.propertyDisplay.signal(EDITOR.stickerDropdown);
+				EDITOR.propertyDisplayDropdown.signal(EDITOR.stickerDropdown);
 			});
 			
 			new JQuery(Browser.window).resize(function(e)
@@ -704,14 +706,14 @@ class Editor
 				//Toggle Property Display
 				if (OGMO.ctrl)
 				{
-					EDITOR.propertyDisplay.toggleMode();
+					OGMO.settings.propertyDisplay.toggleMode();
 					EDITOR.dirty();
 
 					// Refresh
-					if (EDITOR.stickerDropdown.isOpen(PropertyDisplay.id))
+					if (EDITOR.stickerDropdown.isOpen(PropertyDisplayDropdown.id))
 					{
-						EDITOR.propertyDisplay.signal(EDITOR.stickerDropdown);
-						EDITOR.propertyDisplay.signal(EDITOR.stickerDropdown);
+						EDITOR.propertyDisplayDropdown.signal(EDITOR.stickerDropdown);
+						EDITOR.propertyDisplayDropdown.signal(EDITOR.stickerDropdown);
 					}
 				}
 			case Keys.S:

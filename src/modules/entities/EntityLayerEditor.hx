@@ -43,8 +43,8 @@ class EntityLayerEditor extends LayerEditor
 
 		// Draw entity property display texts
 		{
-			FloatingHTMLPropertyDisplay.visibleFade = EDITOR.level.zoom >= EDITOR.propertyDisplay.minimumZoom;
-			FloatingHTMLPropertyDisplay.visible = EDITOR.propertyDisplay.mode != PropertyDisplayMode.Hidden;
+			FloatingHTMLPropertyDisplay.visibleFade = EDITOR.level.zoom >= OGMO.settings.propertyDisplay.minimumZoom;
+			FloatingHTMLPropertyDisplay.visible = OGMO.settings.propertyDisplay.mode != PropertyDisplayMode.Hidden;
 
 			for (ent in entities.list)
 			{
@@ -55,7 +55,7 @@ class EntityLayerEditor extends LayerEditor
 			var toRemove = new Array<Int>();
 			for (id => text in entityTexts)
 			{
-				if (EDITOR.propertyDisplay.mode == PropertyDisplayMode.ActiveLayer && !active)
+				if (OGMO.settings.propertyDisplay.mode == PropertyDisplayMode.ActiveLayer && !active)
 				{
 					text.setOpacity(0);
 					continue;
@@ -71,7 +71,7 @@ class EntityLayerEditor extends LayerEditor
 					text.setEntity(entity);
 					text.setCanvasPosition(new Vector(avgX, minY), PositionAlignH.Left, PositionAlignV.Bottom);
 					text.setOpacity(EDITOR.draw.getAlpha());
-					text.setFontSize(0.75 * EDITOR.propertyDisplay.fontSize);
+					text.setFontSize(0.75 * OGMO.settings.propertyDisplay.fontSize);
 				}
 				else
 				{
