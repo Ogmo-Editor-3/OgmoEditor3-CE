@@ -13,7 +13,8 @@ import io.LevelManager;
 import level.data.Level;
 import level.editor.ui.LayersPanel;
 import level.editor.ui.LevelsPanel;
-import rendering.FloatingHTML.FloatingHTMLPropertyDisplay;
+import level.editor.ui.PropertyDisplay;
+import level.editor.ui.StickerDropdown;
 import rendering.GLRenderer;
 import util.Vector;
 import util.Keys;
@@ -32,6 +33,7 @@ class Editor
 	public var level: Level = null;
 	public var levelManager: LevelManager = new LevelManager();
 	public var toolBelt: ToolBelt;
+	public var stickerDropdown: StickerDropdown;
 	public var layersPanel: LayersPanel = new LayersPanel();
 	public var levelsPanel:LevelsPanel = new LevelsPanel();
 	public var handles: LevelResizeHandles;
@@ -40,6 +42,7 @@ class Editor
 	public var isDirty:Bool = false;
 	public var isOverlayDirty:Bool = false;
 	public var currentLayerEditor(get, null):LayerEditor;
+	public var propertyDisplay: PropertyDisplay = new PropertyDisplay();
 
 	var lastArrows: Vector = new Vector();
 	var mouseMoving:Bool = false;
@@ -68,6 +71,7 @@ class Editor
 		root = new JQuery(".editor");
 		htmlOverlay = new JQuery(".editor_html_overlay#html_overlay");
 		htmlPropertyDisplayOverlay = new JQuery(".editor_html_property_display_overlay#html_property_display_overlay");
+		stickerDropdown = new StickerDropdown();
 
 		//Events
 		{
@@ -80,7 +84,7 @@ class Editor
 			//Toggle Property Display
 			new JQuery('.sticker-propertydisplay').click(function (e)
 			{
-				FloatingHTMLPropertyDisplay.visible = !FloatingHTMLPropertyDisplay.visible;
+				EDITOR.propertyDisplay.signal(EDITOR.stickerDropdown);
 			});
 			
 			new JQuery(Browser.window).resize(function(e)
@@ -700,7 +704,15 @@ class Editor
 				//Toggle Property Display
 				if (OGMO.ctrl)
 				{
-					FloatingHTMLPropertyDisplay.visible = !FloatingHTMLPropertyDisplay.visible;
+					EDITOR.propertyDisplay.toggleMode();
+					EDITOR.dirty();
+
+					// Refresh
+					if (EDITOR.stickerDropdown.isOpen(PropertyDisplay.id))
+					{
+						EDITOR.propertyDisplay.signal(EDITOR.stickerDropdown);
+						EDITOR.propertyDisplay.signal(EDITOR.stickerDropdown);
+					}
 				}
 			case Keys.S:
 				//Save Level

@@ -1,5 +1,6 @@
 package modules.entities;
 
+import level.editor.ui.PropertyDisplay.PropertyDisplayMode;
 import level.editor.ui.SidePanel;
 import level.editor.LayerEditor;
 import rendering.FloatingHTML.FloatingHTMLPropertyDisplay;
@@ -49,7 +50,8 @@ class EntityLayerEditor extends LayerEditor
 			var minFontSize = 0.9;
 			var maxFontSize = 1.15;
 			var fontSize = minFontSize + (maxFontSize - minFontSize) * scale;
-			FloatingHTMLPropertyDisplay.visibleFade = EDITOR.level.zoom >= minZoom;
+			FloatingHTMLPropertyDisplay.visibleFade = EDITOR.level.zoom >= minZoom || EDITOR.propertyDisplay.mode == PropertyDisplayMode.Always;
+			FloatingHTMLPropertyDisplay.visible = EDITOR.propertyDisplay.mode != PropertyDisplayMode.Hidden;
 
 			for (ent in entities.list)
 			{
@@ -60,6 +62,12 @@ class EntityLayerEditor extends LayerEditor
 			var toRemove = new Array<Int>();
 			for (id => text in entityTexts)
 			{
+				if (EDITOR.propertyDisplay.mode == PropertyDisplayMode.ActiveLayer && !active)
+				{
+					text.setOpacity(0);
+					continue;
+				}
+
 				var entity = entities.getByID(id);
 				if (entity != null)
 				{
