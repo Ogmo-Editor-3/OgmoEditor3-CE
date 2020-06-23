@@ -43,14 +43,7 @@ class EntityLayerEditor extends LayerEditor
 
 		// Draw entity property display texts
 		{
-			var minZoom = 1.0;
-			var maxZoom = 2.0;
-			var zoom = Math.min(maxZoom, Math.max(minZoom, EDITOR.level.zoom));
-			var scale = (zoom - minZoom) / (maxZoom - minZoom);
-			var minFontSize = 0.9;
-			var maxFontSize = 1.15;
-			var fontSize = minFontSize + (maxFontSize - minFontSize) * scale;
-			FloatingHTMLPropertyDisplay.visibleFade = EDITOR.level.zoom >= minZoom || EDITOR.propertyDisplay.mode == PropertyDisplayMode.Always;
+			FloatingHTMLPropertyDisplay.visibleFade = EDITOR.level.zoom >= EDITOR.propertyDisplay.minimumZoom;
 			FloatingHTMLPropertyDisplay.visible = EDITOR.propertyDisplay.mode != PropertyDisplayMode.Hidden;
 
 			for (ent in entities.list)
@@ -78,7 +71,7 @@ class EntityLayerEditor extends LayerEditor
 					text.setEntity(entity);
 					text.setCanvasPosition(new Vector(avgX, minY), PositionAlignH.Left, PositionAlignV.Bottom);
 					text.setOpacity(EDITOR.draw.getAlpha());
-					text.setFontSize(fontSize);
+					text.setFontSize(0.75 * EDITOR.propertyDisplay.fontSize);
 				}
 				else
 				{

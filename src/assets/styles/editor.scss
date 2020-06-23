@@ -568,17 +568,15 @@
     position: absolute;
     left: 0px;
     bottom: 48px;
-    opacity: 0;
 
     &.visible
     {
-        opacity: 1;
+        display: block;
     }
 
     &.invisible
     {
-        opacity: 0;
-        transition: opacity 0.25s;
+        display: none;
     }
 
     &-item
@@ -595,14 +593,50 @@
     &-item.header
     {
         pointer-events: none;
-        font-weight: bolder;
         background: #fff;
+        text-align: center;
+        font-size: 16px;
+        height: 36px;
     }
     &-item.selected { background: #fff; }
     &-item:first-child { border-radius: 0 4px 0 0; }
     &-item:last-child { border-radius: 0 0 4px 0; }
     &-item:not(first-child) { border-top: 0; }
-    &-item:hover { background: #fff; }
+    &-item.option:hover { background: #fff; }
+
+    &-item.slider
+    {
+        input
+        {
+            display: inline-block;
+            -webkit-appearance: none;
+            height: 0.25em;
+            width: 8em;
+            border: 0;
+            padding: 0;
+            margin: 0.375em 0.5em;
+            background: white;
+        }
+
+        input::-webkit-slider-thumb
+        {
+            -webkit-appearance: none;
+            width: 1em;
+            height: 1em;
+            border-radius: 0.5em;
+            background: white;
+        }
+
+        .label
+        {
+            display: inline-block;
+        }
+
+        .value
+        {
+            float: right;
+        }
+    }
 }
 
 // TEXT
