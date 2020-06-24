@@ -30,7 +30,6 @@ class Toggle
     {
         icon.addClass(value ? "icon-yes" : "icon-no");
         icon.removeClass(!value ? "icon-yes" : "icon-no");
-        trace("icon: " + value);
         return this.value = value;
     }
 }
