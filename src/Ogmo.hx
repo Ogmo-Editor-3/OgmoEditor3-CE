@@ -1,3 +1,4 @@
+import haxe.io.Path;
 import js.jquery.Event;
 import js.jquery.JQuery;
 import js.Browser;
@@ -31,6 +32,7 @@ class Ogmo
 	public var mouse:Vector = new Vector(0, 0);
 	public var popupMode:Bool = false;
 	public var root:String = untyped Remote.app.getAppPath();
+	public var execDir(get, never):String;
 
 	public var project(default, set):Project = null;
 	public var startTime(default, null):Float = js.lib.Date.now();
@@ -301,6 +303,15 @@ class Ogmo
 	function get_inputFocused():Bool
 	{
 		return (new JQuery('input:focus').length > 0 );
+	}
+
+	function get_execDir()
+	{
+		var isDev = root.indexOf('app.asar') == -1;
+		if (isDev)
+			return root;
+		else
+			return Path.directory(process.execPath);
 	}
 
 	function set_project(value:Project):Project
