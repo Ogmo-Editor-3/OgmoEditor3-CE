@@ -4,13 +4,12 @@ enum PropertyDisplayMode
 {
     ActiveLayer;
     AllLayers;
-    Hidden;
 }
 
 class PropertyDisplaySettings
 {
+    public var visible:Bool = true;
     public var mode:PropertyDisplayMode = PropertyDisplayMode.ActiveLayer;
-    private var lastMode = PropertyDisplayMode.ActiveLayer;
 
     public var fontSize:Float = 1.0;
     public var minimumZoom:Float = 1.0;
@@ -20,22 +19,11 @@ class PropertyDisplaySettings
         
     }
 
-    public function toggleMode()
-    {
-        if (mode == PropertyDisplayMode.Hidden)
-            mode = lastMode;
-        else
-        {
-            lastMode = mode;
-            mode = PropertyDisplayMode.Hidden;
-        }
-    }
-
     public function save():Dynamic
     {
         var data = {
+            visible: visible,
             mode: Type.enumIndex(mode),
-            lastMode: Type.enumIndex(lastMode),
             fontSize: fontSize,
             minimumZoom: minimumZoom,
         };
@@ -44,8 +32,8 @@ class PropertyDisplaySettings
 
     public function load(data:Dynamic)
     {
+        visible = data.visible;
         mode = Type.createEnumIndex(PropertyDisplayMode, data.mode);
-        lastMode = Type.createEnumIndex(PropertyDisplayMode, data.lastMode);
         fontSize = data.fontSize;
         minimumZoom = data.minimumZoom;
     }
@@ -53,7 +41,7 @@ class PropertyDisplaySettings
 
 class PropertyDisplayDropdown
 {
-    public static var id = "Property Display Mode";
+    public static var id = "Property Display";
 
     public var settings:PropertyDisplaySettings;
 
@@ -70,13 +58,29 @@ class PropertyDisplayDropdown
         }
         else
         {
-            dropdown.setup(id, id);
+            dropdown.setup(id, id, "Entities can display properties above themselves, this is configurable per-entity in project settings");
+            dropdown.addToggle("Visible", settings.visible, onChangeVisible, "Globally turns property display on/off");
             dropdown.addSlider("Font Size", 0, 100, Math.round(settings.fontSize * 100. * 0.5), onChangeFontSize, "Scales font for property display");
             dropdown.addSlider("Minimum Zoom", 0, 100, Math.round(settings.minimumZoom * 100.0), onChangeMinimumZoom, "All property displays are hidden when camera zoom falls below this value");
+            dropdown.addSubHeader("Mode", "Pick a display mode");
             dropdown.addOption("Active Layer", PropertyDisplayMode.ActiveLayer, settings.mode == PropertyDisplayMode.ActiveLayer, onSelect, "Display only for entities in the layer currently being edited");
             dropdown.addOption("All Layers", PropertyDisplayMode.AllLayers, settings.mode == PropertyDisplayMode.AllLayers, onSelect, "Display for entities in all layers");
-            dropdown.addOption("Hidden", PropertyDisplayMode.Hidden, settings.mode == PropertyDisplayMode.Hidden, onSelect, "Do not dislay at all");
         }
+    }
+
+    public function refresh(dropdown:StickerDropdown)
+    {
+        if (dropdown.isOpen(PropertyDisplayDropdown.id))
+        {
+            signal(dropdown);
+            signal(dropdown);
+        }
+    }
+
+    private function onChangeVisible(value:Bool)
+    {
+        settings.visible = value;
+        EDITOR.dirty();
     }
 
     private function onChangeFontSize(percent:Int)

@@ -44,7 +44,7 @@ class EntityLayerEditor extends LayerEditor
 		// Draw entity property display texts
 		{
 			FloatingHTMLPropertyDisplay.visibleFade = EDITOR.level.zoom >= OGMO.settings.propertyDisplay.minimumZoom;
-			FloatingHTMLPropertyDisplay.visible = OGMO.settings.propertyDisplay.mode != PropertyDisplayMode.Hidden;
+			FloatingHTMLPropertyDisplay.visible = OGMO.settings.propertyDisplay.visible;
 
 			for (ent in entities.list)
 			{

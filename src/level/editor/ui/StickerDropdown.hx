@@ -1,5 +1,40 @@
 package level.editor.ui;
 
+class Toggle
+{
+    private var element:JQuery;
+    private var icon:JQuery;
+    public var value(default, set) = false;
+
+    public function new(label:String, value:Bool, onChange:Bool->Void, ?tooltip:String)
+    {
+        element = new JQuery('<div class="sticker-dropdown-item toggle"><div class="icon icon-no"></div><div>$label</div></div>');
+        if (tooltip != null)
+            element.prop("title", tooltip);
+        icon = element.find(".icon");
+        this.value = value;
+
+        element.click(function (e)
+        {
+            this.value = !this.value;
+            onChange(this.value);
+        });
+    }
+
+    public function appendTo(to:JQuery)
+    {
+        to.append(element);
+    }
+
+    function set_value(value)
+    {
+        icon.addClass(value ? "icon-yes" : "icon-no");
+        icon.removeClass(!value ? "icon-yes" : "icon-no");
+        trace("icon: " + value);
+        return this.value = value;
+    }
+}
+
 class StickerDropdown
 {
     private var id:String;
@@ -57,6 +92,20 @@ class StickerDropdown
         if (tooltip != null)
             listElement.prop("title", tooltip);
         list.append(listElement);
+    }
+
+    public function addToggle(label:String, value:Bool, onChange:Bool->Void, ?tooltip:String)
+    {
+        var toggle = new Toggle(label, value, onChange, tooltip);
+        toggle.appendTo(list);
+    }
+
+    public function addSubHeader(label:String, ?tooltip:String)
+    {
+        var subHeaderElement = new JQuery('<div class="sticker-dropdown-item subheader">${label}:</div>');
+        if (tooltip != null)
+            subHeaderElement.prop("title", tooltip);
+        list.append(subHeaderElement);
     }
 
     public function isOpen(id:String)

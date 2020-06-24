@@ -568,6 +568,7 @@
     position: absolute;
     left: 0px;
     bottom: 48px;
+    text-transform: uppercase;
 
     &.visible
     {
@@ -636,6 +637,34 @@
         {
             float: right;
         }
+    }
+
+    &-item.toggle
+    {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .icon
+        {
+            display: inline-block;
+            float: none;
+            color: #111;
+            width: 16px;
+            height: 16px;
+            padding-right: 8px;
+        }
+
+        .label
+        {
+            display: inline-block;
+        }
+    }
+    &-item.toggle:hover { background: #fff; }
+
+    &-item.subheader
+    {
+        
     }
 }
 

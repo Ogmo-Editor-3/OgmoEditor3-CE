@@ -706,15 +706,9 @@ class Editor
 				//Toggle Property Display
 				if (OGMO.ctrl)
 				{
-					OGMO.settings.propertyDisplay.toggleMode();
+					OGMO.settings.propertyDisplay.visible = !OGMO.settings.propertyDisplay.visible;
+					EDITOR.propertyDisplayDropdown.refresh(EDITOR.stickerDropdown);
 					EDITOR.dirty();
-
-					// Refresh
-					if (EDITOR.stickerDropdown.isOpen(PropertyDisplayDropdown.id))
-					{
-						EDITOR.propertyDisplayDropdown.signal(EDITOR.stickerDropdown);
-						EDITOR.propertyDisplayDropdown.signal(EDITOR.stickerDropdown);
-					}
 				}
 			case Keys.S:
 				//Save Level
