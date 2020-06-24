@@ -1,7 +1,7 @@
-import haxe.io.Path;
 import js.jquery.Event;
 import js.jquery.JQuery;
 import js.Browser;
+import js.node.Path;
 import js.Node.process;
 import electron.main.BrowserWindow;
 import electron.renderer.Remote;
@@ -311,7 +311,7 @@ class Ogmo
 		if (isDev)
 			return root;
 		else
-			return Path.directory(process.execPath);
+			return Path.dirname(process.execPath);
 	}
 
 	function set_project(value:Project):Project
