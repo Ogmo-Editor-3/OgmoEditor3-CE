@@ -4,18 +4,58 @@ import level.data.Level;
 import project.data.Tileset;
 import level.data.Layer;
 
+enum TileRotation
+{
+	ZERO;
+	PLUS_NINETY;
+	MINUS_NINETY; // Same as +270 degrees
+}
+
+// Note: apply flip first, then apply rotation (clockwise)
+class TileFlipRotationData
+{
+	var flipX:Bool;
+	var flipY:Bool;
+	var rotation:TileRotation;
+
+	public function new(flipX:Bool = false, flipY:Bool = false, rotation:TileRotation = TileRotation.ZERO)
+	{
+		this.flipX = flipX;
+		this.flipY = flipY;
+		this.rotation = rotation;
+	}
+
+	static private final flipRotationLookup = [
+		new TileFlipRotationData(false, false, TileRotation.ZERO),
+		new TileFlipRotationData(false, true,  TileRotation.PLUS_NINETY),
+		new TileFlipRotationData(false, true,  TileRotation.ZERO),
+		new TileFlipRotationData(false, false, TileRotation.MINUS_NINETY),
+		new TileFlipRotationData(true,  false, TileRotation.ZERO),
+		new TileFlipRotationData(false, false, TileRotation.PLUS_NINETY),
+		new TileFlipRotationData(true,  true,  TileRotation.ZERO),
+		new TileFlipRotationData(false, true,  TileRotation.MINUS_NINETY),
+	];
+	static private final flipRotationMask = (TileData.FLAG_FLIP_HORIZONTAL | TileData.FLAG_FLIP_VERTICAL | TileData.FLAG_FLIP_DIAGONALLY);
+
+	public static function fromFlags(flags:Int):TileFlipRotationData
+	{
+		flags = flags & flipRotationMask;
+		return flipRotationLookup[flags];
+	}
+}
+
 class TileData
 {
 	static public inline var EMPTY_TILE = -1; // TODO - It might be nice to be able to set this to 0 -01010111
 
-	static public inline var FLAG_FLIP_HORIZONTAL		= 0x40000000;
-	static public inline var FLAG_FLIP_VERTICAL			= 0x20000000;
-	static public inline var FLAG_FLIP_ANTIDIAGONALLY	= 0x10000000;
+	static public inline var FLAG_FLIP_HORIZONTAL		= 4;
+	static public inline var FLAG_FLIP_VERTICAL		= 2;
+	static public inline var FLAG_FLIP_DIAGONALLY		= 1;
 
 	public var idx = EMPTY_TILE;
 	public var flipX = false;
 	public var flipY = false;
-	public var flipAntiDiagonally = false;
+	public var flipDiagonally = false;
 
 	public function new(idx:Int = EMPTY_TILE)
 	{
@@ -27,7 +67,7 @@ class TileData
 		idx = src.idx;
 		flipX = src.flipX;
 		flipY = src.flipY;
-		flipAntiDiagonally = src.flipAntiDiagonally;
+		flipDiagonally = src.flipDiagonally;
 
 		return this;
 	}
@@ -38,7 +78,7 @@ class TileData
 			idx == rhs.idx &&
 			flipX == rhs.flipX &&
 			flipY == rhs.flipY &&
-			flipAntiDiagonally == rhs.flipAntiDiagonally;
+			flipDiagonally == rhs.flipDiagonally;
 	}
 
 	public function isEmptyTile():Bool
@@ -46,36 +86,32 @@ class TileData
 		return idx == EMPTY_TILE;
 	}
 
-	static public function encodeInt(tile:TileData, value:Int):Int
+	static public function encodeTileFlags(tile:TileData, value:Int):Int
 	{
 		if (tile.flipX)
 			value |= FLAG_FLIP_HORIZONTAL;
 		if (tile.flipY)
 			value |= FLAG_FLIP_VERTICAL;
-		if (tile.flipAntiDiagonally)
-			value |= FLAG_FLIP_ANTIDIAGONALLY;
+		if (tile.flipDiagonally)
+			value |= FLAG_FLIP_DIAGONALLY;
 		return value;
 	}
 
-	static public function decodeInt(tile:TileData, value:Int):Int
+	static public function decodeTileFlags(tile:TileData, value:Int)
 	{
 		tile.flipX = (value & FLAG_FLIP_HORIZONTAL) > 0;
 		tile.flipY = (value & FLAG_FLIP_VERTICAL) > 0;
-		tile.flipAntiDiagonally = (value & FLAG_FLIP_ANTIDIAGONALLY) > 0;
-		tile.idx = Std.int(Math.abs(value)) & ~(FLAG_FLIP_HORIZONTAL | FLAG_FLIP_VERTICAL | FLAG_FLIP_ANTIDIAGONALLY);
-		if (value < 0)
-			tile.idx *= -1;
-		return tile.idx;
+		tile.flipDiagonally = (value & FLAG_FLIP_DIAGONALLY) > 0;
 	}
 
-	public function encode():Int
+	public function encodeFlags():Int
 	{
-		return encodeInt(this, this.idx);
+		return encodeTileFlags(this, 0);
 	}
 
-	public function decode(value:Int):Int
+	public function decodeFlags(value:Int)
 	{
-		return decodeInt(this, value);
+		decodeTileFlags(this, value);
 	}
 
 	public function doFlip(horizontal:Bool)
@@ -94,15 +130,15 @@ class TileData
 		var rotateMask = clockwise ? rotateClockwiseMask : rotateCounterClockwiseMask;
 
 		var mask =
-			(flipX ? 4 : 0) |
-			(flipY ? 2 : 0) |
-			(flipAntiDiagonally ? 1 : 0);
+			(flipX ? FLAG_FLIP_HORIZONTAL : 0) |
+			(flipY ? FLAG_FLIP_VERTICAL : 0) |
+			(flipDiagonally ? FLAG_FLIP_DIAGONALLY : 0);
 
 		mask = rotateMask[mask];
 
-		flipX = (mask & 4) != 0;
-		flipY = (mask & 2) != 0;
-		flipAntiDiagonally = (mask & 1) != 0;
+		flipX = (mask & FLAG_FLIP_HORIZONTAL) != 0;
+		flipY = (mask & FLAG_FLIP_VERTICAL) != 0;
+		flipDiagonally = (mask & FLAG_FLIP_DIAGONALLY) != 0;
 	}
 }
 
@@ -145,13 +181,13 @@ class TileLayer extends Layer
 			if(template.arrayMode == ONE)
 			{
 				data._contents = "data";
-				data.data = [for (column in flippedData) for (tile in column) tile.encode()];
+				data.data = [for (column in flippedData) for (tile in column) tile.idx];
 			}
 			else if (template.arrayMode == TWO)
 			{
 				data._contents = "data2D";
-				data.data2D = Calc.createArray2D(gridCellsX, gridCellsY, TileData.EMPTY_TILE);
-				for (x in 0...flippedData.length) for (y in 0...flippedData[x].length) data.data2D[x][y] = flippedData[x][y].encode();
+				data.data2D = Calc.createArray2D(gridCellsY, gridCellsX, TileData.EMPTY_TILE);
+				for (x in 0...flippedData.length) for (y in 0...flippedData[x].length) data.data2D[x][y] = flippedData[x][y].idx;
 			}
 			else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
 		}
@@ -160,7 +196,7 @@ class TileLayer extends Layer
 			if(template.arrayMode == ONE)
 			{
 				data._contents = "dataCoords";
-				data.dataCoords = [for(column in flippedData) for (tile in column) tile.isEmptyTile() ? [TileData.EMPTY_TILE] : [TileData.encodeInt(tile, tileset.getTileX(tile.idx)), tileset.getTileY(tile.idx)]];
+				data.dataCoords = [for(column in flippedData) for (tile in column) tile.isEmptyTile() ? [TileData.EMPTY_TILE] : [tileset.getTileX(tile.idx), tileset.getTileY(tile.idx)]];
 			}
 			else if (template.arrayMode == TWO)
 			{
@@ -171,7 +207,7 @@ class TileLayer extends Layer
 					for (x in 0...flippedData[y].length)
 					{
 						var tile = flippedData[y][x];
-						arr[y][x] = tile.isEmptyTile() ? [TileData.EMPTY_TILE] : [TileData.encodeInt(tile, tileset.getTileX(tile.idx)), tileset.getTileY(tile.idx)];
+						arr[y][x] = tile.isEmptyTile() ? [TileData.EMPTY_TILE] : [tileset.getTileX(tile.idx), tileset.getTileY(tile.idx)];
 					}
 				}
 				data._contents = "dataCoords2D";
@@ -180,6 +216,33 @@ class TileLayer extends Layer
 			else throw "Invalid Tile Layer Array Mode: " + template.arrayMode;
 		}
 		else throw "Invalid Tile Layer Export Mode: " + template.exportMode;
+
+		if (template.arrayMode == ONE)
+		{
+			var tileFlagsCanary:Int = 0;
+			data.tileFlags = new Array<Int>();
+			for (column in flippedData) for (tile in column)
+			{
+				var flags = tile.encodeFlags();
+				tileFlagsCanary |= flags;
+				data.tileFlags.push(flags);
+			}
+			if (tileFlagsCanary == 0)
+				data.tileFlags = new Array<Int>();
+		}
+		else if (template.arrayMode == TWO)
+		{
+			var tileFlagsCanary:Int = 0;
+			data.tileFlags2D = Calc.createArray2D(gridCellsY, gridCellsX, TileData.EMPTY_TILE);
+			for (x in 0...flippedData.length) for (y in 0...flippedData[x].length)
+			{
+				var flags = flippedData[x][y].encodeFlags();
+				tileFlagsCanary |= flags;
+				data.tileFlags2D[x][y] = flags;
+			}
+			if (tileFlagsCanary == 0)
+				data.tileFlags2D = new Array<Array<Int>>();
+		}
 
 		data.exportMode = template.exportMode;
 		data.arrayMode = template.arrayMode;
@@ -208,15 +271,15 @@ class TileLayer extends Layer
 				{
 					var x = i % gridCellsX;
 					var y = (i / gridCellsX).int();
-					this.data[y][x].decode(content[i]);
+					this.data[y][x].idx = content[i];
 				}
 			}
 			else if (arrayMode == TWO)
 			{
-				var content:Array<Array<Int>> = data.data;
-				for (y in 0...data.data2D.length)
-					for (x in 0...data.data2D[y].length)
-						this.data[y][x].decode(data.data[y][x]);
+				var content:Array<Array<Int>> = data.data2D;
+				for (y in 0...content.length)
+					for (x in 0...content[y].length)
+						this.data[y][x].idx = content[y][x];
 			}
 			else throw "Invalid Tile Layer Array Mode: " + arrayMode;
 		}
@@ -230,11 +293,7 @@ class TileLayer extends Layer
 					var x = i % gridCellsX;
 					var y = (i / gridCellsX).int();
 					if (content[i][0] == TileData.EMPTY_TILE) this.data[y][x].idx = TileData.EMPTY_TILE;
-					else
-					{
-						var decodedX = TileData.decodeInt(this.data[y][x], content[i][0]);
-						this.data[y][x].idx = tileset.coordsToID(decodedX, content[i][1]);
-					}
+					else this.data[y][x].idx = tileset.coordsToID(content[i][0], content[i][1]);
 				}
 			}
 			else if (arrayMode == TWO)
@@ -245,17 +304,32 @@ class TileLayer extends Layer
 					for (x in 0...content[y].length)
 					{
 						if (content[y][x][0] == TileData.EMPTY_TILE) this.data[y][x].idx = TileData.EMPTY_TILE;
-						else
-						{
-							var decodedX = TileData.decodeInt(this.data[y][x], content[y][x][0]);
-							this.data[y][x].idx = tileset.coordsToID(decodedX, content[y][x][1]);
-						}
+						else this.data[y][x].idx = tileset.coordsToID(content[y][x][0], content[y][x][1]);
 					}
 				}
 			}
 			else throw "Invalid Tile Layer Array Mode: " + arrayMode;
 		}
 		else throw "Invalid Tile Layer Export Mode: " + exportMode;
+
+		if (arrayMode == ONE && Reflect.hasField(data, "tileFlags"))
+		{
+			var content:Array<Int> = data.tileFlags;
+			for (i in 0...content.length)
+			{
+				var x = i % gridCellsX;
+				var y = (i / gridCellsX).int();
+				this.data[y][x].decodeFlags(content[i]);
+			}
+		}
+		else if (arrayMode == TWO && Reflect.hasField(data, "tileFlags2D"))
+		{
+			var content:Array<Array<Int>> = data.tileFlags2D;
+			for (y in 0...content.length)
+				for (x in 0...content[y].length)
+					this.data[y][x].decodeFlags(content[y][x]);
+		}
+
 		this.data = flip2dArray(this.data);
 	}
 

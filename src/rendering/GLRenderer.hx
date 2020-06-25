@@ -292,7 +292,7 @@ class GLRenderer
 		var botLeft = new Vector(-1, 1);
 		var botRight = new Vector(1, 1);
 
-		if (tile.flipAntiDiagonally)
+		if (tile.flipDiagonally)
 		{
 			topRight.copy(botLeft);
 			botLeft.set(1, -1);
