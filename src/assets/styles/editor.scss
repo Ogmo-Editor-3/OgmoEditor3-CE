@@ -564,3 +564,31 @@
         }
     }
 }
+
+.about-ogmo
+{
+    img
+    {
+        width: 100%;
+    }
+
+    a
+    {
+        color: #db1e34;
+    }
+
+    ul
+    {
+        margin-top: 0;
+    }
+
+    .list-header
+    {
+        margin-bottom: 0.2em;
+    }
+
+    .version
+    {
+        text-align: center;
+    }
+}

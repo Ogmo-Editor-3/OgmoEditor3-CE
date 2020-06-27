@@ -9,10 +9,11 @@ import project.editor.ProjectEditor;
 import project.data.Project;
 import level.editor.Editor;
 import level.editor.ToolBelt;
+import util.About;
+import util.AppMenu;
 import util.Vector;
 import util.Keys;
 import util.Start;
-import util.AppMenu;
 
 class Ogmo
 {
@@ -120,6 +121,21 @@ class Ogmo
 				ogmo.settings.save();
 				IpcRenderer.send("quit");
 			});
+		});
+
+		IpcRenderer.on(AppMenu.IPC_CHANNEL, function (event, msg:String, data:Dynamic)
+		{
+			switch (msg)
+			{
+				case AppMenu.IPC_MSG_HELP_ABOUT:
+					Popup.open("About Ogmo Editor", "ogmo", About.getPopupHTML(version), [], null, false);
+					new JQuery('.popupWindow a[href]').on('click', function (e:Event)
+					{
+						e.preventDefault();
+						var anchor:js.html.AnchorElement = cast e.target;
+						electron.Shell.openExternal(anchor.href);
+					});
+			}
 		});
 
 		// Run startup functions

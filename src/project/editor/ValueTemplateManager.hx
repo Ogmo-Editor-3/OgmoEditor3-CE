@@ -57,6 +57,8 @@ class ValueTemplateManager
 
 			Popup.openTextDropdown("Create New Value", "plus", "new_value", options, "Create", "Cancel", function(name, index)
 			{
+				if (index < 0)
+					return;
 				var template = ValueDefinition.definitions[index].createTemplate();
 				template.name = name;
 				values.push(template);

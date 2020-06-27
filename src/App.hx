@@ -13,6 +13,11 @@ class App
 	static var mainWindow:BrowserWindow = null;
 	static var forceClose:Bool = false;
 
+	public static function getMainWindow():BrowserWindow
+	{
+		return mainWindow;
+	}
+
 	static function main()
 	{
 		ElectronApp.on('window-all-closed', (e) -> {
