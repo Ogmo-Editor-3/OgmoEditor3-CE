@@ -112,6 +112,7 @@ class ProjectGeneralPanel extends ProjectEditorPanel
 		OGMO.project.layerGridDefaultSize = Fields.getVector(layerGridDefaultSize);
 		OGMO.project.levelMinSize = Fields.getVector(levelMinSize);
 		OGMO.project.levelMaxSize = Fields.getVector(levelMaxSize);
+		levelValueManager.save();
 		OGMO.project.levelValues = levelValueManager.values;
 	}
 }
