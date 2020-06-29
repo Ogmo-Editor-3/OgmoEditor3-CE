@@ -267,11 +267,11 @@ class TilePalettePanel extends SidePanel
 
 		if (tileset != null)
 		{
-			if (!image.complete)
+			if (image.width <= 0)
 			{
-				image.onload = function (e) {
+				image.addEventListener("load", function (e) {
 					refresh();
-				};
+				});
 				return;
 			}
 
