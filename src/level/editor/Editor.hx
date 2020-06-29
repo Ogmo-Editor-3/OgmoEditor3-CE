@@ -381,7 +381,7 @@ class Editor
 
 	public function setState():Void
 	{
-		if (level.path != null) 
+		if (level != null && level.path != null) 
 		{
 			state = {
 				level: level.path,
