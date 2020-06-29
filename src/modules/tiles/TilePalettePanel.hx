@@ -267,6 +267,14 @@ class TilePalettePanel extends SidePanel
 
 		if (tileset != null)
 		{
+			if (!image.complete)
+			{
+				image.onload = function (e) {
+					refresh();
+				};
+				return;
+			}
+
 			context.fillStyle = "rgb(220, 220, 220)";
 			context.fillRect(0, 0, canvas.width, canvas.height);
 
