@@ -286,7 +286,7 @@ class Controls
             { keys: "Left Mouse", action: "Create and select a node for each selected entity snapped to grid. Or select existing node(s)." },
             { subAction: true, keys: "Ctrl", action: "Don't snap to grid" },
             { keys: "Left Mouse Drag + On Selected", action: "Move selected node(s), snapped to grid" },
-            { subAction: true, keys: "Ctrl", action: "Move selected node(s), not snapped to grid" },
+            { subAction: true, keys: "Ctrl", action: "Don't snap to grid" },
             { keys: "Right Mouse", action: "Delete node(s) under cursor" },
             { keys: "Alt", action: "Switch to Entity Create Tool" },
         ]
