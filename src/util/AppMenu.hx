@@ -16,6 +16,7 @@ class AppMenu
 {
 	public static inline var IPC_CHANNEL = "appmenu";
 	public static inline var IPC_MSG_HELP_ABOUT = "help_about";
+	public static inline var IPC_MSG_HELP_CONTROLS = "help_controls";
 
 	public static function build() 
 	{
@@ -80,6 +81,7 @@ class AppMenu
 			label: 'Help',
 			submenu: [
 				{ label: 'About Ogmo Editor', click: sendMsg.bind(IPC_MSG_HELP_ABOUT) },
+				{ label: 'Controls', click: sendMsg.bind(IPC_MSG_HELP_CONTROLS) },
 				{ type: 'separator' },
 				{ label: 'Website', click: openExternalURL.bind(About.WEBSITE_URL) },
 				{ label: 'User Manual', click: openExternalURL.bind(About.USER_MANUAL_URL) },

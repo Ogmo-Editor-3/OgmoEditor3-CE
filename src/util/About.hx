@@ -1,5 +1,8 @@
 package util;
 
+import js.jquery.Event;
+import js.jquery.JQuery;
+
 class About
 {
     public static inline var WEBSITE_URL = "https://ogmo-editor-3.github.io/";
@@ -46,5 +49,15 @@ class About
     private static function link(label:String, url:String):String
     {
         return '<a href="$url" draggable="false">$label</a>';
+    }
+
+    public static function setupJQuery()
+    {
+        new JQuery('.about-ogmo a[href]').on('click', function (e:Event)
+        {
+            e.preventDefault();
+            var anchor:js.html.AnchorElement = cast e.target;
+            electron.Shell.openExternal(anchor.href);
+        });
     }
 }

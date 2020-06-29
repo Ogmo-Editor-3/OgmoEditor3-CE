@@ -11,9 +11,10 @@ import level.editor.Editor;
 import level.editor.ToolBelt;
 import util.About;
 import util.AppMenu;
-import util.Vector;
+import util.Controls;
 import util.Keys;
 import util.Start;
+import util.Vector;
 
 class Ogmo
 {
@@ -129,12 +130,10 @@ class Ogmo
 			{
 				case AppMenu.IPC_MSG_HELP_ABOUT:
 					Popup.open("About Ogmo Editor", "ogmo", About.getPopupHTML(version), [], null, false);
-					new JQuery('.popupWindow a[href]').on('click', function (e:Event)
-					{
-						e.preventDefault();
-						var anchor:js.html.AnchorElement = cast e.target;
-						electron.Shell.openExternal(anchor.href);
-					});
+					About.setupJQuery();
+				case AppMenu.IPC_MSG_HELP_CONTROLS:
+					Popup.open("Controls", "sliders", Controls.getPopupHTML(), [], null, false);
+					Controls.setupJQuery();
 			}
 		});
 
