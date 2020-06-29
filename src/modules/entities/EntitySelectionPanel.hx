@@ -211,7 +211,7 @@ class EntitySelectionPanel extends SidePanel
 					var entityHeight = Fields.createField("Height", Std.string(entity.size.y));
 					entityHeight.on('change keydown paste input', function(e) {
 						var height = Std.parseFloat(Fields.getField(entityHeight));
-						if (!height.isNaN() && entity.size.x != height)
+						if (!height.isNaN() && entity.size.y != height)
 						{
 							EDITOR.level.store("Changed Entity Rotation from '" + entity.size.y + "'  to '" + height + "'");
 
