@@ -13,6 +13,8 @@ import io.LevelManager;
 import level.data.Level;
 import level.editor.ui.LayersPanel;
 import level.editor.ui.LevelsPanel;
+import level.editor.ui.PropertyDisplay.PropertyDisplayDropdown;
+import level.editor.ui.StickerDropdown;
 import rendering.GLRenderer;
 import util.Vector;
 import util.Keys;
@@ -24,11 +26,14 @@ class Editor
 	public var root: JQuery;
 	public var draw: GLRenderer;
 	public var overlay: GLRenderer;
+	public var htmlOverlay: JQuery;
+	public var htmlPropertyDisplayOverlay: JQuery;
 
 	public var layerEditors: Array<LayerEditor> = [];
 	public var level: Level = null;
 	public var levelManager: LevelManager = new LevelManager();
 	public var toolBelt: ToolBelt;
+	public var stickerDropdown: StickerDropdown;
 	public var layersPanel: LayersPanel = new LayersPanel();
 	public var levelsPanel:LevelsPanel = new LevelsPanel();
 	public var handles: LevelResizeHandles;
@@ -37,6 +42,7 @@ class Editor
 	public var isDirty:Bool = false;
 	public var isOverlayDirty:Bool = false;
 	public var currentLayerEditor(get, null):LayerEditor;
+	public var propertyDisplayDropdown: PropertyDisplayDropdown;
 
 	var lastArrows: Vector = new Vector();
 	var mouseMoving:Bool = false;
@@ -64,13 +70,24 @@ class Editor
 		overlay = new GLRenderer("overlay", cast new JQuery(".editor_canvas#overlay")[0]);
 		overlay.clearColor = Color.transparent;
 		root = new JQuery(".editor");
+		htmlOverlay = new JQuery(".editor_html_overlay#html_overlay");
+		htmlPropertyDisplayOverlay = new JQuery(".editor_html_property_display_overlay#html_property_display_overlay");
+		stickerDropdown = new StickerDropdown();
+
+		propertyDisplayDropdown = new PropertyDisplayDropdown(OGMO.settings.propertyDisplay);
 
 		//Events
 		{
 			//Center Camera button
-			new JQuery(".sticker-center").click(function (e)
+			new JQuery(".sticker-centercam").click(function (e)
 			{
 				if (EDITOR.level != null) EDITOR.level.centerCamera();
+			});
+
+			//Toggle Property Display
+			new JQuery('.sticker-propertydisplay').click(function (e)
+			{
+				EDITOR.propertyDisplayDropdown.signal(EDITOR.stickerDropdown);
 			});
 			
 			new JQuery(Browser.window).resize(function(e)
@@ -719,6 +736,14 @@ class Editor
 				if (OGMO.ctrl && EDITOR.level != null)
 				{
 					EDITOR.level.gridVisible = !EDITOR.level.gridVisible;
+					EDITOR.dirty();
+				}
+			case Keys.T:
+				//Toggle Property Display
+				if (OGMO.ctrl)
+				{
+					OGMO.settings.propertyDisplay.visible = !OGMO.settings.propertyDisplay.visible;
+					EDITOR.propertyDisplayDropdown.refresh(EDITOR.stickerDropdown);
 					EDITOR.dirty();
 				}
 			case Keys.S:

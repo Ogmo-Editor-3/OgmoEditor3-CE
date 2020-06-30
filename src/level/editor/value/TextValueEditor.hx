@@ -47,6 +47,7 @@ class TextValueEditor extends ValueEditor
 
 					element.find(".button_text").html(value.substr(0, Math.floor(Math.min(value.length, 5))) + "...");
 					conflict = false;
+					EDITOR.dirty();
 				}
 			});
 		});

@@ -69,6 +69,7 @@ class FieldValueEditor extends ValueEditor
 				}
 				element.val(nextValue);
 				lastValue = nextValue;
+				EDITOR.dirty();
 			});
 			element.on("keyup", function(e) { if (e.which == 13) element.blur(); });
 		}

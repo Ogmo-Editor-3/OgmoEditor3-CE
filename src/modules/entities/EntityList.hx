@@ -89,6 +89,12 @@ class EntityList
 		group.clear();
 	}
 
+	public function getByID(id:Int):Entity
+	{
+		var n = indexOf(id);
+		return n == -1 ? null : list[n];
+	}
+
 	public function getGroup(group:EntityGroup):Array<Entity>
 	{
 		var last = -1;

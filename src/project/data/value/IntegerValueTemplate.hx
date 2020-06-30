@@ -48,7 +48,7 @@ class IntegerValueTemplate extends ValueTemplate
 
 	override function load(data:Dynamic):Void
 	{
-		name = data.name;
+		super.load(data);
 		defaults = data.defaults;
 		bounded = data.bounded;
 		min = Imports.integer(data.min, 0);
@@ -57,10 +57,8 @@ class IntegerValueTemplate extends ValueTemplate
 
 	override function save():Dynamic
 	{
-		var data:Dynamic = {};
+		var data:Dynamic = super.save();
 
-		data.name = name;
-		data.definition = definition.label;
 		data.defaults = defaults;
 		data.bounded = bounded;
 		data.min = min;
