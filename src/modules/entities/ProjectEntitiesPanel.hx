@@ -483,6 +483,28 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 			// icon stuff
 			{
 				var texturePreview = new JQuery('<div class="texture"/>');
+				texturePreview.contextmenu(function (e)
+				{
+					if (entity.texture == null)
+						return;
+
+					var menu = new RightClickMenu(OGMO.mouse);
+
+					menu.addOption("Delete Preview Image", "trash", function()
+					{
+						Popup.open("Delete Preview Image", "trash",  "Permanently delete preview image?", ["Delete", "Cancel"], function (btn)
+						{
+							if (btn == 0)
+							{
+								entity.texture = null;
+								texturePreview.empty();
+								refreshList();
+							}
+						});
+					});
+
+					menu.open();
+				});
 				inspector.append(texturePreview);
 
 				if (entity.texture != null)
@@ -501,6 +523,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 						texturePreview.empty();
 						var img = new JQuery('<img src="${entity.texture.image.src}"/>');
 						texturePreview.append(img);
+						refreshList();
 					}
 				 }), SettingsBlock.Fourth);
 
