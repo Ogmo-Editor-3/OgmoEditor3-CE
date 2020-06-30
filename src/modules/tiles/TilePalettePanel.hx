@@ -271,7 +271,7 @@ class TilePalettePanel extends SidePanel
 			{
 				image.addEventListener("load", function (e) {
 					refresh();
-				});
+				}, { once: true });
 				return;
 			}
 
