@@ -26,6 +26,7 @@ class Controls
             { keys: "Up/Down/Left/Right", action: "Move camera" },
             { keys: "Ctrl + Space", action: "Center camera" },
             { keys: "Ctrl + G", action: "Toggle grid" },
+            { keys: "Ctrl + T", action: "Toggle property display" },
             { keys: "Ctrl + Up", action: "Set previous layer active" },
             { keys: "Ctrl + Down", action: "Set next layer active" },
             { keys: "Ctrl + Number", action: "Set [Number] layer active" },
