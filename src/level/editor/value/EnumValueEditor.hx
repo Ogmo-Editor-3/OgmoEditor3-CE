@@ -54,6 +54,7 @@ class EnumValueEditor extends ValueEditor
 
 				element.val(index);
 				lastValue = nextValue;
+				EDITOR.dirty();
 			}
 		});
 	}

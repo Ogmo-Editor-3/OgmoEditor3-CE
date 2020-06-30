@@ -360,8 +360,8 @@ class GLRenderer
 
 		// use this to push in the UVs a bit to aVoid seems
 		var texel = new Vector(1 / tileset.width, 1 / tileset.height);
-		var uvx = (tileset.tileSeparationX + tx * (tileset.tileWidth + tileset.tileSeparationX)) / tileset.width + texel.x * .01;
-		var uvy = (tileset.tileSeparationY + ty * (tileset.tileHeight + tileset.tileSeparationY)) / tileset.height + texel.y * .01;
+		var uvx = (tileset.tileSeparationX + tileset.tileMarginX + tx * (tileset.tileWidth + tileset.tileSeparationX)) / tileset.width + texel.x * .01;
+		var uvy = (tileset.tileSeparationY + tileset.tileMarginY + ty * (tileset.tileHeight + tileset.tileSeparationY)) / tileset.height + texel.y * .01;
 		var uvw = tileset.tileWidth / tileset.width - texel.x * .02;
 		var uvh = tileset.tileHeight / tileset.height - texel.y * .02;
 

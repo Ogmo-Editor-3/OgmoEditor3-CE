@@ -18,15 +18,18 @@ class ValueTemplateManager
 	public var buttons:JQuery;
 	public var list:JQuery;
 	public var inspector:JQuery;
+	public var propertyDisplayChoicesField:JQuery;
 
 	public var inspecting:ValueTemplate = null;
 	public var inspectingEditor:ValueTemplateEditor = null;
 	public var values:Array<ValueTemplate> = [];
+	public var propertyDisplayEditor:Bool;
 
-	public function new(into:JQuery, from:Array<ValueTemplate>, ?title:String)
+	public function new(into:JQuery, from:Array<ValueTemplate>, ?title:String, propertyDisplayEditor:Bool = false)
 	{
 		root = into;
 		values = from;
+		this.propertyDisplayEditor = propertyDisplayEditor;
 
 		element = new JQuery('<div class="valuetemplates">');
 		root.append(element);
@@ -158,11 +161,26 @@ class ValueTemplateManager
 		{
 			inspectingEditor = value.definition.createTemplateEditor(value);
 			inspectingEditor.importInto(inspector);
+
+			if (propertyDisplayEditor)
+			{
+				var displayTypeChoices = new Map<String, String>();
+				for (prop in Type.allEnums(ValueDisplayType))
+					displayTypeChoices.set(Std.string(prop), ValueDisplayTypeLabel.labels[Type.enumIndex(prop)]);
+				propertyDisplayChoicesField = Fields.createOptions(displayTypeChoices);
+				propertyDisplayChoicesField.val(Std.string(value.display));
+				Fields.createSettingsBlock(inspector, propertyDisplayChoicesField, SettingsBlock.Full, "Display in editor", SettingsBlock.InlineTitle);
+			}
 		}
 	}
 
 	public function save():Void
 	{
-		if (inspecting != null) inspectingEditor.save();
+		if (inspecting != null)
+		{
+			inspectingEditor.save();
+			if (propertyDisplayChoicesField != null)
+				inspectingEditor.template.display = Type.createEnum(ValueDisplayType, propertyDisplayChoicesField.val());
+		}
 	}
 }

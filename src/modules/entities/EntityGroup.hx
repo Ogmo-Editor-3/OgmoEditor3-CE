@@ -105,6 +105,7 @@ class EntityGroup
 				changed = true;
 				i--;
 			}
+			i++;
 		}
 	}
 

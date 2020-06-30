@@ -42,15 +42,13 @@ class BoolValueTemplate extends ValueTemplate
 
 	override function load(data:Dynamic):Void
 	{
-			name = data.name;
-			defaults = data.defaults;
+		super.load(data);
+		defaults = data.defaults;
 	}
 
 	override function save():Dynamic
 	{
-		var data:Dynamic = {};
-		data.name = name;
-		data.definition = definition.label;
+		var data:Dynamic = super.save();
 		data.defaults = defaults;
 		return data;
 	}

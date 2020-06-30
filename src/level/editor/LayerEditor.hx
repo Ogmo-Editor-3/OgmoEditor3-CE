@@ -9,7 +9,7 @@ class LayerEditor
 	public var id:Int;
 	public var currentTool:Int = 0;
 	public var active:Bool = false; // <-- is this the currently-selected layer?
-	public var visible:Bool = true;
+	public var visible(default, set):Bool = true;
 	public var palettePanel:SidePanel;
 	public var selectionPanel:SidePanel;
 	public var template(get, never):LayerTemplate;
@@ -80,6 +80,11 @@ class LayerEditor
 	public function keyRelease(key:Int):Void {}
 
 	public function keyRepeat(key:Int):Void {}
+
+	function set_visible(newVisible)
+	{
+		return visible = newVisible;
+	}
 
 	function get_template():LayerTemplate
 	{

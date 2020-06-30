@@ -50,16 +50,14 @@ class EnumValueTemplate extends ValueTemplate
 
 	override function load(data:Dynamic):Void
 	{
-		name = data.name;
+		super.load(data);
 		choices = data.choices;
 		defaults = Imports.integer(data.defaults, 0);
 	}
 
 	override function save():Dynamic
 	{
-		var data:Dynamic = {};
-		data.name = name;
-		data.definition = definition.label;
+		var data:Dynamic = super.save();
 		data.choices = choices;
 		data.defaults = defaults;
 		return data;

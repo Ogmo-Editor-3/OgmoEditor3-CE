@@ -21,11 +21,13 @@ class Tileset
 	public var tileHeight: Int;
 	public var tileSeparationX: Int;
 	public var tileSeparationY: Int;
+	public var tileMarginX: Int;
+	public var tileMarginY: Int;
 
 	public var brokenPath:Bool = false;
 	public var brokenTexture:Bool = false;
 
-	public function new(project:Project, label:String, path:String, tileWidth:Int, tileHeight:Int, tileSepX:Int, tileSepY:Int, ?image:ImageElement)
+	public function new(project:Project, label:String, path:String, tileWidth:Int, tileHeight:Int, tileSepX:Int, tileSepY:Int, tileMargX:Int, tileMargY:Int, ?image:ImageElement)
 	{
 		this.label = label;
 		this.path = haxe.io.Path.normalize(path);
@@ -33,6 +35,8 @@ class Tileset
 		this.tileHeight = tileHeight;
 		this.tileSeparationX = tileSepX;
 		this.tileSeparationY = tileSepY;
+		this.tileMarginX = tileMargX;
+		this.tileMarginY = tileMargY;
 
 		if (FileSystem.exists(Path.join(Path.dirname(project.path), path)))
 		{
@@ -61,6 +65,8 @@ class Tileset
 		data.tileHeight = tileHeight;
 		data.tileSeparationX = tileSeparationX;
 		data.tileSeparationY = tileSeparationY;
+		data.tileMarginX = tileMarginX;
+		data.tileMarginY = tileMarginY;
 		return data;
 	}
 
@@ -68,7 +74,7 @@ class Tileset
 	{
 		var img = Browser.document.createImageElement();
 		img.src = data.image;
-		return new Tileset(project, data.label, data.path, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, img);
+		return new Tileset(project, data.label, data.path, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, data.tileMarginX, data.tileMarginY, img);
 	}
 
 	public inline function getTileX(id: Int):Int return id % tileColumns;
@@ -81,7 +87,7 @@ class Tileset
 
 	inline function get_height():Int return texture.image.height;
 
-	inline function get_tileColumns():Int return Math.floor((width - tileSeparationX) / (tileWidth + tileSeparationX));
+	inline function get_tileColumns():Int return Math.floor((width - tileSeparationX - tileMarginX - tileMarginX) / (tileWidth + tileSeparationX));
 
-	inline function get_tileRows():Int return Math.floor((height - tileSeparationY) / (tileHeight + tileSeparationY));
+	inline function get_tileRows():Int return Math.floor((height - tileSeparationY - tileMarginY - tileMarginY) / (tileHeight + tileSeparationY));
 }

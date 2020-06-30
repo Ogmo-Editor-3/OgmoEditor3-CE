@@ -2,6 +2,14 @@ package modules.entities;
 
 import io.Imports;
 import level.data.Value;
+import project.data.value.TextValueTemplate;
+import project.data.value.StringValueTemplate;
+import project.data.value.IntegerValueTemplate;
+import project.data.value.FloatValueTemplate;
+import project.data.value.EnumValueTemplate;
+import project.data.value.ColorValueTemplate;
+import project.data.value.BoolValueTemplate;
+import project.data.ValueDefinition.ValueDisplayType;
 import rendering.Texture;
 import util.Matrix;
 

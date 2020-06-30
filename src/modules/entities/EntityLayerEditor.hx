@@ -1,7 +1,11 @@
 package modules.entities;
 
+import level.editor.ui.PropertyDisplay.PropertyDisplayMode;
 import level.editor.ui.SidePanel;
 import level.editor.LayerEditor;
+import rendering.FloatingHTML.FloatingHTMLPropertyDisplay;
+import rendering.FloatingHTML.PositionAlignV;
+import rendering.FloatingHTML.PositionAlignH;
 
 class EntityLayerEditor extends LayerEditor
 {
@@ -9,6 +13,8 @@ class EntityLayerEditor extends LayerEditor
 	public var hovered:EntityGroup = new EntityGroup();
 	public var brush:Int = -1;
 	public var entities(get, never):EntityList;
+
+	private var entityTexts = new Map<Int, FloatingHTMLPropertyDisplay>();
 
 	public function new(id:Int)
 	{
@@ -34,6 +40,49 @@ class EntityLayerEditor extends LayerEditor
 
 		// Draw node lines
 		if (hasNodes.length > 0) for (ent in hasNodes) ent.drawNodeLines();
+
+		// Draw entity property display texts
+		{
+			FloatingHTMLPropertyDisplay.visibleFade = EDITOR.level.zoom >= OGMO.settings.propertyDisplay.minimumZoom;
+			FloatingHTMLPropertyDisplay.visible = OGMO.settings.propertyDisplay.visible;
+
+			for (ent in entities.list)
+			{
+				if (!entityTexts.exists(ent.id))
+					entityTexts.set(ent.id, new FloatingHTMLPropertyDisplay());
+			}
+
+			var toRemove = new Array<Int>();
+			for (id => text in entityTexts)
+			{
+				if (OGMO.settings.propertyDisplay.mode == PropertyDisplayMode.ActiveLayer && !active)
+				{
+					text.setOpacity(0);
+					continue;
+				}
+
+				var entity = entities.getByID(id);
+				if (entity != null)
+				{
+					var corners = entity.getCorners(entity.position, 8 / EDITOR.level.zoom);
+					var avgX = (corners[0].x + corners[1].x + corners[2].x + corners[3].x) / 4.0;
+					var minY = Math.min(Math.min(corners[0].y, corners[1].y), Math.min(corners[2].y, corners[3].y));
+
+					text.setEntity(entity);
+					text.setCanvasPosition(new Vector(avgX, minY), PositionAlignH.Left, PositionAlignV.Bottom);
+					text.setOpacity(EDITOR.draw.getAlpha());
+					text.setFontSize(0.75 * OGMO.settings.propertyDisplay.fontSize);
+				}
+				else
+				{
+					text.destroy();
+					toRemove.push(id);
+				}
+			}
+
+			for (id in toRemove)
+				entityTexts.remove(id);
+		}
 	}
 
 	override function drawAbove()
@@ -58,6 +107,9 @@ class EntityLayerEditor extends LayerEditor
 
 	override function refresh() {
 		selection.clear();
+		for (text in entityTexts)
+			text.destroy();
+		entityTexts.clear();
 	}
 
 	override function createPalettePanel():SidePanel return new EntityPalettePanel(this);
@@ -128,5 +180,12 @@ class EntityLayerEditor extends LayerEditor
 	inline function get_entities():EntityList {
 		var el:EntityLayer = cast layer;
 		return el.entities;
+	}
+
+	override  function set_visible(newVisible:Bool):Bool {
+		if (!newVisible)
+			for (text in entityTexts)
+				text.setOpacity(0);
+		return super.set_visible(newVisible);
 	}
 }

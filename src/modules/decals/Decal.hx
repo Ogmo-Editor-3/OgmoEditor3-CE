@@ -48,7 +48,7 @@ class Decal
 
 	public function clone():Decal
 	{
-		return new Decal(position, path, texture, scale, rotation, values);
+		return new Decal(position, path, texture, origin, scale, rotation, values);
 	}
 
 	function get_width():Int

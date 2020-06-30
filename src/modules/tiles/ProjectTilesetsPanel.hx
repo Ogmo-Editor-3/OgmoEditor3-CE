@@ -27,6 +27,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 	public var tilePath:JQuery;
 	public var tileSize:JQuery;
 	public var tileSeparation:JQuery;
+	public var tileMargin:JQuery;
 
 	public var zoom:Float = 2;
 
@@ -59,7 +60,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 		if (FileSystem.exists(path))
 		{
 			var relative = Path.relative(Path.dirname(OGMO.project.path), path);
-			var tilemap = new Tileset(OGMO.project, "New Tileset", relative, 8, 8, 0, 0);
+			var tilemap = new Tileset(OGMO.project, "New Tileset", relative, 8, 8, 0, 0, 0, 0);
 
 			// delay a frame before refreshing to allow the tileset texture to load
 			haxe.Timer.delay(() -> {
@@ -114,13 +115,16 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 			Fields.createSettingsBlock(into, tilePath, SettingsBlock.TwoThirds, "Path", SettingsBlock.InlineTitle);
 			Fields.createLineBreak(into);
 
-			// tile size + separation
+			// tile size + separation + margin
 			tileSize = Fields.createVector(new Vector(tileset.tileWidth, tileset.tileHeight));
 			tileSize.find("input").on("change", function() { refreshCanvas(context); });
-			Fields.createSettingsBlock(into, tileSize, SettingsBlock.Half, "Tile Size", SettingsBlock.InlineTitle);
+			Fields.createSettingsBlock(into, tileSize, SettingsBlock.Third, "Tile Size", SettingsBlock.InlineTitle);
 			tileSeparation = Fields.createVector(new Vector(tileset.tileSeparationX, tileset.tileSeparationY));
 			tileSeparation.find("input").on("change", function() { refreshCanvas(context); });
-			Fields.createSettingsBlock(into, tileSeparation, SettingsBlock.Half, "Tile Separation", SettingsBlock.InlineTitle);
+			Fields.createSettingsBlock(into, tileSeparation, SettingsBlock.Third, "Tile Separation", SettingsBlock.InlineTitle);
+			tileMargin = Fields.createVector(new Vector(tileset.tileMarginX, tileset.tileMarginY));
+			tileMargin.find("input").on("change", function() { refreshCanvas(context); });
+			Fields.createSettingsBlock(into, tileMargin, SettingsBlock.Third, "Tile Margin", SettingsBlock.InlineTitle);
 			Fields.createLineBreak(into);
 
 			// add canvas
@@ -176,6 +180,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 
 		var gridSize = Fields.getVector(tileSize);
 		var gridSep = Fields.getVector(tileSeparation);
+		var gridMarg = Fields.getVector(tileMargin);
 
 		// create path
 		context.beginPath();
@@ -184,27 +189,27 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 			if (gridSep.x == 0 && gridSep.y == 0)
 			{
 				var i:Float = 0;
-				while (i < tileset.width)
+				while (i < tileset.width - gridMarg.x)
 				{
-					context.moveTo(i * s + .5, 0);
-					context.lineTo(i * s + .5, tileset.height * s);
-				i += gridSize.x;
+					context.moveTo((i + gridMarg.x) * s + .5, (0 + gridMarg.y) * s);
+					context.lineTo((i + gridMarg.x) * s + .5, (tileset.height - gridMarg.y) * s);
+					i += gridSize.x;
 				}
 				i = 0;
-				while (i < tileset.height)
+				while (i < tileset.height - gridMarg.y)
 				{
-					context.moveTo(0, i * s + .5);
-					context.lineTo(tileset.width * s, i * s + .5);
+					context.moveTo((0 + gridMarg.x) * s, (i + gridMarg.y) * s + .5);
+					context.lineTo((tileset.width - gridMarg.x) * s, (i + gridMarg.y) * s + .5);
 					i += gridSize.y;
 				}
 			}
 			else
 			{
-				var x = gridSep.x;
-				while (x < tileset.width)
+				var x = gridSep.x + gridMarg.x;
+				while (x < tileset.width - gridMarg.x)
 				{
-					var y = gridSep.y;
-					while (y < tileset.height)
+					var y = gridSep.y  + gridMarg.y;
+					while (y < tileset.height - gridMarg.y)
 					{
 						context.moveTo(x * s, y * s + .5);
 						context.lineTo((x + gridSize.x) * s + .5, y * s + .5);
@@ -233,6 +238,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 	{
 		var gridSize = Fields.getVector(tileSize);
 		var gridSep = Fields.getVector(tileSeparation);
+		var gridMarg = Fields.getVector(tileMargin);
 
 		tileset.label = Fields.getField(tileLabel);
 		tileset.path = Fields.getField(tilePath);
@@ -240,6 +246,8 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 		tileset.tileHeight = gridSize.y.floor();
 		tileset.tileSeparationX = gridSep.x.floor();
 		tileset.tileSeparationY = gridSep.y.floor();
+		tileset.tileMarginX = gridMarg.x.floor();
+		tileset.tileMarginY = gridMarg.y.floor();
 	}
 
 	override function end():Void
