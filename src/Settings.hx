@@ -12,7 +12,7 @@ class Settings
 {
 
 	public var recentProjects:Array<{ path:String, name:String }> = [];
-	public var propertyDisplay:PropertyDisplaySettings;
+	public var propertyDisplay:PropertyDisplaySettings = new PropertyDisplaySettings();
 	public var openLevelLimit:Int = 30;
 	public var undoLimit:Int = 100;
 	public var shapes:Array<ShapeData> = [];
@@ -49,7 +49,6 @@ class Settings
 		recentProjects = data.recentProjects;
 		openLevelLimit = data.openLevelLimit;
 		undoLimit = data.undoLimit;
-		propertyDisplay = new PropertyDisplaySettings();
 		if (Reflect.hasField(data, "propertyDisplay"))
 			propertyDisplay.load(data.propertyDisplay);
 		shapes = [ for (shape in data_shapes) new ShapeData(shape.label, shape.points) ];
