@@ -74,7 +74,15 @@ class Tileset
 	{
 		var img = Browser.document.createImageElement();
 		img.src = data.image;
-		return new Tileset(project, data.label, data.path, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, data.tileMarginX, data.tileMarginY, img);
+
+		var marginX:Int = 0;
+		if (Reflect.hasField(data, "tileMarginX"))
+			marginX = data.tileMarginX;
+		var marginY:Int = 0;
+		if (Reflect.hasField(data, "tileMarginY"))
+			marginY = data.tileMarginY;
+
+		return new Tileset(project, data.label, data.path, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, marginX, marginY, img);
 	}
 
 	public inline function getTileX(id: Int):Int return id % tileColumns;
