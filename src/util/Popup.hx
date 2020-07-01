@@ -23,7 +23,7 @@ class Popup
 			var win = new JQuery('<div class="popupWindow">');
 			var title = new JQuery('<div class="title">');
 			var content = new JQuery('<div class="content">');
-			var event:Event->Void;
+			var event:Event->Void = null;
 
 			function close(index:Int)
 			{
@@ -110,7 +110,7 @@ class Popup
 		var win = new JQuery('<div class="popupWindow">');
 		var title = new JQuery('<div class="title">');
 		var content = new JQuery('<div class="content">');
-		var event:Event->Void;
+		var event:Event->Void = null;
 
 		function close(escape:Bool)
 		{
@@ -209,9 +209,9 @@ class Popup
 		var win = new JQuery('<div class="popupWindow">');
 		var title = new JQuery('<div class="title">');
 		var content = new JQuery('<div class="content">');
-		var input:JQuery;
-		var dropdown:JQuery;
-		var event:Event->Void;
+		var input:JQuery = null;
+		var dropdown:JQuery = null;
+		var event:Event->Void = null;
 
 		function close(escape:Bool)
 		{
@@ -308,8 +308,8 @@ class Popup
 		var win = new JQuery('<div class="popupWindow">');
 		var title = new JQuery('<div class="title">');
 		var content = new JQuery('<div class="content">');
-		var input: JQuery;
-		var event:Event->Void;
+		var input: JQuery = null;
+		var event:Event->Void = null;
 
 		function close(escape:Bool)
 		{
@@ -401,7 +401,7 @@ class Popup
 
 		// current color
 		var initialColor = color.clone();
-		var event:Event->Void;
+		var event:Event->Void = null;
 
 		function close(result:Color)
 		{
@@ -444,18 +444,18 @@ class Popup
 		var internalSat = color.toHSV()[1];
 
 		// construct all the fields
-		var hex:JQuery;
-		var a:JQuery;
-		var r:JQuery;
-		var g:JQuery;
-		var b:JQuery;
-		var h:JQuery;
-		var s:JQuery;
-		var v:JQuery;
-		var gradient:JQuery;
-		var hue:JQuery;
-		var transparency:JQuery;
-		var view:JQuery;
+		var hex:JQuery = null;
+		var a:JQuery = null;
+		var r:JQuery = null;
+		var g:JQuery = null;
+		var b:JQuery = null;
+		var h:JQuery = null;
+		var s:JQuery = null;
+		var v:JQuery = null;
+		var gradient:JQuery = null;
+		var hue:JQuery = null;
+		var transparency:JQuery = null;
+		var view:JQuery = null;
 
 		// refresh all the fields
 		function refresh(updateHex:Bool, updateRGBA:Bool, updateHSV:Bool)
@@ -644,8 +644,8 @@ class Popup
 		var title = new JQuery('<div class="title">');
 		var settings = new JQuery('<div class="settings">');
 		var content = new JQuery('<div class="content">');
-		var event:Event->Void;
-		var levelOffset:JQuery;
+		var event:Event->Void = null;
+		var levelOffset:JQuery = null;
 
 		function close(escape:Bool)
 		{
