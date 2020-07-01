@@ -14,9 +14,10 @@ class Popup
 	/* --------- MESSAGE POPUP --------- */
 	/* --------------------------------- */
 
-	public static function open(label:String, icon:String, message:String, options:Array<String>, ?callback:Int->Void):Void
+	public static function open(label:String, icon:String, message:String, options:Array<String>, ?callback:Int->Void, closeOtherPopups:Bool = true):Void
 	{
-			Popup.closePopups();
+			if (closeOtherPopups)
+				Popup.closePopups();
 			RightClickMenu.closeMenu();
 
 			var overlay = new JQuery('<div class="overlay">');

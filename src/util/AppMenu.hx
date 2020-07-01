@@ -8,11 +8,16 @@ typedef MenuTemplate =
 	?role:String,
 	?type:String,
 	?accelerator:String,
-	?submenu:Array<MenuTemplate>
+	?submenu:Array<MenuTemplate>,
+	?click:Void->Void
 }
 
 class AppMenu 
 {
+	public static inline var IPC_CHANNEL = "appmenu";
+	public static inline var IPC_MSG_HELP_ABOUT = "help_about";
+	public static inline var IPC_MSG_HELP_CONTROLS = "help_controls";
+
 	public static function build() 
 	{
 		var template:Array<MenuTemplate> = [];
@@ -64,14 +69,41 @@ class AppMenu
 		template.push({
 			label: 'View',
 			submenu: [
+				{ role: 'togglefullscreen' },
+				{ type: 'separator' },
 				{ role: 'reload' },
 				{ role: 'forcereload' },
 				{ role: 'toggledevtools' },
 			]
 		});
 
+		template.push({
+			label: 'Help',
+			submenu: [
+				{ label: 'About Ogmo Editor', click: sendMsg.bind(IPC_MSG_HELP_ABOUT) },
+				{ label: 'Controls', click: sendMsg.bind(IPC_MSG_HELP_CONTROLS) },
+				{ type: 'separator' },
+				{ label: 'Website', click: openExternalURL.bind(About.WEBSITE_URL) },
+				{ label: 'User Manual', click: openExternalURL.bind(About.USER_MANUAL_URL) },
+				{ label: 'Community Forum', click: openExternalURL.bind(About.COMMUNITY_FORUM_URL) },
+				{ label: 'Source Code', click: openExternalURL.bind(About.SOURCE_CODE_URL) },
+				{ label: 'Report Issue', click: openExternalURL.bind(About.REPORT_ISSUE_URL) },
+			]
+		});
+
 		var menu = electron.main.Menu.buildFromTemplate(template);
 		electron.main.Menu.setApplicationMenu(menu);
 		// OGMO.app.setMenu(template);
+	}
+
+	private static function openExternalURL(url:String)
+	{
+		electron.Shell.openExternal(url);
+	}
+
+	// Sends to renderer thread
+	private static function sendMsg(msg:String, ?data:Dynamic)
+	{
+		App.getMainWindow().webContents.send(IPC_CHANNEL, msg, data);
 	}
 }
