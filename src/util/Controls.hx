@@ -284,11 +284,11 @@ class Controls
         name: "Entity Node Tool",
         icon: "entity-nodes",
         controls: [
-            { keys: "Left Mouse", action: "Create and select a node for each selected entity snapped to grid. Or select existing node(s)." },
+            { keys: "Left Mouse", action: "Create and a node (for each selected entity) snapped to grid. Click on a path to create a node between two other nodes." },
             { subAction: true, keys: "Ctrl", action: "Don't snap to grid" },
-            { keys: "Left Mouse Drag + On Selected", action: "Move selected node(s), snapped to grid" },
+            { keys: "Left Mouse Drag + On Selected", action: "Move selected node, snapped to grid" },
             { subAction: true, keys: "Ctrl", action: "Don't snap to grid" },
-            { keys: "Right Mouse", action: "Delete node(s) under cursor" },
+            { keys: "Right Mouse", action: "Delete node under cursor" },
             { keys: "Alt", action: "Switch to Entity Create Tool" },
         ]
     };
