@@ -18,8 +18,8 @@ class FilepathValueTemplateEditor extends ValueTemplateEditor
 		nameField = Fields.createField("Name", pathTemplate.name);
 		Fields.createSettingsBlock(into, nameField, SettingsBlock.Half, "Name", SettingsBlock.InlineTitle);
 
-        // default val
-        var fileExtensions = pathTemplate.extensions.length == 0 ? [] : [{name: "Allowed extensions", extensions: pathTemplate.extensions}];
+		// default val
+		var fileExtensions = pathTemplate.extensions.length == 0 ? [] : [{name: "Allowed extensions", extensions: pathTemplate.extensions}];
 		defaultField = Fields.createFilepathData(pathTemplate.defaults, fileExtensions);
 		Fields.createSettingsBlock(into, defaultField, SettingsBlock.Half, "Default", SettingsBlock.InlineTitle);
 
@@ -28,13 +28,13 @@ class FilepathValueTemplateEditor extends ValueTemplateEditor
 
 		// extensions
 		extensionsField = Fields.createTextarea("...", extensions);
-        Fields.createSettingsBlock(into, extensionsField, SettingsBlock.Full, "Allowed extensions (one per line)");
-        extensionsField.on("input propertychange", function (e) { // Need to update extensions for default val picker
-            save();
-            fileExtensions.splice(0, fileExtensions.length);
-            if (pathTemplate.extensions.length > 0)
-                fileExtensions.push({name: "Allowed extensions", extensions: pathTemplate.extensions});
-        });
+		Fields.createSettingsBlock(into, extensionsField, SettingsBlock.Full, "Allowed extensions (one per line)");
+		extensionsField.on("input propertychange", function (e) { // Need to update extensions for default val picker
+			save();
+			fileExtensions.splice(0, fileExtensions.length);
+			if (pathTemplate.extensions.length > 0)
+				fileExtensions.push({name: "Allowed extensions", extensions: pathTemplate.extensions});
+		});
 	}
 
 	override function save()

@@ -11,174 +11,174 @@ import util.Fields;
 
 class FilepathValueEditor extends ValueEditor
 {
-    public var title:String;
-    public var holder:JQuery = null;
+	public var title:String;
+	public var holder:JQuery = null;
 	public var element:JQuery = null;
 	public var baseButton:JQuery = null;
 	public var selectButton:JQuery = null;
 
 	override function load(template:ValueTemplate, values:Array<Value>):Void
 	{
-        var pathTemplate:FilepathValueTemplate = cast template;
+		var pathTemplate:FilepathValueTemplate = cast template;
 
 		title = template.name;
 
 		// check if values conflict
-        var value = FilepathData.parseString(values[0].value);
+		var value = FilepathData.parseString(values[0].value);
 		var conflictPath = false;
 		var conflictBase = false;
 		var i = 1;
 		while (i < values.length)
 		{
-            var curValue = FilepathData.parseString(values[i].value);
+			var curValue = FilepathData.parseString(values[i].value);
 			if (curValue.path != value.path)
 			{
-                conflictPath = true;
-                value.path = ValueEditor.conflictString();
-            }
-            if (curValue.relativeTo != value.relativeTo)
-            {
-                conflictBase = true;
-            }
+				conflictPath = true;
+				value.path = ValueEditor.conflictString();
+			}
+			if (curValue.relativeTo != value.relativeTo)
+			{
+				conflictBase = true;
+			}
 			i++;
 		}
 
-        var lastPathValue = value.path;
-        var lastBaseValue = conflictBase ? null : value.relativeTo;
+		var lastPathValue = value.path;
+		var lastBaseValue = conflictBase ? null : value.relativeTo;
 
-        function savePath()
-        {
-            var nextValue = FilepathData.parseString(pathTemplate.validate(value.asString()));
-            var nextPathValue = nextValue.path;
-            if (lastPathValue != nextPathValue || conflictPath)
-            {
-                EDITOR.level.store("Changed " + template.name + " Path from '" + lastPathValue + "' to '" + nextPathValue + "'");
-                for (i in 0...values.length)
-                {
-                    var data = FilepathData.parseString(values[i].value);
-                    data.path = nextPathValue;
-                    values[i].value = data.asString();
-                }
-                conflictPath = false;
-                value.path = nextPathValue;
-                lastPathValue = nextPathValue;
-                EDITOR.dirty();
-            }
-        }
+		function savePath()
+		{
+			var nextValue = FilepathData.parseString(pathTemplate.validate(value.asString()));
+			var nextPathValue = nextValue.path;
+			if (lastPathValue != nextPathValue || conflictPath)
+			{
+				EDITOR.level.store("Changed " + template.name + " Path from '" + lastPathValue + "' to '" + nextPathValue + "'");
+				for (i in 0...values.length)
+				{
+					var data = FilepathData.parseString(values[i].value);
+					data.path = nextPathValue;
+					values[i].value = data.asString();
+				}
+				conflictPath = false;
+				value.path = nextPathValue;
+				lastPathValue = nextPathValue;
+				EDITOR.dirty();
+			}
+		}
 
-        function saveBase()
-        {
-            var nextValue = FilepathData.parseString(pathTemplate.validate(value.asString()));
-            var nextBaseValue = nextValue.relativeTo;
-            if (lastBaseValue != nextBaseValue || conflictBase)
-            {
-                var nextPathValue:String = null;
-                var from = nextBaseValue == RelativeTo.PROJECT ? "level" : "project";
-                var to = nextBaseValue != RelativeTo.PROJECT ? "level" : "project";
-                EDITOR.level.store("Changed " + template.name + " Reference from '" + from + "' to '" + to + "'");
-                for (i in 0...values.length)
-                {
-                    var data = FilepathData.parseString(values[i].value);
-                    data.switchRelative(nextBaseValue);
-                    values[i].value = data.asString();
-                    nextPathValue = data.path;
-                }
-                conflictBase = false;
-                value.relativeTo = nextBaseValue;
-                lastBaseValue = nextBaseValue;
-                EDITOR.dirty();
+		function saveBase()
+		{
+			var nextValue = FilepathData.parseString(pathTemplate.validate(value.asString()));
+			var nextBaseValue = nextValue.relativeTo;
+			if (lastBaseValue != nextBaseValue || conflictBase)
+			{
+				var nextPathValue:String = null;
+				var from = nextBaseValue == RelativeTo.PROJECT ? "level" : "project";
+				var to = nextBaseValue != RelativeTo.PROJECT ? "level" : "project";
+				EDITOR.level.store("Changed " + template.name + " Reference from '" + from + "' to '" + to + "'");
+				for (i in 0...values.length)
+				{
+					var data = FilepathData.parseString(values[i].value);
+					data.switchRelative(nextBaseValue);
+					values[i].value = data.asString();
+					nextPathValue = data.path;
+				}
+				conflictBase = false;
+				value.relativeTo = nextBaseValue;
+				lastBaseValue = nextBaseValue;
+				EDITOR.dirty();
 
-                if (!conflictPath)
-                    value.path = nextPathValue;
+				if (!conflictPath)
+					value.path = nextPathValue;
 
-                var btnText = nextBaseValue == RelativeTo.PROJECT ? "Project/" : "Level/";
-                baseButton.find(".button_text").html(btnText);
+				var btnText = nextBaseValue == RelativeTo.PROJECT ? "Project/" : "Level/";
+				baseButton.find(".button_text").html(btnText);
 
-                element.addClass(nextBaseValue == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
-                element.removeClass(nextBaseValue != RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
-            }
-        }
+				element.addClass(nextBaseValue == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+				element.removeClass(nextBaseValue != RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+			}
+		}
 
 		// create element
 		{
-            holder = new JQuery('<div class="filepath">');
+			holder = new JQuery('<div class="filepath">');
 
-            element = new JQuery('<input>');
-            if (conflictPath) element.addClass("default-value");
-            element.addClass(value.relativeTo == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
-            element.val(value.path);
-            element.change(function(e)
-            {
-                value.path = element.val();
-                savePath();
-                element.val(value.path);
-            });
-            element.on("keyup", function(e) { if (e.which == Keys.Enter) element.blur(); });
+			element = new JQuery('<input>');
+			if (conflictPath) element.addClass("default-value");
+			element.addClass(value.relativeTo == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+			element.val(value.path);
+			element.change(function(e)
+			{
+				value.path = element.val();
+				savePath();
+				element.val(value.path);
+			});
+			element.on("keyup", function(e) { if (e.which == Keys.Enter) element.blur(); });
 
-            var baseButtonLabel = value.relativeTo == RelativeTo.PROJECT ? "Project/" : "Level/";
-            if (conflictBase)
-                baseButtonLabel = ValueEditor.conflictString() + "/";
-            baseButton = Fields.createButton("", baseButtonLabel, holder);
-            baseButton.width("84px");
-            baseButton.on("click", function()
-            {
-                value.relativeTo = lastBaseValue == RelativeTo.PROJECT ? RelativeTo.LEVEL : RelativeTo.PROJECT;
-                saveBase();
+			var baseButtonLabel = value.relativeTo == RelativeTo.PROJECT ? "Project/" : "Level/";
+			if (conflictBase)
+				baseButtonLabel = ValueEditor.conflictString() + "/";
+			baseButton = Fields.createButton("", baseButtonLabel, holder);
+			baseButton.width("84px");
+			baseButton.on("click", function()
+			{
+				value.relativeTo = lastBaseValue == RelativeTo.PROJECT ? RelativeTo.LEVEL : RelativeTo.PROJECT;
+				saveBase();
 
-                if (!conflictPath)
-                    element.val(value.path);
+				if (!conflictPath)
+					element.val(value.path);
 
-                var btnText = value.relativeTo == RelativeTo.PROJECT ? "Project/" : "Level/";
-                baseButton.find(".button_text").html(btnText);
+				var btnText = value.relativeTo == RelativeTo.PROJECT ? "Project/" : "Level/";
+				baseButton.find(".button_text").html(btnText);
 
-                element.addClass(value.relativeTo == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
-                element.removeClass(value.relativeTo != RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
-            });
+				element.addClass(value.relativeTo == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+				element.removeClass(value.relativeTo != RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+			});
 
-            holder.append(element);
+			holder.append(element);
 
-            selectButton = Fields.createButton("save", "", holder);
-            selectButton.width("34px");
-            selectButton.on("click", function()
-            {
-                var projectDirPath = FilepathData.getProjectDirectoryPath();
-                var basePath = value.getBase();
-                var fullPath = value.getFull();
-                var initialPath = fullPath;
-                if (initialPath == null || !FileSystem.exists(initialPath))
-                    initialPath = basePath;
-                if (initialPath == null || !FileSystem.exists(initialPath))
-                    initialPath = projectDirPath;
+			selectButton = Fields.createButton("save", "", holder);
+			selectButton.width("34px");
+			selectButton.on("click", function()
+			{
+				var projectDirPath = FilepathData.getProjectDirectoryPath();
+				var basePath = value.getBase();
+				var fullPath = value.getFull();
+				var initialPath = fullPath;
+				if (initialPath == null || !FileSystem.exists(initialPath))
+					initialPath = basePath;
+				if (initialPath == null || !FileSystem.exists(initialPath))
+					initialPath = projectDirPath;
 
-                var fileExtensions = pathTemplate.extensions.length == 0 ? [] : [{name: "Allowed extensions", extensions: pathTemplate.extensions}];
-                var chosenPath = FileSystem.chooseFile("Select Path", fileExtensions, initialPath);
-                if (chosenPath.length == 0)
-                    return;
+				var fileExtensions = pathTemplate.extensions.length == 0 ? [] : [{name: "Allowed extensions", extensions: pathTemplate.extensions}];
+				var chosenPath = FileSystem.chooseFile("Select Path", fileExtensions, initialPath);
+				if (chosenPath.length == 0)
+					return;
 
-                var relativePath = FileSystem.normalize(Path.relative(basePath == null ? projectDirPath : basePath, chosenPath));
-                value.path = relativePath;
-                savePath();
-                element.val(value.path);
-            });
+				var relativePath = FileSystem.normalize(Path.relative(basePath == null ? projectDirPath : basePath, chosenPath));
+				value.path = relativePath;
+				savePath();
+				element.val(value.path);
+			});
 		}
 
 		// deal with conflict text inside the textarea
-        element.on("focus", function()
-        {
-            if (conflictPath)
-            {
-                element.val("");
-                element.removeClass("default-value");
-            }
-        });
-        element.on("blur", function()
-        {
-            if (conflictPath)
-            {
-                element.val(ValueEditor.conflictString());
-                element.addClass("default-value");
-            }
-        });
+		element.on("focus", function()
+		{
+			if (conflictPath)
+			{
+				element.val("");
+				element.removeClass("default-value");
+			}
+		});
+		element.on("blur", function()
+		{
+			if (conflictPath)
+			{
+				element.val(ValueEditor.conflictString());
+				element.addClass("default-value");
+			}
+		});
 	}
 
 	override function display(into:JQuery):Void
