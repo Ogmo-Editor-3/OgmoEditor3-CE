@@ -24,16 +24,13 @@ class FilepathValueEditor extends ValueEditor
 		title = template.name;
 
 		// check if values conflict
-        var value = new FilepathData();
-        value.parseString(values[0].value);
-        value = value.clone();
+        var value = FilepathData.parseString(values[0].value);
 		var conflictPath = false;
 		var conflictBase = false;
 		var i = 1;
 		while (i < values.length)
 		{
-            var curValue = new FilepathData();
-            curValue.parseString(values[i].value);
+            var curValue = FilepathData.parseString(values[i].value);
 			if (curValue.path != value.path)
 			{
                 conflictPath = true;
@@ -49,6 +46,59 @@ class FilepathValueEditor extends ValueEditor
         var lastPathValue = value.path;
         var lastBaseValue = conflictBase ? null : value.relativeTo;
 
+        function savePath()
+        {
+            var nextValue = FilepathData.parseString(pathTemplate.validate(value.asString()));
+            var nextPathValue = nextValue.path;
+            if (lastPathValue != nextPathValue || conflictPath)
+            {
+                EDITOR.level.store("Changed " + template.name + " Path from '" + lastPathValue + "' to '" + nextPathValue + "'");
+                for (i in 0...values.length)
+                {
+                    var data = FilepathData.parseString(values[i].value);
+                    data.path = nextPathValue;
+                    values[i].value = data.asString();
+                }
+                conflictPath = false;
+                value.path = nextPathValue;
+                lastPathValue = nextPathValue;
+                EDITOR.dirty();
+            }
+        }
+
+        function saveBase()
+        {
+            var nextValue = FilepathData.parseString(pathTemplate.validate(value.asString()));
+            var nextBaseValue = nextValue.relativeTo;
+            if (lastBaseValue != nextBaseValue || conflictBase)
+            {
+                var nextPathValue:String = null;
+                var from = nextBaseValue == RelativeTo.PROJECT ? "level" : "project";
+                var to = nextBaseValue != RelativeTo.PROJECT ? "level" : "project";
+                EDITOR.level.store("Changed " + template.name + " Reference from '" + from + "' to '" + to + "'");
+                for (i in 0...values.length)
+                {
+                    var data = FilepathData.parseString(values[i].value);
+                    data.switchRelative(nextBaseValue);
+                    values[i].value = data.asString();
+                    nextPathValue = data.path;
+                }
+                conflictBase = false;
+                value.relativeTo = nextBaseValue;
+                lastBaseValue = nextBaseValue;
+                EDITOR.dirty();
+
+                if (!conflictPath)
+                    value.path = nextPathValue;
+
+                var btnText = nextBaseValue == RelativeTo.PROJECT ? "Project/" : "Level/";
+                baseButton.find(".button_text").html(btnText);
+
+                element.addClass(nextBaseValue == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+                element.removeClass(nextBaseValue != RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+            }
+        }
+
 		// create element
 		{
             holder = new JQuery('<div class="filepath">');
@@ -60,33 +110,10 @@ class FilepathValueEditor extends ValueEditor
             element.change(function(e)
             {
                 value.path = element.val();
-                var nextValue = new FilepathData();
-                nextValue.parseString(pathTemplate.validate(value.asString()));
-                var nextPathValue = nextValue.path;
-                if (lastPathValue != nextPathValue || conflictPath)
-                {
-                    EDITOR.level.store("Changed " + template.name + " Value from '" + lastPathValue + "' to '" + nextPathValue + "'");
-                    for (i in 0...values.length)
-                    {
-                        var data = new FilepathData();
-                        data.parseString(values[i].value);
-                        data.path = nextPathValue;
-                        values[i].value = data.asString();
-                    }
-                    conflictPath = false;
-                    lastPathValue = nextPathValue;
-                    EDITOR.dirty();
-                }
-                element.val(nextPathValue);
+                savePath();
+                element.val(value.path);
             });
-            element.on("keyup", function(e)
-            {
-                if (e.which == 13)
-                {
-                    element.blur();
-                    e.stopPropagation(); // Don't close popup
-                }
-            });
+            element.on("keyup", function(e) { if (e.which == Keys.Enter) element.blur(); });
 
             var baseButtonLabel = value.relativeTo == RelativeTo.PROJECT ? "Project/" : "Level/";
             if (conflictBase)
@@ -96,40 +123,16 @@ class FilepathValueEditor extends ValueEditor
             baseButton.on("click", function()
             {
                 value.relativeTo = lastBaseValue == RelativeTo.PROJECT ? RelativeTo.LEVEL : RelativeTo.PROJECT;
+                saveBase();
 
-                var nextValue = new FilepathData();
-                nextValue.parseString(pathTemplate.validate(value.asString()));
-                var nextBaseValue = nextValue.relativeTo;
-                if (lastBaseValue != nextBaseValue || conflictBase)
-                {
-                    var nextPathValue:String = null;
-                    var from = nextBaseValue == RelativeTo.PROJECT ? "level" : "project";
-                    var to = nextBaseValue != RelativeTo.PROJECT ? "level" : "project";
-                    EDITOR.level.store("Changed " + template.name + " Reference from '" + from + "' to '" + to + "'");
-                    for (i in 0...values.length)
-                    {
-                        var data = new FilepathData();
-                        data.parseString(values[i].value);
-                        data.switchRelative(nextBaseValue);
-                        values[i].value = data.asString();
-                        nextPathValue = data.path;
-                    }
-                    conflictBase = false;
-                    lastBaseValue = nextBaseValue;
-                    EDITOR.dirty();
+                if (!conflictPath)
+                    element.val(value.path);
 
-                    if (!conflictPath)
-                    {
-                        value.path = nextPathValue;
-                        element.val(nextPathValue);
-                    }
+                var btnText = value.relativeTo == RelativeTo.PROJECT ? "Project/" : "Level/";
+                baseButton.find(".button_text").html(btnText);
 
-                    var btnText = nextBaseValue == RelativeTo.PROJECT ? "Project/" : "Level/";
-                    baseButton.find(".button_text").html(btnText);
-
-                    element.addClass(nextBaseValue == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
-                    element.removeClass(nextBaseValue != RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
-                }
+                element.addClass(value.relativeTo == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+                element.removeClass(value.relativeTo != RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
             });
 
             holder.append(element);
@@ -154,25 +157,8 @@ class FilepathValueEditor extends ValueEditor
 
                 var relativePath = FileSystem.normalize(Path.relative(basePath == null ? projectDirPath : basePath, chosenPath));
                 value.path = relativePath;
-
-                var nextValue = new FilepathData();
-                nextValue.parseString(pathTemplate.validate(value.asString()));
-                var nextPathValue = nextValue.path;
-                if (lastPathValue != nextPathValue || conflictPath)
-                {
-                    EDITOR.level.store("Changed " + template.name + " Path from '" + lastPathValue + "' to '" + nextPathValue + "'");
-                    for (i in 0...values.length)
-                    {
-                        var data = new FilepathData();
-                        data.parseString(values[i].value);
-                        data.path = nextPathValue;
-                        values[i].value = data.asString();
-                    }
-                    conflictPath = false;
-                    lastPathValue = nextPathValue;
-                    EDITOR.dirty();
-                }
-                element.val(nextPathValue);
+                savePath();
+                element.val(value.path);
             });
 		}
 

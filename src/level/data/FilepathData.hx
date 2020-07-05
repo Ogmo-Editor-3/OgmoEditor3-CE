@@ -37,41 +37,30 @@ class FilepathData
         return prefix + ":" + path;
     }
 
-    public function parseString(str:String)
+    public static function parseString(str:String):FilepathData
     {
+        var data = new FilepathData();
+
         var projPrefix = "proj:";
         var lvlPrefix = "lvl:";
 
         if (str.length >= projPrefix.length && str.substr(0, projPrefix.length) == projPrefix)
         {
-            relativeTo = RelativeTo.PROJECT;
-            path = str.substring(projPrefix.length, str.length);
+            data.relativeTo = RelativeTo.PROJECT;
+            data.path = str.substring(projPrefix.length, str.length);
         }
         else if (str.length >= lvlPrefix.length && str.substr(0, lvlPrefix.length) == lvlPrefix)
         {
-            relativeTo = RelativeTo.LEVEL;
-            path = str.substring(lvlPrefix.length, str.length);
+            data.relativeTo = RelativeTo.LEVEL;
+            data.path = str.substring(lvlPrefix.length, str.length);
         }
         else
         {
-            relativeTo = RelativeTo.PROJECT;
-            path = str;
+            data.relativeTo = RelativeTo.PROJECT;
+            data.path = str;
         }
-    }
 
-    public function save():Dynamic
-    {
-        var data = {
-            path: path,
-            relativeTo: Type.enumIndex(relativeTo),
-        };
         return data;
-    }
-
-    public function load(data:Dynamic)
-    {
-        path = data.path;
-        relativeTo = Type.createEnumIndex(RelativeTo, data.relativeTo);
     }
 
     public function equals(to:FilepathData)
@@ -82,8 +71,8 @@ class FilepathData
     public function switchRelative(newRelativeTo:RelativeTo)
     {
         var base = getBase();
-        var newBase = newRelativeTo == RelativeTo.PROJECT ? getProjectDirectoryPath() : getLevelDirectoryPath();
         relativeTo = newRelativeTo;
+        var newBase = getBase();
 
         if (!validPath(path))
             return;

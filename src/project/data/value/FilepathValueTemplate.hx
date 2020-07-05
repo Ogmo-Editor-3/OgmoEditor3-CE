@@ -30,8 +30,7 @@ class FilepathValueTemplate extends ValueTemplate
 	{
 		if (extensions.length > 0)
 		{
-			var data:FilepathData = new FilepathData();
-			data.parseString(val);
+			var data:FilepathData = FilepathData.parseString(val);
 			if (FilepathData.validPath(data.path) && !extensions.contains(data.getExtension()))
 			{
 				var extensionsStr = extensions.join(",");
@@ -52,7 +51,7 @@ class FilepathValueTemplate extends ValueTemplate
 	override function load(data:Dynamic):Void
 	{
 		super.load(data);
-		defaults.parseString(data.defaults);
+		defaults = FilepathData.parseString(data.defaults);
 		extensions = data.extensions;
 	}
 
