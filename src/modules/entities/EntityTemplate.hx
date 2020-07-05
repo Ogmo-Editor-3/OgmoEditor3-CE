@@ -170,7 +170,7 @@ class EntityTemplate
 
 		if (texture != null) 
 		{
-			e.texture = haxe.io.Path.normalize(Path.relative(Path.dirname(OGMO.project.path), texture.path));
+			e.texture = FileSystem.normalize(Path.relative(Path.dirname(OGMO.project.path), texture.path));
 			e.textureImage = texture.image.src;
 		}
 

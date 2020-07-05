@@ -15,24 +15,36 @@ import electron.renderer.Remote;
 
 class FileSystem
 {
-
-	public static function chooseFile(title:String, filters:Array<FileFilter>)
+	// Resolves ., .., // + converts \ to /
+	public static function normalize(path:String):String
 	{
+		return haxe.io.Path.normalize(path);
+	}
+
+	public static function chooseFile(title:String, filters:Array<FileFilter>, ?defaultPath:String)
+	{
+		if (defaultPath != null)
+			defaultPath = js.node.Path.normalize(defaultPath); // Converts / back to \ on Windows, or else won't work
+
 		var files = Ogmo.dialog.showOpenDialog(
 			Remote.getCurrentWindow(),
 			{
 				title: title,
 				properties: ['openFile'],
-				filters: filters
+				filters: filters,
+				defaultPath: defaultPath
 			}
 		);
 
-		if (files != null) return files[0];
+		if (files != null) return normalize(files[0]);
 		return '';
 	}
 
 	public static function chooseSaveFile(title:String, filters:Array<FileFilter>, ?defaultPath:String):String
 	{
+		if (defaultPath != null)
+			defaultPath = js.node.Path.normalize(defaultPath); // Converts / back to \ on Windows, or else won't work
+
 		var file = Ogmo.dialog.showSaveDialog(
 			Remote.getCurrentWindow(),
 			{
@@ -41,7 +53,7 @@ class FileSystem
 				defaultPath: defaultPath
 			}
 		);
-		if (file != null) return file;
+		if (file != null) return normalize(file);
 		return '';
 	}
 
@@ -54,7 +66,7 @@ class FileSystem
 				properties: ['openDirectory']
 			}
 		);
-		if (files != null) return files[0];
+		if (files != null) return normalize(files[0]);
 		return '';
 	}
 

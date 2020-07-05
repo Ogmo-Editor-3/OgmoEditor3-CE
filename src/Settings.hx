@@ -58,7 +58,7 @@ class Settings
 	{
 		var maxRecentProjects = 50;
 		var data = {
-			path: project.path,
+			path: FileSystem.normalize(project.path),
 			name: project.name
 		};
 		var n = findProject(project.path);
@@ -82,7 +82,7 @@ class Settings
 
 	function findProject(path: String):Int
 	{
-		for (i in 0...recentProjects.length) if (recentProjects[i].path == path) return i;
+		for (i in 0...recentProjects.length) if (FileSystem.normalize(recentProjects[i].path) == FileSystem.normalize(path)) return i;
 		return -1;
 	}
 
