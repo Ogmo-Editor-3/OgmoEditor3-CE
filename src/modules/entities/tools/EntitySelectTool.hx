@@ -50,7 +50,7 @@ class EntitySelectTool extends EntityTool
 	{
 		mode = Move;
 		firstChange = false;
-		layer.snapToGrid(start, start);
+		if (!OGMO.ctrl) layer.snapToGrid(start, start);
 		entities = layer.entities.getGroup(layerEditor.selection);
 	}
 

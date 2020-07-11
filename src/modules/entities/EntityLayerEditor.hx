@@ -7,10 +7,52 @@ import rendering.FloatingHTML.FloatingHTMLPropertyDisplay;
 import rendering.FloatingHTML.PositionAlignV;
 import rendering.FloatingHTML.PositionAlignH;
 
+class EntityNodeID
+{
+	public static inline var ENTITY_NONE_ID:Int = -1;
+	public static inline var ROOT_NODE_ID:Int = -1;
+
+	public var entityID:Int;
+	public var nodeIdx:Int;
+
+	public function getNodePosition(entity:Entity):Vector
+	{
+		if (entityID == ENTITY_NONE_ID)
+			return null;
+		else if (nodeIdx == ROOT_NODE_ID)
+			return entity.position;
+		else if (nodeIdx >= entity.nodes.length)
+			return null;
+		else
+			return entity.nodes[nodeIdx];
+	}
+
+	public function new()
+	{
+		entityID = ENTITY_NONE_ID;
+		nodeIdx = ROOT_NODE_ID;
+	}
+
+	public function set(entityID:Int, nodeIdx:Int = ROOT_NODE_ID):Bool
+	{
+		var changed = this.entityID != entityID || this.nodeIdx != nodeIdx;
+		this.entityID = entityID;
+		this.nodeIdx = nodeIdx;
+
+		return changed;
+	}
+
+	public function isSet():Bool
+	{
+		return entityID != ENTITY_NONE_ID;
+	}
+}
+
 class EntityLayerEditor extends LayerEditor
 {
 	public var selection:EntityGroup = new EntityGroup();
 	public var hovered:EntityGroup = new EntityGroup();
+	public var hoveredNode:EntityNodeID = new EntityNodeID();
 	public var brush:Int = -1;
 	public var entities(get, never):EntityList;
 
@@ -28,6 +70,16 @@ class EntityLayerEditor extends LayerEditor
 		if (active && hovered.amount > 0)
 		{
 			for (ent in entities.getGroup(hovered)) ent.drawHoveredBox();
+		}
+		if (active && hoveredNode.isSet())
+		{
+			var ent = entities.getByID(hoveredNode.entityID);
+			if (ent != null)
+			{
+				var nodePos = hoveredNode.getNodePosition(ent);
+				if (nodePos != null)
+					ent.drawHoveredNodeBox(nodePos);
+			}
 		}
 
 		// Draw Entities

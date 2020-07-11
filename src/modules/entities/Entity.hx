@@ -274,16 +274,28 @@ class Entity
 		}
 	}
 
-	public function drawHoveredBox()
+	public function drawHoveredBox(?position:Vector)
 	{
-		var corners = getCorners(position, 8 / EDITOR.level.zoom);
+		var pos = position == null ? this.position : position;
+		var corners = getCorners(pos, 8 / EDITOR.level.zoom);
 		EDITOR.draw.drawTri(corners[0], corners[1], corners[2], Entity.hoverColor);
 		EDITOR.draw.drawTri(corners[1], corners[2], corners[3], Entity.hoverColor);
 	}
 
-	public function drawSelectionBox()
+	public function drawHoveredNodeBox(?position:Vector)
 	{
-		var corners = getCorners(position, 8 / EDITOR.level.zoom);
+		var col = Entity.hoverColor.x(0.5);
+
+		var pos = position == null ? this.position : position;
+		var corners = getCorners(pos, 8 / EDITOR.level.zoom);
+		EDITOR.draw.drawTri(corners[0], corners[1], corners[2], col);
+		EDITOR.draw.drawTri(corners[1], corners[2], corners[3], col);
+	}
+
+	public function drawSelectionBox(?position:Vector)
+	{
+		var pos = position == null ? this.position : position;
+		var corners = getCorners(pos, 8 / EDITOR.level.zoom);
 		EDITOR.overlay.drawLine(corners[0], corners[1], Color.green);
 		EDITOR.overlay.drawLine(corners[1], corners[3], Color.green);
 		EDITOR.overlay.drawLine(corners[2], corners[3], Color.green);
@@ -294,30 +306,34 @@ class Entity
 		NODES
 	*/
 
-	public function getNodeAt(pos:Vector):Vector
+	public function getNodeAt(pos:Vector):Int
 	{
-		var size = 6;
-
-		for (n in nodes)
+		for (i in 0...nodes.length)
 		{
-			if (pos.x >= n.x - size && pos.x < n.x + size && pos.y >= n.y - size && pos.y < n.y + size)
-			{
-				return n;
-			}
+			var nodePos = nodes[i];
+			if (checkPoint(pos, nodePos))
+				return i;
 		}
 
 		return null;
 	}
 
+	public var canAddNode(get, never):Bool;
+	function get_canAddNode():Bool
+	{
+		return template.hasNodes && (template.nodeLimit <= 0 || nodes.length < template.nodeLimit);
+	}
+
 	public function addNodeAt(pos:Vector):Vector
 	{
-		if (!template.hasNodes || (template.nodeLimit > 0 && nodes.length >= template.nodeLimit)) return null;
-		else
+		if (canAddNode)
 		{
 			var n = pos.clone();
 			nodes.push(n);
 			return n;
 		}
+		else
+			return null;
 	}
 
 	public var canDrawNodes(get, never):Bool;
@@ -383,11 +399,12 @@ class Entity
 		return corners;
 	}
 
-	public function checkPoint(pos:Vector):Bool
+	public function checkPoint(pos:Vector, ?ownPos:Vector):Bool
 	{
 		var p = pos.clone();
-		p.x -= position.x;
-		p.y -= position.y;
+		var entPos = ownPos == null ? position : ownPos;
+		p.x -= entPos.x;
+		p.y -= entPos.y;
 		_matrix.inverseTransformPoint(p, p);
 
 		var valX = 1 + (4 / (size.x * 0.5));
@@ -396,7 +413,7 @@ class Entity
 		return (p.x >= -valX && p.x < valX && p.y >= -valY && p.y < valY);
 	}
 
-	public function checkRect(rect:Rectangle):Bool
+	public function checkRect(rect:Rectangle, ?ownPos:Vector):Bool
 	{
 		//constraints: rect is AABB, this Entity's hitbox is a potentially-rotated rectangle
 
@@ -406,7 +423,8 @@ class Entity
 			return true;
 
 		//Check Entity corner points against AABB
-		var corners = getCorners(position, 4);
+		var entPos = ownPos == null ? position : ownPos;
+		var corners = getCorners(entPos, 4);
 		for (corner in corners) if (rect.contains(corner)) return true;
 
 		//Check Entity edges against AABB
