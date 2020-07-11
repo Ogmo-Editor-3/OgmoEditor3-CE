@@ -38,7 +38,7 @@ class Decal
 			data.scaleY = scale.y;
 		}
 		if (rotatable) data.rotation = OGMO.project.anglesRadians ? rotation : rotation * Calc.RTD;
-		data.texture = haxe.io.Path.normalize(path);
+		data.texture = FileSystem.normalize(path);
 		data.originX = origin.x;
 		data.originY = origin.y;
 		Export.values(data, values);

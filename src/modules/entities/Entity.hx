@@ -97,7 +97,7 @@ class Entity
 		if (template.rotatable) data.rotation = OGMO.project.anglesRadians ? rotation * Calc.DTR : rotation;
 		if (template.canFlipX) data.flippedX = flippedX;
 		if (template.canFlipY) data.flippedY = flippedY;
-		if (template.canSetColor) data.color = Export.color(color, false);
+		if (template.canSetColor) data.color = Export.color(color, true);
 		Export.nodes(data, nodes);
 		Export.values(data, values);
 

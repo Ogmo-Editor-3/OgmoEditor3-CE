@@ -65,8 +65,8 @@ class Export
 
 	public static function color(color: Color, alpha:Bool):String
 	{
-		if (alpha) return color.toHex();
-		else return color.toHexAlpha();
+		if (alpha) return color.toHexAlpha();
+		else return color.toHex();
 	}
 
 	public static function values(into:Dynamic, values:Array<Value>)

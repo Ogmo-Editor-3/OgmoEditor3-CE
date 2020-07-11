@@ -4,6 +4,7 @@ import js.node.Path;
 import io.FileSystem;
 import io.Imports;
 import js.jquery.JQuery;
+import level.data.FilepathData;
 
 enum SettingsBlock
 {
@@ -280,8 +281,11 @@ class Fields
 		var button = Fields.createButton("folder-dot-open", "Select", holder);
 		button.on("click", function()
 		{
-			var folder = Path.relative(Path.dirname(OGMO.project.path), FileSystem.chooseFolder("Select Folder"));
-			if (folder.length > 0) element.val(folder);
+			var chosenPath = FileSystem.chooseFolder("Select Folder");
+			if (chosenPath.length == 0)
+				return;
+			var folder = FileSystem.normalize(Path.relative(Path.dirname(OGMO.project.path), chosenPath));
+			element.val(folder);
 		});
 
 		if (deleteable)
@@ -299,7 +303,7 @@ class Fields
 		return holder;
 	}
 
-	public static function createFilepath(path:String, deleteable:Bool, filters:Array<electron.FileFilter>, ?into:JQuery, ?onDelete:Void->Void):JQuery
+	public static function createFilepath(path:String, clearable:Bool, filters:Array<electron.FileFilter>, ?into:JQuery, ?onClear:Void->Void):JQuery
 		{
 			var holder = new JQuery('<div class="filepath">');
 			var element = new JQuery('<input disabled>');
@@ -309,16 +313,19 @@ class Fields
 			var button = Fields.createButton("save", "Select", holder);
 			button.on("click", function()
 			{
-				var folder = Path.relative(Path.dirname(OGMO.project.path), FileSystem.chooseFile("Select File", filters));
-				if (folder.length > 0) element.val(folder);
+				var chosenPath = FileSystem.chooseFile("Select File", filters);
+				if (chosenPath.length == 0)
+					return;
+				var folder = FileSystem.normalize(Path.relative(Path.dirname(OGMO.project.path), chosenPath));
+				element.val(folder);
 			});
 	
-			if (deleteable)
+			if (clearable)
 			{
-				var del = Fields.createButton("trash", "Delete", holder);
-				del.on("click", function()
+				var clear = Fields.createButton("no", "Clear", holder);
+				clear.on("click", function()
 				{
-					if (onDelete != null) onDelete();
+					if (onClear != null) onClear();
 					if (into != null) holder.remove();
 				});
 			}
@@ -336,5 +343,77 @@ class Fields
 	public static function getPath(element:JQuery):String
 	{
 		return element.find("input").val();
+	}
+
+	public static function createFilepathData(path:FilepathData, filters:Array<electron.FileFilter>, ?into:JQuery):JQuery
+	{
+		var holder = new JQuery('<div class="filepath">');
+
+		var element = new JQuery('<input>');
+		element.addClass(path.relativeTo == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+		element.val(path.path);
+
+		var baseButtonLabel = path.relativeTo == RelativeTo.PROJECT ? "Project/" : "Level/";
+		var baseButton = Fields.createButton("", baseButtonLabel, holder);
+		baseButton.width("84px");
+		baseButton.on("click", function()
+		{
+			path.switchRelative(path.relativeTo == RelativeTo.PROJECT ? RelativeTo.LEVEL : RelativeTo.PROJECT);
+			element.val(path.path);
+
+			var btnText = path.relativeTo == RelativeTo.PROJECT ? "Project/" : "Level/";
+			baseButton.find(".button_text").html(btnText);
+
+			element.addClass(path.relativeTo == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+			element.removeClass(path.relativeTo != RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+		});
+
+		holder.append(element);
+
+		var selectButton = Fields.createButton("save", "", holder);
+		selectButton.width("34px");
+		selectButton.on("click", function()
+		{
+			var projectDirPath = FilepathData.getProjectDirectoryPath();
+			var basePath = path.getBase();
+			var fullPath = path.getFull();
+			var initialPath = fullPath;
+			if (initialPath == null || !FileSystem.exists(initialPath))
+				initialPath = basePath;
+			if (initialPath == null || !FileSystem.exists(initialPath))
+				initialPath = projectDirPath;
+
+			var chosenPath = FileSystem.chooseFile("Select Path", filters, initialPath);
+			if (chosenPath.length == 0)
+				return;
+
+			var relativePath = FileSystem.normalize(Path.relative(basePath == null ? projectDirPath : basePath, chosenPath));
+			path.path = relativePath;
+			element.val(relativePath);
+		});
+
+		if (into != null) into.append(holder);
+
+		return holder;
+	}
+
+	public static function setFilepathData(element:JQuery, path:FilepathData):JQuery
+	{
+		var btnText = path.relativeTo == RelativeTo.PROJECT ? "Project/" : "Level/";
+		element.find(".button_text").html(btnText);
+
+		element.find("input").addClass(path.relativeTo == RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+		element.find("input").removeClass(path.relativeTo != RelativeTo.PROJECT ? "relative_to_project" : "relative_to_level");
+
+		return element.find("input").val(path.path);
+	}
+
+	public static function getFilepathData(element:JQuery):FilepathData
+	{
+		var data = new FilepathData();
+		var relativeToProject = element.find("input").hasClass("relative_to_project");
+		data.relativeTo = relativeToProject ? RelativeTo.PROJECT : RelativeTo.LEVEL;
+		data.path = element.find("input").val();
+		return data;
 	}
 }

@@ -71,7 +71,7 @@ class FieldValueEditor extends ValueEditor
 				lastValue = nextValue;
 				EDITOR.dirty();
 			});
-			element.on("keyup", function(e) { if (e.which == 13) element.blur(); });
+			element.on("keyup", function(e) { if (e.which == Keys.Enter) element.blur(); });
 		}
 	}
 
