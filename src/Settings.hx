@@ -1,6 +1,5 @@
 import util.RightClickMenu;
 import js.jquery.JQuery;
-import js.node.Path;
 import io.FileSystem;
 import level.editor.ui.PropertyDisplay.PropertyDisplaySettings;
 import project.data.Project;
@@ -23,7 +22,8 @@ class Settings
 	public function new()
 	{
 		initShapes();
-		filepath = Path.join(OGMO.execDir, 'settings.json');
+		// TODO - not sure if this works atm -01010111
+		filepath = OGMO.root + 'settings.json';
 	}
 
 	public function save()
