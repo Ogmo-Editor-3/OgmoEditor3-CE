@@ -6,17 +6,12 @@ import util.Fields;
 
 class FilepathValueTemplateEditor extends ValueTemplateEditor
 {
-	public var nameField:JQuery;
 	public var defaultField:JQuery;
 	public var extensionsField:JQuery;
 
 	override function importInto(into:JQuery)
 	{
 		var pathTemplate:FilepathValueTemplate = cast template;
-
-		// name
-		nameField = Fields.createField("Name", pathTemplate.name);
-		Fields.createSettingsBlock(into, nameField, SettingsBlock.Half, "Name", SettingsBlock.InlineTitle);
 
 		// default val
 		var fileExtensions = pathTemplate.extensions.length == 0 ? [] : [{name: "Allowed extensions", extensions: pathTemplate.extensions}];
@@ -41,8 +36,8 @@ class FilepathValueTemplateEditor extends ValueTemplateEditor
 	{
 		var pathTemplate:FilepathValueTemplate = cast template;
 
-		pathTemplate.name = Fields.getField(nameField);
 		pathTemplate.defaults = Fields.getFilepathData(defaultField);
+
 		var extensions = StringTools.trim(Fields.getField(extensionsField));
 		if (extensions.length == 0)
 			pathTemplate.extensions = [];

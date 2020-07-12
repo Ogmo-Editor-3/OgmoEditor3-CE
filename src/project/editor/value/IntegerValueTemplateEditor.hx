@@ -7,7 +7,6 @@ import util.Fields;
 
 class IntegerValueTemplateEditor extends ValueTemplateEditor
 {
-	public var nameField:JQuery;
 	public var defaultField:JQuery;
 	public var boundedField:JQuery;
 	public var minField:JQuery;
@@ -16,10 +15,6 @@ class IntegerValueTemplateEditor extends ValueTemplateEditor
 	override function importInto(into:JQuery)
 	{
 		var intTemplate:IntegerValueTemplate = cast template;
-
-		// name
-		nameField = Fields.createField("Name", intTemplate.name);
-		Fields.createSettingsBlock(into, nameField, SettingsBlock.Half, "Name", SettingsBlock.InlineTitle);
 
 		// default val
 		defaultField = Fields.createField("Defualt", intTemplate.defaults.string());
@@ -41,7 +36,6 @@ class IntegerValueTemplateEditor extends ValueTemplateEditor
 	{
 		var intTemplate:IntegerValueTemplate = cast template;
 
-		intTemplate.name = Fields.getField(nameField);
 		intTemplate.defaults = Imports.integer(Fields.getField(defaultField), 0);
 		intTemplate.bounded = Fields.getCheckbox(boundedField);
 		intTemplate.min = Imports.integer(Fields.getField(minField), 0);
