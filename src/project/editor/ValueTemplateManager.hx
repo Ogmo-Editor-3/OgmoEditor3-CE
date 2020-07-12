@@ -18,17 +18,20 @@ class ValueTemplateManager
 	public var buttons:JQuery;
 	public var list:JQuery;
 	public var inspector:JQuery;
+	public var nameField:JQuery;
 	public var propertyDisplayChoicesField:JQuery;
 
 	public var inspecting:ValueTemplate = null;
 	public var inspectingEditor:ValueTemplateEditor = null;
 	public var values:Array<ValueTemplate> = [];
+	public var nameEditor:Bool;
 	public var propertyDisplayEditor:Bool;
 
-	public function new(into:JQuery, from:Array<ValueTemplate>, ?title:String, propertyDisplayEditor:Bool = false)
+	public function new(into:JQuery, from:Array<ValueTemplate>, ?title:String, nameEditor:Bool = true, propertyDisplayEditor:Bool = false)
 	{
 		root = into;
 		values = from;
+		this.nameEditor = nameEditor;
 		this.propertyDisplayEditor = propertyDisplayEditor;
 
 		element = new JQuery('<div class="valuetemplates">');
@@ -159,6 +162,16 @@ class ValueTemplateManager
 
 		if (inspecting != null)
 		{
+			if (nameEditor)
+			{
+				nameField = Fields.createField("Name", value.name);
+				Fields.createSettingsBlock(inspector, nameField, SettingsBlock.Half, "Name", SettingsBlock.InlineTitle);
+				nameField.on("input", function(e) {
+					value.name = Fields.getField(nameField);
+					refreshList();
+				});
+			}
+
 			inspectingEditor = value.definition.createTemplateEditor(value);
 			inspectingEditor.importInto(inspector);
 
@@ -179,6 +192,8 @@ class ValueTemplateManager
 		if (inspecting != null)
 		{
 			inspectingEditor.save();
+			if (nameField != null)
+				inspectingEditor.template.name = Fields.getField(nameField);
 			if (propertyDisplayChoicesField != null)
 				inspectingEditor.template.display = Type.createEnum(ValueDisplayType, propertyDisplayChoicesField.val());
 		}

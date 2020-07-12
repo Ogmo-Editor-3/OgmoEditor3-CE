@@ -7,7 +7,6 @@ import util.Fields;
 
 class FloatValueTemplateEditor extends ValueTemplateEditor
 {
-	public var nameField:JQuery;
 	public var defaultField:JQuery;
 	public var boundedField:JQuery;
 	public var minField:JQuery;
@@ -16,10 +15,6 @@ class FloatValueTemplateEditor extends ValueTemplateEditor
 	override function importInto(into:JQuery)
 	{
 		var floatTemplate:FloatValueTemplate = cast template;
-
-		// name
-		nameField = Fields.createField("Name", floatTemplate.name);
-		Fields.createSettingsBlock(into, nameField, SettingsBlock.Half, "Name", SettingsBlock.InlineTitle);
 
 		// default val
 		defaultField = Fields.createField("Default", floatTemplate.defaults.string());
@@ -41,7 +36,6 @@ class FloatValueTemplateEditor extends ValueTemplateEditor
 	{
 		var floatTemplate:FloatValueTemplate = cast template;
 
-		floatTemplate.name = Fields.getField(nameField);
 		floatTemplate.defaults = Imports.float(Fields.getField(defaultField), 0);
 		floatTemplate.bounded = Fields.getCheckbox(boundedField);
 		floatTemplate.min = Imports.float(Fields.getField(minField), 0);

@@ -8,7 +8,6 @@ import project.data.value.StringValueTemplate;
 
 class StringValueTemplateEditor extends ValueTemplateEditor
 {
-	public var nameField:JQuery;
 	public var defaultField:JQuery;
 	public var maxField:JQuery;
 	public var trimField:JQuery;
@@ -16,10 +15,6 @@ class StringValueTemplateEditor extends ValueTemplateEditor
 	override function importInto(into:JQuery)
 	{
 		var stringTemplate:StringValueTemplate = cast template;
-
-		// name
-		nameField = Fields.createField("Name", stringTemplate.name);
-		Fields.createSettingsBlock(into, nameField, SettingsBlock.Full, "Name", SettingsBlock.InlineTitle);
 
 		// default val
 		defaultField = Fields.createField("...", stringTemplate.defaults);
@@ -38,7 +33,6 @@ class StringValueTemplateEditor extends ValueTemplateEditor
 	{
 		var stringTemplate:StringValueTemplate = cast template;
 
-		stringTemplate.name = Fields.getField(nameField);
 		stringTemplate.defaults = Fields.getField(defaultField);
 		stringTemplate.maxLength = Imports.integer(Fields.getField(maxField), 0);
 		stringTemplate.trimWhitespace = Fields.getCheckbox(trimField);
