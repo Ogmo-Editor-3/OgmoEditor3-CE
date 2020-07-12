@@ -34,7 +34,9 @@ module.exports = (env, argv) => {
         'assets',
         `${__dirname}/package.json` 
       ]),
-      new CleanWebpackPlugin()
+      new CleanWebpackPlugin({
+        cleanOnceBeforeBuildPatterns: ['**/*', '!settings.json']
+      })
     ],
     node: {
       __dirname: false,
