@@ -281,9 +281,9 @@ class DecalSelectTool extends DecalTool
 		else if (mode == None)
 		{
 			var hit = layer.getAt(pos);
-			var isEqual = true;
+			var isEqual = hit.length == layerEditor.hovered.length;
 			var i = 0;
-			while (isEqual && hit.length == layerEditor.hovered.length && i < hit.length)
+			while (isEqual && i < hit.length)
 			{
 				if (layerEditor.hovered.indexOf(hit[i]) < 0) isEqual = false;
 				i++;
