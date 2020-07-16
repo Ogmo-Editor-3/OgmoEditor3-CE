@@ -37,6 +37,7 @@ class EntityTemplate
 	public var values:Array<ValueTemplate> = [];
 	public var tags:Array<String> = [];
 	public var texture:Null<Texture>;
+	public var originalTexturePath:String;
 
 	//Not Exported
 	public var _icon:String = null;
@@ -130,11 +131,13 @@ class EntityTemplate
 		// Try to load the texture from the filepath
 		if (data.texture != null)
 		{
-			 if (FileSystem.exists(data.texture)) e.texture = Texture.fromFile(data.texture);
-			 else if (FileSystem.exists(Path.join(Path.dirname(project.path), data.texture))) e.texture = Texture.fromFile(Path.join(Path.dirname(project.path), data.texture));
+			e.originalTexturePath = data.texture;
+			if (FileSystem.exists(Path.join(Path.dirname(project.path), data.texture)))
+				e.texture = Texture.fromFile(Path.join(Path.dirname(project.path), data.texture));
 		}
 		// If that didnt work, try to load the base64'd version
-		if (e.texture == null && data.textureImage != null) e.texture = Texture.fromString(data.textureImage);
+		if (e.texture == null && data.textureImage != null)
+			e.texture = Texture.fromString(data.textureImage);
 
 		return e;
 	}
@@ -170,7 +173,10 @@ class EntityTemplate
 
 		if (texture != null) 
 		{
-			e.texture = FileSystem.normalize(Path.relative(Path.dirname(OGMO.project.path), texture.path));
+			if (texturePathBroken())
+				e.texture = originalTexturePath;
+			else
+				e.texture = FileSystem.normalize(Path.relative(Path.dirname(OGMO.project.path), texture.path));
 			e.textureImage = texture.image.src;
 		}
 
@@ -188,6 +194,13 @@ class EntityTemplate
 		if (texture != null) return texture.image.src;
 		if (_icon == null) refreshIcon();
 		return _icon;
+	}
+
+	public function texturePathBroken()
+	{
+		if (texture == null)
+			return false;
+		return texture.path == null;
 	}
 
 	public function onShapeChanged()
