@@ -1,12 +1,10 @@
 package modules.entities;
 
-import rendering.Texture;
 import util.RightClickMenu;
 import project.editor.ProjectEditorPanel;
 import util.ItemList;
 import util.Fields;
 import project.editor.ValueTemplateManager;
-import js.node.Path;
 
 class ProjectEntitiesPanel extends ProjectEditorPanel
 {
@@ -496,7 +494,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 						{
 							if (btn == 0)
 							{
-								entity.texture = null;
+								entity.setTexture(null, OGMO.project);
 								texturePreview.empty();
 								refreshList();
 							}
@@ -518,7 +516,7 @@ class ProjectEntitiesPanel extends ProjectEditorPanel
 					var path = FileSystem.chooseFile("Select Preview Image", [{ name: "Images", extensions: ["png", "jpg"] }]);
 					if (FileSystem.exists(path))
 					{
-						entity.texture = Texture.fromFile(path);
+						entity.setTexture(path, OGMO.project);
 
 						texturePreview.empty();
 						var img = new JQuery('<img src="${entity.texture.image.src}"/>');
