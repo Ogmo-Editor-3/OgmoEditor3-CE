@@ -133,7 +133,9 @@ class EntityTemplate
 		if (data.texture != null)
 		{
 			e.texturePath = data.texture;
-			if (FileSystem.exists(Path.join(Path.dirname(project.path), data.texture)))
+			if (Path.isAbsolute(data.texture) && FileSystem.exists(data.texture))
+				e.setTexture(data.texture, project);
+			else if (FileSystem.exists(Path.join(Path.dirname(project.path), data.texture)))
 				e.setTexture(Path.join(Path.dirname(project.path), data.texture), project);
 		}
 		// If that didnt work, try to load the base64'd version
