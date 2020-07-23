@@ -37,6 +37,7 @@ class EntityTemplate
 	public var values:Array<ValueTemplate> = [];
 	public var tags:Array<String> = [];
 	public var texture:Null<Texture>;
+	public var texturePath:String;
 
 	//Not Exported
 	public var _icon:String = null;
@@ -94,6 +95,7 @@ class EntityTemplate
 		next.nodeGhost = from.nodeGhost;
 		next.tags = from.tags;
 		next.texture = from.texture;
+		next.texturePath = from.texturePath;
 
 		return next;
 	}
@@ -130,11 +132,15 @@ class EntityTemplate
 		// Try to load the texture from the filepath
 		if (data.texture != null)
 		{
-			 if (FileSystem.exists(data.texture)) e.texture = Texture.fromFile(data.texture);
-			 else if (FileSystem.exists(Path.join(Path.dirname(project.path), data.texture))) e.texture = Texture.fromFile(Path.join(Path.dirname(project.path), data.texture));
+			e.texturePath = data.texture;
+			if (Path.isAbsolute(data.texture) && FileSystem.exists(data.texture))
+				e.setTexture(data.texture, project);
+			else if (FileSystem.exists(Path.join(Path.dirname(project.path), data.texture)))
+				e.setTexture(Path.join(Path.dirname(project.path), data.texture), project);
 		}
 		// If that didnt work, try to load the base64'd version
-		if (e.texture == null && data.textureImage != null) e.texture = Texture.fromString(data.textureImage);
+		if (e.texture == null && data.textureImage != null)
+			e.texture = Texture.fromString(data.textureImage);
 
 		return e;
 	}
@@ -170,7 +176,8 @@ class EntityTemplate
 
 		if (texture != null) 
 		{
-			e.texture = FileSystem.normalize(Path.relative(Path.dirname(OGMO.project.path), texture.path));
+			if (texturePath != null)
+				e.texture = texturePath;
 			e.textureImage = texture.image.src;
 		}
 
@@ -188,6 +195,20 @@ class EntityTemplate
 		if (texture != null) return texture.image.src;
 		if (_icon == null) refreshIcon();
 		return _icon;
+	}
+
+	public function setTexture(absolutePath:String, project:Project)
+	{
+		if (absolutePath == null)
+		{
+			texturePath = null;
+			texture = null;
+		}
+		else
+		{
+			texturePath = FileSystem.normalize(Path.relative(Path.dirname(project.path), absolutePath));
+			texture = Texture.fromFile(absolutePath);
+		}
 	}
 
 	public function onShapeChanged()
