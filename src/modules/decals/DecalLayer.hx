@@ -36,8 +36,7 @@ class DecalLayer extends Layer
 			var scale = Imports.vector(decal, "scaleX", "scaleY", new Vector(1, 1));
 			var rotation = Imports.float(decal.rotation, 0);
 
-			if (decal.values == null) decal.values = [];
-			var values = Imports.values(decal.values, (cast template:DecalLayerTemplate).values);
+			var values = Imports.values(decal, (cast template:DecalLayerTemplate).values);
 
 			trace(path + ", " + relative);
 
