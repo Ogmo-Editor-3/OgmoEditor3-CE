@@ -220,28 +220,28 @@ class TileLayer extends Layer
 		if (template.arrayMode == ONE)
 		{
 			var tileFlagsCanary:Int = 0;
-			data.tileFlags = new Array<Int>();
+			var tileFlags = new Array<Int>();
 			for (column in flippedData) for (tile in column)
 			{
 				var flags = tile.encodeFlags();
 				tileFlagsCanary |= flags;
-				data.tileFlags.push(flags);
+				tileFlags.push(flags);
 			}
-			if (tileFlagsCanary == 0)
-				data.tileFlags = new Array<Int>();
+			if (tileFlagsCanary != 0)
+				data.tileFlags = tileFlags;
 		}
 		else if (template.arrayMode == TWO)
 		{
 			var tileFlagsCanary:Int = 0;
-			data.tileFlags2D = Calc.createArray2D(gridCellsY, gridCellsX, TileData.EMPTY_TILE);
+			var tileFlags2D = Calc.createArray2D(gridCellsY, gridCellsX, TileData.EMPTY_TILE);
 			for (x in 0...flippedData.length) for (y in 0...flippedData[x].length)
 			{
 				var flags = flippedData[x][y].encodeFlags();
 				tileFlagsCanary |= flags;
-				data.tileFlags2D[x][y] = flags;
+				tileFlags2D[x][y] = flags;
 			}
-			if (tileFlagsCanary == 0)
-				data.tileFlags2D = new Array<Array<Int>>();
+			if (tileFlagsCanary != 0)
+				data.tileFlags2D = tileFlags2D;
 		}
 
 		data.exportMode = template.exportMode;
