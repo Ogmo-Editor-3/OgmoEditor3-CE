@@ -1,10 +1,11 @@
 package modules.tiles;
 
+import modules.tiles.TileLayer.TileData;
 import level.editor.LayerEditor;
 
 class TileLayerEditor extends LayerEditor
 {
-	public var brush:Array<Array<Int>> = [[0]];
+	public var brush:Array<Array<TileData>> = [[new TileData(0)]];
 	public var brushIsContiguous(get, never):Bool;
 	public var brushRectangle(get, never):Rectangle;
 
@@ -18,7 +19,8 @@ class TileLayerEditor extends LayerEditor
 		for (x in 0...layer.gridCellsX) for (y in 0...layer.gridCellsY)
 		{
 			var l:TileLayer = cast layer;
-			if (l.data[x][y] != -1) EDITOR.draw.drawTile(x * l.template.gridSize.x, y * layer.template.gridSize.y, l.tileset, l.data[x][y]);
+			var tile = l.data[x][y];
+			if (!tile.isEmptyTile()) EDITOR.draw.drawTile(x * l.template.gridSize.x, y * layer.template.gridSize.y, l.tileset, tile);
 		}
 	}
 	
@@ -32,8 +34,8 @@ class TileLayerEditor extends LayerEditor
 		if (brushIsContiguous)
 		{
 			var layer:TileLayer = cast this.layer;
-			var atX = layer.tileset.getTileX(brush[0][0]);
-			var atY = layer.tileset.getTileY(brush[0][0]);
+			var atX = layer.tileset.getTileX(brush[0][0].idx);
+			var atY = layer.tileset.getTileY(brush[0][0].idx);
 			atX += x;
 			atY += y;
 
@@ -56,9 +58,29 @@ class TileLayerEditor extends LayerEditor
 		}
 	}
 
+	public function flipBrush(horizontal:Bool):Void
+	{
+		var newBrush = Calc.createArray2D(brush.length, brush[0].length, new TileData());
+		if (horizontal)
+			for (x in 0...brush.length) for (y in 0...brush[x].length) newBrush[brush.length - 1 - x][y] = brush[x][y];
+		else
+			for (x in 0...brush.length) for (y in 0...brush[x].length) newBrush[x][brush[x].length - 1 - y] = brush[x][y];
+		brush = newBrush;
+	}
+
+	public function rotateBrush(clockwise:Bool):Void
+	{
+		var newBrush = Calc.createArray2D(brush[0].length, brush.length, new TileData());
+		if (clockwise)
+			for (x in 0...brush.length) for (y in 0...brush[x].length) newBrush[brush[x].length - 1 - y][x] = brush[x][y];
+		else
+			for (x in 0...brush.length) for (y in 0...brush[x].length) newBrush[y][brush.length - 1 - x] = brush[x][y];
+		brush = newBrush;
+	}
+
 	public function setBrushRect(topLeft:Int):Void
 	{
-		for (x in 0...brush.length) for (y in 0...brush[x].length) brush[x][y] = topLeft + x + y * (cast layer : TileLayer).tileset.tileColumns;
+		for (x in 0...brush.length) for (y in 0...brush[x].length) brush[x][y].idx = topLeft + x + y * (cast layer : TileLayer).tileset.tileColumns;
 	}
 
 	override function keyRepeat(key:Int):Void
@@ -81,7 +103,7 @@ class TileLayerEditor extends LayerEditor
 	{
 		for (x in 0...brush.length) for (y in 0...brush[x].length)
 		{
-			if (brush[x][y] == -1 || brush[x][y] != brush[0][0] + x + y * (cast layer : TileLayer).tileset.tileColumns)
+			if (brush[x][y].isEmptyTile() || brush[x][y].idx != brush[0][0].idx + x + y * (cast layer : TileLayer).tileset.tileColumns)
 				return false;
 		}
 		return true;
@@ -91,7 +113,7 @@ class TileLayerEditor extends LayerEditor
 	{
 		if (brushIsContiguous)
 		{
-			var first = brush[0][0];
+			var first = brush[0][0].idx;
 			var columns = (cast layer : TileLayer).tileset.tileColumns;
 			return new Rectangle(first % columns, Math.floor(first / columns), brush.length, brush[0].length);
 		}

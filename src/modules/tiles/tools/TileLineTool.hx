@@ -1,12 +1,13 @@
 package modules.tiles.tools;
 
 import util.Random;
+import modules.tiles.TileLayer.TileData;
 
 class TileLineTool extends TileTool
 {
 	public var drawing:Bool = false;
 	public var deleting:Bool = false;
-	public var brush:Array<Array<Int>>;
+	public var brush:Array<Array<TileData>>;
 	public var start:Vector = new Vector();
 	public var end:Vector = new Vector();
 	public var points:Array<Vector>;
@@ -101,7 +102,7 @@ class TileLineTool extends TileTool
 			drawing = true;
 			deleting = true;
 			start = end = pos;
-			brush = [[-1]]; // TODO - It might be nice to be able to set this to 0 -01010111
+			brush = [[new TileData()]];
 			updateLine();
 		}
 	}
@@ -119,6 +120,8 @@ class TileLineTool extends TileTool
 	
 	override public function onKeyPress(key:Int)
 	{
+		super.onKeyPress(key);
+
 		if (OGMO.keyIsCtrl(key))
 			EDITOR.overlayDirty();
 	}
@@ -143,7 +146,7 @@ class TileLineTool extends TileTool
 
 			for (p in points)
 			{
-				if (layer.insideGrid(p)) layer.data[p.x.int()][p.y.int()] = brushAt(brush, p.x.int() - start.x.int(), p.y.int() - start.y.int(), random);
+				if (layer.insideGrid(p)) layer.data[p.x.int()][p.y.int()].copy(brushAt(brush, p.x.int() - start.x.int(), p.y.int() - start.y.int(), random));
 			}
 		}
 	}
@@ -170,7 +173,7 @@ class TileLineTool extends TileTool
 		{
 			if (layer.insideGrid(p))
 			{
-				if (layer.data[p.x.int()][p.y.int()] != brushAt(brush, p.x.int() - start.x.int(), p.y.int() - start.y.int(), random))
+				if (!layer.data[p.x.int()][p.y.int()].equals(brushAt(brush, p.x.int() - start.x.int(), p.y.int() - start.y.int(), random)))
 				{
 					ret = true;
 					break;

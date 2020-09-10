@@ -7,6 +7,7 @@ import js.html.webgl.RenderingContext;
 import js.html.webgl.Buffer;
 import js.Syntax;
 import project.data.Tileset;
+import modules.tiles.TileLayer;
 import util.Vector;
 import util.Color;
 import util.Rectangle;
@@ -336,27 +337,60 @@ class GLRenderer
 		uvs.push(uvy + uvh);
 	}
 
-	public function drawTile(x:Float, y:Float, tileset: Tileset, id: Int): Void
+	public function drawTile(x:Float, y:Float, tileset:Tileset, tile:TileData): Void
 	{
 		setTexture(tileset.texture);
 
-		var tx = (id % tileset.tileColumns);
-		var ty = Math.floor(id / tileset.tileColumns);
+		var tx = (tile.idx % tileset.tileColumns);
+		var ty = Math.floor(tile.idx / tileset.tileColumns);
 		var tw = tileset.tileWidth;
 		var th = tileset.tileHeight;
 
-		positions.push(x);
-		positions.push(y);
-		positions.push(x + tw);
-		positions.push(y);
-		positions.push(x);
-		positions.push(y + th);
-		positions.push(x + tw);
-		positions.push(y);
-		positions.push(x);
-		positions.push(y + th);
-		positions.push(x + tw);
-		positions.push(y + th);
+		var topLeft = new Vector(-1, -1);
+		var topRight = new Vector(1, -1);
+		var botLeft = new Vector(-1, 1);
+		var botRight = new Vector(1, 1);
+
+		if (tile.flipDiagonally)
+		{
+			topRight.copy(botLeft);
+			botLeft.set(1, -1);
+		}
+		if (tile.flipX)
+		{
+			topLeft.x *= -1;
+			botLeft.x *= -1;
+			topRight.x *= -1;
+			botRight.x *= -1;
+		}
+		if (tile.flipY)
+		{
+			topLeft.y *= -1;
+			topRight.y *= -1;
+			botLeft.y *= -1;
+			botRight.y *= -1;
+		}
+
+		var tileOrigin = new Vector(x, y);
+		var tileWidth = new Vector(tw, th);
+		var half = new Vector(0.5, 0.5);
+		topLeft = topLeft.scale(0.5).add(half).mult(tileWidth).add(tileOrigin);
+		topRight = topRight.scale(0.5).add(half).mult(tileWidth).add(tileOrigin);
+		botLeft = botLeft.scale(0.5).add(half).mult(tileWidth).add(tileOrigin);
+		botRight = botRight.scale(0.5).add(half).mult(tileWidth).add(tileOrigin);
+
+		positions.push(topLeft.x);
+		positions.push(topLeft.y);
+		positions.push(topRight.x);
+		positions.push(topRight.y);
+		positions.push(botLeft.x);
+		positions.push(botLeft.y);
+		positions.push(topRight.x);
+		positions.push(topRight.y);
+		positions.push(botLeft.x);
+		positions.push(botLeft.y);
+		positions.push(botRight.x);
+		positions.push(botRight.y);
 
 		// use this to push in the UVs a bit to aVoid seems
 		var texel = new Vector(1 / tileset.width, 1 / tileset.height);

@@ -1,5 +1,6 @@
 package modules.tiles.tools;
 
+import modules.tiles.TileLayer.TileData;
 import level.editor.LayerEditor;
 import util.Random;
 
@@ -7,7 +8,7 @@ class TilePencilTool extends TileTool
 {
 	public var drawing:Bool = false;
 	public var firstDraw:Bool = false;
-	public var drawBrush:Array<Array<Int>>;
+	public var drawBrush:Array<Array<TileData>>;
 	public var prevPos:Vector = new Vector();
 	public var lastRect:Rectangle = null;
 	public var random:Random = new Random();
@@ -22,7 +23,7 @@ class TilePencilTool extends TileTool
 			if (OGMO.ctrl)
 			{
 				var tile = random.peekChoice2D(layerEditor.brush);
-				if (tile != -1 && layer.insideGrid(prevPos))
+				if (!tile.isEmptyTile() && layer.insideGrid(prevPos))
 					EDITOR.overlay.drawTile(at.x, at.y, layer.tileset, tile);
 			}
 			else
@@ -31,12 +32,12 @@ class TilePencilTool extends TileTool
 				{
 					for (y in 0...layerEditor.brush[x].length)
 					{
-						var id = layerEditor.brush[x][y];
-						if (id != -1)
+						var tile = layerEditor.brush[x][y];
+						if (!tile.isEmptyTile())
 						{
 							var cur = new Vector(at.x + x * layer.template.gridSize.x, at.y + y * layer.template.gridSize.y);
 							if (layer.insideGrid(new Vector(prevPos.x + x, prevPos.y + y)))
-								EDITOR.overlay.drawTile(cur.x, cur.y, layer.tileset, id);
+								EDITOR.overlay.drawTile(cur.x, cur.y, layer.tileset, tile);
 						}
 					}
 				}
@@ -58,7 +59,7 @@ class TilePencilTool extends TileTool
 
 	override public function onRightDown(pos:Vector)
 	{
-		startDrawing(pos, [[-1]]); // TODO - It might be nice to be able to set this to 0 -01010111
+		startDrawing(pos, [[new TileData()]]);
 	}
 
 	override public function onMouseMove(pos:Vector)
@@ -87,7 +88,7 @@ class TilePencilTool extends TileTool
 		EDITOR.locked = false;
 	}
 
-	public function startDrawing(pos:Vector, tiles:Array<Array<Int>>)
+	public function startDrawing(pos:Vector, tiles:Array<Array<TileData>>)
 	{
 		layer.levelToGrid(pos, pos);
 		prevPos = pos;
@@ -117,7 +118,7 @@ class TilePencilTool extends TileTool
 				if (layer.insideGrid(pos))
 				{
 					var tile = random.nextChoice2D(drawBrush);
-					layer.data[px][py] = tile;
+					layer.data[px][py].copy(tile);
 
 					lastRect = new Rectangle(pos.x, pos.y, 1, 1);
 				}
@@ -127,7 +128,7 @@ class TilePencilTool extends TileTool
 				for (x in 0...drawBrush.length)
 					for (y in 0...drawBrush[x].length)
 						if (layer.insideGrid(new Vector(px + x, py + y)))
-							layer.data[px.int() + x][py.int() + y] = drawBrush[x][y];
+							layer.data[px.int() + x][py.int() + y].copy(drawBrush[x][y]);
 
 				lastRect = new Rectangle(pos.x, pos.y, drawBrush.length, drawBrush[0].length);
 			}
@@ -149,6 +150,8 @@ class TilePencilTool extends TileTool
 	
 	override public function onKeyPress(key:Int)
 	{
+		super.onKeyPress(key);
+
 		if (OGMO.keyIsCtrl(key))
 			EDITOR.overlayDirty();
 	}
