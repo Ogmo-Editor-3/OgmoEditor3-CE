@@ -17,6 +17,7 @@ class Tileset
 
 	public var tileColumns(get, null):Int;
 	public var tileRows(get, null):Int;
+	public var tileAuto: Bool;
 	public var tileWidth: Int;
 	public var tileHeight: Int;
 	public var tileSeparationX: Int;
@@ -27,10 +28,11 @@ class Tileset
 	public var brokenPath:Bool = false;
 	public var brokenTexture:Bool = false;
 
-	public function new(project:Project, label:String, path:String, tileWidth:Int, tileHeight:Int, tileSepX:Int, tileSepY:Int, tileMargX:Int, tileMargY:Int, ?image:ImageElement)
+	public function new(project:Project, label:String, path:String, tileAuto:Bool, tileWidth:Int, tileHeight:Int, tileSepX:Int, tileSepY:Int, tileMargX:Int, tileMargY:Int, ?image:ImageElement)
 	{
 		this.label = label;
 		this.path = haxe.io.Path.normalize(path);
+		this.tileAuto = tileAuto;
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
 		this.tileSeparationX = tileSepX;
@@ -61,6 +63,7 @@ class Tileset
 		data.label = label;
 		data.path = path;
 		data.image = texture.image.src;
+		data.tileAuto = tileAuto;
 		data.tileWidth = tileWidth;
 		data.tileHeight = tileHeight;
 		data.tileSeparationX = tileSeparationX;
@@ -82,7 +85,7 @@ class Tileset
 		if (Reflect.hasField(data, "tileMarginY"))
 			marginY = data.tileMarginY;
 
-		return new Tileset(project, data.label, data.path, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, marginX, marginY, img);
+		return new Tileset(project, data.label, data.path, data.tileAuto, data.tileWidth, data.tileHeight, data.tileSeparationX, data.tileSeparationY, marginX, marginY, img);
 	}
 
 	public inline function getTileX(id: Int):Int return id % tileColumns;
