@@ -98,7 +98,7 @@ class Tileset
 
 	inline function get_height():Int return texture.image.height;
 
-	inline function get_tileColumns():Int return Math.floor((width - tileSeparationX - tileMarginX - tileMarginX) / (tileWidth + tileSeparationX));
+	inline function get_tileColumns():Int return tileAuto ? 1 : Math.floor((width - tileSeparationX - tileMarginX - tileMarginX) / (tileWidth + tileSeparationX));
 
-	inline function get_tileRows():Int return Math.floor((height - tileSeparationY - tileMarginY - tileMarginY) / (tileHeight + tileSeparationY));
+	inline function get_tileRows():Int return tileAuto ? 1 : Math.floor((height - tileSeparationY - tileMarginY - tileMarginY) / (tileHeight + tileSeparationY));
 }
