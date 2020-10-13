@@ -12,7 +12,7 @@ class TilePencilTool extends TileTool
 	public var prevPos:Vector = new Vector();
 	public var lastRect:Rectangle = null;
 	public var random:Random = new Random();
-	
+
 	override public function drawOverlay()
 	{
 		if (!drawing)
@@ -113,7 +113,16 @@ class TilePencilTool extends TileTool
 				firstDraw = true;
 			}
 
-			if (OGMO.ctrl)
+			if (layer.tileset.tileAuto)
+			{
+				layer.data[px][py].copy(drawBrush[0][0]);
+
+				for (x in px-1...px+2)
+					for (y in py-1...py+2)
+						if (layer.data[x][y].idx > -1)
+							layer.data[x][y].idx = layer.tileset.autotile.getTileId(x, y, layer.data);
+			}
+			else if (OGMO.ctrl)
 			{
 				if (layer.insideGrid(pos))
 				{
