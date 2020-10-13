@@ -32,8 +32,8 @@ class TilePalettePanel extends SidePanel
 	public var rows(get, never):Int;
 
 	function get_tileset():Tileset { return (cast layerEditor.layer : TileLayer).tileset; }
-	function get_columns():Int { return tileset.tileColumns; }
-	function get_rows():Int { return tileset.tileRows; }
+	function get_columns():Int { return tileset.tileAuto ? 1 : tileset.tileColumns; }
+	function get_rows():Int { return tileset.tileAuto ? 1 : tileset.tileRows; }
 
 	public function new(layerEditor: TileLayerEditor)
 	{
@@ -213,6 +213,7 @@ class TilePalettePanel extends SidePanel
 				for (y in 0...selection.height.floor())
 				{
 					var id:Int = selection.x.floor() + x + (selection.y.floor() + y) * columns;
+
 					layerEditor.brush[x].push(new TileData(id));
 				}
 			}
