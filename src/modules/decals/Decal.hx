@@ -26,21 +26,24 @@ class Decal
 		this.origin = origin == null ? new Vector(0.5, 0.5) : origin.clone();
 	}
 
-	public function save(scaleable:Bool, rotatable:Bool):Dynamic
+	public function save(scaleable:Bool, rotatable:Bool):DecalData
 	{
-		var data:Dynamic = {};
-		data._name = "decal";
-		data.x = position.x;
-		data.y = position.y;
+		var data:DecalData = {
+			_name: "decal",
+			x: position.x,
+			y: position.y,
+			texture: FileSystem.normalize(path),
+			originX: origin.x,
+			originY: origin.y,
+		};
+
 		if (scaleable)
 		{
 			data.scaleX = scale.x;
 			data.scaleY = scale.y;
 		}
 		if (rotatable) data.rotation = OGMO.project.anglesRadians ? rotation : rotation * Calc.RTD;
-		data.texture = FileSystem.normalize(path);
-		data.originX = origin.x;
-		data.originY = origin.y;
+		
 		Export.values(data, values);
 
 		return data;
@@ -121,5 +124,17 @@ class Decal
 
 		return corners;
 	}
+}
 
+typedef DecalData = {
+	_name:String,
+	x:Float,
+	y:Float,
+	texture:String,
+	originX:Float,
+	originY:Float,
+	?scaleX:Float,
+	?scaleY:Float,
+	?rotation:Float,
+	?values:Dynamic,
 }

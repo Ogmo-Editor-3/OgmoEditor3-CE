@@ -4,7 +4,7 @@ import js.node.Path;
 import io.FileSystem;
 import level.editor.ui.PropertyDisplay.PropertyDisplaySettings;
 import project.data.Project;
-import project.data.ShapeData;
+import project.data.Shape;
 import util.ItemList;
 import Ogmo.startPage as STARTPAGE;
 import electron.Shell;
@@ -16,7 +16,7 @@ class Settings
 	public var propertyDisplay:PropertyDisplaySettings = new PropertyDisplaySettings();
 	public var openLevelLimit:Int = 30;
 	public var undoLimit:Int = 100;
-	public var shapes:Array<ShapeData> = [];
+	public var shapes:Array<Shape> = [];
 	public var populateInto:JQuery;
 	public var filepath:String = '';
 
@@ -51,7 +51,7 @@ class Settings
 		undoLimit = data.undoLimit;
 		if (Reflect.hasField(data, "propertyDisplay"))
 			propertyDisplay.load(data.propertyDisplay);
-		shapes = [ for (shape in data_shapes) new ShapeData(shape.label, shape.points) ];
+		shapes = [ for (shape in data_shapes) new Shape(shape.label, shape.points) ];
 	}
 
 	public function registerProject(project:Project)
@@ -153,44 +153,44 @@ class Settings
 
 	public function initShapes()
 	{
-		var s: ShapeData;
+		var s: Shape;
 
 		//Rectangle
-		s = new ShapeData("Rectangle");
+		s = new Shape("Rectangle");
 		s.addRect(-1, -1, 1, 1);
 		shapes.push(s);
 
 		//Diamond
-		s = new ShapeData("Diamond");
+		s = new Shape("Diamond");
 		s.addBox(-1, 0, 0, -1, 1, 0, 0, 1);
 		shapes.push(s);
 
 		//Triangle
-		s = new ShapeData("Triangle");
+		s = new Shape("Triangle");
 		s.addTri(0, -1, 1, 1, -1, 1);
 		shapes.push(s);
 
 		//House
-		s = new ShapeData("House");
+		s = new Shape("House");
 		s.addTri(0, -1, 1, 0, -1, 0);
 		s.addRect(-1, 0, 1, 1);
 		shapes.push(s);
 
 		//Arrow
-		s = new ShapeData("Arrow");
+		s = new Shape("Arrow");
 		s.addTri(0, -1, 1, 0, -1, 0);
 		s.addRect(-0.35, 0, 0.35, 1);
 		shapes.push(s);
 
 		//Cross
-		s = new ShapeData("Cross");
+		s = new Shape("Cross");
 		s.addRect(-1, -0.35, 1, 0.35);
 		s.addRect(-0.35, -1, 0.35, -0.35);
 		s.addRect(-0.35, 0.35, 0.35, 1);
 		shapes.push(s);
 	}
 
-	public function getShape(id:Int):ShapeData
+	public function getShape(id:Int):Shape
 	{
 		if (id >= 0 && id < shapes.length) return shapes[id].clone();
 		return shapes[0].clone();

@@ -6,43 +6,42 @@ import util.Matrix;
 import util.Vector;
 import util.Color;
 
-class ShapeData
+class Shape
 {
 
 	public var label:String;
 	public var points:Array<Vector> = [];
 
-	public function new(label:String, ?points:Array<Vector>) 
+	public function new(label:String, ?points:Array<VectorData>) 
 	{
 		this.label = label;
 		if (points == null) this.points = [];
 		else 
 		{
-			for (p in points) this.points.push(new Vector(p.x, p.y));
+			for (p in points) this.points.push(Vector.load(p));
 		}
 	}
 
-	public function clone():ShapeData
+	public function clone():Shape
 	{
-		var s = new ShapeData(label);
-		for (p in points) s.points.push(new Vector(p.x, p.y));
+		var s = new Shape(label);
+		for (p in points) s.points.push(p.clone());
 		return s;
 	}
 
-	public static function load(data:Dynamic):ShapeData
+	public static function load(data:ShapeData):Shape
 	{
-		var s = new ShapeData(data.label == null ? 'Shape' : data.label);
+		var s = new Shape(data.label == null ? 'Shape' : data.label);
 		if (data.points == null || data.points.length == 0) return s;
-		var data_points:Array<Vector> = cast data.points;
-		for (p in data_points) s.points.push(new Vector(p.x, p.y));
+		for (p in data.points) s.points.push(Vector.load(p));
 		return s;
 	}
 
-	public function save():Dynamic
+	public function save()
 	{
 		return {
 			label: label,
-			points: [for (p in points) p.clone()]
+			points: [for (p in points) p.save()]
 		};
 	}
 
@@ -105,8 +104,8 @@ class ShapeData
 
 				var from = points.length;
 				addPoints(points, flipX, flipY);
-				ShapeData.slicePoints(points, from, sLeft, sRight, sTop, sBottom);
-				ShapeData.transformPoints(points, from, x + 1, y + 1, matrix);
+				Shape.slicePoints(points, from, sLeft, sRight, sTop, sBottom);
+				Shape.transformPoints(points, from, x + 1, y + 1, matrix);
 
 				y += 2;
 			}
@@ -168,13 +167,13 @@ class ShapeData
 				{
 					//Two points of triangle are outiside, so move them in
 					for (j in 0...2)
-						ShapeData.getAtX(outside[j], inside[0], left, outside[j]);
+						Shape.getAtX(outside[j], inside[0], left, outside[j]);
 				}
 				else if (outside.length == 1)
 				{
 					//One point of triangle is outside, so split it
-					var a = ShapeData.getAtX(outside[0], inside[0], left);
-					var b = ShapeData.getAtX(outside[0], inside[1], left);
+					var a = Shape.getAtX(outside[0], inside[0], left);
+					var b = Shape.getAtX(outside[0], inside[1], left);
 
 					points.splice(points.indexOf(outside[0]), 1);
 					points.insert(i, inside[0].clone());
@@ -216,13 +215,13 @@ class ShapeData
 				{
 					//Two points of triangle are outiside, so move them in
 					for (j in 0...2)
-						ShapeData.getAtX(outside[j], inside[0], right, outside[j]);
+						Shape.getAtX(outside[j], inside[0], right, outside[j]);
 				}
 				else if (outside.length == 1)
 				{
 					//One point of triangle is outside, so split it
-					var a = ShapeData.getAtX(outside[0], inside[0], right);
-					var b = ShapeData.getAtX(outside[0], inside[1], right);
+					var a = Shape.getAtX(outside[0], inside[0], right);
+					var b = Shape.getAtX(outside[0], inside[1], right);
 
 					points.splice(points.indexOf(outside[0]), 1);
 					points.insert(i, inside[0].clone());
@@ -264,13 +263,13 @@ class ShapeData
 				{
 					//Two points of triangle are outiside, so move them in
 					for (j in 0...2)
-						ShapeData.getAtY(outside[j], inside[0], top, outside[j]);
+						Shape.getAtY(outside[j], inside[0], top, outside[j]);
 				}
 				else if (outside.length == 1)
 				{
 					//One point of triangle is outside, so split it
-					var a = ShapeData.getAtY(outside[0], inside[0], top);
-					var b = ShapeData.getAtY(outside[0], inside[1], top);
+					var a = Shape.getAtY(outside[0], inside[0], top);
+					var b = Shape.getAtY(outside[0], inside[1], top);
 
 					points.splice(points.indexOf(outside[0]), 1);
 					points.insert(i, inside[0].clone());
@@ -312,13 +311,13 @@ class ShapeData
 				{
 					//Two points of triangle are outiside, so move them in
 					for (j in 0...2)
-						ShapeData.getAtY(outside[j], inside[0], bottom, outside[j]);
+						Shape.getAtY(outside[j], inside[0], bottom, outside[j]);
 				}
 				else if (outside.length == 1)
 				{
 					//One point of triangle is outside, so split it
-					var a = ShapeData.getAtY(outside[0], inside[0], bottom);
-					var b = ShapeData.getAtY(outside[0], inside[1], bottom);
+					var a = Shape.getAtY(outside[0], inside[0], bottom);
+					var b = Shape.getAtY(outside[0], inside[1], bottom);
 
 					points.splice(points.indexOf(outside[0]), 1);
 					points.insert(i, inside[0].clone());
@@ -427,5 +426,9 @@ class ShapeData
 
 		return canvas.toDataURL();
 	}
+}
 
+typedef ShapeData = {
+	?label:String,
+	points:Array<VectorData>
 }

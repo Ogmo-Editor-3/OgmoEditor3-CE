@@ -1,5 +1,6 @@
 package modules.decals;
 
+import modules.decals.Decal.DecalData;
 import rendering.Texture;
 import js.node.Path;
 import level.data.Layer;
@@ -8,15 +9,23 @@ class DecalLayer extends Layer
 {
 	public var decals:Array<Decal> = [];
 
-	override function save():Dynamic
+	override function save():DecalLayerData
 	{
 		var data = super.save();
-		data._contents = "decals";
-		data.decals = [];
-		for (decal in decals) data.decals.push(decal.save((cast template : DecalLayerTemplate).scaleable, (cast template : DecalLayerTemplate).rotatable));
-		data.folder = (cast template : DecalLayerTemplate).folder;
 
-		return data;
+		return {
+			name: data.name,
+			_eid: data._eid,
+			_contents: "decals",
+			offsetX: data.offsetX,
+			offsetY: data.offsetY,
+			gridCellWidth: data.gridCellWidth,
+			gridCellHeight: data.gridCellHeight,
+			gridCellsX: data.gridCellsX,
+			gridCellsY: data.gridCellsY,
+			decals: [for (decal in decals) decal.save((cast template : DecalLayerTemplate).scaleable, (cast template : DecalLayerTemplate).rotatable)],
+			folder: (cast template : DecalLayerTemplate).folder
+		};
 	}
 
 	override function load(data:Dynamic):Void
@@ -115,4 +124,10 @@ class DecalLayer extends Layer
 			decal.position.y += amount.y;
 		}
 	}
+}
+
+typedef DecalLayerData = {
+	>LayerData,
+	decals:Array<DecalData>,
+	folder:String
 }

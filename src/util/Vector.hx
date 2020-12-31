@@ -5,7 +5,7 @@ class Vector
 	public var x:Float;
 	public var y:Float;
 
-	public function new(?x:Float, ?y:Float)
+	public inline function new(?x:Float, ?y:Float)
 	{
 		this.x = x == null ? 0 : x;
 		this.y = y == null ? 0 : y;
@@ -130,12 +130,9 @@ class Vector
 		return x == other.x && y == other.y;
 	}
 
-	public function save():Dynamic
+	public function save():VectorData
 	{
-		var obj:Dynamic = {};
-		obj.x = x;
-		obj.y = y;
-		return obj;
+		return {x: x, y: y};
 	}
 
 	public function saveInto(data:Dynamic, xName:String, yName:String)
@@ -155,7 +152,7 @@ class Vector
 		return result;
 	}
 
-	public static function load(data:Dynamic):Vector
+	public static function load(data:VectorData):Vector
 	{
 		return new Vector(data.x, data.y);
 	}
@@ -196,3 +193,5 @@ class Vector
 		return new Vector(a.x + (b.x - a.x) * v, a.y + (b.y - a.y) * v);
 	}
 }
+
+typedef VectorData = {x:Float, y:Float}

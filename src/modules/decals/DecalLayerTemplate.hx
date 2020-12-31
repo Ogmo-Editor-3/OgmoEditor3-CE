@@ -59,15 +59,21 @@ class DecalLayerTemplate extends LayerTemplate
 		return new DecalLayer(level, id);
 	}
 
-	override function save():Dynamic
+	override function save():DecalLayerTemplateData
 	{
-		var data:Dynamic = super.save();
-		data.folder = folder;
-		data.includeImageSequence = includeImageSequence;
-		data.scaleable = scaleable;
-		data.rotatable = rotatable;
-		data.values = ValueTemplate.saveList(values);
-		return data;
+		var data = super.save();
+		
+		return {
+			definition: data.definition,
+			name: data.name,
+			gridSize: data.gridSize,
+			exportID: data.exportID,
+			folder: folder,
+			includeImageSequence: includeImageSequence,
+			scaleable: scaleable,
+			rotatable: rotatable,
+			values: ValueTemplate.saveList(values),
+		};
 	}
 
 	override function load(data:Dynamic):DecalLayerTemplate
@@ -206,4 +212,13 @@ class DecalLayerTemplate extends LayerTemplate
 		files = { name: "root", parent: null, textures: [], subdirs: [] };
 		if (walker != null) walker.destroy();
 	}
+}
+
+typedef DecalLayerTemplateData = {
+	>LayerTemplateData,
+	folder: String,
+	includeImageSequence: Bool,
+	scaleable: Bool,
+	rotatable: Bool,
+	values: Dynamic
 }

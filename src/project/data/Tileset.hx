@@ -55,19 +55,19 @@ class Tileset
 		}
 	}
 
-	public function save():Dynamic
+	public function save():TilesetData
 	{
-		var data:Dynamic = {};
-		data.label = label;
-		data.path = path;
-		data.image = texture.image.src;
-		data.tileWidth = tileWidth;
-		data.tileHeight = tileHeight;
-		data.tileSeparationX = tileSeparationX;
-		data.tileSeparationY = tileSeparationY;
-		data.tileMarginX = tileMarginX;
-		data.tileMarginY = tileMarginY;
-		return data;
+		return {
+		label: label,
+		path: path,
+		image: texture.image.src,
+		tileWidth: tileWidth,
+		tileHeight: tileHeight,
+		tileSeparationX: tileSeparationX,
+		tileSeparationY: tileSeparationY,
+		tileMarginX: tileMarginX,
+		tileMarginY: tileMarginY,
+		}
 	}
 
 	public static function load(project:Project, data:Dynamic):Tileset
@@ -98,4 +98,16 @@ class Tileset
 	inline function get_tileColumns():Int return Math.floor((width - tileSeparationX - tileMarginX - tileMarginX) / (tileWidth + tileSeparationX));
 
 	inline function get_tileRows():Int return Math.floor((height - tileSeparationY - tileMarginY - tileMarginY) / (tileHeight + tileSeparationY));
+}
+
+typedef TilesetData = {
+		label:String,
+		path:String,
+		image:String,
+		tileWidth: Int,
+		tileHeight: Int,
+		tileSeparationX: Int,
+		tileSeparationY: Int,
+		tileMarginX: Int,
+		tileMarginY: Int,
 }

@@ -16,12 +16,22 @@ class EntityLayer extends Layer
 		if (nextID != null) _nextID = nextID;
 	}
 
-	override function save():Dynamic
+	override function save():EntityLayerData
 	{
 		var data = super.save();
-		data._contents = 'entities';
-		data.entities = [for (entity in entities.list) entity.save()];
-		return data;
+
+		return {
+			name: data.name,
+			_eid: data._eid,
+			_contents: 'entities',
+			offsetX: data.offsetX,
+			offsetY: data.offsetY,
+			gridCellWidth: data.gridCellWidth,
+			gridCellHeight: data.gridCellHeight,
+			gridCellsX: data.gridCellsX,
+			gridCellsY: data.gridCellsY,
+			entities: [for (entity in entities.list) entity.save()]
+		};
 	}
 
 	override function load(data:Dynamic)
@@ -50,4 +60,9 @@ class EntityLayer extends Layer
 
 	var _nextID:Int = 0;
 	public function nextID():Int return _nextID++;
+}
+
+typedef EntityLayerData = {
+	>LayerData,
+	entities:Array<Dynamic>
 }

@@ -84,13 +84,16 @@ class Entity
 
 	public function new() {}
 
-	public function save():Dynamic
+	public function save():EntityData
 	{
-		var data:Dynamic = {};
-		data.name = template.name;
-		data.id = id;
-		data._eid = template.exportID;
-		position.saveInto(data, "x", "y");
+		var data:EntityData = {
+			name: template.name,
+			id: id,
+			_eid: template.exportID,
+			x: position.x,
+			y: position.y
+		};
+
 		if (template.resizeableX) data.width = size.x;
 		if (template.resizeableY) data.height = size.y;
 		if (template.originAnchored) origin.saveInto(data, "originX", "originY");
@@ -439,4 +442,22 @@ class Entity
 
 		return false;
 	}
+}
+
+typedef EntityData = {
+	name:String,
+	id:Int,
+	_eid:String,
+	x:Float,
+	y:Float,
+	?width:Float,
+	?height:Float,
+	?originX:Float,
+	?originY:Float,
+	?rotation:Float,
+	?flippedX:Bool,
+	?flippedY:Bool,
+	?color:String,
+	?nodes:Array<Dynamic>,
+	?values:Array<Dynamic>
 }

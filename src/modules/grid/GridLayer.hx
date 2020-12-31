@@ -25,9 +25,9 @@ class GridLayer extends Layer
 		}
 	}
 
-	override function save():Dynamic
+	override function save():GridLayerData
 	{
-		var data = super.save();
+		var data:GridLayerData = cast super.save();
 		var template:GridLayerTemplate = cast this.template;
 
 		if(template.arrayMode == ONE)
@@ -268,4 +268,11 @@ class GridLayer extends Layer
 		return flipped;
 	}
 
+}
+
+typedef GridLayerData = {
+	>LayerData,
+	?grid:Dynamic,
+	?grid2D:Dynamic,
+	?arrayMode:Int
 }

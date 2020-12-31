@@ -38,16 +38,18 @@ class TileLayerTemplate extends LayerTemplate
 		return new TileLayer(level, id);
 	}
 
-	override function save():Dynamic
+	override function save():TileLayerTemplateData
 	{
-		var data:Dynamic = super.save();
-
-		data.exportMode = exportMode;
-		data.arrayMode = arrayMode;
-		if (defaultTileset != null) data.defaultTileset = defaultTileset;
-		else data.defaultTileset = "";
-
-		return data;
+		var data = super.save();
+		return {
+			definition: data.definition,
+			name: data.name,
+			gridSize: data.gridSize,
+			exportID: data.exportID,
+			exportMode: exportMode,
+			arrayMode: arrayMode,
+			defaultTileset: defaultTileset == null ? '' : defaultTileset
+		};
 	}
 
 	override function load(data: Dynamic):LayerTemplate
@@ -60,4 +62,11 @@ class TileLayerTemplate extends LayerTemplate
 
 		return this;
 	}
+}
+
+typedef TileLayerTemplateData = {
+	>LayerTemplateData,
+	exportMode:Int,
+	arrayMode:Int,
+	defaultTileset:String
 }

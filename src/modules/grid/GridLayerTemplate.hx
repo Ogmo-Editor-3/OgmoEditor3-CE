@@ -55,13 +55,19 @@ class GridLayerTemplate extends LayerTemplate
 		return new GridLayer(level, id);
 	}
 
-	override function save():Dynamic
+	override function save():GridLayerTemplateData
 	{
-		var data:Dynamic = super.save();
-		data.arrayMode = arrayMode;
-		data.legend = {};
-		for (key in legend.keys()) untyped data.legend[key] = legend[key].toHexAlpha(); // Reflect.setField(data.legend, key, legend[key].toHexAlpha());
-		return data;
+		var data = super.save();
+		var legendData = {};
+		for (key in legend.keys()) untyped legendData[key] = legend[key].toHexAlpha(); // Reflect.setField(data.legend, key, legend[key].toHexAlpha());
+		return {
+			definition: data.definition,
+			name: data.name,
+			gridSize: data.gridSize,
+			exportID: data.exportID,
+			arrayMode: arrayMode,
+			legend: legendData
+		};
 	}
 
 	override function load(data:Dynamic):LayerTemplate
@@ -93,4 +99,10 @@ class GridLayerTemplate extends LayerTemplate
 		}
 		throw "Grid layers must have at least 2 characters in their legend.";
 	}
+}
+
+typedef GridLayerTemplateData = {
+	>LayerTemplateData,
+	arrayMode:Int,
+	legend:Dynamic
 }

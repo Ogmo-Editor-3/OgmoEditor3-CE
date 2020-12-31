@@ -36,12 +36,17 @@ class EntityLayerTemplate extends LayerTemplate
 		return new EntityLayer(level, id);
 	}
 
-	override public function save():Dynamic
+	override public function save():EntityLayerTemplateData
 	{
-		var data:Dynamic = super.save();
-		data.requiredTags = requiredTags;
-		data.excludedTags = excludedTags;
-		return data;
+		var data = super.save();
+		return {
+			definition: data.definition,
+			name: data.name,
+			gridSize: data.gridSize,
+			exportID: data.exportID,
+			requiredTags: requiredTags,
+			excludedTags: excludedTags
+		};
 	}
 
 	override public function load(data:Dynamic):LayerTemplate
@@ -53,4 +58,10 @@ class EntityLayerTemplate extends LayerTemplate
 
 		return this;
 	}
+}
+
+typedef EntityLayerTemplateData = {
+	>LayerTemplateData,
+	requiredTags:Array<String>,
+	excludedTags:Array<String>
 }

@@ -22,14 +22,14 @@ class LayerTemplate
 		return name + "\nGrid: " + this.gridSize.x + " x " + this.gridSize.y + "\n";
 	}
 
-	public function save(): Dynamic
-	{
-		var data: Dynamic = {};
-		data.definition = this.definition.id;
-		data.name = this.name;
-		data.gridSize = this.gridSize.save();
-		data.exportID = this.exportID;
-		return data;
+	public function save():LayerTemplateData
+	{	
+		return {
+			definition :this.definition.id,
+			name: this.name,
+			gridSize: this.gridSize.save(),
+			exportID :this.exportID
+		};
 	}
 
 	public function load(data: Dynamic):LayerTemplate
@@ -47,4 +47,11 @@ class LayerTemplate
 	public function projectWasLoaded(project:Project):Void {}
 
 	public function projectWasUnloaded():Void {}
+}
+
+typedef LayerTemplateData = {
+	definition: String,
+	name: String,
+	gridSize: VectorData,
+	exportID: String
 }

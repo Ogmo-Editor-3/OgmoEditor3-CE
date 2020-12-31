@@ -167,15 +167,25 @@ class TileLayer extends Layer
 		if (tileset == null && OGMO.project.tilesets.length > 0) tileset = OGMO.project.tilesets[0];
 	}
 
-	override function save():Dynamic
+	override function save():TileLayerData
 	{
-		var data = super.save();
+		var layerData = super.save();
 		var template:TileLayerTemplate = cast this.template;
+		var data:TileLayerData = {
+				name: layerData.name,
+				_eid: layerData._eid,
+				offsetX: layerData.offsetX,
+				offsetY: layerData.offsetY,
+				gridCellWidth: layerData.gridCellWidth,
+				gridCellHeight: layerData.gridCellHeight,
+				gridCellsX: layerData.gridCellsX,
+				gridCellsY: layerData.gridCellsY,
+				tileset: tileset == null ? '' : tileset.label,
+				arrayMode: template.arrayMode,
+				exportMode: template.exportMode
+			};
+
 		var flippedData = flip2dArray(this.data);
-
-		if (tileset != null) data.tileset = tileset.label;
-		else data.tileset = "";
-
 		if (template.exportMode == IDS)
 		{
 			if(template.arrayMode == ONE)
@@ -243,9 +253,6 @@ class TileLayer extends Layer
 			if (tileFlagsCanary != 0)
 				data.tileFlags2D = tileFlags2D;
 		}
-
-		data.exportMode = template.exportMode;
-		data.arrayMode = template.arrayMode;
 
 		return data;
 	}
@@ -511,4 +518,17 @@ class TileLayer extends Layer
 		}
 		return flipped;
 	}
+}
+
+typedef TileLayerData = {
+	>LayerData,
+	tileset:String,
+	arrayMode:Int,
+	exportMode:Int,
+	?data:Dynamic,
+	?data2D:Dynamic,
+	?dataCoords:Dynamic,
+	?dataCoords2D:Dynamic,
+	?tileFlags:Dynamic,
+	?tileFlags2D:Dynamic,
 }

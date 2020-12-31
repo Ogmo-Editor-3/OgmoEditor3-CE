@@ -5,7 +5,7 @@ import util.Matrix;
 import util.Vector;
 import util.Color;
 import project.data.Project;
-import project.data.ShapeData;
+import project.data.Shape;
 import project.data.value.ValueTemplate;
 import rendering.Texture;
 import Enums;
@@ -18,7 +18,7 @@ class EntityTemplate
 	public var size:Vector = new Vector(16, 16);
 	public var origin:Vector = new Vector(0, 0);
 	public var originAnchored:Bool = true;
-	public var shape:ShapeData;
+	public var shape:Shape;
 	public var color:Color = new Color(1, 0, 0, 1);
 	public var tileX:Bool = false;
 	public var tileY:Bool = false;
@@ -110,7 +110,7 @@ class EntityTemplate
 		e.size = Vector.load(data.size);
 		e.origin = Vector.load(data.origin);
 		e.originAnchored = data.originAnchored;
-		e.shape = ShapeData.load(data.shape);
+		e.shape = Shape.load(data.shape);
 		e.color = Color.fromHexAlpha(data.color);
 		e.tileX = data.tileX;
 		e.tileY = data.tileY;

@@ -42,18 +42,18 @@ class Layer
 	 */
 	public function shift(amount:Vector):Void {}
 
-	public function save():Dynamic
+	public function save():LayerData
 	{
-		var data:Dynamic = { };
-
-		data.name = template.name;
-		data._eid = template.exportID;
-		offset.saveInto(data, "offsetX", "offsetY");
-		template.gridSize.saveInto(data, "gridCellWidth", "gridCellHeight");
-		data.gridCellsX = gridCellsX + (leftoverX > 0 ? 1 : 0);
-		data.gridCellsY = gridCellsY + (leftoverY > 0 ? 1 : 0);
-
-		return data;
+		return {
+			name: template.name,
+			_eid: template.exportID,
+			offsetX: offset.x,
+			offsetY: offset.y,
+			gridCellWidth: template.gridSize.x,
+			gridCellHeight: template.gridSize.y,
+			gridCellsX: gridCellsX + (leftoverX > 0 ? 1 : 0),
+			gridCellsY: gridCellsY + (leftoverY > 0 ? 1 : 0)
+		};
 	}
 
 	public function load(data: Dynamic):Void
@@ -172,4 +172,16 @@ class Layer
 	{
 		return (level.data.size.y - offset.y) % template.gridSize.y;
 	}
+}
+
+typedef LayerData = {
+	name:String,
+	_eid:String,
+	offsetX:Float,
+	offsetY:Float,
+	gridCellWidth:Float,
+	gridCellHeight:Float,
+	gridCellsX:Float,
+	gridCellsY:Float,
+	?_contents:String,
 }
