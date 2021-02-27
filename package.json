@@ -20,7 +20,7 @@
         "copy-webpack-plugin": "^5.0.3",
         "css-loader": "^2.1.1",
         "electron": "^4.1.4",
-        "electron-builder": "^21.2.0",
+        "electron-builder": "^22.2.0",
         "electron-icon-maker": "0.0.4",
         "file-loader": "^3.0.1",
         "haxe-loader": "^0.10.0",
