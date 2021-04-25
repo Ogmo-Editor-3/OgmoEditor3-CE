@@ -26,7 +26,7 @@ class FileSystem
 		if (defaultPath != null)
 			defaultPath = js.node.Path.normalize(defaultPath); // Converts / back to \ on Windows, or else won't work
 
-		var files = Ogmo.dialog.showOpenDialog(
+		var files = Ogmo.dialog.showOpenDialogSync(
 			Remote.getCurrentWindow(),
 			{
 				title: title,
@@ -45,7 +45,7 @@ class FileSystem
 		if (defaultPath != null)
 			defaultPath = js.node.Path.normalize(defaultPath); // Converts / back to \ on Windows, or else won't work
 
-		var file = Ogmo.dialog.showSaveDialog(
+		var file = Ogmo.dialog.showSaveDialogSync(
 			Remote.getCurrentWindow(),
 			{
 				title: title,
@@ -59,7 +59,7 @@ class FileSystem
 
 	public static function chooseFolder(title:String):String
 	{
-		var files = Ogmo.dialog.showOpenDialog(
+		var files = Ogmo.dialog.showOpenDialogSync(
 			Remote.getCurrentWindow(),
 			{
 				title: title,
@@ -72,7 +72,7 @@ class FileSystem
 
 	public static function showQuestion(title:String, question:String, confirm:String, deny:String):Bool
 	{
-		var result = Ogmo.dialog.showMessageBox(
+		var result = Ogmo.dialog.showMessageBoxSync(
 			Remote.getCurrentWindow(),
 			{
 				message: question,
