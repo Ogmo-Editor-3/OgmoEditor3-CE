@@ -387,7 +387,7 @@ class LevelsPanel extends SidePanel
 			{
 				Popup.open("Invalid Level File", "warning", "<span class='monospace'>" + Path.basename(data) + "</span> is not a valid level file!<br /><span class='monospace'>" + error + "</span>", ["Okay", "Delete It", "Open With Default Program"], function(i)
 				{
-					if (i == 2) Shell.openItem(data);
+					if (i == 2) Shell.openPath(data);
 					else if (i == 1)
 					{
 						EDITOR.levelManager.delete(data);
@@ -401,7 +401,7 @@ class LevelsPanel extends SidePanel
 			var message = '<img src="file:${data}" style="display: block; margin: 0 auto;"/>';
 			Popup.open('Image File: ' + Path.basename(data), "info", message, ["Okay", "Open With Default Program"], function(i)
 			{
-				if (i == 1) Shell.openItem(data);
+				if (i == 1) Shell.openPath(data);
 			});
 		}
 
@@ -417,7 +417,7 @@ class LevelsPanel extends SidePanel
 			default:
 				Popup.open('Unsupported File Extension', 'warning', 'Ogmo can\'t open .${split[split.length -1]} files... Yet!', ["Okay", "Delete It", "Open With Default Program"], function(i)
 				{
-					if (i == 2) Shell.openItem(node.data);
+					if (i == 2) Shell.openPath(node.data);
 					else if (i == 1)
 					{
 						EDITOR.levelManager.delete(node.data);
@@ -534,7 +534,7 @@ class LevelsPanel extends SidePanel
 		{
 			menu.addOption("Explore", "folder-open", function()
 			{
-				Shell.openItem(node.data);
+				Shell.openPath(node.data);
 			});
 		}
 
@@ -719,7 +719,7 @@ class LevelsPanel extends SidePanel
 
 		menu.addOption("Open in Text Editor", "book", function()
 		{
-			Shell.openItem(node.data);
+			Shell.openPath(node.data);
 		});
 
 		if (EDITOR.levelManager.isOpen(node.data))

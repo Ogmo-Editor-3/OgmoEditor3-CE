@@ -17,7 +17,7 @@ This project requires Haxe v4.0.0 or later, Node v10+, and various dependencies 
 * Run the following commands:
 ```
 haxelib setup
-haxelib install electron 4.1.4
+haxelib install electron 12.0.4
 haxelib install jQueryExtern
 haxelib install haxe-loader
 ```

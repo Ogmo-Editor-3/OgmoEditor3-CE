@@ -142,7 +142,7 @@ class Settings
 
 		menu.addOption("Open in Text Editor", "book", function ()
 		{
-			Shell.openItem(path);
+			Shell.openPath(path);
 		});
 
 		item.highlighted = true;
