@@ -196,7 +196,7 @@ class Level
 		// 		{ name: "XML Level", extensions: [ "xml" ]}
 		// 	];
 
-		var file = Ogmo.dialog.showSaveDialog(Remote.getCurrentWindow(),
+		var file = Ogmo.dialog.showSaveDialogSync(Remote.getCurrentWindow(),
 		{
 			title: "Save Level As...",
 			filters: [{ name: "JSON Level", extensions: [ "json" ] }],

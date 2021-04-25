@@ -52,6 +52,8 @@ class App
 			minWidth: 1024,
 			minHeight: 600,
 			webPreferences: {
+				contextIsolation: false,
+				enableRemoteModule: true,
 				nodeIntegration: true
 			} 
 		});
