@@ -43,7 +43,7 @@ class App
 		});
 
 		mainWindow = new BrowserWindow({
-			backgroundColor: "#ffffff",
+			backgroundColor: '#ffffff',
 			title: '',
 			icon: Webpack.require('./assets/img/icon32.png'),
 			x: mainWindowState.x,
