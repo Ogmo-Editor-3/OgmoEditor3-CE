@@ -20,6 +20,8 @@ class App
 
 	static function main()
 	{
+		setupLaunchWithFile();
+
 		ElectronApp.on('window-all-closed', (e) -> {
 			// Keep the app open if even if windows are closed on OSX (normal mac app behavior)
 			if (process.platform != 'darwin') {
@@ -104,4 +106,44 @@ class App
 		#end
 	}
 
+	private static function setupLaunchWithFile() {
+		// The file path the app was launched with.
+		var launchFilePath:Null<String> = null;
+
+		if (process.platform == 'darwin') {
+			// On macOS, the file path is provided by the 'open-file' event.
+			ElectronApp.on('will-finish-launching', () -> {
+				ElectronApp.on('open-file', (event, path) -> {
+					/**
+					 * On macOS, an existing instance of this app is re-used if it is still open. 
+					 * Since there's only one window, for the sake of simplicity we only listen to 
+					 * 'open-file' events which occur while the window is closed.
+					 */
+					if (mainWindow == null) {
+						launchFilePath = path;
+					}
+				});
+			});
+		} else {
+			// On other platforms (Windows and Linux), the file path is passed as an argument to the process.
+			var args:Array<String> = [];
+
+			if (ElectronApp.isPackaged) {
+				args = process.argv.slice(1);
+			} else {
+				args = process.argv.slice(2);
+			}
+
+			if (args.length != 0) {
+				launchFilePath = args[0];
+			}
+		}
+
+		// Allow the render process to ask for the launch file.
+		IpcMain.handle('getLaunchFilePath', () -> {
+			final path = launchFilePath;
+			launchFilePath = null;
+			return path;
+		});
+	}
 }
