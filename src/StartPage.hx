@@ -29,8 +29,6 @@ class StartPage
 			var path = FileSystem.chooseFile("Select Project", [{ name: "Ogmo Editor Project", extensions: ["ogmo"]}]);
 			if (FileSystem.exists(path)) onOpenProject(path);
 		});
-
-		tryOpenLaunchFile();
 	}
 
 	public function onNewProject(path:String):Void
@@ -75,15 +73,4 @@ class StartPage
 	public function keyRepeat(key:Int):Void {}
 
 	public function keyRelease(key:Int):Void {}
-
-	// Check if the app was launched with an associated file.
-	private function tryOpenLaunchFile(): Void {
-		IpcRenderer
-			.invoke("getLaunchFilePath")
-			.then((path) -> {
-				if (path != null && FileSystem.exists(path)) {
-					onOpenProject(path);
-				}
-			});
-	}
 }

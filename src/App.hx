@@ -13,6 +13,9 @@ class App
 	static var mainWindow:BrowserWindow = null;
 	static var forceClose:Bool = false;
 
+	static var createWindowOnFileOpen:Bool = false;
+	static var readyForFileEvents:Bool = false;
+
 	public static function getMainWindow():BrowserWindow
 	{
 		return mainWindow;
@@ -30,7 +33,12 @@ class App
 			}
 		});
 
-		ElectronApp.on('ready', (e) -> createWindow());
+		ElectronApp.on('ready', (e) -> {
+			createWindow();
+
+			// Create a new window on future 'open-file' events.
+			createWindowOnFileOpen = true;
+		});
 
 		// On macOS it's common to re-create a window in the app when the
 		// dock icon is clicked and there are no other windows open.
@@ -83,6 +91,9 @@ class App
 
 			mainWindow.on('closed', (e) -> {
 				mainWindow = null;
+
+				// Queue 'open-file' events until the app is ready again.
+				readyForFileEvents = false;
 			});
 		}
 
@@ -106,21 +117,29 @@ class App
 		#end
 	}
 
-	private static function setupLaunchWithFile() {
+	private static function setupLaunchWithFile() 
+	{
 		// The file path the app was launched with.
-		var launchFilePath:Null<String> = null;
+		var pendingFileEvent:Null<String> = null;
 
 		if (process.platform == 'darwin') {
 			// On macOS, the file path is provided by the 'open-file' event.
 			ElectronApp.on('will-finish-launching', () -> {
 				ElectronApp.on('open-file', (event, path) -> {
-					/**
-					 * On macOS, an existing instance of this app is re-used if it is still open. 
-					 * Since there's only one window, for the sake of simplicity we only listen to 
-					 * 'open-file' events which occur while the window is closed.
-					 */
-					if (mainWindow == null) {
-						launchFilePath = path;
+					// Capture the event.
+					event.preventDefault();
+
+					// On macOS, the app may still be running even if the window is closed.
+					// If we get an 'open-file' event this state, create a new window.
+					if (mainWindow == null && createWindowOnFileOpen) {
+						createWindow();
+					}
+
+					// If the app is not ready to handle file events, save it for later.
+					if (!readyForFileEvents) {
+						pendingFileEvent = path;
+					} else {
+						mainWindow.webContents.send('openFile', path);
 					}
 				});
 			});
@@ -135,15 +154,17 @@ class App
 			}
 
 			if (args.length != 0) {
-				launchFilePath = args[0];
+				pendingFileEvent = args[0];
 			}
 		}
 
-		// Allow the render process to ask for the launch file.
-		IpcMain.handle('getLaunchFilePath', () -> {
-			final path = launchFilePath;
-			launchFilePath = null;
-			return path;
+		// Wait for the app to notify us that it is ready to handle openFile events.
+		IpcMain.on('readyForFileEvents', (event: Dynamic) -> {
+			readyForFileEvents = true;
+			if (pendingFileEvent != null) {
+				event.sender.send('openFile', pendingFileEvent);
+				pendingFileEvent = null;
+			}
 		});
 	}
 }
