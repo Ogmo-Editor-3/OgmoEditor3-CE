@@ -1,4 +1,4 @@
-<p align="center">
+ <p align="center">
   <img src="assets/gfx/logo.png" alt="Ogmo Editor 3"/>
 </p>
 
@@ -47,6 +47,6 @@ npm run dist
 This builds, then packages the App into an executable.
 
 # Credits
- - Created by [Matt Thorson](https://twitter.com/mattthorson) and [Noel Berry](https://twitter.com/noelfb)
+ - Created by [Maddy Thorson](https://twitter.com/MaddyThorson) and [Noel Berry](https://twitter.com/noelfb)
  - Icons & Logo by [Kyle Pulver](https://twitter.com/kylepulver)
  - Ported to Haxe and extended by [Caleb Cornett](https://twitter.com/thespydog), [Will Blanton](https://twitter.com/x01010111), and [Austin East](https://twitter.com/austinweast)
