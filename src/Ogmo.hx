@@ -138,12 +138,20 @@ class Ogmo
 					Controls.setupJQuery();
 			}
 		});
-
+		
 		// Run startup functions
 		Start.up();
 		//Init the toolbelt
 		editor.toolBelt = new ToolBelt();
 		updateWindowTitle();
+
+		// Setup handler for 'openFile' event.
+		IpcRenderer.on("openFile", function (event, path: String) {
+			if (startPage.active && FileSystem.exists(path)) {
+				startPage.onOpenProject(path);
+			}
+		});
+		IpcRenderer.send("readyForFileEvents");
 	}
 
 	public function loop(?dt:Float):Void

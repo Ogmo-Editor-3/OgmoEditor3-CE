@@ -2,7 +2,7 @@ import io.Imports;
 import io.FileSystem;
 import project.data.Project;
 import js.jquery.JQuery;
-import electron.renderer.Remote;
+import electron.renderer.IpcRenderer;
 
 class StartPage
 {
