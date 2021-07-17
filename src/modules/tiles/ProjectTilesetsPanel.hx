@@ -1,6 +1,7 @@
 package modules.tiles;
 
 
+import js.html.CanvasWindingRule;
 import js.Browser;
 import js.node.Path;
 import project.data.Tileset;
@@ -28,6 +29,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 	public var tileSize:JQuery;
 	public var tileSeparation:JQuery;
 	public var tileMargin:JQuery;
+	public var tileAuto:JQuery;
 
 	public var zoom:Float = 2;
 
@@ -60,7 +62,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 		if (FileSystem.exists(path))
 		{
 			var relative = FileSystem.normalize(Path.relative(Path.dirname(OGMO.project.path), path));
-			var tilemap = new Tileset(OGMO.project, "New Tileset", relative, 8, 8, 0, 0, 0, 0);
+			var tilemap = new Tileset(OGMO.project, "New Tileset", relative, false, 8, 8, 0, 0, 0, 0);
 
 			// delay a frame before refreshing to allow the tileset texture to load
 			haxe.Timer.delay(() -> {
@@ -110,9 +112,12 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 					if (item.data == tileset) item.label = Fields.getField(tileLabel);
 				});
 			});
-			Fields.createSettingsBlock(into, tileLabel, SettingsBlock.Third, "Label", SettingsBlock.InlineTitle);
+			Fields.createSettingsBlock(into, tileLabel, SettingsBlock.Fourth, "Label", SettingsBlock.InlineTitle);
 			tilePath = Fields.createField("File Path", tileset.path);
-			Fields.createSettingsBlock(into, tilePath, SettingsBlock.TwoThirds, "Path", SettingsBlock.InlineTitle);
+			Fields.createSettingsBlock(into, tilePath, SettingsBlock.Half, "Path", SettingsBlock.InlineTitle);
+			tileAuto = Fields.createCheckbox(tileset.tileAuto, "Auto Tiling");
+			tileAuto.on("click", function() { refreshCanvas(context); });
+			Fields.createSettingsBlock(into, tileAuto, SettingsBlock.Fourth);
 			Fields.createLineBreak(into);
 
 			// tile size + separation + margin
@@ -178,9 +183,19 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 		context.clearRect(0, 0, tileset.width * s, tileset.height * s);
 		context.drawImage(tileset.texture.image, 0, 0, tileset.width * s, tileset.height * s);
 
+		var gridAuto = Fields.getCheckbox(tileAuto);
 		var gridSize = Fields.getVector(tileSize);
 		var gridSep = Fields.getVector(tileSeparation);
 		var gridMarg = Fields.getVector(tileMargin);
+
+		if (gridAuto)
+		{
+			context.fillStyle = "rgba(255, 255, 255, 0.35)";
+			context.beginPath();
+			context.rect(0, 0, tileset.width * s, tileset.height * s);
+			context.rect((gridMarg.x + gridSep.x) * s, (gridMarg.y + gridSep.y) * s, gridSize.x * s, gridSize.y * s);
+			context.fill(CanvasWindingRule.EVENODD);
+		}
 
 		// create path
 		context.beginPath();
@@ -242,6 +257,7 @@ class ProjectTilesetsPanel extends ProjectEditorPanel
 
 		tileset.label = Fields.getField(tileLabel);
 		tileset.path = Fields.getField(tilePath);
+		tileset.tileAuto = Fields.getCheckbox(tileAuto);
 		tileset.tileWidth = gridSize.x.floor();
 		tileset.tileHeight = gridSize.y.floor();
 		tileset.tileSeparationX = gridSep.x.floor();
