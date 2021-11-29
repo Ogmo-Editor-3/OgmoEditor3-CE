@@ -50,7 +50,11 @@ class EntitySelectTool extends EntityTool
 	{
 		mode = Move;
 		firstChange = false;
-		if (!OGMO.ctrl) layer.snapToGrid(start, start);
+		if (!OGMO.ctrl) {
+      layer.snapToGrid(start, start);
+    } else {
+      layer.snapToInt(start, start);
+    }
 		entities = layer.entities.getGroup(layerEditor.selection);
 	}
 
@@ -89,7 +93,11 @@ class EntitySelectTool extends EntityTool
 		}
 		else if (mode == Move)
 		{
-			if (!OGMO.ctrl) layer.snapToGrid(pos, pos);
+			if (!OGMO.ctrl) {
+        layer.snapToGrid(pos, pos);
+      } else {
+        layer.snapToInt(pos, pos);
+      }
 
 			if (!pos.equals(start))
 			{
