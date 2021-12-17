@@ -292,7 +292,6 @@ class DecalSelectTool extends DecalTool
 			if (!isEqual)
 			{
 				layerEditor.hovered = hit;
-				layerEditor.selectedChanged = true;
 				EDITOR.dirty();
 			}
 		}
