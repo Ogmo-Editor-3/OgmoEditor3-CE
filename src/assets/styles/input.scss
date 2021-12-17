@@ -29,6 +29,12 @@ input, select, textarea
 	border-radius: 2px;
 }
 select { height: 36px; max-width: 200px; font-size: 0.9em; }
+select:focus
+{
+    font-weight: bold;
+    color: #000;
+    border: 1px solid #000;
+}
 input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 input[type="color"]::-webkit-color-swatch { border: none; }
 input.default-value { color: #888; }
@@ -134,14 +140,14 @@ textarea, input, button, select { font-family: inherit; }
         border-bottom-right-radius: 0;
     }
 
-    &:hover
+    &:hover, &:focus
     {
         font-weight: bold;
         color: #000;
         border: 1px solid #000;
     }
-    &:hover &_icon { }
-    &:hover &_icon::after { background-color: #000; }
+    &:hover &_icon, &:focus &_icon { }
+    &:hover &_icon::after, &:focus &_icon::after { background-color: #000; }
 
     &.important
     {

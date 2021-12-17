@@ -154,7 +154,7 @@ class Fields
 
 	public static function createButton(icon:String, label:String, ?into:JQuery):JQuery
 	{
-		var element = new JQuery('<div>');
+		var element = new JQuery('<button>');
 		element.addClass("button");
 
 		if (icon != null && icon.length > 0)

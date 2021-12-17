@@ -98,7 +98,7 @@ class Ogmo
 				case Keys.Y:
 					if (ogmo.ctrl) e.preventDefault();
 				case Keys.Tab:
-					if (popupMode || editor.active) e.preventDefault();
+					if (popupMode) e.preventDefault();
 			}
 		});
 
