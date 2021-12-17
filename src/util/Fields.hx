@@ -35,7 +35,12 @@ class Fields
 			element.addClass("default-value");
 			element.val(label);
 		}
-		
+
+		element.on("keyup", function(e)
+		{
+			if (e.keyCode == Keys.Enter)
+				element.blur();
+		});
 		element.on("focus", function(e)
 		{
 			if (element.hasClass("default-value"))
