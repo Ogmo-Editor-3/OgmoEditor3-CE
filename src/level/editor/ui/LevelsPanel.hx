@@ -48,7 +48,7 @@ class LevelsPanel extends SidePanel
 		options.append(newbutton);
 
 		// search bar
-		searchbar = new JQuery('<div class="searchbar"><div class="searchbar_icon icon icon-magnify-glass"></div><input class="searchbar_field"/></div>');
+		searchbar = new JQuery('<div class="searchbar"><div class="searchbar_icon icon icon-magnify-glass"></div><input class="searchbar_field" tabindex="-1"/></div>');
 		searchbar.find("input").on("change keyup", refresh);
 		options.append(searchbar);
 

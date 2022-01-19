@@ -78,7 +78,7 @@ class StickerDropdown
 
     public function addSlider(label:String, min:Int = 0, max:Int = 100, value:Int = 50, onChange:Int->Void, ?tooltip:String)
     {
-        var listElement = new JQuery('<div class="sticker-dropdown-item slider"><input type="range" min="$min" max="$max" value="$value" class="slider"><div class="label">${label}:&nbsp</div><div class="value">${toPercentDisplayText(value)}</div></div>');
+        var listElement = new JQuery('<div class="sticker-dropdown-item slider"><input type="range" min="$min" max="$max" value="$value" class="slider" tabindex="-1"><div class="label">${label}:&nbsp</div><div class="value">${toPercentDisplayText(value)}</div></div>');
         var sliderElement = listElement.find(".slider");
         var valueElement = listElement.find(".value");
         sliderElement.on("input", function (e)

@@ -110,7 +110,6 @@ class EntitySelectTool extends EntityTool
 			if (!layerEditor.hovered.equals(hit))
 			{
 				layerEditor.hovered.set(hit);
-				layerEditor.selection.changed = true;
 				EDITOR.dirty();
 			}
 		}
