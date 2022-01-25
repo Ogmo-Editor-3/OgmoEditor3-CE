@@ -1,5 +1,6 @@
 package modules.tiles;
 
+import js.html.ImageElement;
 import modules.tiles.TileLayer.TileData;
 import js.Browser;
 import js.jquery.Event;
@@ -31,8 +32,8 @@ class TilePalettePanel extends SidePanel
 	public var rows(get, never):Int;
 
 	function get_tileset():Tileset { return (cast layerEditor.layer : TileLayer).tileset; }
-	function get_columns():Int { return tileset.tileColumns; }
-	function get_rows():Int { return tileset.tileRows; }
+	function get_columns():Int { return tileset.tileAuto ? 1 : tileset.tileColumns; }
+	function get_rows():Int { return tileset.tileAuto ? 1 : tileset.tileRows; }
 
 	public function new(layerEditor: TileLayerEditor)
 	{
@@ -212,6 +213,7 @@ class TilePalettePanel extends SidePanel
 				for (y in 0...selection.height.floor())
 				{
 					var id:Int = selection.x.floor() + x + (selection.y.floor() + y) * columns;
+
 					layerEditor.brush[x].push(new TileData(id));
 				}
 			}
@@ -281,23 +283,33 @@ class TilePalettePanel extends SidePanel
 
 			// draw tiles (+transparent bg)
 			context.fillStyle = "rgb(200,200,200)";
-			var tx = tileset.tileSeparationX + tileset.tileMarginX, x = 0;
-			while(tx < image.width - tileset.tileMarginX)
-			{
-				var ty = tileset.tileSeparationY + tileset.tileMarginY, y = 0;
-				while(ty < image.height - tileset.tileMarginY)
-				{
-					var drawX = x * (tileset.tileWidth + spacing);
-					var drawY = y * (tileset.tileHeight + spacing);
 
-					context.fillRect(drawX - spacing / 2, drawY - spacing / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
-					context.fillRect(drawX + tileset.tileWidth / 2, drawY + tileset.tileHeight / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
-					context.drawImage(image, tx, ty, tileset.tileWidth, tileset.tileHeight, drawX, drawY, tileset.tileWidth, tileset.tileHeight);
-					ty += tileset.tileHeight + tileset.tileSeparationY;
-					y++;
+			if (tileset.tileAuto)
+			{
+				var tx = tileset.tileSeparationX + tileset.tileMarginX;
+				var ty = tileset.tileSeparationY + tileset.tileMarginY;
+
+				drawTile(image, tx, ty);
+			}
+			else
+			{
+				var tx = tileset.tileSeparationX + tileset.tileMarginX, x = 0;
+				while(tx < image.width - tileset.tileMarginX)
+				{
+					var ty = tileset.tileSeparationY + tileset.tileMarginY, y = 0;
+					while(ty < image.height - tileset.tileMarginY)
+					{
+						var drawX = x * (tileset.tileWidth + spacing);
+						var drawY = y * (tileset.tileHeight + spacing);
+
+						drawTile(image, tx, ty, drawX, drawY);
+
+						ty += tileset.tileHeight + tileset.tileSeparationY;
+						y++;
+					}
+					tx += tileset.tileWidth + tileset.tileSeparationX;
+					x++;
 				}
-				tx += tileset.tileWidth + tileset.tileSeparationX;
-				x++;
 			}
 
 			// get current selection
@@ -320,5 +332,12 @@ class TilePalettePanel extends SidePanel
 				sel.width * (tileset.tileWidth + spacing), sel.height * (tileset.tileHeight + spacing));
 			}
 		}
+	}
+
+	function drawTile(image:ImageElement, tx:Int, ty:Int, drawX:Int = 0, drawY:Int = 0):Void
+	{
+		context.fillRect(drawX - spacing / 2, drawY - spacing / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
+		context.fillRect(drawX + tileset.tileWidth / 2, drawY + tileset.tileHeight / 2, tileset.tileWidth / 2 + spacing / 2, tileset.tileHeight / 2 + spacing / 2);
+		context.drawImage(image, tx, ty, tileset.tileWidth, tileset.tileHeight, drawX, drawY, tileset.tileWidth, tileset.tileHeight);
 	}
 }
