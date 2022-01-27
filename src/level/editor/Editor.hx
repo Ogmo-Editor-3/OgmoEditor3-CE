@@ -262,7 +262,7 @@ class Editor
 				if (executingPlayCommand == null)
 				{
 					js.Lib.require('fix-path')();
-					executingPlayCommand = ChildProcess.spawn(OGMO.project.playCommand, {
+					executingPlayCommand = ChildProcess.spawn(OGMO.project.playCommand + ' ' + EDITOR.level.path, {
 						cwd: Path.directory(OGMO.project.path),
 						shell: true
 					});
