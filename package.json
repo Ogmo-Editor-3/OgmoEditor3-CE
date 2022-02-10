@@ -25,7 +25,7 @@
         "file-loader": "^3.0.1",
         "haxe-loader": "^0.10.0",
         "node-loader": "^0.6.0",
-        "node-sass": "^4.14.1",
+        "node-sass": "^7.0.0",
         "sass-loader": "^7.1.0",
         "style-loader": "^0.23.1",
         "webpack": "^4.30.0",
